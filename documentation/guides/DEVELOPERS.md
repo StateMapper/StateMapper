@@ -17,11 +17,12 @@
 
 | Layer name | Responsability |
 | -------- | ---- |
+| controller + api | route calls and prepare data for the templates |
 | fetch | download bulletins from bulletin providers |
 | parse | parse bulletins and triggering subsequent fetches (follows) |
 | extract | extract precepts and status from parsed object |
 | spider | trigger workers to fetch, parse and extract bulletins |
-| daemon | start and stop spiders |
+| daemon | start and stop bulletin spiders |
 
 ![Classes diagram](../classes_diagram.png)
 
