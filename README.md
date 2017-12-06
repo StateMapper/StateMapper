@@ -14,19 +14,14 @@
 
 
 <div align="center">
+	<div></div>
+	<div>Index</div>
 	<div><a href="#manifest">Manifest</a></div>
-	<div><a href="#manifest">Manifest</a></div>
-	<div><a href="#manifest">Manifest</a></div>
-	<div><a href="#manifest">Manifest</a></div>
+	<div><a href="#installation">Installation</a></div>
+	<div><a href="#contribute">Contribute</a></div>
+	<div><a href="#known-bugs">Known bugs</a></div>
+	<div><a href="#todos">TODO's</a></div>
 </div>
-
-### Index:
-
-- [Manifest](#manifest)
-- [Installation](#installation)
-- [Contribute](#contribute)
-- [Known bugs](#known-bugs)
-- [TODO's](#todos)
 
 
 ## Manifest:
