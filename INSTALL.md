@@ -2,7 +2,7 @@
 	<img src="app/assets/images/logo/logo-black-big.png" />
 </p>
 <p align="center">
-	Installation guide
+	**INSTALLATION GUIDE**
 </p>
 
 ## Requirements
