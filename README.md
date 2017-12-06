@@ -86,7 +86,7 @@ Install TOR following [these instructions](https://www.torproject.org/docs/debia
 sudo vim /etc/tor/torrc 			# or emacs, nano, gedit..
 ```
 
-Uncomment "ControlPort 9051", uncomment "CookieAuthentication 0" and set it to 1 ("CookieAuthentication 1"). Save and close.
+Uncomment ```ControlPort 9051```, uncomment ```CookieAuthentication 0``` and set it to 1 (```CookieAuthentication 1```). Save and close. Then enter:
 
 ```bash
 sudo service tor restart	 		# make sure TOR is running
