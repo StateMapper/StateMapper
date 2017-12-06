@@ -165,12 +165,6 @@ If you simply think you just had a great idea, or you have skills we may seek, d
 
 If you wish to help with the core code or bulletin schemas, you may want to learn what follows before starting to code:
 
-### Data extraction layers:
-
-- **fetch**:		in charge of downloading bulletins from original source.
-- **parse**:		in charge of parsing bulletins and triggering subsequent fetches (follows).
-- **extract**:	in charge of extracting precepts and status from parsed object.
-
 ### Folder structure:
 
 | Folder | Description |
@@ -218,6 +212,14 @@ Within each bulletin's schema, the following parts are the most important:
 | parsingProtocoles | set of rules to parse the fetched bulletins (mostly XPath and Regexp) |
 | extractProtocoles | final statuses to be extracted from the parsed object |
 
+### Data extraction layers:
+
+- **fetch**:		in charge of downloading bulletins from original source.
+- **parse**:		in charge of parsing bulletins and triggering subsequent fetches (follows).
+- **extract**:	in charge of extracting precepts and status from parsed object.
+
+![Classes diagram](documentation/classes_diagram.png)
+
 
 ### Schema transformations:
 
@@ -242,6 +244,10 @@ Within each bulletin's schema, the following parts are the most important:
 | | |
 | [/api](https://statemapper.net/api) | list of countries, bulletin providers and schemas |
 | [/api/xx](https://statemapper.net/api/es) | list of bulletin providers and schemas for country xx (example: /api/es) |
+
+### Extracted statuses
+
+![Database diagram](documentation/database_diagram.png)
 
 
 ### Tips & tricks:
