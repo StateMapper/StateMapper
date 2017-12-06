@@ -142,7 +142,7 @@ If you like this software and its goals, there surely are many ways you can get 
 
 The project's current workforce splits into three commissions:
 
-| Commission | Goal |
+| Commission | Responsability |
 | ----- | ------ |
 | Counter-bribery Strategists | in charge of the project's strategy and communication |
 | Core Wizards | in charge of improving the core code |
