@@ -73,14 +73,17 @@ Within each bulletin's schema, the following parts are the most important:
 | parsingProtocoles | set of rules to parse the fetched bulletins (mostly XPath and Regexp) |
 | extractProtocoles | final statuses to be extracted from the parsed object |
 
+To implement a new schema, please refer to existing ones, like [ES/ES.json](../../schemas/ES/ES.json), [ES/AGENCIA_ESTATAL.json](../../schemas/ES/AGENCIA_ESTATAL.json), [ES/BOE.json](../../schemas/ES/BOE.json) and [ES/BORME.json](../../schemas/ES/BORME.json).
 
 ## Schema transformations:
 
- * parseDate: parse date
- * parseDatetime: parse date and time
- * assign: replace content by pattern
- * parseList: extract list bullet/number
- * [.. to fill]
+| Name | Description |
+| ----- | ---- |
+| parseDate | parse date |
+| parseDatetime | parse date and time |
+| assign | replace content by pattern |
+| parseList | extract list bullet/number |
+
 
 ## URI structure:
 
