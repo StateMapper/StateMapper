@@ -142,10 +142,10 @@ If you like this software and its goals, there surely are many ways you can get 
 
 The project's current workforce splits into three comissions:
 
-Counter-bribery Strategists | in charge of the project's strategy and communication
-Core Wizards | in charge of improving the core code
-Schema Soldiers | in charge of implementing more bulletin schemas
-Country Ambassadors | in charge of hosting bulletin IPFS nodes
+| Counter-bribery Strategists | in charge of the project's strategy and communication |
+| Core Wizards | in charge of improving the core code |
+| Schema Soldiers | in charge of implementing more bulletin schemas |
+| Country Ambassadors | in charge of hosting bulletin IPFS nodes |
 
 .. and any of the following would help us all a lot!
 
