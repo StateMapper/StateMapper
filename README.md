@@ -1,5 +1,5 @@
 <p align="center" id="top">
-	<img src="app/assets/images/logo/logo-black-square.png" />
+	<img src="app/assets/images/logo/logo-black-square-flat.png" />
 </p>
 <p align="center" id="badges">
 	<a href="http://php.net/"><img src="https://img.shields.io/badge/language-PHP-yellow.svg?style=flat-square" /></a>
