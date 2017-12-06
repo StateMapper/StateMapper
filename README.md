@@ -140,11 +140,11 @@ smap # should ask for your password, then output the CLI help
 
 ### Web GUI: 
 
-Start Apache and MySQL, open a browser and navigate to http://localhost/statemapper/app/
 ```bash
-sudo service apache2 restart
-sudo service mysql restart
+sudo service apache2 restart # make sure Apache is running
+sudo service mysql restart # make sure MySQL is running
 ```
+Then open a browser and navigate to http://localhost/statemapper/app/
 
 ### Web API: 
 
