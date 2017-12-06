@@ -10,7 +10,7 @@
 
 -----
 
-**Index:** [Dataflow layers](#dataflow-layers) / [Folder structure](#folder-structure) / [Bulletin schemas structure](#bulletin-schemas-structure) / [Schema transformations](#schema-transformations) / [Tips & tricks](#tips--tricks)
+**Index:** [Dataflow layers](#dataflow-layers) / [Folder structure](#folder-structure) / [Schema structure](#schema-structure) / [Schema transformations](#schema-transformations) / [Tips & tricks](#tips--tricks)
 
 
 ## Dataflow layers:
@@ -50,19 +50,19 @@
 | [app/database/](../../app/database) | database .sql files |
 | [app/assets/](../../app/assets) | web assets of the app (images, fonts, .css, .js) |
 
-## Bulletin schemas structure:
+## Schema structure:
 
-Bulletin schemas are the definition files of each bulletin, issuing institution and country. They are ordered as follow:
+Bulletin schemas are the definition files for each bulletin, issuing institution and country. They are organized as follows:
 
 | File path | Description | Example |
 | ------------ | --------------- | ------- |
-| ```bulletins/XX/XX.json``` | country or continent schema | [bulletins/ES/ES.json](../../bulletins/ES/ES.json) |
-| ```bulletins/XX/ISSUING_NAME.json``` | issuing institution's schema | [bulletins/ES/AGENCIA_ESTATAL.json](../../bulletins/ES/AGENCIA_ESTATAL.json) |
-| ```bulletins/XX/ISSUING_NAME.png``` | 64x64px picture for the issuing institution | [bulletins/ES/AGENCIA_ESTATAL.png](../../bulletins/ES/AGENCIA_ESTATAL.png) |
-| ```bulletins/XX/BULLETIN_NAME.json``` | bulletin's schema | [bulletins/ES/BOE.json](../../bulletins/ES/BOE.json) |
-| ```bulletins/XX/BULLETIN_NAME.png``` | 64x64px picture for the bulletin | [bulletins/ES/BOE.png](../../bulletins/ES/BOE.png) |
+| ```schemas/XX/XX.json``` | country or continent schema | [schemas/ES/ES.json](../../schemas/ES/ES.json) |
+| ```schemas/XX/ISSUING_NAME.json``` | issuing institution's schema | [schemas/ES/AGENCIA_ESTATAL.json](../../schemas/ES/AGENCIA_ESTATAL.json) |
+| ```schemas/XX/ISSUING_NAME.png``` | 64x64px picture for the issuing institution | [schemas/ES/AGENCIA_ESTATAL.png](../../schemas/ES/AGENCIA_ESTATAL.png) |
+| ```schemas/XX/BULLETIN_NAME.json``` | bulletin's schema | [schemas/ES/BOE.json](../../schemas/ES/BOE.json) |
+| ```schemas/XX/BULLETIN_NAME.png``` | 64x64px picture for the bulletin | [schemas/ES/BOE.png](../../schemas/ES/BOE.png) |
 
-Continents and countries are all first level folders (bulletins/EU and bulletins/ES). Country/continent flags are taken from ```app/assets/images/flags/XX.png```.
+Continents and countries are all first level folders (```schemas/ES```, not ```schemas/EU/ES```). Country and continent flags are automatically taken from ```app/assets/images/flags/XX.png```.
 
 Within each bulletin's schema, the following parts are the most important:
 
