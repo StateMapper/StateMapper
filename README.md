@@ -141,10 +141,14 @@ smap # should ask for your password, then output the CLI help
 ### Web GUI: 
 
 Start Apache and MySQL, open a browser and navigate to http://localhost/statemapper/app/
+```bash
+sudo service apache2 restart
+sudo service mysql restart
+```
 
 ### Web API: 
 
-Navigate to http://localhost/statemapper/app/api/ and browse bulletins actions. Like with the CLI API, most actions' URLs can be appended "/raw" to get a JSON raw output. For example http://localhost/statemapper/app/api/es/boe/2017-02-01/parse/raw.
+Navigate to http://localhost/statemapper/app/api/ to browse bulletins' actions. Like with the CLI API, most actions' URLs can be appended "/raw" to get a JSON raw output. For example http://localhost/statemapper/app/api/es/boe/2017-02-01/parse/raw.
 
 
 ### Daemon commands:
