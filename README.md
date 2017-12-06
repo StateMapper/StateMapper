@@ -330,7 +330,5 @@ Copyright &copy; 2017 [StateMapper.net](https://statemapper.net) & [Ingoberlab](
 
 ## Contact
 
-Email: [statemapper@riseup.net](mailto:statemapper@riseup.net)
-
-Chat (Jabber/XMPP): statemapper@conference.riseup.net
+Email: [statemapper@riseup.net](mailto:statemapper@riseup.net) / Chat (Jabber/XMPP): statemapper@conference.riseup.net
 
