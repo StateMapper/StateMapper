@@ -80,34 +80,21 @@ ipfs cat /ipns/...... # (to check IPFS is working well)
 
 ### Optional: TOR addon
 
-Install TOR following [these instructions](https://www.torproject.org/docs/debian.html.en).
+Install TOR following [these instructions](https://www.torproject.org/docs/debian.html.en). Then enter:
 
 ```bash
-sudo vi /etc/tor/torrc 			# (or emacs, nano, gedit..)
+sudo vim /etc/tor/torrc 			# or emacs, nano, gedit..
 ```
 
 Uncomment "ControlPort 9051", uncomment "CookieAuthentication 0" and set it to 1 ("CookieAuthentication 1"). Save and close.
 
 ```bash
-sudo /etc/init.d/tor restart 
-curl ifconfig.me/ip
-torify curl ifconfig.me/ip
-print 'AUTHENTICATE ""\r\nsignal NEWNYM\r\nQUIT' | nc 127.0.0.1 9051
-torify curl ifconfig.me/ip
+sudo /etc/init.d/tor restart 		# make sure TOR is running
+curl ifconfig.me/ip					# should print your real IP
+torify curl ifconfig.me/ip			# should print another IP
+print 'AUTHENTICATE ""\r\nsignal NEWNYM\r\nQUIT' | nc 127.0.0.1 9051 # get yet another IP
+torify curl ifconfig.me/ip 			# should print yet another IP
 ```
-
-.. should print: 
-
-```
-[your real IP]
-[another IP]
-
-250 OK
-250 OK
-250 closing connection
-[yet another IP]
-```
-
 
 ## Test StateMapper:
 
