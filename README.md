@@ -35,7 +35,7 @@
 
 ## Manifest
 
-Official bulletins are a mess: unpublished or in unstructured manner, lots of plain text to read, no browser. And this is a key point to hide public bribary. StateMapper is born after project Kaos155 was uncovered, both in an attempt to [.....]
+Official bulletins are a mess: unpublished or in unstructured manner, lots of plain text to read, no browser. And this is a key point to hide public bribary. StateMapper is born short after project Kaos155 has been uncovered, [... to be continued/replaced]
 
 
 ## Minimal requirements
