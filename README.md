@@ -1,4 +1,3 @@
-# StateMapper
 ![StateMapper](app/assets/images/logo/logo-black-big.png)
 
 
