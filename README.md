@@ -222,13 +222,13 @@ documentation  	# extra documentation (graphic material, diagrams..)
 
 Bulletin schemas are the definition files of each bulletin, issuing institution and country. They are ordered as follow:
 
-```bash
-bulletins/ES/ES.json  				# country folder
-bulletins/ES/ISSUING_NAME.json  	# issuing institution's schema
-bulletins/ES/ISSUING_NAME.png  		# [XxYpx] picture for the issuing institution
-bulletins/ES/BULLETIN_NAME.json  	# bulletin's schema
-bulletins/ES/BULLETIN_NAME.png  	# [XxYpx] picture for the bulletin
-```
+| File path | Description |
+| ------------ | --------------- |
+| bulletins/ES/ES.json | country folder |
+| bulletins/ES/ISSUING_NAME.json | issuing institution's schema |
+| bulletins/ES/ISSUING_NAME.png | [XxYpx] picture for the issuing institution |
+| bulletins/ES/BULLETIN_NAME.json | bulletin's schema |
+| bulletins/ES/BULLETIN_NAME.png | [XxYpx] picture for the bulletin |
 
 Continents and countries are all first level folders (bulletins/EU and bulletins/ES). Flags are taken from ```app/assets/images/flags/XX.png```.
 
@@ -250,7 +250,7 @@ Within each bulletin's schema, the following parts are the most important:
 
 ### URI structure:
 
-| URI pattern  | Page |
+| URI pattern  | Page description |
 | ------------- | ------------- |
 | / | entity browser |
 | /institutions | list of extracted institutions |
