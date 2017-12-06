@@ -89,7 +89,7 @@ sudo vim /etc/tor/torrc 			# or emacs, nano, gedit..
 Uncomment "ControlPort 9051", uncomment "CookieAuthentication 0" and set it to 1 ("CookieAuthentication 1"). Save and close.
 
 ```bash
-sudo /etc/init.d/tor restart	 		# make sure TOR is running
+sudo service tor restart	 		# make sure TOR is running
 curl ifconfig.me/ip				# should print your real IP
 torify curl ifconfig.me/ip			# should print another IP
 print 'AUTHENTICATE ""\r\nsignal NEWNYM\r\nQUIT' | nc 127.0.0.1 9051
