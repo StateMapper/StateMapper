@@ -36,7 +36,7 @@ Official bulletins are a mess: unpublished or in unstructured manner, lots of pl
 ## Minimal requirements
 
 - PHP4+ (best PHP7+)
-- MariaDB with its TokuDB plugin (though MySQL may be enough for local development)
+- MariaDB with its [TokuDB plugin](https://mariadb.com/kb/en/library/tokudb/) (though MySQL may be enough for local development)
 - Apache 2.2+ with mod_rewrite enabled
 - curl
 - pdftotext (from poppler-utils)
