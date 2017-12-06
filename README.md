@@ -155,7 +155,7 @@ Like with the CLI API, most frontend URLs can be appended "/raw" to get a JSON r
 
 ### Daemon commands:
 
-If you want the spiders to fetch bulletins, it is required to start the daemon with ```smap daemon start```. Here are a summary of the daemon commands:
+If you want the spiders to be able to start, it is required to start the daemon with ```smap daemon start```. Here are the available daemon commands:
 
 ```bash
 smap daemon [start] 	# start the daemon in the background
