@@ -82,28 +82,16 @@ ipfs cat /ipns/...... # (to check IPFS is working well)
 
 #### Installation instructions:
 
-- Recommended way: follow the instructions at [the TOR Project's website](https://www.torproject.org/docs/debian.html.en).
-
-- Quick and dirty way: 
-```
-sudo apt-get install tor
-```
-
-#### TOR API configuration:
+- Install TOR following [these instructions](https://www.torproject.org/docs/debian.html.en).
 
 ```bash
-sudo vi /etc/tor/torrc # (or emacs, nano, gedit..)
+sudo vi /etc/tor/torrc 			# (or emacs, nano, gedit..)
 ```
 
 Uncomment "ControlPort 9051", uncomment "CookieAuthentication 0" and set it to 1 ("CookieAuthentication 1"). Save and close.
 
 ```bash
 sudo /etc/init.d/tor restart 
-```
-
-#### Check the install:
-
-```bash
 curl ifconfig.me/ip
 torify curl ifconfig.me/ip
 print 'AUTHENTICATE ""\r\nsignal NEWNYM\r\nQUIT' | nc 127.0.0.1 9051
