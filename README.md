@@ -4,7 +4,6 @@
 *This software is a PHP/MySQL rewrite/redesign of [Kaos155](https://github.com/Ingobernable/kaos155/), developped by the same [Ingoberlab](https://hacklab.ingobernable.net/) team. It aims at providing a browser of all the world's public bulletins' data, and altogether analyze how bribery has been hiding through history.*
 
 
-
 **Licensed under** [GNU General Public License v3](LICENSE) / 
 **Copyright** &copy; 2017 [StateMapper.net](https://statemapper.net) & [Ingoberlab](https://hacklab.ingobernable.net) / 
 **Email:** <statemapper@riseup.net> / **Chat:** Jabber/XMPP <statemapper@conference.riseup.net>
@@ -34,7 +33,7 @@
 - [TODOs](#todos)
 
 
-## Manifiest
+## Manifest
 
 Official bulletins are a mess: unpublished or in unstructured manner, lots of plain text to read, no browser. And this is a key point to hide public bribary. StateMapper is born after project Kaos155 was uncovered, both in an attempt to [.....]
 
