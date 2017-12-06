@@ -65,7 +65,7 @@ mkdir /var/www/statemapper
 cd /var/www/statemapper
 git clone https://github.com/StateMapper/StateMapper
 ```
-* Edit *config.php* and change the constants according to your needs (follow the instructions in comments).
+* Edit ```config.php``` and change the constants according to your needs (follow the instructions in comments).
 
 
 ### IPFS Installation and checks: *(optional)*
