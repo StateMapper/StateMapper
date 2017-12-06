@@ -41,8 +41,8 @@ Official bulletins are a mess: unpublished or in unstructured manner, lots of pl
 - curl
 - pdftotext (from poppler-utils)
 
-- [IPFS](https://ipfs.io/) *(optional)*
-- [TOR](https://www.torproject.org/) *(optional)*
+- Optional: [IPFS](https://ipfs.io/)
+- Optional: [TOR](https://www.torproject.org/)
 
 **Included libraries:** [jQuery](http://jquery.com/), [FontAwesome](http://fontawesome.io/icons/) and [Tippy.js](https://atomiks.github.io/tippyjs/).
 
