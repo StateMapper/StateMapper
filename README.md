@@ -229,10 +229,12 @@ Continents and countries are all first level folders (bulletins/EU and bulletins
 
 Within each bulletin's schema, the following parts are the most important:
 
-- guesses: ...
-- fetchProtocoles: set of rules to fetch bulletins according to given parameters (date, id, url..)
-- parsingProtocoles: set of rules to parse fetched bulletins
-- extractProtocoles: dataset to be extracted from parsed bulletins
+| Schema part | Description |
+| ----- | ----- |
+| guesses | set of rules to guess query parameters from other parameteres |
+| fetchProtocoles | set of rules to fetch bulletins according to available parameters (date, id, url..) |
+| parsingProtocoles | set of rules to parse the fetched bulletins (mostly XPath and Regexp) |
+| extractProtocoles | final statuses to be extracted from the parsed object |
 
 
 ### Schema transformations:
