@@ -12,7 +12,7 @@
 
 -----
 
-**Index:** [Manifest](#manifest) / [Installation](#installation) / [Contribute](#contribute) / [License](#license) / [Disclaimer](#disclaimer) / [Contact us](#contact-us) / <a href="https://statemapper.net" target="_blank">Live website &rarr;</a>
+**Index:** [Manifest](#manifest) / [Installation](#installation) / [Contribute](#contribute) / [License](#license) / [Disclaimer](#disclaimer) / [Contact us](#contact-us) / <a href="https://statemapper.net" target="_blank">StateMapper.net &rarr;</a>
 
 
 ## Manifest:
