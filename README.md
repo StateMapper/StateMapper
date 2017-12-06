@@ -57,7 +57,7 @@ sudo a2enmod rewrite
 sudo service apache2 restart
 ```
 
-* Follow the [TokuDB installation instructions there](https://mariadb.com/kb/en/library/enabling-tokudb/).
+* Follow the TokuDB installation instructions [here](https://mariadb.com/kb/en/library/enabling-tokudb/).
 
 * Clone the repository to a dedicated folder in your Apache working directory:
 ```
