@@ -1,6 +1,8 @@
-![StateMapper](app/assets/images/logo/logo-black-big.png)
+<p align="center">
+	![StateMapper](app/assets/images/logo/logo-black-big.png)
+</p>
 
-[![Twitter Follow](https://img.shields.io/twitter/follow/espadrine.svg?style=social&label=Follow)](https://twitter.com/StateMapper)
+[![Twitter Follow](https://img.shields.io/twitter/follow/espadrine.svg?style=social&label=Follow+@StateMapper)](https://twitter.com/StateMapper)
 
 *This software is a PHP/MySQL rewrite/redesign of [Kaos155](https://github.com/Ingobernable/kaos155/) developped by the same [Ingoberlab](https://hacklab.ingobernable.net/) team. It aims at providing a browser of all the world's public bulletins' data, and altogether analyze how bribery has been hiding through history.*
 
