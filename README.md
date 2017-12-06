@@ -35,6 +35,8 @@ Official bulletins are a mess: unpublished or in unstructured manner, lots of pl
 
 ## Minimal requirements
 
+StateMapper was only tested on Ubuntu 16.04, but might work just well on any Debian-based system. Here are the requirement:
+
 - PHP4+ (best PHP7+)
 - MariaDB with its [TokuDB plugin](https://mariadb.com/kb/en/library/tokudb/) (though MySQL may be enough for local development)
 - Apache 2.2+ with mod_rewrite enabled
@@ -44,9 +46,7 @@ Official bulletins are a mess: unpublished or in unstructured manner, lots of pl
 - [IPFS](https://ipfs.io/) *(optional)*
 - [TOR](https://www.torproject.org/) *(optional)*
 
-**Included libraries:** [jQuery](http://jquery.com/), [FontAwesome](http://fontawesome.io/icons/) and [Tippy.js](https://atomiks.github.io/tippyjs/).
-
-**Disclaimer:** StateMapper was only tested on Ubuntu 16.04, but might work just well on any Debian-based system. 
+StateMapper includes [jQuery](http://jquery.com/), [FontAwesome](http://fontawesome.io/icons/) and [Tippy.js](https://atomiks.github.io/tippyjs/).
 
 
 ## Basic installation
