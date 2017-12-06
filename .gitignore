@@ -1,0 +1,13 @@
+
+# Windows temp files
+*.DS_Store
+
+# Unix temp files
+*~
+
+# Main configuration file
+config.php
+
+# Bulletins
+bulletins/*
+

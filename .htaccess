@@ -1,0 +1,34 @@
+
+<IfModule mod_rewrite.c>
+
+Options -Indexes
+
+RewriteEngine On
+
+# Force HTTPS (enable on production!)
+# RewriteCond %{HTTPS} !on
+# RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+
+# Stop rewriting if index.php is being called
+RewriteRule ^index\.php$ - [L]
+
+# Redirect everything to index.php, except js, css, pictures, svg, favicons and fonts
+RewriteCond %{REQUEST_FILENAME} !\.(js|css|png|jpg|jpeg|gif|eot|woff|ttf|svg|otf|woff2|ico)$
+RewriteRule . index.php [L]
+
+# Allow serving fonts
+AddType application/vnd.ms-fontobject .eot
+AddType application/font-woff .woff
+AddType application/x-font-truetype .ttf
+AddType image/svg+xml .svg
+AddType application/x-font-opentype .otf
+
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch ".(js|css|xml|gz|html)$">
+
+    Header append Vary: Accept-Encoding
+
+  </FilesMatch>
+</IfModule>
