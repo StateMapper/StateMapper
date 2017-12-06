@@ -1,9 +1,11 @@
 <p align="center">
-	<a href="https://github.com/StateMapper/StateMapper" title="Go back to the project's homepage"><img src="../../app/assets/images/logo/logo-black-big.png" /></a>
+	<a href="https://github.com/StateMapper/StateMapper" title="Go to the project's homepage"><img src="../../app/assets/images/logo/logo-black-big.png" /></a>
 </p>
 <p align="center">
 	<strong>INSTALLATION GUIDE</strong>
 </p>
+
+[&larr; Go to the project's homepage](https://github.com/StateMapper/StateMapper)
 
 ## Requirements
 
