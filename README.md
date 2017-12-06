@@ -52,7 +52,7 @@ StateMapper might work just well on any Debian-based system. Here are the requir
 ## Basic installation
 
 1. Install and start the web server:
-```sh
+```bash
 sudo apt-get install php7.0 apache2 libapache2-mod-php mariadb-plugin-tokudb php-mcrypt php-mysql curl poppler-utils
 sudo a2enmod rewrite			# enable Apache's mod_rewrite
 sudo service apache2 restart		# make sure Apache is running
@@ -67,27 +67,27 @@ git clone https://github.com/StateMapper/StateMapper
 4. Edit ```config.php``` and change the constants according to your needs (follow the instructions in comments).
 
 
-### Optional: IPFS addon
+5. **Optional:** Install IPFS
 
 Please follow the instructions from [the IPFS documentation](https://ipfs.io/docs/install/) (recommended *"Installing from a Prebuilt Package"*). Then enter:
 
-```sh
+```bash
 ipfs init
 ipfs daemon& 			# wait 3 seconds and press Ctrl+L to clear the screen
 ipfs cat /ipns/...... 		# shoud print something if IPFS is well configured
 ```
 
-### Optional: TOR addon
+6. **Optional:** Install TOR
 
 Install TOR following [these instructions](https://www.torproject.org/docs/debian.html.en). Then enter:
 
-```sh
+```bash
 sudo vim /etc/tor/torrc 			# or emacs, nano, gedit..
 ```
 
 Uncomment ```ControlPort 9051```, uncomment ```CookieAuthentication 0``` and set it to 1 (```CookieAuthentication 1```). Save and close. Then enter:
 
-```sh
+```bash
 sudo service tor restart	 		# make sure TOR is running
 curl ifconfig.me/ip				# should print your real IP
 torify curl ifconfig.me/ip			# should print another IP
@@ -102,7 +102,7 @@ torify curl ifconfig.me/ip 			# should print yet another IP
 If your Apache user is not ```www-data```, edit the first constant in ```scripts/statemapper```. 
 
 Get a system-wide ```smap``` command with the following:
-```sh 
+```bash 
 echo 'alias smap="/var/www/statemapper/scripts/statemapper "' >> ~/.bashrc
 source ~/.bashrc
 ```
@@ -113,7 +113,7 @@ Then explore the CLI API entering ```smap``` in a terminal.
 
 ### Web GUI: 
 
-```sh
+```bash
 sudo service apache2 restart 	# make sure Apache is running
 sudo service mysql restart 	# make sure MySQL is running
 ```
@@ -130,7 +130,7 @@ Like with the CLI API, most frontend URLs can be appended ```/raw``` to get a ra
 
 If you want the spiders to be able to start, it is required to start the daemon with ```smap daemon start```. Here are the available daemon commands:
 
-```sh
+```bash
 smap daemon [start] 		# start the daemon in the background
 smap daemon -d 			# start it in debug mode (do not daemonize)
 smap daemon stop 		# stop it smoothly (wait for the workers)
@@ -259,7 +259,7 @@ Within each bulletin's schema, the following parts are the most important:
 * When developping and fetching lots of bulletins, sometimes you won't have enough space on your local disk.
 To move everything to a new disk, we recommend using the following command:
 
-```sh
+```bash
 rsync -arv --size-only /path/to/statemapper/data/ /path/to/your/external_disk/statemapper/data
 ```
 
@@ -267,7 +267,7 @@ Then modify the DATA_PATH in ```config.php```.
 
 * To delete all files from a specific extension (say .pdf), use the following:
 
-```sh
+```bash
 find /path/to/statemapper/data/ -name "*.pdf" -type f -delete
 ```
 
