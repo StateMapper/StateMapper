@@ -97,7 +97,7 @@ torify curl ifconfig.me/ip 			# should print yet another IP
 
 ## Test StateMapper:
 
-### Command line API (CLI):
+### Command line API:
 
 If your Apache user is not ```www-data```, edit the first constant in ```scripts/statemapper```. 
 Then install a system-wide ```smap``` command entering the following:
