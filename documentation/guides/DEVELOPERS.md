@@ -10,16 +10,16 @@
 
 -----
 
-**Index:** [Dataflow layers](#data-extraction-layers) / [Folder structure](#folder-structure) / [Bulletin schemas structure](#bulletin-schemas-structure) / [Schema transformations](#schema-transformations) / [Tips & tricks](#tips--tricks)
+**Index:** [Dataflow layers](#dataflow-layers) / [Folder structure](#folder-structure) / [Bulletin schemas structure](#bulletin-schemas-structure) / [Schema transformations](#schema-transformations) / [Tips & tricks](#tips--tricks)
 
 
 ## Dataflow layers:
 
 | Layer name | Role |
 | -------- | ---- |
-| **fetch** | downloads bulletins from original source |
-| **parse** | parses bulletins and triggering subsequent fetches (follows) |
-| **extract** | extracts precepts and status from parsed object |
+| fetch | downloads bulletins from original source |
+| parse | parses bulletins and triggering subsequent fetches (follows) |
+| extract | extracts precepts and status from parsed object |
 
 ![Classes diagram](../classes_diagram.png)
 
