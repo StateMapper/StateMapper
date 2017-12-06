@@ -12,7 +12,7 @@
 
 -----
 
-**Index:** [Manifest](#manifest) / [Installation](#installation) / [Contribute](#contribute) / [License](#license) / [Disclaimer](#disclaimer) / [Contact us](#contact-us) / <a href="https://statemapper.net">StateMapper.net &rarr;</a>
+**Index:** [Manifest](#manifest) / [Installation](#installation) / [Contribute](#contribute) / [License](#license) / [Disclaimer](#disclaimer) / [Contact & support](#contact--support) / <a href="https://statemapper.net">StateMapper.net &rarr;</a>
 
 
 ## Manifest:
@@ -71,9 +71,9 @@ StateMapper builds sheets about people based on their names (not ID numbers). Th
 THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU. SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
 
 
-## Contact us:
+## Contact and support:
 
-Please write us at [statemapper@riseup.net](mailto:statemapper@riseup.net) or come to chat with us at [statemapper@conference.riseup.net](statemapper@conference.riseup.net) ([Jabber/XMPP](https://jabber.at/p/clients/)).
+Please feel free to write us at [statemapper@riseup.net](mailto:statemapper@riseup.net) or come to chat with us at [statemapper@conference.riseup.net](statemapper@conference.riseup.net) ([Jabber/XMPP](https://jabber.at/p/clients/)).
 
 -----
 
