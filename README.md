@@ -51,20 +51,22 @@ StateMapper might work just well on any Debian-based system. Here are the requir
 
 ## Basic installation
 
-```bash
+1. ```bash
 sudo apt-get install php7.0 apache2 libapache2-mod-php mariadb-plugin-tokudb php-mcrypt php-mysql curl poppler-utils
 sudo a2enmod rewrite			# enable Apache's mod_rewrite
 sudo service apache2 restart		# make sure Apache is running
 ```
 
-Follow these [TokuDB installation instructions](https://mariadb.com/kb/en/library/enabling-tokudb/). Then clone the repository to a dedicated folder in your Apache working directory:
+2. Follow these [TokuDB installation instructions](https://mariadb.com/kb/en/library/enabling-tokudb/). 
+
+3. Then clone the repository to a dedicated folder in your Apache working directory:
 
 ```
 mkdir /var/www/statemapper
 cd /var/www/statemapper
 git clone https://github.com/StateMapper/StateMapper
 ```
-Edit ```config.php``` and change the constants according to your needs (follow the instructions in comments).
+4. Edit ```config.php``` and change the constants according to your needs (follow the instructions in comments).
 
 
 ### Optional: IPFS addon
