@@ -68,7 +68,7 @@ git clone https://github.com/StateMapper/StateMapper
 * Edit ```config.php``` and change the constants according to your needs (follow the instructions in comments).
 
 
-### IPFS Installation and checks: *(optional)*
+### Optional: IPFS Installation and checks
 
 Please follow the instructions from [the IPFS documentation](https://ipfs.io/docs/install/) (recommended *"Installing from a Prebuilt Package"*). Then enter:
 
@@ -78,9 +78,7 @@ ipfs daemon& # (wait 3 seconds and press Ctrl+L to clear the screen)
 ipfs cat /ipns/...... # (to check IPFS is working well)
 ```
 
-### TOR Installation and checks: *(optional)*
-
-#### Installation instructions:
+### Optional: TOR Installation and checks
 
 - Install TOR following [these instructions](https://www.torproject.org/docs/debian.html.en).
 
