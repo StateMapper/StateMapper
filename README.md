@@ -230,7 +230,7 @@ Bulletin schemas are the definition files of each bulletin, issuing institution 
 | bulletins/XX/BULLETIN_NAME.json | bulletin's schema |
 | bulletins/XX/BULLETIN_NAME.png | 64x64px picture for the bulletin |
 
-Continents and countries are all first level folders (bulletins/EU and bulletins/ES). Flags are taken from ```app/assets/images/flags/XX.png```.
+Continents and countries are all first level folders (bulletins/EU and bulletins/ES). Country/continent flags are taken from ```app/assets/images/flags/XX.png```.
 
 Within each bulletin's schema, the following parts are the most important:
 
