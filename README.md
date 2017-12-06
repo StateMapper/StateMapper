@@ -1,6 +1,10 @@
 <p align="center" id="top">
 	<img src="app/assets/images/logo/logo-black-big.png" />
 </p>
+<p align="center" id="badges">
+	<img src="https://img.shields.io/badge/language-PHP-yellow.svg" />
+	<img src="https://img.shields.io/badge/license-GPL3-green.svg" />
+</p>
 
 
 *This software is a PHP/MySQL rewrite/redesign of [Kaos155](https://github.com/Ingobernable/kaos155/) developped by the same [Ingoberlab](https://hacklab.ingobernable.net/) team. It aims at providing a browser of all the world's public bulletins' data, and altogether analyze how bribery has been hiding through history.*
