@@ -69,7 +69,8 @@ git clone https://github.com/StateMapper/StateMapper
 
 ```bash
 ipfs init
-ipfs daemon & 			# wait 3 seconds and press Ctrl+L to clear the screen
+ipfs daemon& 
+# wait 3 seconds and press Ctrl+L to clear the screen
 ipfs cat /ipns/...... 		# shoud print something if IPFS is well configured
 ```
 
