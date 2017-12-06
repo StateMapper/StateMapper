@@ -10,15 +10,15 @@
 
 - [Manifest](#manifest)
 - [Minimal requirements](#minimal-requirements)
-- [Basic installation](#basic-installation)
+- [Installation](#basic-installation)
 - [IPFS Installation and checks](#ipfs-installation-and-checks-optional) *(optional)*
 - [TOR Installation and checks](#tor-installation-and-checks-optional) *(optional)*
-- [Test StateMapper](#test-statemapper)
-  - [Command line API (CLI)](#command-line-api-cli)
+- [Usage](#test-statemapper)
+  - [Command line API](#command-line-api-cli)
   - [Web GUI](#web-gui)
   - [Web API](#web-api)
   - [Daemon commands](#daemon-commands)
-- [Contribute to StateMapper](#contribute-to-statemapper)
+- [Contribute](#contribute-to-statemapper)
   - [Data extraction layers](#data-extraction-layers)
   - [Folder structure](#folder-structure)
   - [Bulletin schemas structure](#bulletin-schemas-structure)
