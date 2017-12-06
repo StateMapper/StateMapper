@@ -148,7 +148,9 @@ Then open a browser and navigate to http://localhost/statemapper/app/
 
 ### Web API: 
 
-Navigate to http://localhost/statemapper/app/api/ to browse bulletins' actions. Like with the CLI API, most actions' URLs can be appended "/raw" to get a JSON raw output. For example http://localhost/statemapper/app/api/es/boe/2017-02-01/parse/raw.
+Navigate to http://localhost/statemapper/app/api/ to browse all bulletins. 
+
+Like with the CLI API, most actions' URLs can be appended "/raw" to get a JSON raw output. For example http://localhost/statemapper/app/api/es/boe/2017-02-01/parse/raw.
 
 
 ### Daemon commands:
