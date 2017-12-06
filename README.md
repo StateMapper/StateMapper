@@ -46,8 +46,6 @@ StateMapper might work just well on any Debian-based system. Here are the requir
 - [IPFS](https://ipfs.io/) *(optional)*
 - [TOR](https://www.torproject.org/) *(optional)*
 
-StateMapper includes [jQuery](http://jquery.com/), [FontAwesome](http://fontawesome.io/icons/) and [Tippy.js](https://atomiks.github.io/tippyjs/).
-
 
 ## Basic installation
 
@@ -315,6 +313,8 @@ find /path/to/statemapper/data/ -name "*.pdf" -type f -delete
 ## License
 
 The StateMapper software and all its documentation are licensed under the [GNU General Public License v3.0](COPYING), also included in our repository in the [COPYING](COPYING) file.
+
+StateMapper includes [jQuery](http://jquery.com/), [FontAwesome](http://fontawesome.io/icons/) and [Tippy.js](https://atomiks.github.io/tippyjs/).
 
 
 ## Contact
