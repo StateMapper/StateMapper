@@ -8,16 +8,12 @@
 *[&larr; Project's homepage](https://github.com/StateMapper/StateMapper#top)*
 
 
-## Index:
+-----
 
-- [Data extraction layers](#data-extraction-layers)
-- [Folder structure](#folder-structure)
-- [Bulletin schemas structure](#bulletin-schemas-structure)
-- [Schema transformations](#schema-transformations)
-- [Tips & tricks](#tips--tricks)
+**Index:** [Dataflow layers](#data-extraction-layers) / [Folder structure](#folder-structure) / [Bulletin schemas structure](#bulletin-schemas-structure) / [Schema transformations](#schema-transformations) / [Tips & tricks](#tips--tricks)
 
 
-## Data extraction layers:
+## Dataflow layers:
 
 - **fetch**:		in charge of downloading bulletins from original source.
 - **parse**:		in charge of parsing bulletins and triggering subsequent fetches (follows).
@@ -130,4 +126,4 @@ find /path/to/statemapper/data/ -name "*.pdf" -type f -delete
 
 -----
 
-*[&larr; Project's homepage](https://github.com/StateMapper/StateMapper#top) / StateMapper &copy; 2017 [StateMapper.net](https://statemapper.net) & [Ingoberlab](https://hacklab.ingobernable.net) / Licensed under [GNU GPLv3](../../COPYING).*
+*[&larr; Project's homepage](https://github.com/StateMapper/StateMapper#top) / StateMapper &copy; 2017 [StateMapper.net](https://statemapper.net) & [Ingoberlab](https://hacklab.ingobernable.net) / Licensed under [GNU GPLv3](../../COPYING) / [&uarr; top](#top)*
