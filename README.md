@@ -1,7 +1,7 @@
-<p align="center" id="top">
+<p align="" id="top">
 	<img src="app/assets/images/logo/logo-black-big.png" />
 </p>
-<p align="center" id="badges">
+<p align="" id="badges">
 	<img src="https://img.shields.io/badge/language-PHP-yellow.svg?style=flat-square" />
 	<img src="https://img.shields.io/badge/platform-Linux-lightgrey.svg?style=flat-square" />
 	<img src="https://img.shields.io/badge/license-GPL3-green.svg?style=flat-square" />
@@ -13,8 +13,9 @@
 **Disclaimer:** StateMapper builds sheets about people based on their names (not ID numbers). This means one sheet may represent several people at the same time, with the exact same name(s) and last name(s).
 
 
-<div align="center">
-	<div></div>
+<div>
+	<div> </div>
+	<div> </div>
 	<div>Index</div>
 	<div><a href="#manifest">Manifest</a></div>
 	<div><a href="#installation">Installation</a></div>
