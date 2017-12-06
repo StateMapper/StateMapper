@@ -205,10 +205,10 @@ If you wish to help with the core code or bulletin schemas, you may want to lear
 | [app/extractor](app/extractor) | extract layer |
 | [app/spider](app/spider) | spider (and workers) layer |
 | [app/api](app/api) | api controller layer |
-| [app/browser](app/browser) | frontend browser controller (?) |
-| [app/templates](app/templates) | page templates |
-| [app/helpers](app/helpers) | helpers functions |
-| [app/addons](app/addons) | addons likes wikipedia suggestions, geoencoding services..  |
+| [app/browser](app/browser) | frontend browser |
+| [app/templates](app/templates) | page and partial templates |
+| [app/helpers](app/helpers) | helper functions |
+| [app/addons](app/addons) | addons likes Wikipedia suggs, Geoencoding, Website autodetection..  |
 | [app/languages](app/languages) | translation files |
 | [app/database](app/database) | database .sql files |
 | [app/assets](app/assets) | web assets of the app (images, fonts, .css, .js) |
