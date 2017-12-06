@@ -101,11 +101,13 @@ torify curl ifconfig.me/ip 			# should print yet another IP
 
 If your Apache user is not ```www-data```, edit the first constant in ```scripts/statemapper```. 
 
-Install a system-wide ```smap``` command entering the following:
+Get a system-wide ```smap``` command with the following:
 ```bash 
 echo 'alias smap="/var/www/statemapper/scripts/statemapper "' >> ~/.bashrc
 source ~/.bashrc
-smap 					# should ask for your password, then output the CLI help
+```
+Then explore the CLI API entering:
+smap 
 ```
 **Disclaimer:** all ```smap``` calls require root login because PHP requires to be executed with the same user as the Apache server (most likely www-data), to be able to read-write files correctly.
 
