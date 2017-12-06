@@ -252,9 +252,9 @@ Within each bulletin's schema, the following parts are the most important:
 | [/?etype=company](https://statemapper.net/?etype=company) | list of all extracted companies |
 | [/?etype=person](https://statemapper.net/?etype=person) | list of all extracted people |
 | | |
-| /xx/institution/itsname | an institution's sheet from country xx |
-| /xx/company/mycompany	| a company's sheet from country xx |
-| /xx/person/john-doe | a person's sheet from country xx |
+| /xx/institution/itsname | the sheet of an institution from country xx |
+| /xx/company/mycompany	| the sheet of an company from country xx |
+| /xx/person/john-doe | the sheet of an person from country xx |
 | | |
 | [/api](https://statemapper.net/api) | list of countries, bulletin providers and schemas |
 | [/api/xx](https://statemapper.net/api/es) | list of bulletin providers and schemas for country xx (example: /api/es) |
