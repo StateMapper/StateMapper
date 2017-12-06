@@ -4,7 +4,7 @@
 <p align="center" id="badges">
 	<img src="https://img.shields.io/badge/language-PHP-yellow.svg?style=flat-square" />
 	<img src="https://img.shields.io/badge/platform-Linux-lightgrey.svg?style=flat-square" />
-	<img src="https://img.shields.io/badge/license-GPL3-green.svg?style=flat-square" />
+	<img src="https://img.shields.io/badge/license-GPLv3-green.svg?style=flat-square" />
 </p>
 
 
@@ -15,23 +15,21 @@
 **Disclaimer:** StateMapper builds sheets about people based on their names (not ID numbers). This means one sheet may represent several people at the same time, with the exact same name(s) and last name(s).
 
 
-<div><strong>Index:</strong></div>
-   <div><a href="#manifest">Manifest</a></div>
-   <div><a href="#installation">Installation</a></div>
-   <div><a href="#contribute">Contribute</a></div>
-   <div><a href="#known-bugs">Known bugs</a></div>
-   <div><a href="#todos">TODO's</a></div>
+**Index:** [Manifest](#manifest) / [Installation](#installation) / [Contribute](#contribute) / [License](#license)
 
 -----
-
 
 ## Manifest:
 
 Official bulletins are a mess: unpublished or in unstructured manner, lots of plain text to read, no browser. And this is a key point to hide public bribary. StateMapper is born short after project Kaos155 has been uncovered, [... to be continued/replaced]
 
+-----
+
 ## Installation:
 
 Please refer to [the Installation guide](documentation/guides/INSTALL.md#top).
+
+-----
 
 ## Contribute:
 
@@ -63,34 +61,6 @@ If you simply think you just had a great idea, or you have skills we may seek, d
 
 
 If you wish to help with the core code or bulletin schemas, you may want to read the [Developers guide](documentation/guides/DEVELOPERS.md).
-
-
-## Known bugs:
-
-* Chromium can't manage to display well XML within iframes
-* frontend iframe is cut from the bottom in fetch/lint mode
-* [fill...]
-
-## TODO's:
-
-**Data representation:**
-- Store location objects, and at extraction time?
-- Parse and understand/represent institutions' levels
-- Parse and understand/represent geographical levels (province, city..)
-- Detect sub-companies of given companies
-- Improve filters (think it for entity sheets, entity listings and search results, separately).
-- Maybe rebuid the Controller/API handling?
-- Add API endpoints for entity sheets (summary + details) and rewind mode (yearly stats).
-
-**UI/UX:**
-
-- Replace dev mode's date pickers by jQuery ones (FF doesn't implement HTML5 date fields)
-- Improve dev quick commands (on the title's tick in a bulletin's schema) for each seperated bulletin.
-- Check/rewrite install page
-- Add i18n function ("_('bla')") to all labels and translate to Spanish with poedit app/languages/es_ES/LC_MESSAGES + handle web language cookie?
-- Rename scripts to statemapper?
-- Implement commands "daemon status" and "daemon restart"
-- Leave enough open for researchers to be able to fill in (and share?) bulletins and data manually (for official bulletins that may not have been scanned by the state, ever).
 
 
 ## License:
