@@ -109,7 +109,7 @@ source ~/.bashrc
 
 Then explore the CLI API entering ```smap``` in a terminal.
 
-**Disclaimer:** all ```smap``` calls require root login because PHP requires to be executed with the same user as the Apache server (most likely www-data), to be able to read-write files correctly.
+**Disclaimer:** all ```smap``` calls require root login because PHP requires to be executed with the same user as the Apache server (most likely ```www-data```) to be able to read-write files correctly.
 
 ### Web GUI: 
 
