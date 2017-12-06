@@ -57,9 +57,10 @@ sudo a2enmod rewrite			# enable Apache's mod_rewrite
 sudo service apache2 restart		# make sure Apache is running
 ```
 
-* Follow the TokuDB installation instructions [here](https://mariadb.com/kb/en/library/enabling-tokudb/).
+Follow the TokuDB installation instructions [here](https://mariadb.com/kb/en/library/enabling-tokudb/).
 
-* Clone the repository to a dedicated folder in your Apache working directory:
+Clone the repository to a dedicated folder in your Apache working directory:
+
 ```
 mkdir /var/www/statemapper
 cd /var/www/statemapper
