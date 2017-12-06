@@ -327,5 +327,5 @@ Please write us at [statemapper@riseup.net](mailto:statemapper@riseup.net) or co
 
 -----
 
-StateMapper &copy;2017 [StateMapper.net](https://statemapper.net) & [Ingoberlab](https://hacklab.ingobernable.net) < https://hacklab.ingobernable.net >
+*StateMapper &copy;2017 [StateMapper.net](https://statemapper.net) & [Ingoberlab](https://hacklab.ingobernable.net) < https://hacklab.ingobernable.net >*
 
