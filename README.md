@@ -140,8 +140,9 @@ smap daemon kill 		# kill it (for emergencies only)
 
 If you like this software and its goals, there surely are many ways you can get involved!
 
-The project's current workforce splits into three comissions:
+The project's current workforce splits into three commissions:
 
+| Commission | Goal |
 | ----- | ------ |
 | Counter-bribery Strategists | in charge of the project's strategy and communication |
 | Core Wizards | in charge of improving the core code |
