@@ -58,7 +58,7 @@ StateMapper might work just well on any Debian-based system. Here are the requir
 
 2. Install TokuDB following [these instructions](https://mariadb.com/kb/en/library/enabling-tokudb/). 
 
-3. OPTIONAL: Install IPFS following [these instructions](https://ipfs.io/docs/install/). Then enter:
+3. <u>OPTIONAL:</u> Install IPFS following [these instructions](https://ipfs.io/docs/install/). Then enter:
 
    ```bash
    ipfs init
@@ -66,7 +66,7 @@ StateMapper might work just well on any Debian-based system. Here are the requir
    ipfs cat /ipns/...... 		# shoud print something if IPFS is well configured
    ```
 
-4. OPTIONAL: Install TOR following [these instructions](https://www.torproject.org/docs/debian.html.en).  
+4. <u>OPTIONAL:</u> Install TOR following [these instructions](https://www.torproject.org/docs/debian.html.en).  
    
    Then edit ```/etc/tor/torrc```. Uncomment ```ControlPort 9051```, uncomment ```CookieAuthentication 0``` and set it to 1 (```CookieAuthentication 1```). Save and close. Then enter:  
 
@@ -88,7 +88,7 @@ StateMapper might work just well on any Debian-based system. Here are the requir
 
 6. Edit ```config.php``` and change the constants according to your needs (follow the instructions in comments).
 
-7. OPTIONAL: Setup an ```smap``` alias to access the CLI API easily. Enter:
+7. <u>OPTIONAL:</u> Setup an ```smap``` alias to access the CLI API easily. Enter:
 
    ```bash 
    echo 'alias smap="/var/www/statemapper/scripts/statemapper "' >> ~/.bashrc
@@ -96,7 +96,7 @@ StateMapper might work just well on any Debian-based system. Here are the requir
    smap							# should print the CLI help
    ```
    
-   **Disclaimer:** all ```smap``` calls require root login because PHP requires to be executed with the same user as the Apache server (most likely ```www-data```) to be able to read-write files correctly.
+   *Disclaimer: all ```smap``` calls require root login because PHP requires to be executed with the same user as the Apache server (most likely ```www-data```) to be able to read-write files correctly.*
 
 
 8. Restart the web server and visit the Web GUI:
