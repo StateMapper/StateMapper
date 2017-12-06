@@ -75,7 +75,7 @@ Please follow the instructions from [the IPFS documentation](https://ipfs.io/doc
 ```bash
 ipfs init
 ipfs daemon& 			# wait 3 seconds and press Ctrl+L to clear the screen
-ipfs cat /ipns/...... 	# shoud print something if IPFS is well configured
+ipfs cat /ipns/...... 		# shoud print something if IPFS is well configured
 ```
 
 ### Optional: TOR addon
