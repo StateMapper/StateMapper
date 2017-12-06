@@ -21,7 +21,7 @@ StateMapper might work just fine on any [Debian-based](https://www.debian.org/de
 * [Apache](https://httpd.apache.org/) 2.2+ with [mod_rewrite](http://httpd.apache.org/docs/current/mod/mod_rewrite.html) enabled
 * [cURL](http://php.net/manual/en/intro.curl.php)
 * [pdftotext](https://poppler.freedesktop.org/) *(from Poppler)*
-* [git](https://git-scm.com/docs/gittutorial) *(or simply download the files from Github)*
+* [git](https://git-scm.com/docs/gittutorial) *(or simply download the files from this repository)*
 
 * [IPFS](https://ipfs.io/ "InterPlanetary File System") *(optional)*
 * [TOR](https://www.torproject.org/ "The TOR Project") *(optional)*
@@ -35,21 +35,16 @@ StateMapper might work just fine on any [Debian-based](https://www.debian.org/de
    ```
 2. Install TokuDB following [these instructions](https://mariadb.com/kb/en/library/enabling-tokudb/). 
 
-3. Fix Apache root folder's permissions: *(replace ```/var/www/html``` if convenient)*
+3. Fix Apache permissions and enable mod_rewrite: *(replace ```www-data``` and ```/var/www/html``` if convenient)*
    ```bash
    sudo chgrp -R www-data /var/www/html
    sudo find /var/www/html -type d -exec chmod g+rx {} +
    sudo find /var/www/html -type f -exec chmod g+r {} +
-   ```
-
-4. Enable mod_rewrite and restart Apache:
-   ```bash
    sudo a2enmod rewrite		# enable Apache's mod_rewrite
    sudo service apache2 restart 	# make sure Apache is running
-   sudo service mysql restart 	# make sure MySQL is running
    ```
 
-5. OPTIONAL: Install IPFS following [these instructions](https://ipfs.io/docs/install/). Then enter:
+4. OPTIONAL: Install IPFS following [these instructions](https://ipfs.io/docs/install/). Then enter:
 
    ```bash
    ipfs init
@@ -57,7 +52,7 @@ StateMapper might work just fine on any [Debian-based](https://www.debian.org/de
    ipfs cat /ipns/...... 		# shoud print something if IPFS is well configured
    ```
 
-6. OPTIONAL: Install TOR following [these instructions](https://www.torproject.org/docs/debian.html.en).  
+5. OPTIONAL: Install TOR following [these instructions](https://www.torproject.org/docs/debian.html.en).  
    
    Then edit ```/etc/tor/torrc```. Uncomment ```ControlPort 9051```, uncomment ```CookieAuthentication 0``` and set it to 1 (```CookieAuthentication 1```). Save and close. Then enter:  
 
@@ -69,16 +64,16 @@ StateMapper might work just fine on any [Debian-based](https://www.debian.org/de
    torify curl ifconfig.me/ip 			# should print yet another IP
    ```
 
-7. Clone this repository to a dedicated folder in your Apache's root folder: (most probably ```/var/www/html```)
+6. Clone this repository to a dedicated folder in your Apache's root folder: (most probably ```/var/www/html```)
 
    ```bash
    git clone https://github.com/StateMapper/StateMapper /var/www/html/statemapper
    ```
    *Alternatively, if you already have the files, you can simply extract them to ```/var/www/html/statemapper```.*
 
-8. Edit ```config.php``` and change the constants according to your needs (follow the instructions in comments).
+7. Edit ```config.php``` and change the constants according to your needs (follow the instructions in comments).
 
-9. OPTIONAL: Create an ```smap``` alias to access the CLI API easily from anywhere. Enter:
+8. OPTIONAL: Create an ```smap``` alias to access the CLI API easily from anywhere. Enter:
 
    ```bash 
    echo 'alias smap="/var/www/html/statemapper/scripts/statemapper "' >> ~/.bashrc
@@ -89,7 +84,7 @@ StateMapper might work just fine on any [Debian-based](https://www.debian.org/de
    *Disclaimer: all ```smap``` calls require root login because PHP requires to be executed with the same user as the Apache server (most likely ```www-data```) to be able to read-write files correctly.*
 
 
-10. Open a browser and navigate to http://localhost/statemapper/app/
+9. Open a browser and navigate to http://localhost/statemapper/app/
 
 
 ## Daemon commands:
