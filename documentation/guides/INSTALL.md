@@ -99,3 +99,9 @@ smap daemon -d 			# start it in debug mode (do not daemonize)
 smap daemon stop 		# stop it smoothly (wait for the workers)
 smap daemon kill 		# kill it (for emergencies only)
 ```
+
+-----
+
+[&larr; Project's homepage](https://github.com/StateMapper/StateMapper#top)
+
+*StateMapper &copy; 2017 [StateMapper.net](https://statemapper.net) & [Ingoberlab](https://hacklab.ingobernable.net)*
