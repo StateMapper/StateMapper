@@ -51,19 +51,20 @@ StateMapper might work just well on any Debian-based system. Here are the requir
 
 ## Basic installation
 
-1. Install and start the web server:
+1. Install dependencies:
 ```bash
 sudo apt-get install php7.0 apache2 libapache2-mod-php mariadb-plugin-tokudb php-mcrypt php-mysql curl poppler-utils
-sudo a2enmod rewrite			# enable Apache's mod_rewrite
-sudo service apache2 restart		# make sure Apache is running
 ```
+
 2. Follow [these TokuDB installation instructions](https://mariadb.com/kb/en/library/enabling-tokudb/). 
+
 3. Clone the repository to a dedicated folder in your Apache working directory: (most probably ```/var/www```)
 ```
 mkdir /var/www/statemapper
 cd /var/www/statemapper
 git clone https://github.com/StateMapper/StateMapper
 ```
+
 4. **OPTIONAL: Install IPFS**. Follow the instructions from [the IPFS documentation](https://ipfs.io/docs/install/) (recommended *"Installing from a Prebuilt Package"*). Then enter:
 
 ```bash
@@ -71,6 +72,7 @@ ipfs init
 ipfs daemon& 			# wait 3 seconds and press Ctrl+L to clear the screen
 ipfs cat /ipns/...... 		# shoud print something if IPFS is well configured
 ```
+
 5. **OPTIONAL:** Install TOR
 
 Install TOR following [these instructions](https://www.torproject.org/docs/debian.html.en). Then enter:
@@ -88,7 +90,14 @@ torify curl ifconfig.me/ip			# should print another IP
 print 'AUTHENTICATE ""\r\nsignal NEWNYM\r\nQUIT' | nc 127.0.0.1 9051
 torify curl ifconfig.me/ip 			# should print yet another IP
 ```
+
 6. Edit ```config.php``` and change the constants according to your needs (follow the instructions in comments).
+
+7. Start Apache with mod_rewrite:
+```bash
+sudo a2enmod rewrite			# enable Apache's mod_rewrite
+sudo service apache2 restart		# make sure Apache is running
+```
 
 
 ## Test StateMapper:
