@@ -39,14 +39,14 @@ Official bulletins are a mess: unpublished or in unstructured manner, lots of pl
 
 StateMapper might work just well on any Debian-based system. Here are the requirement:
 
-- PHP4+ (best PHP7+)
-- MariaDB with its [TokuDB plugin](https://mariadb.com/kb/en/library/tokudb/) (though MySQL may be enough for local development)
-- Apache 2.2+ with mod_rewrite enabled
-- curl
-- pdftotext (from poppler-utils)
+* PHP4+ (best PHP7+)
+* MariaDB with its [TokuDB plugin](https://mariadb.com/kb/en/library/tokudb/) (though MySQL may be enough for local development)
+* Apache 2.2+ with mod_rewrite enabled
+* curl
+* pdftotext (from poppler-utils)
 
-- [IPFS](https://ipfs.io/) *(optional)*
-- [TOR](https://www.torproject.org/) *(optional)*
+* [IPFS](https://ipfs.io/) *(optional)*
+* [TOR](https://www.torproject.org/) *(optional)*
 
 
 ## Basic installation
