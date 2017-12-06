@@ -52,28 +52,23 @@ StateMapper might work just well on any Debian-based system. Here are the requir
 ## Basic installation
 
 1. Install dependencies: *(if MySQL is installed, it will be replaced by MariaDB)*
-```bash
-sudo apt-get install php7.0 apache2 libapache2-mod-php mariadb-plugin-tokudb php-mcrypt php-mysql curl poppler-utils
-```
+   ```bash
+   sudo apt-get install php7.0 apache2 libapache2-mod-php mariadb-plugin-tokudb php-mcrypt php-mysql curl poppler-utils
+   ```
 
 2. Install TokuDB following [these instructions](https://mariadb.com/kb/en/library/enabling-tokudb/). 
 
 3. OPTIONAL: Install IPFS following [these instructions](https://ipfs.io/docs/install/). Then enter:
 
-```bash
-ipfs init
-ipfs daemon& 			# wait 3 seconds and press Ctrl+L to clear the screen
-ipfs cat /ipns/...... 		# shoud print something if IPFS is well configured
-```
+   ```bash
+   ipfs init
+   ipfs daemon& 			# wait 3 seconds and press Ctrl+L to clear the screen
+   ipfs cat /ipns/...... 		# shoud print something if IPFS is well configured
+   ```
 
-4. OPTIONAL: Install TOR.
-
-   Follow [these instructions](https://www.torproject.org/docs/debian.html.en).  
+4. OPTIONAL: Install TOR following [these instructions](https://www.torproject.org/docs/debian.html.en).  
    
-   Then edit ```/etc/tor/torrc```  
-   Uncomment ```ControlPort 9051```  
-   Uncomment ```CookieAuthentication 0``` and set it to 1 (```CookieAuthentication 1```).   
-   Save and close. Then enter:  
+   Then edit ```/etc/tor/torrc```. Uncomment ```ControlPort 9051```, uncomment ```CookieAuthentication 0``` and set it to 1 (```CookieAuthentication 1```). Save and close. Then enter:  
 
    ```bash
    sudo service tor restart	 		# make sure TOR is running
@@ -84,19 +79,21 @@ ipfs cat /ipns/...... 		# shoud print something if IPFS is well configured
    ```
 
 5. Clone this repository to a dedicated folder in your Apache working directory: (most probably ```/var/www```)
-```
-mkdir /var/www/statemapper
-cd /var/www/statemapper
-git clone https://github.com/StateMapper/StateMapper
-```
+
+   ```
+   mkdir /var/www/statemapper
+   cd /var/www/statemapper
+   git clone https://github.com/StateMapper/StateMapper
+   ```
 
 6. Edit ```config.php``` and change the constants according to your needs (follow the instructions in comments).
 
 7. Start Apache with mod_rewrite:
-```bash
-sudo a2enmod rewrite			# enable Apache's mod_rewrite
-sudo service apache2 restart		# make sure Apache is running
-```
+
+   ```bash
+   sudo a2enmod rewrite			# enable Apache's mod_rewrite
+   sudo service apache2 restart		# make sure Apache is running
+   ```
 
 
 ## Test StateMapper:
