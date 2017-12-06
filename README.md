@@ -102,7 +102,7 @@ StateMapper might work just well on any Debian-based system. Here are the requir
 8. Restart the web server and visit the Web GUI:
 
    ```bash
-   sudo a2enmod rewrite			# enable Apache's mod_rewrite
+   sudo a2enmod rewrite		# enable Apache's mod_rewrite
    sudo service apache2 restart 	# make sure Apache is running
    sudo service mysql restart 	# make sure MySQL is running
    ```
