@@ -100,7 +100,7 @@ The extraction layer is where data is finally saved to the database in the form 
 Status are sorted by ```type``` and ```action``` as follows:
 
 | Type | Action | Meaning | Arguments |
-| ---- | ----- | ----- |
+| ---- | ----- | ----- | ---- |
 | name | new | company foundation | note: the company name |
 | name | update | name change | target_id: the new entity |
 | name | end | company dissolution | | |
