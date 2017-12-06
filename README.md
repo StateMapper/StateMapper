@@ -51,7 +51,8 @@ StateMapper might work just well on any Debian-based system. Here are the requir
 
 ## Basic installation
 
-1. ```bash
+1. 
+```bash
 sudo apt-get install php7.0 apache2 libapache2-mod-php mariadb-plugin-tokudb php-mcrypt php-mysql curl poppler-utils
 sudo a2enmod rewrite			# enable Apache's mod_rewrite
 sudo service apache2 restart		# make sure Apache is running
