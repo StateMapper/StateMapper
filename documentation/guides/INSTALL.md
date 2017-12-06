@@ -58,7 +58,7 @@ StateMapper might work just fine on any [Debian-based](https://www.debian.org/de
 
 5. Clone this repository to a dedicated folder in your Apache working directory: (most probably ```/var/www/html```)
 
-   ```
+   ```bash
    mkdir /var/www/html/statemapper
    cd /var/www/html/statemapper
    git clone https://github.com/StateMapper/StateMapper
