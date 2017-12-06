@@ -1,0 +1,114 @@
+#!/bin/bash
+# MAIN STATEMAPPER BASH SCRIPT
+
+# nice levels for this script (the higher, the less priority)
+IONICE=3
+NICE=19
+
+# STOP EDITING BELOW!
+
+
+
+
+# find out what the Apache user is (to later execute PHP with it)
+APACHE_USER=$(ps -ef | egrep '(httpd|apache2|apache)' 2> /dev/null | grep -v `whoami` 2> /dev/null | grep -v root 2> /dev/null | head -n1 | awk '{print $1}' 2> /dev/null)
+
+CMD=$1
+BASE_DIR=$(dirname "$0")
+
+# change the nice levels at your convenency (using the smallest now)
+PHP_CMD="ionice -c $IONICE nice -n $NICE php $BASE_DIR/../index.php $*"
+
+function contains {
+  local list="$1"
+  local item="$2"
+  if [[ $list =~ (^|[[:space:]])"$item"($|[[:space:]]) ]] ; then
+    # yes, list include item
+    result=0
+  else
+    result=1
+  fi
+  return $result
+}
+
+# grab Ctrl+C and interrupt the call beautifully
+trap stop INT TSTP
+stty -echo -icanon time 2 || exit $?
+
+function stop {
+	echo "User interruption, plan unexpected results!"
+	exit 0
+}
+
+if [ "$CMD" = "daemon" ]
+then
+	# daemonizing
+	
+	if [ -f "$BASE_DIR/.statemapper.lock" ]
+	then
+		PID=$(cat $BASE_DIR/.statemapper.lock)
+		if [ "$PID" != "" ]
+		then
+			if ps -p "$PID" > /dev/null 2>&1
+			then
+			
+				# kill the daemon
+				if [ "$2" = "kill" ]
+				then
+					sudo kill -9 "$PID" 
+					rm "$BASE_DIR/.statemapper.lock"
+					echo "Kaos daemon killed"
+					exit 0
+				fi
+				
+				# stop the daemon, waiting for workers
+				if [ "$2" = "stop" ]
+				then
+					sudo echo "Stopping the Kaos daemon"
+					PHP_CMD="$PHP_CMD daemon stop"
+					sudo su - $APACHE_USER -s /bin/bash -c "$PHP_CMD" 2> /dev/null
+					if [ $? -eq 0 ]
+					then
+						rm "$BASE_DIR/.statemapper.lock"
+						echo "Kaos daemon stopped"
+					else
+						echo "Could not stop the Kaos daemon"
+					fi
+					exit 0
+				fi
+				
+				echo "Kaos daemon already running with pid $PID"
+				exit 1
+			fi
+		fi
+	fi
+
+	# daemon is not running
+	if contains "kill stop" "$2"
+	then
+		echo "Kaos daemon not running"
+		exit 1
+	fi
+	
+	if contains "-d -debug --d --debug" "$2"
+	then
+		# debug, not daemonized
+		sudo echo "Kaos daemon debugging.."
+		PHP_CMD="$PHP_CMD "'echo "$!"'
+		sudo su - $APACHE_USER -s /bin/bash -c "$PHP_CMD"
+	else
+	
+		# daemonize and print pid into .lock file
+		PHP_CMD="nohup $PHP_CMD >/dev/null 2>&1 &"'echo "$!"'
+		sudo su - $APACHE_USER -s /bin/bash -c "$PHP_CMD" > $BASE_DIR/.statemapper.lock
+		PID=$(cat $BASE_DIR/.statemapper.lock)
+		echo "Kaos daemon started with pid $PID"
+	fi
+
+else
+	# not a daemon command, pass it to PHP
+	sudo su - $APACHE_USER -s /bin/bash -c "$PHP_CMD"
+fi
+
+exit 0
+
