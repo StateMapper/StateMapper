@@ -76,7 +76,7 @@ ipfs cat /ipns/...... 		# shoud print something if IPFS is well configured
    Save and close. Then enter:  
 
    ```bash
-sudo service tor restart	 		# make sure TOR is running
+   sudo service tor restart	 		# make sure TOR is running
 curl ifconfig.me/ip				# should print your real IP
 torify curl ifconfig.me/ip			# should print another IP
 print 'AUTHENTICATE ""\r\nsignal NEWNYM\r\nQUIT' | nc 127.0.0.1 9051
