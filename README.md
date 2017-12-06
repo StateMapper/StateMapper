@@ -7,7 +7,7 @@
 	<img src="https://img.shields.io/badge/license-GPL3-green.svg?style=flat-square" />
 </p>
 
-<div> </div>
+<div>&nsbp;</div>
 
 *This software is a PHP/MySQL rewrite/redesign of [Kaos155](https://github.com/Ingobernable/kaos155/) developped by the same [Ingoberlab](https://hacklab.ingobernable.net/) team. It aims at providing a browser of all the world's public bulletins' data, and altogether analyze how bribery has been hiding through history.*
 
