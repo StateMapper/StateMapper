@@ -5,14 +5,11 @@
 	<strong>INSTALLATION GUIDE</strong>
 </p>
 
-*[&larr; Project's homepage](https://github.com/StateMapper/StateMapper#top)*
+*[&larr; homepage](https://github.com/StateMapper/StateMapper#top)*
 
+-----
 
-### Index:
-
-- [Requirements](#requirements)
-- [Installation](#installation)
-- [Daemon commands](#daemon-commands)
+**Index:** [Requirements](#requirements) / [Installation](#installation) / [Daemon commands](#daemon-commands)
 
 
 ## Requirements
@@ -102,4 +99,4 @@ smap daemon kill 		# kill it (for emergencies only)
 
 -----
 
-*[&larr; Project's homepage](https://github.com/StateMapper/StateMapper#top) / StateMapper &copy; 2017 [StateMapper.net](https://statemapper.net) & [Ingoberlab](https://hacklab.ingobernable.net) / Licensed under [GNU GPLv3](../../COPYING).*
+*[&larr; homepage](https://github.com/StateMapper/StateMapper#top) / StateMapper &copy; 2017 [StateMapper.net](https://statemapper.net) & [Ingoberlab](https://hacklab.ingobernable.net) / Licensed under [GNU GPLv3](../../COPYING).*
