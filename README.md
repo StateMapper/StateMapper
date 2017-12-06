@@ -53,8 +53,8 @@ Official bulletins are a mess: unpublished or in unstructured manner, lots of pl
 
 ```
 sudo apt-get install php7.0 apache2 libapache2-mod-php mariadb-plugin-tokudb php-mcrypt php-mysql curl poppler-utils
-sudo a2enmod rewrite
-sudo service apache2 restart
+sudo a2enmod rewrite			# enable Apache's mod_rewrite
+sudo service apache2 restart	# make sure Apache is running
 ```
 
 * Follow the TokuDB installation instructions [here](https://mariadb.com/kb/en/library/enabling-tokudb/).
