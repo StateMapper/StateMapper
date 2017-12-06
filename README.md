@@ -56,7 +56,7 @@ StateMapper might work just well on any Debian-based system. Here are the requir
 sudo apt-get install php7.0 apache2 libapache2-mod-php mariadb-plugin-tokudb php-mcrypt php-mysql curl poppler-utils
 ```
 
-2. Follow [these TokuDB installation instructions](https://mariadb.com/kb/en/library/enabling-tokudb/). 
+2. Install TokuDB following [these instructions](https://mariadb.com/kb/en/library/enabling-tokudb/). 
 
 3. Clone the repository to a dedicated folder in your Apache working directory: (most probably ```/var/www```)
 ```
