@@ -3,7 +3,7 @@
 </p>
 <p align="center" id="badges">
 	<img src="https://img.shields.io/badge/language-PHP-yellow.svg?style=flat-square" />
-	<img src="https://img.shields.io/badge/platform-linux.svg?style=flat-square" />
+	<img src="https://img.shields.io/badge/platform-linux-lightgrey.svg?style=flat-square" />
 	<img src="https://img.shields.io/badge/license-GPL3-green.svg?style=flat-square" />
 </p>
 
