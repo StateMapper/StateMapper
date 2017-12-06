@@ -11,16 +11,11 @@
 ### Index:
 
 - [Manifest](#manifest)
-- [Minimal requirements](#minimal-requirements)
-- [Installation](#basic-installation)
-- [IPFS Installation and checks](#ipfs-installation-and-checks-optional) *(optional)*
-- [TOR Installation and checks](#tor-installation-and-checks-optional) *(optional)*
-- [Usage](#test-statemapper)
-  - [Command line API](#command-line-api-cli)
-  - [Web GUI](#web-gui)
-  - [Web API](#web-api)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Usage](#usage)
   - [Daemon commands](#daemon-commands)
-- [Contribute](#contribute-to-statemapper)
+- [Contribute](#contribute)
   - [Data extraction layers](#data-extraction-layers)
   - [Folder structure](#folder-structure)
   - [Bulletin schemas structure](#bulletin-schemas-structure)
@@ -35,7 +30,7 @@
 Official bulletins are a mess: unpublished or in unstructured manner, lots of plain text to read, no browser. And this is a key point to hide public bribary. StateMapper is born short after project Kaos155 has been uncovered, [... to be continued/replaced]
 
 
-## Minimal requirements
+## Requirements
 
 StateMapper might work just well on any Debian-based system. Here are the requirement:
 
@@ -49,7 +44,7 @@ StateMapper might work just well on any Debian-based system. Here are the requir
 * [TOR](https://www.torproject.org/) *(optional)*
 
 
-## Basic installation
+## Installation
 
 1. Install dependencies: *(if MySQL is installed, it will be replaced by MariaDB)*
    ```bash
@@ -107,7 +102,6 @@ StateMapper might work just well on any Debian-based system. Here are the requir
    sudo service mysql restart 	# make sure MySQL is running
    ```
    Then open a browser and navigate to http://localhost/statemapper/app/
-   Like with the CLI API, most frontend URLs can be appended ```/raw``` to get a raw JSON equivalent.
 
 
 ### Daemon commands:
@@ -122,7 +116,7 @@ smap daemon kill 		# kill it (for emergencies only)
 ```
 
 
-## Contribute to StateMapper:
+## Contribute:
 
 If you like this software and its goals, there surely are many ways you can get involved!
 
