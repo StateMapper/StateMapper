@@ -25,8 +25,8 @@ StateMapper might work just fine on any [Debian-based distribution](https://www.
 * [cURL](http://php.net/manual/en/intro.curl.php)
 * [pdftotext](https://poppler.freedesktop.org/), from Poppler
 
-* OPTIONAL: [IPFS](https://ipfs.io/ "InterPlanetary File System")
-* OPTIONAL: [TOR](https://www.torproject.org/ "The TOR Project") 
+* [IPFS](https://ipfs.io/ "InterPlanetary File System") *(optional)*
+* [TOR](https://www.torproject.org/ "The TOR Project") *(optional)*
 
 
 ## Installation
