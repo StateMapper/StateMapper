@@ -247,10 +247,10 @@ Within each bulletin's schema, the following parts are the most important:
 
 | URI pattern  | Page description |
 | ------------- | ------------- |
-| [/](https://statemapper.net/) | entity browser |
-| [/?etype=institution](https://statemapper.net/?etype=institution) | list of extracted institutions |
-| [/?etype=company](https://statemapper.net/?etype=company) | list of extracted companies |
-| [/?etype=person](https://statemapper.net/?etype=person) | list of extracted people |
+| [/](https://statemapper.net/) | site root |
+| [/?etype=institution](https://statemapper.net/?etype=institution) | list of all extracted institutions |
+| [/?etype=company](https://statemapper.net/?etype=company) | list of all extracted companies |
+| [/?etype=person](https://statemapper.net/?etype=person) | list of all extracted people |
 | | |
 | /xx/institution/itsname | an institution's sheet from country xx |
 | /xx/company/mycompany	| a company's sheet from country xx |
