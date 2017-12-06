@@ -58,14 +58,7 @@ sudo apt-get install php7.0 apache2 libapache2-mod-php mariadb-plugin-tokudb php
 
 2. Install TokuDB following [these instructions](https://mariadb.com/kb/en/library/enabling-tokudb/). 
 
-3. Clone the repository to a dedicated folder in your Apache working directory: (most probably ```/var/www```)
-```
-mkdir /var/www/statemapper
-cd /var/www/statemapper
-git clone https://github.com/StateMapper/StateMapper
-```
-
-4. OPTIONAL: Install IPFS following [these instructions](https://ipfs.io/docs/install/). Then enter:
+3. OPTIONAL: Install IPFS following [these instructions](https://ipfs.io/docs/install/). Then enter:
 
 ```bash
 ipfs init
@@ -73,7 +66,7 @@ ipfs daemon& 			# wait 3 seconds and press Ctrl+L to clear the screen
 ipfs cat /ipns/...... 		# shoud print something if IPFS is well configured
 ```
 
-5. OPTIONAL: Install TOR.
+4. OPTIONAL: Install TOR.
 
 * Follow [these instructions](https://www.torproject.org/docs/debian.html.en). 
 * Then edit ```/etc/tor/torrc```
@@ -87,6 +80,13 @@ curl ifconfig.me/ip				# should print your real IP
 torify curl ifconfig.me/ip			# should print another IP
 print 'AUTHENTICATE ""\r\nsignal NEWNYM\r\nQUIT' | nc 127.0.0.1 9051
 torify curl ifconfig.me/ip 			# should print yet another IP
+```
+
+5. Clone this repository to a dedicated folder in your Apache working directory: (most probably ```/var/www```)
+```
+mkdir /var/www/statemapper
+cd /var/www/statemapper
+git clone https://github.com/StateMapper/StateMapper
 ```
 
 6. Edit ```config.php``` and change the constants according to your needs (follow the instructions in comments).
