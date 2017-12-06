@@ -62,8 +62,8 @@ StateMapper might work just fine on any [Debian-based](https://www.debian.org/de
    mkdir /var/www/html/statemapper
    cd /var/www/html/statemapper
    git clone https://github.com/StateMapper/StateMapper
-   # alternatively, if you already have the files, simply extract them to /var/www/html/statemapper
    ```
+   *Alternatively, if you already have the files, simply extract them to /var/www/html/statemapper.*
 
 6. Edit ```config.php``` and change the constants according to your needs (follow the instructions in comments).
 
