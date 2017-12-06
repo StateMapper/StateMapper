@@ -35,7 +35,7 @@ Official bulletins are a mess: unpublished or in unstructured manner, lots of pl
 
 ## Minimal requirements
 
-StateMapper was only tested on Ubuntu 16.04, but might work just well on any Debian-based system. Here are the requirement:
+StateMapper might work just well on any Debian-based system. Here are the requirement:
 
 - PHP4+ (best PHP7+)
 - MariaDB with its [TokuDB plugin](https://mariadb.com/kb/en/library/tokudb/) (though MySQL may be enough for local development)
