@@ -51,7 +51,7 @@ StateMapper might work just well on any Debian-based system. Here are the requir
 
 ## Basic installation
 
-1. Install dependencies:
+1. Install dependencies: (if MySQL is installer, it will be replaced by MariaDB)
 ```bash
 sudo apt-get install php7.0 apache2 libapache2-mod-php mariadb-plugin-tokudb php-mcrypt php-mysql curl poppler-utils
 ```
@@ -65,7 +65,7 @@ cd /var/www/statemapper
 git clone https://github.com/StateMapper/StateMapper
 ```
 
-4. **OPTIONAL: Install IPFS**. Follow the instructions from [the IPFS documentation](https://ipfs.io/docs/install/) (recommended *"Installing from a Prebuilt Package"*). Then enter:
+4. OPTIONAL: Install IPFS following [these instructions](https://ipfs.io/docs/install/) (recommended *"Installing from a Prebuilt Package"*). Then enter:
 
 ```bash
 ipfs init
@@ -73,9 +73,7 @@ ipfs daemon& 			# wait 3 seconds and press Ctrl+L to clear the screen
 ipfs cat /ipns/...... 		# shoud print something if IPFS is well configured
 ```
 
-5. **OPTIONAL:** Install TOR
-
-Install TOR following [these instructions](https://www.torproject.org/docs/debian.html.en). Then enter:
+5. OPTIONAL: Install TOR following [these instructions](https://www.torproject.org/docs/debian.html.en). Then enter:
 
 ```bash
 sudo vim /etc/tor/torrc 			# or emacs, nano, gedit..
