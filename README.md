@@ -284,16 +284,6 @@ find /path/to/statemapper/data/ -name "*.pdf" -type f -delete
 
 ## TODO's:
 
-**Optimization:**
-- Check in code and improve MySql indexes (prefer multi-indexes as much as possible).
-- Check CPU-related workers moderation (going down to 1 worker when workers take several minutes, then back to many)
-- Workers slow down to 1 after a while (may be solved already)
-- In manual (spide) mode, remove "manual" from db and force spider $config from the controller instead (and do not update $config during the spide)
-- Put transformations into a separate folder, one file for each type of transformation.
-- Create a scripts/statemapper.conf or import config parsing config.php directly from scripts/statemapper? (to not having to configure 2 files, one for the software, another one for the CLI/daemon)
-- detect <![CDATA[ ?? see XEE: http://projects.webappsec.org/w/page/13247004/XML%20Injection
-- improve the templating system (some parts are duplicated..)
-
 **Data representation:**
 - Store location objects, and at extraction time?
 - Parse and understand/represent institutions' levels
