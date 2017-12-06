@@ -99,4 +99,4 @@ smap daemon kill 		# kill it (for emergencies only)
 
 -----
 
-*[&larr; Project's homepage](https://github.com/StateMapper/StateMapper#top) / [&uarr; top](#top) / StateMapper &copy; 2017 [StateMapper.net](https://statemapper.net) & [Ingoberlab](https://hacklab.ingobernable.net) / Licensed under [GNU GPLv3](../../COPYING).*
+*[&larr; Project's homepage](https://github.com/StateMapper/StateMapper#top) / StateMapper &copy; 2017 [StateMapper.net](https://statemapper.net) & [Ingoberlab](https://hacklab.ingobernable.net) / Licensed under [GNU GPLv3](../../COPYING) / [&uarr; top](#top)*
