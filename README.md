@@ -77,11 +77,11 @@ ipfs cat /ipns/...... 		# shoud print something if IPFS is well configured
 
    ```bash
    sudo service tor restart	 		# make sure TOR is running
-curl ifconfig.me/ip				# should print your real IP
-torify curl ifconfig.me/ip			# should print another IP
-print 'AUTHENTICATE ""\r\nsignal NEWNYM\r\nQUIT' | nc 127.0.0.1 9051
-torify curl ifconfig.me/ip 			# should print yet another IP
-```
+   curl ifconfig.me/ip				# should print your real IP
+   torify curl ifconfig.me/ip			# should print another IP
+   print 'AUTHENTICATE ""\r\nsignal NEWNYM\r\nQUIT' | nc 127.0.0.1 9051
+   torify curl ifconfig.me/ip 			# should print yet another IP
+   ```
 
 5. Clone this repository to a dedicated folder in your Apache working directory: (most probably ```/var/www```)
 ```
