@@ -250,7 +250,11 @@ Within each bulletin's schema, the following parts are the most important:
 
 ### URI structure:
 
-```
+| URI pattern  | Page |
+| ------------- | ------------- |
+| /  			| entity browser  |
+| Content Cell  | Content Cell  |
+
 /							entity browser
 
 /institutions				list of extracted institutions
@@ -263,7 +267,7 @@ Within each bulletin's schema, the following parts are the most important:
 
 /api						list of countries, bulletin providers and schemas
 /api/xx						list of bulletin providers and schemas for country xx (example: /api/es)
-```
+
 
 ### Tips & tricks:
 
