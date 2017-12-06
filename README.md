@@ -73,7 +73,7 @@ THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.
 
 ## Contact & support:
 
-Please feel free to write us at [statemapper@riseup.net](mailto:statemapper@riseup.net) or come to chat with us at [statemapper@conference.riseup.net](statemapper@conference.riseup.net) ([Jabber/XMPP](https://jabber.at/p/clients/)).
+Please feel free to write us at [statemapper@riseup.net](mailto:statemapper@riseup.net) or to come and chat with us at [statemapper@conference.riseup.net](statemapper@conference.riseup.net) ([Jabber/XMPP](https://jabber.at/p/clients/)).
 
 -----
 
