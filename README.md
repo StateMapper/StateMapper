@@ -28,7 +28,7 @@ Official bulletins are a mess: unpublished or in unstructured manner, lots of pl
 
 ## Installation
 
-Please refer to [the Installation guide](documentation/guides/INSTALL.md).
+Please refer to [the Installation guide](documentation/guides/INSTALL.md#top).
 
 ## Contribute:
 
