@@ -15,11 +15,13 @@
 
 ## Dataflow layers:
 
-| Layer name | Role |
+| Layer name | Responsability |
 | -------- | ---- |
-| fetch | downloads bulletins from original source |
-| parse | parses bulletins and triggering subsequent fetches (follows) |
-| extract | extracts precepts and status from parsed object |
+| fetch | download bulletins from bulletin providers |
+| parse | parse bulletins and triggering subsequent fetches (follows) |
+| extract | extract precepts and status from parsed object |
+| spider | trigger workers to fetch, parse and extract bulletins |
+| daemon | start and stop spiders |
 
 ![Classes diagram](../classes_diagram.png)
 
