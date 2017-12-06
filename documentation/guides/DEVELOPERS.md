@@ -15,9 +15,11 @@
 
 ## Dataflow layers:
 
-- **fetch**:		in charge of downloading bulletins from original source.
-- **parse**:		in charge of parsing bulletins and triggering subsequent fetches (follows).
-- **extract**:	in charge of extracting precepts and status from parsed object.
+| Layer name | Role |
+| -------- | ---- |
+| **fetch** | downloads bulletins from original source |
+| **parse** | parses bulletins and triggering subsequent fetches (follows) |
+| **extract** | extracts precepts and status from parsed object |
 
 ![Classes diagram](../classes_diagram.png)
 
@@ -26,24 +28,24 @@
 
 | Folder | Description |
 | ------- | ------ |
-| [schemas](../../schemas) | bulletin definitions (schemas) |
-| [bulletins](../../bulletins) | bulletins stored after download |
-| [scripts](../../scripts) | bash scripts |
-| [documentation](../../documentation) | extra documentation (graphic material, diagrams..) |
-| [app](../../app) | core files of the app |
-| [app/controller](../../app/controller) | controller layer |
-| [app/fetcher](../../app/fetcher) | fetch layer |
-| [app/parser](../../app/parser) | parse layer |
-| [app/extractor](../../app/extractor) | extract layer |
-| [app/spider](../../app/spider) | spider (and workers) layer |
-| [app/api](../../app/api) | api controller layer |
-| [app/browser](../../app/browser) | frontend browser |
-| [app/templates](../../app/templates) | page and partial templates |
-| [app/helpers](../../app/helpers) | helper functions |
-| [app/addons](../../app/addons) | addons likes Wikipedia suggs, Geoencoding, Website autodetection..  |
-| [app/languages](../../app/languages) | translation files |
-| [app/database](../../app/database) | database .sql files |
-| [app/assets](../../app/assets) | web assets of the app (images, fonts, .css, .js) |
+| [schemas/](../../schemas) | bulletin definitions (schemas) |
+| [bulletins/](../../bulletins) | where bulletins are stored after download |
+| [scripts/](../../scripts) | bash scripts (command ```smap```) |
+| [documentation/](../../documentation) | documentation file (graphic material, diagrams, manuals..) |
+| [app/](../../app) | core files of the app |
+| [app/controller/](../../app/controller) | controller layer |
+| [app/fetcher/](../../app/fetcher) | fetch layer |
+| [app/parser/](../../app/parser) | parse layer |
+| [app/extractor/](../../app/extractor) | extract layer |
+| [app/spider/](../../app/spider) | spider (and workers) layer |
+| [app/api/](../../app/api) | api controller layer |
+| [app/browser/](../../app/browser) | frontend browser |
+| [app/templates/](../../app/templates) | page and partial template files |
+| [app/helpers/](../../app/helpers) | helper functions |
+| [app/addons/](../../app/addons) | addons likes Wikipedia suggs, Geoencoding, Website autodetection..  |
+| [app/languages/](../../app/languages) | translation files |
+| [app/database/](../../app/database) | database .sql files |
+| [app/assets/](../../app/assets) | web assets of the app (images, fonts, .css, .js) |
 
 ## Bulletin schemas structure:
 
