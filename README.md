@@ -196,27 +196,27 @@ If you wish to help with the core code or bulletin schemas, you may want to lear
 
 ### Folder structure:
 
-```bash
-app           	# core files of the app
-app/controller 	# controller layer
-app/fetcher    	# fetch layer
-app/parser    	# parse layer
-app/extractor  	# extract layer
-app/spider    	# spider (and workers) layer
-app/api		  	# api controller layer
-app/browser	  	# frontend browser controller (?)
-app/templates  	# page templates
-app/helpers  	# helpers functions
-app/addons  	# addons likes wikipedia suggestions, geoencoding services.. 
-app/languages  	# transation files
-app/database  	# database .sql files
-app/assets    	# web assets of the app (images, fonts, .css, .js)
-
-schemas			# bulletin definitions (schemas)
-bulletins      	# bulletins stored after download
-scripts      	# bash scripts
-documentation  	# extra documentation (graphic material, diagrams..)
-```
+| Folder | Description |
+| ------- | ------ |
+| app | core files of the app |
+| app/controller | controller layer |
+| app/fetcher | fetch layer |
+| app/parser | parse layer |
+| app/extractor | extract layer |
+| app/spider | spider (and workers) layer |
+| app/api | api controller layer |
+| app/browser | frontend browser controller (?) |
+| app/templates | page templates |
+| app/helpers | helpers functions |
+| app/addons | addons likes wikipedia suggestions, geoencoding services..  |
+| app/languages | transation files |
+| app/database | database .sql files |
+| app/assets | web assets of the app (images, fonts, .css, .js) |
+| | |
+| schemas | bulletin definitions (schemas) |
+| bulletins | bulletins stored after download |
+| scripts | bash scripts |
+| documentation| extra documentation (graphic material, diagrams..) |
 
 ### Bulletin schemas structure:
 
