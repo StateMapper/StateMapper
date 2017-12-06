@@ -92,7 +92,7 @@ The extraction layer is where data is finally saved to the database in the form 
 | Table | Content |
 | ---- | ----- |
 | precepts | original text to extract information from |
-| status | single, small information about one or several entities |
+| statuses | single, small information about one or several entities |
 | entities | legal actors: people, companies and institutions |
 
 ![Database diagram](../database_diagram.png)
@@ -126,6 +126,8 @@ Status are sorted by ```type``` and ```action``` as follows:
 
 
 ## Tips & tricks:
+
+* If you ever need to hide yourself when pushing changes, we recommend you create a Github user with a dedicated mailbox from [RiseUp](https://account.riseup.net/user/new) or [ProtonMail](https://protonmail.com/signup). Also, we recommend you also use RiseUp's [VPN Red](https://riseup.net/en/vpn). To do so, follow [these instructions](https://riseup.net/en/vpn/vpn-red/linux).
 
 * When developping and fetching lots of bulletins, sometimes you won't have enough space on your local disk.
 To move everything to a new disk, we recommend using the following command:

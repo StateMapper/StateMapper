@@ -55,11 +55,11 @@ StateMapper might work just fine on any [Debian-based](https://www.debian.org/de
    torify curl ifconfig.me/ip 			# should print yet another IP
    ```
 
-5. Clone this repository to a dedicated folder in your Apache working directory: (most probably ```/var/www```)
+5. Clone this repository to a dedicated folder in your Apache working directory: (most probably ```/var/www/html```)
 
    ```
-   mkdir /var/www/statemapper
-   cd /var/www/statemapper
+   mkdir /var/www/html/statemapper
+   cd /var/www/html/statemapper
    git clone https://github.com/StateMapper/StateMapper
    ```
 
@@ -68,7 +68,7 @@ StateMapper might work just fine on any [Debian-based](https://www.debian.org/de
 7. OPTIONAL: Create an ```smap``` alias to access the CLI API easily from anywhere. Enter:
 
    ```bash 
-   echo 'alias smap="/var/www/statemapper/scripts/statemapper "' >> ~/.bashrc
+   echo 'alias smap="/var/www/html/statemapper/scripts/statemapper "' >> ~/.bashrc
    source ~/.bashrc		# read ~/.bashrc again
    smap				# should print the CLI help
    ```
