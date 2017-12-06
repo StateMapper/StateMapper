@@ -1,5 +1,5 @@
 <p align="center">
-	<img src="app/assets/images/logo/logo-black-big.png" />
+	<img src="../../app/assets/images/logo/logo-black-big.png" />
 </p>
 <p align="center">
 	<strong>INSTALLATION GUIDE</strong>
