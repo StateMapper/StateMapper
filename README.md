@@ -44,7 +44,8 @@ Official bulletins are a mess: unpublished or in unstructured manner, lots of pl
 - [IPFS](https://ipfs.io/) *(optional)*
 - [TOR](https://www.torproject.org/) *(optional)*
 
-**Uses:** [jQuery](http://jquery.com/), [FontAwesome](http://fontawesome.io/icons/) and [Tippy.js](https://atomiks.github.io/tippyjs/).
+**Included libraries:** [jQuery](http://jquery.com/), [FontAwesome](http://fontawesome.io/icons/) and [Tippy.js](https://atomiks.github.io/tippyjs/).
+
 **Disclaimer:** StateMapper was only tested on Ubuntu 16.04, but might work just well on any Debian-based system. 
 
 
