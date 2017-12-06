@@ -40,9 +40,11 @@ StateMapper might work just fine on any [Debian-based](https://www.debian.org/de
    sudo chgrp -R www-data /var/www/html
    sudo find /var/www/html -type d -exec chmod g+rx {} +
    sudo find /var/www/html -type f -exec chmod g+r {} +
-   sudo a2enmod rewrite		# enable Apache's mod_rewrite
-   sudo service apache2 restart 	# make sure Apache is running
+   sudo a2enmod rewrite		# enable mod_rewrite
+   sudo service apache2 restart 	# restart Apache
    ```
+   
+   If mod_rewrite is still not working, try editing ```/etc/apache2/apache2.conf``` to set ```AllowOverride``` to ```All``` inside of ```<Directory /var/www/>```. Then restart Apache again.
 
 4. OPTIONAL: Install IPFS following [these instructions](https://ipfs.io/docs/install/). Then enter:
 
@@ -64,7 +66,7 @@ StateMapper might work just fine on any [Debian-based](https://www.debian.org/de
    torify curl ifconfig.me/ip 			# should print yet another IP
    ```
 
-6. Clone this repository to a dedicated folder in your Apache's root folder: (most probably ```/var/www/html```)
+6. Clone this repository to a dedicated folder in your Apache's root folder: *(most probably ```/var/www/html```)*
 
    ```bash
    git clone https://github.com/StateMapper/StateMapper /var/www/html/statemapper
