@@ -329,7 +329,7 @@ The StateMapper software and all its documentation are licensed under the [GNU G
 
 ## Contact
 
-**Email**: [statemapper@riseup.net](mailto:statemapper@riseup.net) / **Chat** (Jabber/XMPP): statemapper@conference.riseup.net
+**Email**: [statemapper@riseup.net](mailto:statemapper@riseup.net) / **Public chat** (Jabber/XMPP): statemapper@conference.riseup.net
 
 Copyright &copy; 2017 [StateMapper.net](https://statemapper.net) & [Ingoberlab](https://hacklab.ingobernable.net) 
 
