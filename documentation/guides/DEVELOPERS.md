@@ -8,7 +8,7 @@
 *[&larr; Project's homepage](https://github.com/StateMapper/StateMapper#top)*
 
 
-### Index:
+## Index:
 
 - [Data extraction layers](#data-extraction-layers)
 - [Folder structure](#folder-structure)
@@ -17,7 +17,7 @@
 - [Tips & tricks](#tips--tricks)
 
 
-### Folder structure:
+## Folder structure:
 
 | Folder | Description |
 | ------- | ------ |
@@ -41,7 +41,7 @@
 | [scripts](../../scripts) | bash scripts |
 | [documentation](../../documentation) | extra documentation (graphic material, diagrams..) |
 
-### Bulletin schemas structure:
+## Bulletin schemas structure:
 
 Bulletin schemas are the definition files of each bulletin, issuing institution and country. They are ordered as follow:
 
@@ -64,7 +64,7 @@ Within each bulletin's schema, the following parts are the most important:
 | parsingProtocoles | set of rules to parse the fetched bulletins (mostly XPath and Regexp) |
 | extractProtocoles | final statuses to be extracted from the parsed object |
 
-### Data extraction layers:
+## Data extraction layers:
 
 - **fetch**:		in charge of downloading bulletins from original source.
 - **parse**:		in charge of parsing bulletins and triggering subsequent fetches (follows).
@@ -73,7 +73,7 @@ Within each bulletin's schema, the following parts are the most important:
 ![Classes diagram](../classes_diagram.png)
 
 
-### Schema transformations:
+## Schema transformations:
 
  * parseDate: parse date
  * parseDatetime: parse date and time
@@ -81,7 +81,7 @@ Within each bulletin's schema, the following parts are the most important:
  * parseList: extract list bullet/number
  * [.. to fill]
 
-### URI structure:
+## URI structure:
 
 | URI pattern  | Page description |
 | ------------- | ------------- |
@@ -97,12 +97,12 @@ Within each bulletin's schema, the following parts are the most important:
 | [/api](https://statemapper.net/api) | list of countries, bulletin providers and schemas |
 | [/api/xx](https://statemapper.net/api/es) | list of bulletin providers and schemas for country xx (example: /api/es) |
 
-### Extracted statuses
+## Extracted statuses
 
 ![Database diagram](../database_diagram.png)
 
 
-### Tips & tricks:
+## Tips & tricks:
 
 * When developping and fetching lots of bulletins, sometimes you won't have enough space on your local disk.
 To move everything to a new disk, we recommend using the following command:
