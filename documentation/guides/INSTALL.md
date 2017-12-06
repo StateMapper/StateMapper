@@ -12,7 +12,7 @@
 
 - [Requirements](#requirements)
 - [Installation](#installation)
-- [Daemon commands](#daemon-commands)
+- [Daemon controle](#daemon-controle)
 
 
 ## Requirements
@@ -89,7 +89,7 @@ StateMapper might work just fine on any [Debian-based](https://www.debian.org/de
    Then open a browser and navigate to http://localhost/statemapper/app/
 
 
-## Daemon commands:
+## Daemon controle:
 
 If you want the spiders to be able to start, it is required to start the daemon with ```smap daemon start```. Here are the available daemon commands:
 
