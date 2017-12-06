@@ -92,8 +92,8 @@ StateMapper might work just well on any Debian-based system. Here are the requir
 
    ```bash 
    echo 'alias smap="/var/www/statemapper/scripts/statemapper "' >> ~/.bashrc
-   source ~/.bashrc
-   smap							# should print the CLI help
+   source ~/.bashrc		# read ~/.bashrc again
+   smap					# should print the CLI help
    ```
    
    *Disclaimer: all ```smap``` calls require root login because PHP requires to be executed with the same user as the Apache server (most likely ```www-data```) to be able to read-write files correctly.*
