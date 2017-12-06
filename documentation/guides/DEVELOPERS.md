@@ -26,6 +26,10 @@
 
 | Folder | Description |
 | ------- | ------ |
+| [schemas](../../schemas) | bulletin definitions (schemas) |
+| [bulletins](../../bulletins) | bulletins stored after download |
+| [scripts](../../scripts) | bash scripts |
+| [documentation](../../documentation) | extra documentation (graphic material, diagrams..) |
 | [app](../../app) | core files of the app |
 | [app/controller](../../app/controller) | controller layer |
 | [app/fetcher](../../app/fetcher) | fetch layer |
@@ -40,11 +44,6 @@
 | [app/languages](../../app/languages) | translation files |
 | [app/database](../../app/database) | database .sql files |
 | [app/assets](../../app/assets) | web assets of the app (images, fonts, .css, .js) |
-| | |
-| [schemas](../../schemas) | bulletin definitions (schemas) |
-| [bulletins](../../bulletins) | bulletins stored after download |
-| [scripts](../../scripts) | bash scripts |
-| [documentation](../../documentation) | extra documentation (graphic material, diagrams..) |
 
 ## Bulletin schemas structure:
 
