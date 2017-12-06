@@ -10,7 +10,7 @@
 
 -----
 
-**Index:** [Dataflow layers](#dataflow-layers) / [Folder structure](#folder-structure) / [Schema structure](#schema-structure) / [Schema transformations](#schema-transformations) / [Tips & tricks](#tips--tricks)
+**Index:** [Dataflow layers](#dataflow-layers) / [Folder structure](#folder-structure) / [Schema structure](#schema-structure) / [Schema transformations](#schema-transformations) / [Data extraction](#data-extraction) / [URI structure](#uri-structure) / [Tips & tricks](#tips--tricks)
 
 
 ## Dataflow layers:
@@ -85,6 +85,29 @@ To implement a new schema, please refer to existing ones, like [ES/ES.json](../.
 | parseList | extract list bullet/number |
 
 
+## Data extraction:
+
+The extraction layer is where data is finally saved to the database in the form of very small pieces of information, linked to their original text. During this step, several tables are filled:
+
+| Table | Content |
+| ---- | ----- |
+| precepts | original text to extract information from |
+| status | single, small information about one or several entities |
+| entities | legal actors: people, companies and institutions |
+
+![Database diagram](../database_diagram.png)
+
+Status are sorted by ```type``` and ```action``` as follows:
+
+| Type | Action | Meaning | Arguments |
+| ---- | ----- | ----- |
+| name | new | company foundation | note: the company name |
+| name | update | name change | target_id: the new entity |
+| name | end | company dissolution | | |
+| administrator | start | start as an administrator | target_id: the administering entity |
+
+
+
 ## URI structure:
 
 | URI pattern  | Page description |
@@ -100,10 +123,6 @@ To implement a new schema, please refer to existing ones, like [ES/ES.json](../.
 | | |
 | [/api](https://statemapper.net/api) | list of countries, bulletin providers and schemas |
 | [/api/xx](https://statemapper.net/api/es) | list of bulletin providers and schemas for country xx (example: /api/es) |
-
-## Extracted statuses
-
-![Database diagram](../database_diagram.png)
 
 
 ## Tips & tricks:
