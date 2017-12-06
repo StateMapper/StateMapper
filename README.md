@@ -88,7 +88,7 @@ StateMapper might work just well on any Debian-based system. Here are the requir
 
 6. Edit ```config.php``` and change the constants according to your needs (follow the instructions in comments).
 
-7. OPTIONAL: Setup an ```smap``` alias to access the CLI API easily, from anywhere. Enter:
+7. OPTIONAL: Create an ```smap``` alias to access the CLI API easily from anywhere. Enter:
 
    ```bash 
    echo 'alias smap="/var/www/statemapper/scripts/statemapper "' >> ~/.bashrc
