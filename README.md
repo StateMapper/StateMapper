@@ -2,7 +2,8 @@
 	<img src="app/assets/images/logo/logo-black-big.png" />
 </p>
 <p align="center" id="badges">
-	<img src="https://img.shields.io/badge/lang-PHP-yellow.svg?style=flat-square" />
+	<img src="https://img.shields.io/badge/language-PHP-yellow.svg?style=flat-square" />
+	<img src="https://img.shields.io/badge/platform-linux.svg?style=flat-square" />
 	<img src="https://img.shields.io/badge/license-GPL3-green.svg?style=flat-square" />
 </p>
 
