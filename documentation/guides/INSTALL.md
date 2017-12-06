@@ -1,5 +1,5 @@
 <p align="center">
-	<img src="../../app/assets/images/logo/logo-black-big.png" />
+	<a href="/" title="Go back to the project's homepage"><img src="../../app/assets/images/logo/logo-black-big.png" /></a>
 </p>
 <p align="center">
 	<strong>INSTALLATION GUIDE</strong>
