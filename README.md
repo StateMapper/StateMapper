@@ -224,11 +224,11 @@ Bulletin schemas are the definition files of each bulletin, issuing institution 
 
 | File path | Description |
 | ------------ | --------------- |
-| bulletins/XX/XX.json | country or continent schema (example: bulletins/ES/ES.json) |
-| bulletins/XX/ISSUING_NAME.json | issuing institution's schema |
-| bulletins/XX/ISSUING_NAME.png | 64x64px picture for the issuing institution |
-| bulletins/XX/BULLETIN_NAME.json | bulletin's schema |
-| bulletins/XX/BULLETIN_NAME.png | 64x64px picture for the bulletin |
+| ```bulletins/XX/XX.json``` | country or continent schema (example: bulletins/ES/ES.json) |
+| ```bulletins/XX/ISSUING_NAME.json``` | issuing institution's schema |
+| ```bulletins/XX/ISSUING_NAME.png``` | 64x64px picture for the issuing institution |
+| ```bulletins/XX/BULLETIN_NAME.json``` | bulletin's schema |
+| ```bulletins/XX/BULLETIN_NAME.png``` | 64x64px picture for the bulletin |
 
 Continents and countries are all first level folders (bulletins/EU and bulletins/ES). Country/continent flags are taken from ```app/assets/images/flags/XX.png```.
 
