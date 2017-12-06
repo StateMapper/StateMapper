@@ -65,8 +65,7 @@ cd /var/www/statemapper
 git clone https://github.com/StateMapper/StateMapper
 ```
 
-4. OPTIONAL: Install IPFS following [these instructions](https://ipfs.io/docs/install/) *(recommended "Installing from a Prebuilt Package")*. 
-Then enter:
+4. OPTIONAL: Install IPFS following [these instructions](https://ipfs.io/docs/install/). Then enter:
 
 ```bash
 ipfs init
