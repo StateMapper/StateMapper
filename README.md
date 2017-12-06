@@ -75,7 +75,7 @@ ipfs cat /ipns/...... 		# shoud print something if IPFS is well configured
    Uncomment ```CookieAuthentication 0``` and set it to 1 (```CookieAuthentication 1```).   
    Save and close. Then enter:  
 
-```bash
+   ```bash
 sudo service tor restart	 		# make sure TOR is running
 curl ifconfig.me/ip				# should print your real IP
 torify curl ifconfig.me/ip			# should print another IP
