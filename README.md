@@ -1,5 +1,5 @@
 <p align="center">
-	![StateMapper](app/assets/images/logo/logo-black-big.png)
+	<img src="app/assets/images/logo/logo-black-big.png" />
 </p>
 
 [![Twitter Follow](https://img.shields.io/twitter/follow/espadrine.svg?style=social&label=Follow+@StateMapper)](https://twitter.com/StateMapper)
