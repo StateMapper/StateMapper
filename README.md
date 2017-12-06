@@ -209,7 +209,7 @@ If you wish to help with the core code or bulletin schemas, you may want to lear
 | app/templates | page templates |
 | app/helpers | helpers functions |
 | app/addons | addons likes wikipedia suggestions, geoencoding services..  |
-| app/languages | transation files |
+| app/languages | translation files |
 | app/database | database .sql files |
 | app/assets | web assets of the app (images, fonts, .css, .js) |
 | | |
