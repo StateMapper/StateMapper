@@ -14,19 +14,16 @@
 
 **Index:** [Manifest](#manifest) / [Installation](#installation) / [Contribute](#contribute) / [License](#license) / [Disclaimer](#disclaimer) / [Contact us](#contact-us)
 
------
 
 ## Manifest:
 
 Official bulletins are a mess: unpublished or in unstructured manner, lots of plain text to read, no browser. And this is a key point to hide public bribary. StateMapper is born short after project Kaos155 has been uncovered, [... to be continued/replaced]
 
------
 
 ## Installation:
 
 Please refer to [the Installation guide](documentation/guides/INSTALL.md#top).
 
------
 
 ## Contribute:
 
@@ -59,7 +56,6 @@ If you simply think you just had a great idea, or you have skills we may seek, d
 
 If you wish to help with the core code or bulletin schemas, you may want to read the [Developers guide](documentation/guides/DEVELOPERS.md).
 
------
 
 ## License:
 
@@ -67,13 +63,11 @@ The StateMapper software and all its documentation are licensed under the **GNU 
 
 Included dependencies: [jQuery](http://jquery.com/) ([MIT](https://tldrlegal.com/license/mit-license)), [FontAwesome](http://fontawesome.io/icons/) ([SIL OFL 1.1 & MIT](http://fontawesome.io/license/)) and [Tippy.js](https://atomiks.github.io/tippyjs/) ([MIT](https://tldrlegal.com/license/mit-license)).
 
------
 
 ## Disclaimer:
 
 StateMapper builds sheets about people based on their names (not ID numbers). This means one sheet may represent several people at the same time, with the exact same name(s) and last name(s).
 
------
 
 ## Contact us:
 
