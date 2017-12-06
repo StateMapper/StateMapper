@@ -136,7 +136,7 @@ source ~/.bashrc
 ```bash
 smap # should ask for your password, then output the CLI help
 ```
-**Disclaimer:** all ```smap``` calls require root login because php require to be executed with the same user as Apache (most likely www-data) to be able to read-write files correctly.
+**Disclaimer:** all ```smap``` calls require root login because PHP requires to be executed with the same user as the Apache server (most likely www-data), to be able to read-write files correctly.
 
 ### Web GUI: 
 
