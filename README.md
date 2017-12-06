@@ -51,7 +51,7 @@ StateMapper might work just well on any Debian-based system. Here are the requir
 
 ## Basic installation
 
-1. Install dependencies: (if MySQL is installer, it will be replaced by MariaDB)
+1. Install dependencies: (if MySQL is installed, it will be replaced by MariaDB)
 ```bash
 sudo apt-get install php7.0 apache2 libapache2-mod-php mariadb-plugin-tokudb php-mcrypt php-mysql curl poppler-utils
 ```
