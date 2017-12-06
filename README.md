@@ -269,7 +269,7 @@ To move everything to a new disk, we recommend using the following command:
 rsync -arv --size-only /path/to/statemapper/data/ /path/to/your/external_disk/statemapper/data
 ```
 
-Then modify the DATA_PATH in *config.php*.
+Then modify the DATA_PATH in ```config.php```.
 
 * To delete all files from a specific extension (say .pdf), use the following:
 
@@ -277,12 +277,12 @@ Then modify the DATA_PATH in *config.php*.
 find /path/to/statemapper/data/ -name "*.pdf" -type f -delete
 ```
 
-* To edit this README, you may find useful to use [this Github README editor tool](https://jbt.github.io/markdown-editor/).
+* To edit this README, you may find useful to use this [Github README editor tool](https://jbt.github.io/markdown-editor/).
 * To read/edit ```documentation/database_diagram.mwb```, you may use [MySQL Workbench](https://www.mysql.com/products/workbench/design/).
 * To read/edit ```documentation/classes_diagram.dia```, you may use [Dia](http://dia-installer.de/download/linux.html): ```sudo apt-get install dia```
 * In general, you may use "?stop=1" to stop auto-refreshing (the rewind map, for example), and be able to edit the DOM/CSS more easily.
 * In general, you may use "?human=1" to format a raw JSON output for humans.
-* The main logo was made using the Nasalization font (see the ```app/assets/font``` folder) and the [FontAwesome](http://fontawesome.io/icons/) "map-signs" icon.
+* The main logo was made using the [Nasalization font](app/assets/font/nasalization) and the [FontAwesome](http://fontawesome.io/icons/)'s "map-signs" icon.
 
 ## Known bugs:
 
