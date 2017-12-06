@@ -5,7 +5,9 @@
 	<strong>INSTALLATION GUIDE</strong>
 </p>
 
-[&larr; Go to the project's homepage](https://github.com/StateMapper/StateMapper#top)
+<p size="small">
+	[&larr; Project's homepage](https://github.com/StateMapper/StateMapper#top)
+</p>
 
 ## Requirements
 
