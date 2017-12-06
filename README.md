@@ -2,9 +2,9 @@
 	<img src="app/assets/images/logo/logo-black-big.png" />
 </p>
 <p align="center" id="badges">
-	<img src="https://img.shields.io/badge/language-PHP-yellow.svg?style=flat-square" />
-	<img src="https://img.shields.io/badge/platform-Linux-lightgrey.svg?style=flat-square" />
-	<img src="https://img.shields.io/badge/license-GPLv3-green.svg?style=flat-square" />
+	<a href="http://php.net/"><img src="https://img.shields.io/badge/language-PHP-yellow.svg?style=flat-square" /></a>
+	<a href="https://www.debian.org/derivatives/"><img src="https://img.shields.io/badge/platform-Linux-lightgrey.svg?style=flat-square" /></a>
+	<a href="https://github.com/StateMapper/StateMapper/COPYING"><img src="https://img.shields.io/badge/license-GPLv3-green.svg?style=flat-square" /></a>
 </p>
 
 
@@ -12,7 +12,7 @@
 
 -----
 
-**Index:** [Manifest](#manifest) / [Installation](#installation) / [Contribute](#contribute) / [License](#license) / [Disclaimer](#disclaimer) / [Contact us](#contact-us) / <a href="https://statemapper.net" target="_blank">StateMapper.net &rarr;</a>
+**Index:** [Manifest](#manifest) / [Installation](#installation) / [Contribute](#contribute) / [License](#license) / [Disclaimer](#disclaimer) / [Contact us](#contact-us) / <a href="https://statemapper.net">StateMapper.net &rarr;</a>
 
 
 ## Manifest:
