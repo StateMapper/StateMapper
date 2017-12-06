@@ -321,9 +321,9 @@ The StateMapper software and all its documentation are licensed under the [GNU G
 StateMapper includes [jQuery](http://jquery.com/) ([MIT](https://tldrlegal.com/license/mit-license)), [FontAwesome](http://fontawesome.io/icons/) ([SIL OFL 1.1 & MIT](http://fontawesome.io/license/)) and [Tippy.js](https://atomiks.github.io/tippyjs/) ([MIT](https://tldrlegal.com/license/mit-license)).
 
 
-## Contact
+## Contact us
 
-Please write us at [statemapper@riseup.net](mailto:statemapper@riseup.net) or come to chat at [statemapper@conference.riseup.net](statemapper@conference.riseup.net) ([Jabber/XMPP](https://jabber.at/p/clients/)).
+Please write us at [statemapper@riseup.net](mailto:statemapper@riseup.net) or come to chat in [statemapper@conference.riseup.net](statemapper@conference.riseup.net) ([Jabber/XMPP](https://jabber.at/p/clients/)).
 
 StateMapper &copy; 2017 [StateMapper.net](https://statemapper.net) & [Ingoberlab](https://hacklab.ingobernable.net) 
 
