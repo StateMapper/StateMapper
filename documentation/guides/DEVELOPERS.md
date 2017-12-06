@@ -125,3 +125,8 @@ find /path/to/statemapper/data/ -name "*.pdf" -type f -delete
 * In general, you may use "?stop=1" to stop auto-refreshing (the rewind map, for example), and be able to edit the DOM/CSS more easily.
 * In general, you may use "?human=1" to format a raw JSON output for humans.
 * The main logo was made using the [Nasalization font](../../app/assets/font/nasalization) and the [FontAwesome](http://fontawesome.io/icons/)'s "map-signs" icon.
+
+
+-----
+
+*[&larr; Project's homepage](https://github.com/StateMapper/StateMapper#top) / StateMapper &copy; 2017 [StateMapper.net](https://statemapper.net) & [Ingoberlab](https://hacklab.ingobernable.net) / Licensed under [GNU GPLv3](../../COPYING).*
