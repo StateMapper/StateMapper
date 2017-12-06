@@ -1,4 +1,4 @@
-<p align="center">
+<p align="center" id="top">
 	<img src="app/assets/images/logo/logo-black-big.png" />
 </p>
 
