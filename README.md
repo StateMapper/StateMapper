@@ -141,21 +141,23 @@ smap daemon kill 		# kill it (for emergencies only)
 If you like this software and its goals, there surely are many ways you can get involved!
 
 The project's current workforce splits into three comissions:
-- **Counter-bribery Strategists**: in charge of the project's strategy and communication.
-- **Core Wizards**: in charge of improving the core code.
-- **Schema soldiers**: in charge of implementing more bulletin schemas.
+
+Counter-bribery Strategists | in charge of the project's strategy and communication
+Core Wizards | in charge of improving the core code
+Schema Soldiers | in charge of implementing more bulletin schemas
+Country Ambassadors | in charge of hosting bulletin IPFS nodes
 
 .. and any of the following would help us all a lot!
 
-- **Map yet another bulletin!** You're a JS/json/regexp developer? Help us by implementing a missing bulletin of your choice. It can be from whichever country, region or city, the goal being to get interesting information out!
+**Map yet another bulletin!** You're a JS/json/regexp developer? Help us by implementing a missing bulletin of your choice. It can be from whichever country, region or city, the goal being to get interesting information out!
 
-- **Improve our code!** You're a PHP/MySQL developer? Push us some core code improvements or bugfixes! Come to our team meetings if you wish.
+**Improve our code!** You're a PHP/MySQL developer? Push us some core code improvements or bugfixes! Come to our team meetings if you wish.
 
-- **Translate to a new language!** Thanks to [PoEdit](https://poedit.net/), it is really easy to translate StateMapper to whatever language you speak. And it can really help the project to spread!
+**Translate to a new language!** Thanks to [PoEdit](https://poedit.net/), it is really easy to translate StateMapper to whatever language you speak. And it can really help the project to spread!
 
-- **Share this project!** and tell everyone how it can help us out with the world's dramatic public bribery situation.
+**Share this project!** and tell everyone how it can help us out with the world's dramatic public bribery situation.
 
-- **Donate to us**, coming to the [Ingobernable](https://ingobernable.net) and asking for the Kaos team :)
+**Donate to us**, coming to the [Ingobernable](https://ingobernable.net) and asking for the Kaos team :)
 
 
 If you simply think you just had a great idea, or you have skills we may seek, do not hesitate to contact us through [this email](statemapper@riseup.net)!
