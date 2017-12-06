@@ -35,8 +35,8 @@ The project's current workforce splits into three commissions:
 | ----- | ------ |
 | Counter-bribery Strategists | in charge of the project's strategy and communication |
 | Core Wizards | in charge of improving the core code |
-| Schema Soldiers | in charge of implementing more bulletin schemas |
-| Country Ambassadors | in charge of hosting bulletin IPFS nodes |
+| Schema Soldiers | in charge of implementing bulletin schemas |
+| Country Ambassadors | in charge of hosting bulletins' IPFS nodes |
 
 .. and any of the following would help us all a lot!
 
