@@ -17,7 +17,7 @@
 
 ## Requirements
 
-StateMapper might work just fine on any [Debian-based distribution](https://www.debian.org/derivatives/) (Linux), with the following software requirements:
+StateMapper might work just fine on any [Debian-based](https://www.debian.org/derivatives/) Linux OS, with the following software requirements:
 
 * [PHP4+](http://php.net/) *(best PHP7+)*
 * [MariaDB](https://mariadb.com/) with its [TokuDB plugin](https://mariadb.com/kb/en/library/tokudb/) *(though MySQL may be enough for local development)*
