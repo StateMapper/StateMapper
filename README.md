@@ -64,18 +64,14 @@ mkdir /var/www/statemapper
 cd /var/www/statemapper
 git clone https://github.com/StateMapper/StateMapper
 ```
-4. Edit ```config.php``` and change the constants according to your needs (follow the instructions in comments).
-
-
-5. **Optional: Install IPFS**. Follow the instructions from [the IPFS documentation](https://ipfs.io/docs/install/) (recommended *"Installing from a Prebuilt Package"*). Then enter:
+4. **OPTIONAL: Install IPFS**. Follow the instructions from [the IPFS documentation](https://ipfs.io/docs/install/) (recommended *"Installing from a Prebuilt Package"*). Then enter:
 
 ```bash
 ipfs init
 ipfs daemon& 			# wait 3 seconds and press Ctrl+L to clear the screen
 ipfs cat /ipns/...... 		# shoud print something if IPFS is well configured
 ```
-
-6. **Optional:** Install TOR
+5. **OPTIONAL:** Install TOR
 
 Install TOR following [these instructions](https://www.torproject.org/docs/debian.html.en). Then enter:
 
@@ -92,6 +88,8 @@ torify curl ifconfig.me/ip			# should print another IP
 print 'AUTHENTICATE ""\r\nsignal NEWNYM\r\nQUIT' | nc 127.0.0.1 9051
 torify curl ifconfig.me/ip 			# should print yet another IP
 ```
+6. Edit ```config.php``` and change the constants according to your needs (follow the instructions in comments).
+
 
 ## Test StateMapper:
 
