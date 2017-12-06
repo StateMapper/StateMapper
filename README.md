@@ -5,7 +5,7 @@
 
 
 **Licensed under** [GNU General Public License v3](LICENSE) / 
-**Copyright** (C) 2017 [Ingoberlab](https://hacklab.ingobernable.net) & [StateMapper.net](https://statemapper.net) / 
+**Copyright** &copy; 2017 [Ingoberlab](https://hacklab.ingobernable.net) & [StateMapper.net](https://statemapper.net) / 
 **Contact:** <statemapper@riseup.net>
 
 **Disclaimer:** StateMapper builds sheets about people based on their names (not ID numbers). This means one sheet may represent several people at the same time, with the exact same name(s) and last name(s).
