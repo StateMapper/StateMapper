@@ -19,11 +19,11 @@
 
 StateMapper might work just fine on any [Debian-based distribution](https://www.debian.org/derivatives/) (Linux), with the following software requirements:
 
-* [PHP4+ (best PHP7+)](http://php.net/)
+* [PHP4+](http://php.net/) *(best PHP7+)*
 * [MariaDB](https://mariadb.com/) with its [TokuDB plugin](https://mariadb.com/kb/en/library/tokudb/) (though [MySQL](https://www.mysql.com/) may be enough for local development)
 * [Apache](https://httpd.apache.org/) 2.2+ with [mod_rewrite](http://httpd.apache.org/docs/current/mod/mod_rewrite.html) enabled
 * [cURL](http://php.net/manual/en/intro.curl.php)
-* [pdftotext](https://poppler.freedesktop.org/), from Poppler
+* [pdftotext](https://poppler.freedesktop.org/) *(from Poppler)*
 
 * [IPFS](https://ipfs.io/ "InterPlanetary File System") *(optional)*
 * [TOR](https://www.torproject.org/ "The TOR Project") *(optional)*
