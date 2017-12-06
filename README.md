@@ -11,8 +11,7 @@
 ### Index:
 
 - [Manifest](#manifest)
-- [Requirements](#requirements)
-- [Installation](#installation)
+- [Requirements & installation](#requirements-installation)
 - [Contribute](#contribute)
   - [Data extraction layers](#data-extraction-layers)
   - [Folder structure](#folder-structure)
@@ -27,11 +26,7 @@
 
 Official bulletins are a mess: unpublished or in unstructured manner, lots of plain text to read, no browser. And this is a key point to hide public bribary. StateMapper is born short after project Kaos155 has been uncovered, [... to be continued/replaced]
 
-## Requirements
-
-Please see [the Installation guide](INSTALL.md).
-
-## Installation
+## Requirements & installation
 
 Please see [the Installation guide](INSTALL.md).
 
