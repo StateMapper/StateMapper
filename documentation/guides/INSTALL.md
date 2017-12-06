@@ -18,8 +18,8 @@
 StateMapper might work just fine on any [Debian-based distribution](https://www.debian.org/derivatives/) (Linux), with the following software requirements:
 
 * PHP4+ (best PHP7+)
-* MariaDB with its [TokuDB plugin](https://mariadb.com/kb/en/library/tokudb/) (though MySQL may be enough for local development)
-* Apache 2.2+ with mod_rewrite enabled
+* [MariaDB](https://mariadb.com/) with its [TokuDB plugin](https://mariadb.com/kb/en/library/tokudb/) (though [MySQL](https://www.mysql.com/) may be enough for local development)
+* [Apache](https://httpd.apache.org/) 2.2+ with [mod_rewrite](http://httpd.apache.org/docs/current/mod/mod_rewrite.html) enabled
 * curl
 * pdftotext (from poppler-utils)
 
