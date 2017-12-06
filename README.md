@@ -67,9 +67,7 @@ git clone https://github.com/StateMapper/StateMapper
 4. Edit ```config.php``` and change the constants according to your needs (follow the instructions in comments).
 
 
-5. **Optional:** Install IPFS
-
-Please follow the instructions from [the IPFS documentation](https://ipfs.io/docs/install/) (recommended *"Installing from a Prebuilt Package"*). Then enter:
+5. **Optional: Install IPFS**. Follow the instructions from [the IPFS documentation](https://ipfs.io/docs/install/) (recommended *"Installing from a Prebuilt Package"*). Then enter:
 
 ```bash
 ipfs init
