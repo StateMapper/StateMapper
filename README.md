@@ -326,9 +326,10 @@ find /path/to/statemapper/data/ -name "*.pdf" -type f -delete
 
 The StateMapper software and all its documentation are licensed under the [GNU General Public License v3.0](COPYING), also included in our repository in the [COPYING](COPYING) file.
 
-Copyright &copy; 2017 [StateMapper.net](https://statemapper.net) & [Ingoberlab](https://hacklab.ingobernable.net) 
 
 ## Contact
 
-Email: [statemapper@riseup.net](mailto:statemapper@riseup.net) / Chat (Jabber/XMPP): statemapper@conference.riseup.net
+**Email**: [statemapper@riseup.net](mailto:statemapper@riseup.net) / **Chat** (Jabber/XMPP): statemapper@conference.riseup.net
+
+Copyright &copy; 2017 [StateMapper.net](https://statemapper.net) & [Ingoberlab](https://hacklab.ingobernable.net) 
 
