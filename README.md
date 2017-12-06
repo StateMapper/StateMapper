@@ -123,7 +123,7 @@ Then open a browser and navigate to http://localhost/statemapper/app/
 
 Navigate to http://localhost/statemapper/app/api/ to browse all bulletin providers & bulletins. 
 
-Like with the CLI API, most frontend URLs can be appended "/raw" to get a JSON raw output equivalent.
+Like with the CLI API, most frontend URLs can be appended ```/raw``` to get a JSON raw output equivalent.
 
 
 ### Daemon commands:
