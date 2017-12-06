@@ -75,5 +75,5 @@ Please write us at [statemapper@riseup.net](mailto:statemapper@riseup.net) or co
 
 -----
 
-*[&uarr; top](#top) / StateMapper &copy; 2017 [StateMapper.net](https://statemapper.net) & [Ingoberlab](https://hacklab.ingobernable.net)*
+*StateMapper &copy; 2017 [StateMapper.net](https://statemapper.net) & [Ingoberlab](https://hacklab.ingobernable.net) / [&uarr; top](#top)*
 
