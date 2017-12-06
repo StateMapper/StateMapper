@@ -247,17 +247,17 @@ Within each bulletin's schema, the following parts are the most important:
 
 | URI pattern  | Page description |
 | ------------- | ------------- |
-| / | entity browser |
-| /institutions | list of extracted institutions |
-| /companies | list of extracted companies |
-| /people | list of extracted people |
+| [/](https://statemapper.net/) | entity browser |
+| [/?etype=institution](https://statemapper.net/?etype=institution) | list of extracted institutions |
+| [/?etype=company](https://statemapper.net/?etype=company) | list of extracted companies |
+| [/?etype=person](https://statemapper.net/?etype=person) | list of extracted people |
 | | |
 | /xx/institution/itsname | an institution's sheet from country xx |
 | /xx/company/mycompany	| a company's sheet from country xx |
 | /xx/person/john-doe | a person's sheet from country xx |
 | | |
-| /api | list of countries, bulletin providers and schemas |
-| /api/xx | list of bulletin providers and schemas for country xx (example: /api/es) |
+| [/api](https://statemapper.net/api) | list of countries, bulletin providers and schemas |
+| [/api/xx](https://statemapper.net/api/es) | list of bulletin providers and schemas for country xx (example: /api/es) |
 
 
 ### Tips & tricks:
@@ -329,7 +329,7 @@ The StateMapper software and all its documentation are licensed under the [GNU G
 
 ## Contact
 
-**Email**: [statemapper@riseup.net](mailto:statemapper@riseup.net) / **Public chat** (Jabber/XMPP): statemapper@conference.riseup.net
+**Email**: [statemapper@riseup.net](mailto:statemapper@riseup.net) / **Chat** (Jabber/XMPP): statemapper@conference.riseup.net
 
 Copyright &copy; 2017 [StateMapper.net](https://statemapper.net) & [Ingoberlab](https://hacklab.ingobernable.net) 
 
