@@ -88,43 +88,26 @@ StateMapper might work just well on any Debian-based system. Here are the requir
 
 6. Edit ```config.php``` and change the constants according to your needs (follow the instructions in comments).
 
-7. Enable mod_rewrite and restart Apache:
+7. OPTIONAL: Setup an ```smap``` alias to access the CLI API easily. Enter:
+
+   ```bash 
+   echo 'alias smap="/var/www/statemapper/scripts/statemapper "' >> ~/.bashrc
+   source ~/.bashrc
+   smap							# should print the CLI help
+   ```
+   
+   **Disclaimer:** all ```smap``` calls require root login because PHP requires to be executed with the same user as the Apache server (most likely ```www-data```) to be able to read-write files correctly.
+
+
+8. Restart the web server and visit the Web GUI:
 
    ```bash
    sudo a2enmod rewrite			# enable Apache's mod_rewrite
-   sudo service apache2 restart		# make sure Apache is running
+   sudo service apache2 restart 	# make sure Apache is running
+   sudo service mysql restart 	# make sure MySQL is running
    ```
-
-
-## Test StateMapper:
-
-### Command line API:
-
-If your Apache user is not ```www-data```, edit the first constant in ```scripts/statemapper```. 
-
-Get a system-wide ```smap``` command with the following:
-```bash 
-echo 'alias smap="/var/www/statemapper/scripts/statemapper "' >> ~/.bashrc
-source ~/.bashrc
-```
-
-Then explore the CLI API entering ```smap``` in a terminal.
-
-**Disclaimer:** all ```smap``` calls require root login because PHP requires to be executed with the same user as the Apache server (most likely ```www-data```) to be able to read-write files correctly.
-
-### Web GUI: 
-
-```bash
-sudo service apache2 restart 	# make sure Apache is running
-sudo service mysql restart 	# make sure MySQL is running
-```
-Then open a browser and navigate to http://localhost/statemapper/app/
-
-### Web API: 
-
-Navigate to http://localhost/statemapper/app/api/ to browse all bulletin providers & bulletins. 
-
-Like with the CLI API, most frontend URLs can be appended ```/raw``` to get a raw JSON equivalent.
+   Then open a browser and navigate to http://localhost/statemapper/app/
+   Like with the CLI API, most frontend URLs can be appended ```/raw``` to get a raw JSON equivalent.
 
 
 ### Daemon commands:
