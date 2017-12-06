@@ -88,7 +88,7 @@ StateMapper might work just well on any Debian-based system. Here are the requir
 
 6. Edit ```config.php``` and change the constants according to your needs (follow the instructions in comments).
 
-7. Start Apache with mod_rewrite:
+7. Enable mod_rewrite and restart Apache:
 
    ```bash
    sudo a2enmod rewrite			# enable Apache's mod_rewrite
