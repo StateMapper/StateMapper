@@ -13,7 +13,7 @@
 **Disclaimer:** StateMapper builds sheets about people based on their names (not ID numbers). This means one sheet may represent several people at the same time, with the exact same name(s) and last name(s).
 
 
-<ul align="center">
+<ul align="center" style="list-style:none; font-size: 12px;">
 	<li><a href="#manifest">Manifest</a></li>
 	<li><a href="#manifest">Manifest</a></li>
 	<li><a href="#manifest">Manifest</a></li>
