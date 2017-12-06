@@ -16,8 +16,8 @@
 - [Manifest](#manifest)
 - [Minimal requirements](#minimal-requirements)
 - [Basic installation](#basic-installation)
-- [IPFS Installation and checks](#ipfs-installation-and-checks) *(optional)*
-- [TOR Installation and checks](#tor-installation-and-checks) *(optional)*
+- [IPFS Installation and checks](#ipfs-installation-and-checks-optional) *(optional)*
+- [TOR Installation and checks](#tor-installation-and-checks-optional) *(optional)*
 - [Test StateMapper](#test-statemapper)
   - [Command line API (CLI)](#command-line-api-cli)
   - [Web GUI](#web-gui)
@@ -30,7 +30,7 @@
   - [Schema transformations](#schema-transformations)
   - [Tips & tricks](#tips-and-tricks)
 - [Known bugs](#known-bugs)
-- [TODOs](#todos)
+- [TODO's](#todos)
 
 
 ## Manifest
