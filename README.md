@@ -141,9 +141,9 @@ smap daemon kill 		# kill it (for emergencies only)
 If you like this software and its goals, there surely are many ways you can get involved!
 
 The project's current workforce splits into three comissions:
-- **COUNTER-BRIBERY Strategists**: in charge of the project's strategy and communication.
-- **CORE Wizards**: in charge of improving the core code.
-- **SCHEMA Warriors**: in charge of implementing more bulletin schemas.
+- **Counter-bribery Strategists**: in charge of the project's strategy and communication.
+- **Core Wizards**: in charge of improving the core code.
+- **Schema soldiers**: in charge of implementing more bulletin schemas.
 
 .. and any of the following would help us all a lot!
 
