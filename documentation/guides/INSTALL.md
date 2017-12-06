@@ -21,6 +21,7 @@ StateMapper might work just fine on any [Debian-based](https://www.debian.org/de
 * [Apache](https://httpd.apache.org/) 2.2+ with [mod_rewrite](http://httpd.apache.org/docs/current/mod/mod_rewrite.html) enabled
 * [cURL](http://php.net/manual/en/intro.curl.php)
 * [pdftotext](https://poppler.freedesktop.org/) *(from Poppler)*
+* [git](https://git-scm.com/docs/gittutorial) *(or simply download the files from Github)*
 
 * [IPFS](https://ipfs.io/ "InterPlanetary File System") *(optional)*
 * [TOR](https://www.torproject.org/ "The TOR Project") *(optional)*
@@ -30,7 +31,7 @@ StateMapper might work just fine on any [Debian-based](https://www.debian.org/de
 
 1. Install dependencies: *(if MySQL is installed, it will be replaced by MariaDB)*
    ```bash
-   sudo apt-get install php7.0 apache2 libapache2-mod-php mariadb-plugin-tokudb php-mcrypt php-mysql curl poppler-utils
+   sudo apt-get install php7.0 apache2 libapache2-mod-php mariadb-plugin-tokudb php-mcrypt php-mysql curl poppler-utils git
    ```
 
 2. Install TokuDB following [these instructions](https://mariadb.com/kb/en/library/enabling-tokudb/). 
@@ -61,6 +62,7 @@ StateMapper might work just fine on any [Debian-based](https://www.debian.org/de
    mkdir /var/www/html/statemapper
    cd /var/www/html/statemapper
    git clone https://github.com/StateMapper/StateMapper
+   # alternatively, if you already have the files, simply extract them to /var/www/html/statemapper
    ```
 
 6. Edit ```config.php``` and change the constants according to your needs (follow the instructions in comments).
