@@ -9,7 +9,7 @@
 
 -----
 
-**Index:** [Requirements](#requirements) / [Installation](#installation) / [Daemon commands](#daemon-commands)
+**Index:** [Requirements](#requirements) · [Installation](#installation) · [Daemon commands](#daemon-commands)
 
 
 ## Requirements
