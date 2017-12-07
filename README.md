@@ -28,7 +28,7 @@ Please refer to the [Installation guide](documentation/guides/INSTALL.md#top).
 
 ## Contribute:
 
-If you like this project, whatever skills you have, there surely is a way you can help! The project's current workforce splits into the following four commissions:
+If you like this project, whatever skills you have, there surely is a way you can help! The project's current workforce splits into the following [four commissions](https://github.com/StateMapper/StateMapper/projects):
 
 | Commission | Responsability | Profile | Related |
 | ----- | ------ | ---- | ---- |
