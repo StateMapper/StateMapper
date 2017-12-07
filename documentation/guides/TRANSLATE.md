@@ -23,7 +23,7 @@ If you consider contributing to this project, we highly recommend you read and f
 
 ## Configuration:
 
-All commands below must be entered from what's going to be your StateMapper's local folder.
+*All commands below must be entered from what's going to be your StateMapper's local folder.*
 
 1. If you haven't installed PoEdit yet, install it now:
    ```
@@ -44,7 +44,7 @@ All commands below must be entered from what's going to be your StateMapper's lo
 
 ## Translation instructions:
 
-All commands below must be entered from your StateMapper's local folder.
+*All commands below must be entered from your StateMapper's local folder.*
 
 1. To start PoEdit, enter: ```poedit app/languages/xx_YY/LC_MESSAGES/kaos.po```
 
