@@ -23,7 +23,10 @@ If you consider contributing to this project, we highly recommend you read and f
 
 ## Configuration:
 
-1. If you haven't installed PoEdit yet, please install with ```sudo apt-get install poedit```.
+1. If you haven't installed PoEdit yet, install it:
+   ```
+   sudo apt-get install poedit
+   ```
 
 2. If you haven't downloaded the project's files yet, download them now:
    ```
