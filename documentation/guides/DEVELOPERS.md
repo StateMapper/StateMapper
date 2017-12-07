@@ -9,7 +9,7 @@
 
 -----
 
-**Index:** [Dataflow layers](#dataflow-layers) · [Folder structure](#folder-structure) · [Schema structure](#schema-structure) / [Schema transformations](#schema-transformations) · [Data extraction](#data-extraction) · [URI structure](#uri-structure) · [Tips & tricks](#tips--tricks)
+**Index:** [Dataflow layers](#dataflow-layers) · [Folder structure](#folder-structure) · [Schema structure](#schema-structure) · [Schema transformations](#schema-transformations) · [Data extraction](#data-extraction) · [URI structure](#uri-structure) · [Tips & tricks](#tips--tricks)
 
 
 ## Dataflow layers:
