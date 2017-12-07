@@ -26,7 +26,8 @@ If you consider contributing to this project, we highly recommend you read and f
 1. If you haven't installed PoEdit yet, please install with ```sudo apt-get install poedit```.
 
 2. If you haven't downloaded the project's files yet, download them now:
-   ```git clone github.com/StateMapper/StateMapper /where/to/store/the/project
+   ```
+   git clone github.com/StateMapper/StateMapper /where/to/store/the/project
    cd /where/to/store/the/project
    ```
    
