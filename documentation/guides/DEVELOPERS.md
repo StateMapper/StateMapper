@@ -5,12 +5,9 @@
 	<strong>DEVELOPERS GUIDE</strong>
 </p>
 
-*[&larr; Project's homepage](https://github.com/StateMapper/StateMapper#top)*
-
-
 -----
 
-**Index:** [Dataflow layers](#dataflow-layers) / [Folder structure](#folder-structure) / [Schema structure](#schema-structure) / [Schema transformations](#schema-transformations) / [Data extraction](#data-extraction) / [URI structure](#uri-structure) / [Tips & tricks](#tips--tricks)
+[&larr; Project's homepage](https://github.com/StateMapper/StateMapper#top) · **Index:** [Dataflow layers](#dataflow-layers) · [Folder structure](#folder-structure) · [Schema structure](#schema-structure) / [Schema transformations](#schema-transformations) · [Data extraction](#data-extraction) · [URI structure](#uri-structure) · [Tips & tricks](#tips--tricks)
 
 
 ## Dataflow layers:
@@ -156,4 +153,4 @@ find /path/to/statemapper/data/ -name "*.pdf" -type f -delete
 
 -----
 
-*[&larr; Project's homepage](https://github.com/StateMapper/StateMapper#top) / Copyright &copy; 2017 [StateMapper.net](https://statemapper.net) / Licensed under [GNU GPLv3](../../COPYING) / [&uarr; top](#top)* <img src="[![Bitbucket issues](https://img.shields.io/bitbucket/issues/atlassian/python-bitbucket.svg?style=social" align="right" /> <img src="http://hits.dwyl.com/StateMapper/StateMapper.svg?style=flat-square" align="right" />
+*[&larr; Project's homepage](https://github.com/StateMapper/StateMapper#top) · Copyright &copy; 2017 [StateMapper.net](https://statemapper.net) · Licensed under [GNU GPLv3](../../COPYING) · [&uarr; top](#top)* <img src="[![Bitbucket issues](https://img.shields.io/bitbucket/issues/atlassian/python-bitbucket.svg?style=social" align="right" /> <img src="http://hits.dwyl.com/StateMapper/StateMapper.svg?style=flat-square" align="right" />
