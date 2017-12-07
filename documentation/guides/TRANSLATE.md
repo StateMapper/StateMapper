@@ -23,7 +23,9 @@ If you consider contributing to this project, we highly recommend you read and f
 
 ## Configuration:
 
-1. If you haven't installed PoEdit yet, install it:
+All commands below must be entered from what's going to be your StateMapper's local folder.
+
+1. If you haven't installed PoEdit yet, install it now:
    ```
    sudo apt-get install poedit
    ```
@@ -31,8 +33,7 @@ If you consider contributing to this project, we highly recommend you read and f
 2. If you haven't downloaded the project's files yet, download them now:
    ```
    sudo apt-get install git
-   git clone github.com/StateMapper/StateMapper /where/to/store/the/project
-   cd /where/to/store/the/project
+   git clone github.com/StateMapper/StateMapper .
    ```
    
 3. To add a new language, copy the ```es_ES``` translation folder to a folder with the language code as a title:
@@ -43,7 +44,9 @@ If you consider contributing to this project, we highly recommend you read and f
 
 ## Translation instructions:
 
-1. To start PoEdit, enter: ```poedit /path/to/the/project/app/languages/es_ES app/languages/xx_YY/LC_MESSAGES/kaos.po```
+All commands below must be entered from your StateMapper's local folder.
+
+1. To start PoEdit, enter: ```poedit app/languages/xx_YY/LC_MESSAGES/kaos.po```
 
 2. If you just created this language file, click ```Catalog > Properties...```, correct the ```Language``` field and click ```OK```.
 
@@ -57,8 +60,8 @@ If you consider contributing to this project, we highly recommend you read and f
 
 7. Push your translation files to the project's repository:
    ```
-   git add /path/to/the/project/app/languages/xx_YY
-   git commit -m "a nice message of your choice, in english!"
+   git add app/languages/xx_YY
+   git commit -m "A nice message of your choice, in English!"
    git push 
    ```
    Then enter your credentials and confirm. We might accept your push request within 24-48h, thank you very much for your contribution!
