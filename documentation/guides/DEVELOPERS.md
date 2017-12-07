@@ -94,10 +94,8 @@ The extraction layer is where data is finally saved to the database in the form 
 | precepts | original text to extract information from |
 | statuses | single, small information about one or several entities |
 | entities | legal actors; currently of three types: *person*, *company* and *institution* |
-| amounts | amounts related with the status, with units and exchange rate |
+| amounts | amounts related with the status, with units and USD values |
 | locations | locations related with the status |
-
-![Database diagram](../database_diagram.png)
 
 Status are sorted by ```type``` and ```action``` as follows:
 
@@ -108,6 +106,8 @@ Status are sorted by ```type``` and ```action``` as follows:
 | name | end | company dissolution | | |
 | administrator | start | start as an administrator | target_id: the administering entity |
 
+
+![Database diagram](../database_diagram.png)
 
 
 ## URI structure:
