@@ -52,7 +52,7 @@ You may also help this project by:
 
 The StateMapper software and all its documentation are licensed under the **GNU General Public License v3.0**, also included in our repository in the [COPYING](COPYING) file.
 
-StateMapper includes the following libraries: [jQuery](http://jquery.com/) ([MIT](https://tldrlegal.com/license/mit-license)), [FontAwesome](http://fontawesome.io/icons/) ([SIL OFL 1.1 & MIT](http://fontawesome.io/license/)), [Tippy.js](https://atomiks.github.io/tippyjs/) ([MIT](https://tldrlegal.com/license/mit-license)) and the [Roboto font](https://fonts.google.com/specimen/Roboto) ([Apache License v2.0](http://www.apache.org/licenses/LICENSE-2.0)).
+StateMapper also includes the following libraries: [jQuery](http://jquery.com/) ([MIT](https://tldrlegal.com/license/mit-license)), [FontAwesome](http://fontawesome.io/icons/) ([SIL OFL 1.1 & MIT](http://fontawesome.io/license/)), [Tippy.js](https://atomiks.github.io/tippyjs/) ([MIT](https://tldrlegal.com/license/mit-license)) and the [Roboto font](https://fonts.google.com/specimen/Roboto) ([Apache License v2.0](http://www.apache.org/licenses/LICENSE-2.0)).
 
 StateMapper uses the following web-services: [Here.com Places API](https://developer.here.com/documentation/places/topics/quick-start.html), [Wikipedia's API](https://www.mediawiki.org/wiki/API:Main_page) and [startpage](https://www.startpage.com/).
 
