@@ -74,14 +74,11 @@ THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.
 
 Please feel free to contact us through the following channels:
 
-- **Contributions:** 
-   Please send all [pull requests](https://github.com/StateMapper/StateMapper/pulls) through Github.
+- **Code contributions:** Please send all [pull requests](https://github.com/StateMapper/StateMapper/pulls) through Github.
 
-- **Issues:** 
-   If the issue is critical, please write us at [statemapper@riseup.net](mailto:statemapper@riseup.net). Otherwise, start an issue on our repository's [issue tab](https://github.com/StateMapper/StateMapper/issues) specifying the URL where the bug happens.
+- **Bugs & suggestions:** If it's about a critical issue, please write us privately at [statemapper@riseup.net](mailto:statemapper@riseup.net). Otherwise, [start an issue](https://github.com/StateMapper/StateMapper/issues) on our repository, specifying the URL where the bug happens.
 
-- **Suggestions, press & enrollment:**
-   Write us at [statemapper@riseup.net](mailto:statemapper@riseup.net) or chat with us through our [Jabber/XMPP](https://jabber.at/p/clients/) public chat room at [statemapper@conference.riseup.net](statemapper@conference.riseup.net).
+- **Press & enrollment:** Write us at [statemapper@riseup.net](mailto:statemapper@riseup.net) or chat with us through our [Jabber/XMPP](https://jabber.at/p/clients/) public chat room at [statemapper@conference.riseup.net](statemapper@conference.riseup.net).
 
 
 -----
