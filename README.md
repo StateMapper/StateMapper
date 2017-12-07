@@ -5,7 +5,7 @@
 	<a href="http://php.net/"><img src="https://img.shields.io/badge/language-PHP-yellow.svg?style=flat-square" /></a>
 	<a href="https://www.debian.org/derivatives/"><img src="https://img.shields.io/badge/platform-Linux-lightgrey.svg?style=flat-square" /></a>
 	<a href="https://github.com/StateMapper/StateMapper/blob/master/COPYING"><img src="https://img.shields.io/badge/license-GPLv3-green.svg?style=flat-square" /></a>
-	<img src="https://img.shields.io/badge/chat-on%20XMPP-ff69b4.svg" />
+	<img src="https://img.shields.io/badge/chat-XMPP-ff69b4.svg" />
 </p>
 
 
