@@ -34,8 +34,8 @@ If you like this project, whatever skills you have, there surely is a way you ca
 | ----- | ------ | ---- | ---- |
 | [Counter-bribery Strategists](https://github.com/StateMapper/StateMapper/projects/1) | to elaborate the best strategy and endorse public communications | political scientists, journalists, magistrates, social activists | |
 | [Core Wizards](https://github.com/StateMapper/StateMapper/projects/2) | to develop and maintain the core code | software engineers, PHP/MySQL/JS developers | [Developers guide](documentation/guides/DEVELOPERS.md) |
-| [Schema Soldiers](https://github.com/StateMapper/StateMapper/projects/3) | to implement more bulletin schemas | JS/Regexp nurds | [Developers guide](documentation/guides/DEVELOPERS.md) |
-| [Country Ambassadors](https://github.com/StateMapper/StateMapper/projects/4) | to host bulletins' IPFS nodes, check bulletins' integrity and translate the UI | Collectives of social rights | *pending..* |
+| [Schema Soldiers](https://github.com/StateMapper/StateMapper/projects/3) | to implement more bulletin schemas | JS/Regexp nurds | [Developers guide](documentation/guides/DEVELOPERS.md) + [#21](https://github.com/StateMapper/StateMapper/issues/21) |
+| [Country Ambassadors](https://github.com/StateMapper/StateMapper/projects/4) | to host bulletins' IPFS nodes, check bulletins' integrity and translate the UI | Collectives of social rights | [#21](https://github.com/StateMapper/StateMapper/issues/21) |
 
 If you wish to get involved into one of them, please do not hesitate in contacting us! (see the [contact & support](#contact--support) section below).
 
