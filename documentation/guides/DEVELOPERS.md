@@ -87,13 +87,13 @@ To implement a new schema, please refer to existing ones, like [ES/ES.json](../.
 
 ## Data extraction:
 
-The extraction layer is where data is finally saved to the database in the form of very small pieces of information, linked to their original text. During this step, several tables are filled:
+The extraction layer is where data is finally saved to the database in the form of very small pieces of information (called *status*), linked to their original text (called *precept*). During this step, several tables are filled:
 
 | Table | Content |
 | ---- | ----- |
 | precepts | original text to extract information from |
 | statuses | single, small information about one or several entities |
-| entities | legal actors: people, companies and institutions |
+| entities | legal actors; currently of three types: *person*, *company* and *institution* |
 
 ![Database diagram](../database_diagram.png)
 
