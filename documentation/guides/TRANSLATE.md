@@ -33,14 +33,14 @@ If you consider contributing to this project, we highly recommend you read and f
 2. If you haven't downloaded the project's files yet, download them now:
    ```
    sudo apt-get install git
-   git clone github.com/StateMapper/StateMapper .
+   git clone github.com/StateMapper/StateMapper . # don't forget the final dot!
    ```
    
-3. To add a new language, copy the ```es_ES``` translation folder to a folder with the language code as a title:
+3. To add a new language, copy the ```es_ES``` translation folder as follows:
    ```
    cp -fR app/languages/es_ES app/languages/xx_YY
    ```
-   where ```xx``` is an [ISO-639-1 language code](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) and ```YY``` is a [ISO-3166 Alpha-2 country code](https://www.iso.org/obp/ui/#search/code/).
+   ..where ```xx``` is an [ISO-639-1 language code](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) and ```YY``` is a [ISO-3166 Alpha-2 country code](https://www.iso.org/obp/ui/#search/code/).
 
 ## Translation instructions:
 
