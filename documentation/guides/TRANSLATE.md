@@ -40,7 +40,7 @@ If you consider contributing to this project, we highly recommend you read and f
    ```
    cp -fR app/languages/es_ES app/languages/xx_YY
    ```
-   ..where ```xx``` is an [ISO-639-1 language code](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) and ```YY``` is a [ISO-3166 Alpha-2 country code](https://www.iso.org/obp/ui/#search/code/).
+   ..where ```xx``` is an [ISO-639-1 language code](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) and ```YY``` is an [ISO-3166 Alpha-2 country code](https://www.iso.org/obp/ui/#search/code/).
 
 ## Translation instructions:
 
@@ -52,7 +52,7 @@ If you consider contributing to this project, we highly recommend you read and f
 
 3. Push the ```Update``` button.
 
-4. Translate or correct all lines that are fuzzy (**bold** or colored).
+4. Translate or correct all lines that are fuzzy (**bold** or colored). Special strings like ```%s``` and ```%d``` must be left as is and in the some order, when translating.
 
 5. Click the save button (it automatically recompile the ```.mo``` in the same folder).
 
