@@ -154,4 +154,4 @@ find /path/to/statemapper/data/ -name "*.pdf" -type f -delete
 
 -----
 
-*[&larr; Project's homepage](https://github.com/StateMapper/StateMapper#top) / StateMapper &copy; 2017 [StateMapper.net](https://statemapper.net) & [Ingoberlab](https://hacklab.ingobernable.net) / Licensed under [GNU GPLv3](../../COPYING) / [&uarr; top](#top)* <img src="[![Bitbucket issues](https://img.shields.io/bitbucket/issues/atlassian/python-bitbucket.svg?style=social" align="right" /> <img src="http://hits.dwyl.com/StateMapper/StateMapper.svg?style=flat-square" align="right" />
+*[&larr; Home](https://github.com/StateMapper/StateMapper#top) / StateMapper &copy; 2017 [StateMapper.net](https://statemapper.net) & [Ingoberlab](https://hacklab.ingobernable.net) / Licensed under [GNU GPLv3](../../COPYING) / [&uarr; top](#top)* <img src="[![Bitbucket issues](https://img.shields.io/bitbucket/issues/atlassian/python-bitbucket.svg?style=social" align="right" /> <img src="http://hits.dwyl.com/StateMapper/StateMapper.svg?style=flat-square" align="right" />
