@@ -16,9 +16,9 @@ If you consider contributing to this project, we highly recommend you read and f
 
 ## Requirements:
 
-* A [Github user account](https://github.com/join). 
+* A [Github user account](https://github.com/join)
 
-* [git](https://git-scm.com/docs/gittutorial) *(or simply download the files from this repository)*
+* [git](https://git-scm.com/docs/gittutorial)
 * [PoEdit](https://poedit.net/)
 
 ## Configuration:
