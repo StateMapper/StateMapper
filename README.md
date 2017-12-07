@@ -27,24 +27,24 @@ Please refer to [the Installation guide](documentation/guides/INSTALL.md#top).
 
 ## Contribute:
 
-If you like this project, whatever skills you have, there surely is a way you can help! The project's current workforce splits into four commissions:
+If you like this project, whatever skills you have, there surely is a way you can help! The project's current workforce splits into the following four commissions:
 
 | Commission | Responsability | Profile | Related |
 | ----- | ------ | ---- | ---- |
-| Counter-bribery Strategists | to elaborate the best strategy and endorse public communications | Political scientists, journalists, magistrates, social activists | |
-| Core Wizards | to develop and maintain the core code | Web engineers, PHP/MySQL/JS developers | [Developers guide](documentation/guides/DEVELOPERS.md) |
+| Counter-bribery Strategists | to elaborate the best strategy and endorse public communications | political scientists, journalists, magistrates, social activists | |
+| Core Wizards | to develop and maintain the core code | software engineers, PHP/MySQL/JS developers | [Developers guide](documentation/guides/DEVELOPERS.md) |
 | Schema Soldiers | to implement more bulletin schemas | JS/Regexp nurds | [Developers guide](documentation/guides/DEVELOPERS.md) |
 | Country Ambassadors | to host bulletins' IPFS nodes, check bulletins' integrity and translate the UI | Collectives of social rights | *pending..* |
 
 If you wish to get involved into one of them, please do not hesitate in contacting us through one of the manners given in the [contact & support section](#contact--support).
 
-You may also help the project by either:
+You may also help this project by:
 
 - **Translating to a new language:** thanks to [PoEdit](https://poedit.net/), it is really easy to translate StateMapper to whatever language you speak. And it can really help the project spread!
 
-- **Share this project** and tell everyone how it can help us out with the world's dramatic public bribery situation.
+- **Sharing this project:** tell your most important contacts how this project can help us out with the world's dramatic public bribery situation.
 
-- **Donate to us**, coming to the [Ingobernable](https://ingobernable.net) and asking for the Kaos155 [hacker team](hacklab.ingobernable.net) :)
+- **Donating to us**: come to visit us at [La Ingobernable](https://ingobernable.net) (Madrid, Spain), and ask for the Kaos155 [hacker team](hacklab.ingobernable.net) :)
 
 
 ## License:
