@@ -45,7 +45,7 @@ You may also help this project by:
 
 - **Sharing this project:** tell your most important contacts how this project can help us out with the world's dramatic public bribery situation.
 
-- **Donating to us**: come to visit us at [La Ingobernable](https://ingobernable.net) (Madrid, Spain), and ask for the Kaos155 [hacker team](hacklab.ingobernable.net) :)
+- **Donating to us**: come to visit us at [La Ingobernable](https://ingobernable.net) (Madrid, Spain), and ask for the Kaos155 [hacker team](https://hacklab.ingobernable.net) :)
 
 
 ## License:
