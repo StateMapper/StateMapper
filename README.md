@@ -27,22 +27,20 @@ Please refer to [the Installation guide](documentation/guides/INSTALL.md#top).
 
 ## Contribute:
 
-If you like this project, whatever skills you have, there surely is a way you can help!
+If you like this project, whatever skills you have, there surely is a way you can help! The project's current workforce splits into four commissions:
 
-The project's current workforce splits into four commissions:
-
-| Commission name | Responsability | Profile | Note / related documentation |
+| Commission | Responsability | Profile | Related |
 | ----- | ------ | ---- | ---- |
-| Counter-bribery Strategists | to elaborate the best strategy and endorse the public communication | Political scientists, journalists, magistrates, social activists | |
-| Core Wizards | to develop and maintain the core code | Web engineers, PHP/MySQL/JS/HTML/CSS/Regexp developers | [Developers guide](documentation/guides/DEVELOPERS.md) |
+| Counter-bribery Strategists | to elaborate the best strategy and endorse public communications | Political scientists, journalists, magistrates, social activists | |
+| Core Wizards | to develop and maintain the core code | Web engineers, PHP/MySQL/JS developers | [Developers guide](documentation/guides/DEVELOPERS.md) |
 | Schema Soldiers | to implement more bulletin schemas | JS/Regexp nurds | [Developers guide](documentation/guides/DEVELOPERS.md) |
-| Country Ambassadors | to host bulletins' IPFS nodes and check bulletin providers' integrity | Collectives of social rights | *Implementation pending..*
+| Country Ambassadors | to host bulletins' IPFS nodes, check bulletins' integrity and translate the UI | Collectives of social rights | *pending..* |
 
 If you wish to get involved into one of them, please do not hesitate in contacting us through one of the manners given in the [contact & support section](#contact--support).
 
 You may also help the project by either:
 
-- *Translating to a new language:** thanks to [PoEdit](https://poedit.net/), it is really easy to translate StateMapper to whatever language you speak. And it can really help the project spread!
+- **Translating to a new language:** thanks to [PoEdit](https://poedit.net/), it is really easy to translate StateMapper to whatever language you speak. And it can really help the project spread!
 
 - **Share this project** and tell everyone how it can help us out with the world's dramatic public bribery situation.
 
