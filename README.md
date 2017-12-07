@@ -36,7 +36,7 @@ If you like this project, whatever skills you have, there surely is a way you ca
 | Schema Soldiers | to implement more bulletin schemas | JS/Regexp nurds | [Developers guide](documentation/guides/DEVELOPERS.md) |
 | Country Ambassadors | to host bulletins' IPFS nodes, check bulletins' integrity and translate the UI | Collectives of social rights | *pending..* |
 
-If you wish to get involved into one of them, please do not hesitate in contacting us through one of the manners given in the [contact & support section](#contact--support).
+If you wish to get involved into one of them, please do not hesitate in contacting us! (see the [contact & support](#contact--support) section below).
 
 You may also help this project by:
 
