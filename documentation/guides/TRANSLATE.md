@@ -27,6 +27,7 @@ If you consider contributing to this project, we highly recommend you read and f
 
 2. If you haven't downloaded the project's files yet, download them now:
    ```
+   sudo apt-get install git
    git clone github.com/StateMapper/StateMapper /where/to/store/the/project
    cd /where/to/store/the/project
    ```
