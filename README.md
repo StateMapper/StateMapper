@@ -37,11 +37,11 @@ If you like this project, whatever skills you have, there surely is a way you ca
 | [Schema Soldiers](https://github.com/StateMapper/StateMapper/projects/3) | to implement and maintain bulletin schemas | JSON/Regexp experts | [Developers guide](documentation/guides/SOLDIERS.md) |
 | [Country Ambassadors](https://github.com/StateMapper/StateMapper/projects/4) | to host bulletins' IPFS nodes, check bulletins' integrity and translate the UI | collectives of social rights | [Ambassadors' guide](documentation/guides/AMBASSADORS.md) |
 
-If you wish to get involved into one of them, please do not hesitate [in contacting us](#contact--support)! A list of active Soldiers and Ambassadors is available on the [bulletin providers' page](https://statemapper.com/api).
+If you wish to get involved into one of them, please do not hesitate in [contacting us](#contact--support)! A list of active Soldiers and Ambassadors is available on the [bulletin providers' page](https://statemapper.com/api).
 
 You may also help this project by:
 
-- **Translating to a new language:** thanks to [PoEdit](https://poedit.net/), it is really easy to translate StateMapper to whatever language you speak. And it can really help the project spread! Read the [Translation guide](documentation/guides/TRANSLATE.md#top) for more details.
+- **Translating to a new language:** it is really easy to translate StateMapper to whatever language you speak, and it can really help the project spread! Please read the [Translation guide](documentation/guides/TRANSLATE.md#top) for more details.
 
 - **Sharing this project:** tell your most important contacts how this project can help us out with the world's dramatic public bribery situation.
 
