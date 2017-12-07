@@ -13,7 +13,7 @@
 
 -----
 
-**Index:** [Manifest](#manifest) / [Installation](#installation) / [Contribute](#contribute) / [License](#license) / [Disclaimer](#disclaimer) / [Contact & support](#contact--support) / **Live website:** <a href="https://statemapper.net">StateMapper.net &rarr;</a>
+**Index:** [Manifest](#manifest) | [Installation](#installation) | [Contribute](#contribute) | [Roadmap](#roadmap) | [License](#license) | [Disclaimer](#disclaimer) | [Contact & support](#contact--support) | **Live website:** <a href="https://statemapper.net">StateMapper.net &rarr;</a>
 
 
 ## Manifest:
@@ -39,20 +39,28 @@ If you like this project, whatever skills you have, there surely is a way you ca
 
 If you wish to get involved into one of them, please do not hesitate in contacting us! (see the [contact & support](#contact--support) section below).
 
+Please visit the [bulletin providers' page](https://statemapper.com/api) to see what Soldiers and Ambassadors are currently needed.
+
 You may also help this project by:
 
-- **Translating to a new language:** thanks to [PoEdit](https://poedit.net/), it is really easy to translate StateMapper to whatever language you speak. And it can really help the project spread!
+- **Translating to a new language:** thanks to [PoEdit](https://poedit.net/), it is really easy to translate StateMapper to whatever language you speak. And it can really help the project spread! Read the [Translation guide](documentation/guides/TRANSLATE.md#top) for more details.
 
 - **Sharing this project:** tell your most important contacts how this project can help us out with the world's dramatic public bribery situation.
 
 - **Donating to us**: come to visit us at [La Ingobernable](https://ingobernable.net) (Madrid, Spain), and ask for the Kaos155 [hacker team](https://hacklab.ingobernable.net) :)
 
 
+## Roadmap:
+
+- **Q1 2018:** stable live version with near 100% parsed information from ES/BOE and ES/BORME.
+- **Q2 2018:** allow persistent user customization, add a cooperation/social layer.
+- **Q3 2018:** implement machine learning and suspition patterns, manage Soldiers in most rich countries.
+
 ## License:
 
 The StateMapper software and all its documentation are licensed under the **GNU General Public License v3.0**, also included in our repository in the [COPYING](COPYING) file.
 
-StateMapper also includes the following libraries: [jQuery](http://jquery.com/) ([MIT](https://tldrlegal.com/license/mit-license)), [FontAwesome](http://fontawesome.io/icons/) ([SIL OFL 1.1 & MIT](http://fontawesome.io/license/)), [Tippy.js](https://atomiks.github.io/tippyjs/) ([MIT](https://tldrlegal.com/license/mit-license)) and the [Roboto font](https://fonts.google.com/specimen/Roboto) ([Apache License v2.0](http://www.apache.org/licenses/LICENSE-2.0)).
+StateMapper includes the following libraries: [jQuery](http://jquery.com/) ([MIT](https://tldrlegal.com/license/mit-license)), [FontAwesome](http://fontawesome.io/icons/) ([SIL OFL 1.1 & MIT](http://fontawesome.io/license/)), [Tippy.js](https://atomiks.github.io/tippyjs/) ([MIT](https://tldrlegal.com/license/mit-license)) and the [Roboto font](https://fonts.google.com/specimen/Roboto) ([Apache License v2.0](http://www.apache.org/licenses/LICENSE-2.0)).
 
 StateMapper uses the following web-services: [Here.com Places API](https://developer.here.com/documentation/places/topics/quick-start.html), [Wikipedia's API](https://www.mediawiki.org/wiki/API:Main_page) and [startpage](https://www.startpage.com/).
 
@@ -70,5 +78,5 @@ Please feel free to write us at [statemapper@riseup.net](mailto:statemapper@rise
 
 -----
 
-*Copyright &copy; 2017 [StateMapper.net](https://statemapper.net) / Licensed under [GNU GPLv3](COPYING) / [&uarr; top](#top)* <img src="http://hits.dwyl.com/StateMapper/StateMapper.svg?style=flat-square" align="right" />
+*Copyright &copy; 2017 [StateMapper.net](https://statemapper.net) | Licensed under [GNU GPLv3](COPYING) | [&uarr; top](#top)* <img src="http://hits.dwyl.com/StateMapper/StateMapper.svg?style=flat-square" align="right" />
 
