@@ -67,5 +67,6 @@ Please feel free to write us at [statemapper@riseup.net](mailto:statemapper@rise
 
 -----
 
-*StateMapper &copy; 2017 [StateMapper.net](https://statemapper.net) & [Ingoberlab](https://hacklab.ingobernable.net) / Licensed under [GNU GPLv3](COPYING) / [&uarr; top](#top)*
+*StateMapper &copy; 2017 [StateMapper.net](https://statemapper.net) & [Ingoberlab](https://hacklab.ingobernable.net) / Licensed under [GNU GPLv3](COPYING) / [![HitCount](http://hits.dwyl.com/StateMapper/StateMapper.svg)](http://hits.dwyl.com/StateMapper/StateMapper)
+ [&uarr; top](#top)*
 
