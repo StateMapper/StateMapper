@@ -10,7 +10,7 @@
 
 -----
 
-**Index:** [Requirements](#requirements) · [Installation](#installation) · [Daemon commands](#daemon-commands)
+**Index:** [Requirements](#requirements) · [Configuration](#configuration) · [Translation instructions](#translation-instructions)
 
 If you consider contributing to this project, we highly recommend you read and follow our [Privacy protection guide](documentation/guides/PRIVACY.md#top) before you continue reading.
 
