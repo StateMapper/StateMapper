@@ -5,7 +5,9 @@
 	<strong>TRANSLATION GUIDE</strong>
 </p>
 
+
 *[&larr; Project's homepage](https://github.com/StateMapper/StateMapper#top)*
+
 -----
 
 **Index:** [Requirements](#requirements) · [Installation](#installation) · [Daemon commands](#daemon-commands)
