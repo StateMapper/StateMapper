@@ -73,7 +73,7 @@ Within each bulletin's schema, the following parts are the most important:
 | parsingProtocoles | set of rules to parse the fetched bulletins (mostly XPath and Regexp) |
 | extractProtocoles | final statuses to be extracted from the parsed object |
 
-To implement a new schema, please refer to existing ones, like [ES/ES.json](../../schemas/ES/ES.json), [ES/AGENCIA_ESTATAL.json](../../schemas/ES/AGENCIA_ESTATAL.json), [ES/BOE.json](../../schemas/ES/BOE.json) and [ES/BORME.json](../../schemas/ES/BORME.json).
+To implement a new schema, please take example on [ES/ES](../../schemas/ES/ES.json), [ES/AGENCIA_ESTATAL](../../schemas/ES/AGENCIA_ESTATAL.json), [ES/BOE](../../schemas/ES/BOE.json) and [ES/BORME](../../schemas/ES/BORME.json).
 
 ## Schema transformations:
 
