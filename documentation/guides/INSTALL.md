@@ -12,7 +12,7 @@
 **Index:** [Requirements](#requirements) · [Installation](#installation) · [Daemon commands](#daemon-commands)
 
 
-## Requirements
+## Requirements:
 
 StateMapper might work just fine on any [Debian-based](https://www.debian.org/derivatives/) Linux operating system, with the following software requirements:
 
@@ -27,7 +27,7 @@ StateMapper might work just fine on any [Debian-based](https://www.debian.org/de
 * [TOR](https://www.torproject.org/ "The TOR Project") *(optional)*
 
 
-## Installation
+## Installation:
 
 1. Install dependencies: *(if MySQL is installed, it will be replaced by MariaDB)*
    ```bash

@@ -32,8 +32,8 @@
 | ------- | ------ |
 | [schemas/](../../schemas) | bulletin definitions (schemas) |
 | [bulletins/](../../bulletins) | where bulletins are stored after download |
-| [scripts/](../../scripts) | bash scripts (command ```smap```) |
-| [documentation/](../../documentation) | documentation file (graphic material, diagrams, manuals..) |
+| [scripts/](../../scripts) | bash scripts (```smap``` command) |
+| [documentation/](../../documentation) | documentation files (graphic material, diagrams, manuals..) |
 | [app/](../../app) | core files of the app |
 | [app/controller/](../../app/controller) | controller layer |
 | [app/fetcher/](../../app/fetcher) | fetch layer |
