@@ -30,16 +30,14 @@ Please refer to the [Installation guide](documentation/guides/INSTALL.md#top).
 
 If you like this project, whatever skills you have, there surely is a way you can help! The project's current workforce splits into the following [four commissions](https://github.com/StateMapper/StateMapper/projects):
 
-| Commission | Responsability | Profile | Related |
+| Commission | Responsability | Profile | Please read |
 | ----- | ------ | ---- | ---- |
 | [Counter-bribery Strategists](https://github.com/StateMapper/StateMapper/projects/1) | to elaborate the best strategy and endorse public communications | political scientists, journalists, magistrates, social activists | |
 | [Core Wizards](https://github.com/StateMapper/StateMapper/projects/2) | to develop and maintain the core code | PHP/MySQL/JS/Regexp experts | [Developers guide](documentation/guides/DEVELOPERS.md) |
-| [Schema Soldiers](https://github.com/StateMapper/StateMapper/projects/3) | to implement more bulletin schemas | JSON/Regexp experts | [Developers guide](documentation/guides/DEVELOPERS.md) + [#21](https://github.com/StateMapper/StateMapper/issues/21) |
-| [Country Ambassadors](https://github.com/StateMapper/StateMapper/projects/4) | to host bulletins' IPFS nodes, check bulletins' integrity and translate the UI | collectives of social rights | [#21](https://github.com/StateMapper/StateMapper/issues/21) |
+| [Schema Soldiers](https://github.com/StateMapper/StateMapper/projects/3) | to implement and maintain bulletin schemas | JSON/Regexp experts | [Developers guide](documentation/guides/SOLDIERS.md) |
+| [Country Ambassadors](https://github.com/StateMapper/StateMapper/projects/4) | to host bulletins' IPFS nodes, check bulletins' integrity and translate the UI | collectives of social rights | [Ambassadors' guide](documentation/guides/AMBASSADORS.md) |
 
-If you wish to get involved into one of them, please do not hesitate in contacting us! (see [Contact & support](#contact--support))
-
-Please visit the [bulletin providers' page](https://statemapper.com/api) to see what Soldiers and Ambassadors are currently needed.
+If you wish to get involved into one of them, please do not hesitate in contacting us! (see [Contact & support](#contact--support)) A list of active Soldiers and Ambassadors is available on the [bulletin providers' page](https://statemapper.com/api).
 
 You may also help this project by:
 
