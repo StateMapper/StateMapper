@@ -1,0 +1,13 @@
+{
+	id: "ES/AGENCIA_ESTATAL",
+	type: "institution",
+	name: "Agencia Estatal, Ministerio para la Presidencia y para las Administraciones Territoriales",
+	shortName: "Agencia Estatal",
+	siteUrl: "http://www.mpr.gob.es",
+	city: null,
+	region: null,
+	country: "ES",
+	continent: "Europe",
+	locale: "es_ES",
+	gmtOffset: 2
+}

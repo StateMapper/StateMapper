@@ -1,0 +1,35 @@
+{
+	id: "FR",
+	type: "country",
+	originalName: "France",
+	name: "France",
+	continent: "EU",
+	
+	officialCurrencies: ["EUR"],													// national currencies, first being the default one
+	
+	vocabulary: {
+		months: ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"],
+		legalEntity: {
+			types: {
+				SL: {
+					name: "Société Limitée",
+					shortName: "S.L.",
+					patterns: [
+						"S\.?\s?L\.?",
+						"Société\s*Limitée"
+					]
+				},
+				SA: {
+					name: "Société Anonyme",
+					shortName: "S.A.",
+					patterns: [
+						"S\.?\s?A\.?",
+						"Société\s*Anonyme"
+					]
+				}
+			}
+		}
+	}
+}
+						
+			

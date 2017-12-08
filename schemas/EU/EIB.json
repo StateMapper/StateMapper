@@ -1,0 +1,13 @@
+{
+	id: "EU/EIB",
+	type: "institution",
+	name: "European Investment Bank",
+	shortName: "EIB",
+	siteUrl: "http://www.eib.org/",
+	city: null,
+	region: null,
+	country: null,
+	continent: "EU",
+	locale: "en_UK",
+	gmtOffset: 2
+}

@@ -1,0 +1,10 @@
+{
+	id: "EU",
+	type: "continent",
+	originalName: "Europe",
+	name: "Europe",
+	
+	officialCurrencies: ["EUR"]														// continent currencies if any, first being the default one
+}
+						
+			

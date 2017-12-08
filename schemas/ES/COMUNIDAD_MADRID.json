@@ -1,0 +1,13 @@
+{
+	id: "ES/COMUNIDAD_MADRID",
+	type: "institution",
+	name: "Comunidad de Madrid",
+	shortName: "Comunidad de Madrid",
+	siteUrl: "http://www.madrid.org",
+	city: null,
+	region: "Madrid",
+	country: "ES",
+	continent: "EU",
+	locale: "es_ES",
+	gmtOffset: 2
+}

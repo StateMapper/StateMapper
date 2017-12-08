@@ -1,0 +1,9 @@
+{
+	id: "IT",																		// full path/ID to this schema
+	type: "country",
+	originalName: "Italia",															// country name in the country language
+	name: "Italy",																	// country name in English
+	continent: "EU",
+	
+	officialCurrencies: ["EUR"]														// national currencies, first being the default one
+}

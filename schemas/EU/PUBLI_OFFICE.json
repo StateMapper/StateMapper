@@ -1,0 +1,13 @@
+{
+	id: "EU/PUBLI_OFFICE",
+	type: "institution",
+	name: "Publications Office",
+	shortName: "OP",
+	siteUrl: "https://publications.europa.eu/en/home",
+	city: null,
+	region: null,
+	country: null,
+	continent: "EU",
+	locale: "en_UK",
+	gmtOffset: 2
+}

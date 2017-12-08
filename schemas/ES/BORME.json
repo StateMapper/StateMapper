@@ -1,0 +1,996 @@
+{
+	
+	// todo: comparar http://visualcif.es/Empresa/272429/oximesa-sl
+	
+	id: "ES/BORME",
+	type: "bulletin",
+	providerId: "ES/AGENCIA_ESTATAL",
+	official: true,
+	name: "Boletín Oficial del Registro Mercantil",
+	shortName: "BORME",
+	siteUrl: "https://www.boe.es/",
+	searchUrl: "https://boe.es/diario_borme/",
+	
+	frequency: {
+		weekDays: ["MO", "TU", "WE", "TH", "FR"] // weekdays of publication
+	},
+	
+	guesses: {
+		id: {
+			url: { // guess id from url
+				pattern: "#^[^/]+://[^/]+/borme/dias/[0-9]+/[0-9]+/[0-9]+/pdfs/(BORME-[a-z0-9-_]+)\.(pdf|xml|htm.)$#i",
+				transform: [
+					{
+						type: "regexpMatch",
+						match: "$1"
+					}
+				]
+			}
+		},
+		date: {
+			url: { // guess date from url
+				pattern: "#^[^/]+://[^/]+/borme/dias/([0-9]+/[0-9]+/[0-9]+)/pdfs/BORME-[a-z0-9-_]+\.(pdf|xml|htm.)$#i",
+				transform: [
+					{
+						type: "regexpMatch",
+						match: "$1"
+					},
+					{
+						type: "parseDate",
+						dateFormat: "Y/m/d"
+					}
+				]
+			}
+		}
+	},
+
+	fetchProtocoles: {
+		summary: {
+			type: "Summary",
+			protocoles: [
+				{
+					input: {
+						format: "xml",
+						parameters: ["date"]
+					},
+					protocole: {
+						default: {
+							steps: [
+								{
+									type: "HTTP",
+									method: "GET",
+									url: "https://boe.es/diario_borme/xml.php?id=BORME-S-{date:formatDate(Ymd)}"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		document: {
+			type: "document",
+			protocoles: [
+				{
+					input: {
+						format: "xml",
+						parameters: ["url"]
+					},
+					protocole: {
+						default: {
+							format: "xml",
+							steps: [
+								{
+									type: "HTTP",
+									method: "GET",
+									url: "{url}"
+								}
+							]
+						}
+					}
+				},
+				{
+					input: {
+						format: "pdf",
+						parameters: ["url"]
+					},
+					protocole: {
+						default: {
+							format: "pdf",
+							steps: [
+								{
+									type: "HTTP",
+									method: "GET",
+									url: "{url}"
+								}
+							]
+						}
+					}
+				},
+				{
+					input: {
+						format: "pdf",
+						parameters: ["id", "date"]
+					},
+					protocole: {
+						default: {
+							steps: [
+								{
+									type: "HTTP",
+									method: "GET",
+									url: "https://boe.es/borme/dias/{date:formatDate(Y/m/d)}/pdfs/{id}.pdf"
+								}
+							]
+						}
+					}
+				},
+				{
+					input: {
+						format: "xml",
+						parameters: ["id"]
+					},
+					protocole: {
+						default: {
+							steps: [
+								{
+									type: "HTTP",
+									method: "GET",
+									url: "https://boe.es/diario_borme/xml.php?id={id}"
+								}
+							]
+						}
+					}
+				}
+			]
+		}
+	},
+	parsingProtocoles: {
+		summaries: {
+			type: "Summary",
+			format: "xml",
+			protocole: {
+				published: {
+					selector: "/sumario/meta/fecha/text()",
+					transform: [
+						{
+							type: "parseDate",
+							dateFormat: "d/m/Y"
+						}
+					]
+				},
+				children: {
+					sections: {
+						title: "@nombre",
+						selector: "//seccion",
+						children: {
+							emitters: {
+								name: "@nombre",
+								selector: "./emisor",
+								children: {
+									title: "@nombre",
+									items: {
+										selector: "./item",
+										schema: "ES/BORME",
+										id: "@id",
+										title: "./titulo",
+										type: "document",
+										followUrl: {
+											xml: {
+												selector: "./urlXml",
+												transform: [
+													{
+														type: "assign",
+														value: "https://boe.es{value}"
+													}
+												]
+											},
+											pdf: {
+												selector: "./urlPdf",
+												transform: [
+													{
+														type: "assign",
+														value: "https://boe.es{value}"
+													}
+												]
+											}
+										},
+										follow: true
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		documentPdf: {
+			type: "document",
+			format: "pdf",
+			protocole: {
+				published: {
+					regexpAttr: "#^(.*?)(Núm\.?\s*([0-9]+)\s*.*?([0-9]+)\s+de\s+(\S+)\s+de\s+(\d{4}))(.*)$#is",
+					transform: [
+						{
+							type: "regexpMatch",
+							match: "$4 $5 $6"
+						},
+						{
+							type: "parseDate",
+							dateFormat: "j F Y"
+						}
+					]
+				},
+				children: {
+					articles: { 
+						_filterable: true,
+						regexp: "#([$\n]\s*([0-9]{1,9})\s*[-]\s*({legalEntityPattern}))#isu", // split on this
+						
+						title: "$1",
+						reference: "$2",
+						
+						inject: {
+							bormeTopLimiters: "(?:(?!.*\bNombrami?entos?|\bModificaciones\s+estatutarias|\bConstituci[oó]n|\bDatos\s+registrales|\bAmpliaci[oó]n\s+de\s+capital|\bModificaciones\s+estatutarias|\bCambio\s+(?:de\s+)?objeto\s+social|\bCambio\s+de\s+denominaci[oó]n\s+social|\bReelecciones|\bFe\s+de\s+erratas|\bCeses\s*/\s*Dimisi[oó]n(?:es)?|\bAmpliaci[oó]n?\s+del\s+objeto\s+social|\bCambio\s+de\s+domicilio\s+social|\bDeclaraci[óo]n\s+de\s+unipersonalidad[\.\s]*Socio\s+[uú]nico|\bOtros?\s+conceptos?|\bSituaci[oó]\s+Concursal|\bRevocaci[óo]n(?:es)?\b\s*\.?|\bApo\.\s*(?:Man\.?\s*)?Soli?\b\.?|\bRepresentan?:|\s+Reactivaci[oó]n\s+(?:de\s+(?:la\s+)?)?sociedad.*|\bSituaci[óo]n\s+concursal).*?)",
+							bormeLimiters: "\bCapital:|cve:\s*BORME-|BOLET[IÍ]N\s+OFICIAL\s+DEL|Socio\s+[uú]nico|Reducci[óo]n\s+de\s+capital|Nombrami?entos?|Modificaciones\s+estatutarias|\b(?:Adm|Liq)(?:[\.\s]*?)[UÚ]nico\s?:\s|\bSoc(?:io)?(?:[\.\s]*)Prof\.?\s?:\s|Liquidador|Constituci[oó]n|Datos\s+registrales|Ampliaci[oó]n\s+de\s+capital|Modificaciones\s+estatutarias|Cambio\s+(?:de\s+)?objeto\s+social|Cambio\s+de\s+denominaci[oó]n\s+social|Reelecciones|Fe\s+de\s+erratas|\bCeses\s*/\s*Dimisi[oó]n(?:es)?\b|\bAmpliaci[oó]n?\s+del\s+objeto\s+social\b|Cambio\s+de\s+domicilio\s+social|Declaraci[óo]n\s+de\s+unipersonalidad[\.\s]*Socio\s+[uú]nico|Otros?\s+conceptos?|Situaci[oó]\s+Concursal|\bRevocaci[óo]n(?:es)?\b|\bApo\.?\s*(?:Man\.?\s*)?Soli?\b\.?|\bSocio:\s+|\bRepresentan?:|\s+Reactivaci[oó]n\s+(?:de\s+(?:la\s+)?)?sociedad\b|\bSituaci[óo]n\s+concursal\b|\bAuditor\b|\bpresident[ea]?\b|\bconsejer[oa]\b|\bsecretari[oa]s?\b"
+						},
+						
+						// TODO: falta parsear Modificaciones\s+estatutarias!, Cambio de objeto social, Socios?:, Representan:
+
+						legalEntity: { // related entity (from title)
+							match: "$3",
+							transform: [
+								{
+									type: "regexpMatch",
+									regexp: "#^(.+?)[\s\.]*(({bormeLimiters}).*?)?$#isu",
+									match: "$1"
+								},
+								{
+									type: "grepLegalEntities",
+									entityExtra: {
+										type: "company"
+									}
+								}
+							]
+						},
+
+						preceptType: { // precept type
+							match: "$6",
+							transform: [
+								{
+									type: "regexpMatch",
+									regexp: "#^(.*?)\..*$#is", // before first dot
+									match: "$1"
+								},
+								{
+									type: "lint"
+								}
+							]
+						},
+						
+						legalEntityNameChange: {  // Cambio de denominación social: ...
+							match: "$6",
+							transform: [
+								{
+									type: "regexpMatch",
+									regexp: "#^.*?Cambio\s+de\s+denominaci[óo]n social\.?\s*:?\s*(.+?)[\s\.]*(?:(?:{bormeLimiters}).*?)?$#isu",
+									match: "$1"
+								},
+								{
+									type: "grepLegalEntities",
+									entityExtra: {
+										type: "company"
+									}
+								}
+							]
+						},
+						
+						capitalCreation: { // Constitución. Capital: XXXX
+							match: "$6",
+							transform: [
+								{
+									type: "regexpMatch",
+									regexp: "#\bConstituci[óo]n\s*\..*?\bCapital\b\s*:?\s*([0-9\.,\s]+\s*([^\.,]+)?)[\s\.]*(?:(?:{bormeLimiters}).*?)*$#isu",
+									match: "$1"
+								},
+								{
+									type: "parseMonetary"
+								}
+							]
+						},
+						
+						capitalIncrease: { // Ampliación de capital: Capital: XXXX
+							match: "$6",
+							transform: [
+								{
+									type: "regexpMatch",
+									regexp: "#\bAmpliaci[óo]n\s*de?\s*capital[\.\s]*Capital\s*:?\s*([0-9\.,\s]+)\s*([^\s\.,]+)?#isu",
+									match: "$1 $2"
+								},
+								{
+									type: "parseMonetary"
+								}
+							]
+						},
+
+						capitalDecrease: { // TODO: check this or disable..
+							match: "$6",
+							transform: [
+								{
+									type: "regexpMatch",
+									regexp: "#Reducci[óo]n\s+(de\s*)?capital[\.\s]*Importe\s+reducci[oó]n\s*:?\s*([0-9\.,]+)\s*([^\s\.,]+)?#isu",
+									match: "$2 $3"
+								},
+								{
+									type: "parseMonetary"
+								}
+							]
+						},
+
+						unipersonalTypeDeclaration: { // Declaración de unipersonalidad: [..] Socio único: ...
+							match: "$6",
+							transform: [
+								{
+									type: "regexpMatch",
+									regexp: "#^.*?Declaraci[óo]n\s+(?:de\s+)?unipersonalidad\.?(?:{bormeTopLimiters})?\s*\bSocio\s*[úu]nico\s*:?(.+?)[\s\.]*(({bormeLimiters}).*?)?$#isu",
+									match: "$1"
+								},
+								{
+									type: "grepLegalEntities",
+									allowOtherValue: true,
+									entityExtra: {
+										type: "person"
+									}
+								},
+								{
+									type: "lint"
+								}
+							]
+						},
+
+						counselorNew: { // Nombramientos: [...] Consejero: ...
+							match: "$6",
+							transform: [
+								{
+									type: "regexpMatch",
+									regexp: "#^.*?\Nombramientos?\s*\.?\s*:?\s*(?:{bormeTopLimiters})?\bconsejer[oa]s?\b\s*:?(.+?)[\s\.]*(({bormeLimiters}).*?)?$#isu",
+									match: "$1"
+								},
+								{	
+									type: "splitBy",
+									regexp: "#[;]#"
+								},
+								{
+									type: "grepLegalEntities",
+									allowOtherValue: true,
+									entityExtra: {
+										type: "person"
+									}
+								}
+							]
+						},
+
+						secretarioNew: { // Nombramientos: [...] secretario: ...
+							match: "$6",
+							transform: [
+								{
+									type: "regexpMatch",
+									regexp: "#^.*?\Nombramientos?\s*\.?\s*:?\s*(?:{bormeLimiters}.*)*\bsecretari[oa]?s?\b\s*:?(.+?)[\s\.]*(({bormeTopLimiters}).*?)?$#isu",
+									match: "$1"
+								},
+								{	
+									type: "splitBy",
+									regexp: "#[;]#"
+								},
+								{
+									type: "grepLegalEntities",
+									allowOtherValue: true,
+									entityExtra: {
+										type: "person"
+									}
+								}
+							]
+						},
+
+						presidentNew: { // Nombramientos: [...] presidente: ...
+							match: "$6",
+							transform: [
+								{
+									type: "regexpMatch",
+									regexp: "#^.*?\Nombramientos?\s*\.?\s*:?\s*(?:{bormeLimiters}.*)*\bpresident[ae]?\b\s*:?(.+?)[\s\.]*(({bormeTopLimiters}).*?)?$#isu",
+									match: "$1"
+								},
+								{	
+									type: "splitBy",
+									regexp: "#[;]#"
+								},
+								{
+									type: "grepLegalEntities",
+									allowOtherValue: true,
+									entityExtra: {
+										type: "person"
+									}
+								}
+							]
+						},
+						
+						auditorKeep: { // Reelección: [...] auditor: ...
+							match: "$6",
+							transform: [
+								{
+									type: "regexpMatch",
+									regexp: "#^.*?\bReelecci[oó]n(?:es)?\.?\s*:?\s*(?:{bormeTopLimiters})?\bauditora?\b\s*:?(.+?)[\s\.]*(({bormeLimiters}).*?)?$#isu",
+									match: "$1"
+								},
+								{
+									type: "grepLegalEntities",
+									allowOtherValue: true,
+									entityExtra: {
+										type: "person"
+									}
+								},
+								{
+									type: "lint"
+								}
+							]
+						},
+						
+						administratorContractStart: { // Nombramientos: [...] Adm. único: ...
+							match: "$6",
+							transform: [
+								{
+									type: "regexpMatch",
+									regexp: "#^.*?Nombrami?entos?\.?\s*:?\s*(?:{bormeTopLimiters})?adm\.?\s*[uú]nico\s*:?(.+?)[\s\.]*(({bormeLimiters}).*?)?$#isu",
+									match: "$1"
+								},
+								{
+									type: "grepLegalEntities",
+									allowOtherValue: true,
+									entityExtra: {
+										type: "person"
+									}
+								},
+								{
+									type: "lint"
+								}
+							]
+						},
+
+						administratorMancomContractStart: { // Nombramientos: [...] Adm. Mancom: ...
+							match: "$6",
+							transform: [
+								{
+									type: "regexpMatch",
+									regexp: "#^.*?Nombrami?entos?\.?\s*:?\s*(?:{bormeTopLimiters})?adm\.?\s*Mancom\.?\s*:?(.+?)[\s\.]*(({bormeLimiters}).*?)?$#isu",
+									match: "$1"
+								},
+								{	
+									type: "splitBy",
+									regexp: "#[,;]#"
+								},
+								{
+									type: "grepLegalEntities",
+									allowOtherValue: true
+								},
+								{
+									type: "lint"
+								}
+							]
+						},
+						
+						empoweredContractStart: { // Nombramientos: [...] Apoderado: ...
+							match: "$6",
+							transform: [
+								{
+									type: "regexpMatch",
+									regexp: "#^.*?Nombrami?entos?\.?\s*:?\s*(?:{bormeTopLimiters})?apoderad[ao]s?:?(.+?)[\s\.]*(({bormeLimiters}).*?)?$#isu",
+									match: "$1"
+								},
+								{	
+									type: "splitBy",
+									regexp: "#[,;]#"
+								},
+								{
+									type: "grepLegalEntities",
+									allowOtherValue: true,
+									entityExtra: {
+										type: "person"
+									}
+								}
+							]
+						},
+						
+						Nombramientos_ApoManSol: { // Nombramientos: [...] Apoderado: ...
+							match: "$6",
+							transform: [
+								{
+									type: "regexpMatch",
+									regexp: "#^.*?Nombrami?entos?\.?\s*:?\s*(?:{bormeTopLimiters})?Apo\.?\s*Man\.?\s*Soli?\.?\s*:?(.+?)[\s\.]*(({bormeLimiters}).*?)?$#isu",
+									match: "$1"
+								},
+								{	
+									type: "splitBy",
+									regexp: "#[,;]#"
+								},
+								{
+									type: "grepLegalEntities",
+									allowOtherValue: true,
+									entityExtra: {
+										type: "person"
+									}
+								}
+							]
+						},
+						
+						Nombramientos_ApoSol: { // Nombramientos: [...] Apoderado: ...
+							match: "$6",
+							transform: [
+								{
+									type: "regexpMatch",
+									regexp: "#^.*?Nombrami?entos?\.?\s*:?\s*(?:{bormeTopLimiters})?Apo\.?\s*Soli?\.?\s*:?(.+?)[\s\.]*(({bormeLimiters}).*?)?$#isu",
+									match: "$1"
+								},
+								{	
+									type: "splitBy",
+									regexp: "#[,;]#"
+								},
+								{
+									type: "grepLegalEntities",
+									allowOtherValue: true,
+									entityExtra: {
+										type: "person"
+									}
+								}
+							]
+						},
+						
+						administratorReelected: { // Reelección: [...] Adm. Solid. ...
+							match: "$6",
+							transform: [
+								{
+									type: "regexpMatch",
+									regexp: "#^.*?Reelecci[oó]n(es)?\.?\s*(?:{bormeTopLimiters})?Adm\.?\s*Solid\.?\s*:?\s*(.+?)[\s\.]*(({bormeLimiters}).*?)?$#isu",
+									match: "$2"
+								},
+								{	
+									type: "splitBy",
+									regexp: "#[,;]#"
+								},
+								{
+									type: "grepLegalEntities",
+									allowOtherValue: true,
+									entityExtra: {
+										type: "person"
+									}
+								}
+							]
+						},
+						administratorContractEnd: { // Ceses/Dimisiones: [...] Adm. único. ...
+							match: "$6",
+							transform: [
+								{
+									type: "regexpMatch",
+									regexp: "#^.*?Ceses?[\s\.]*/[\s\.]*Dimisi[oó]n(?:es)?\.?\s*:?\s*(?:{bormeTopLimiters})?adm\s*\.?\s*[uú]nico:?(.+?)[\s\.]*(({bormeLimiters}).*)?$#isu",
+									match: "$1"
+								},
+								{	
+									type: "splitBy",
+									regexp: "#[,;]#"
+								},
+								{
+									type: "grepLegalEntities",
+									allowOtherValue: true,
+									entityExtra: {
+										type: "person"
+									}
+								},
+								{
+									type: "lint"
+								}
+							]
+						},
+						entityEndReason: { // Nombramiento: [...] Liquidador: ...
+							match: "$6",
+							transform: [
+								{
+									type: "regexpMatch",
+									regexp: "#^.*?Nombrami?entos?\.?\s*:?\s*(?:{bormeTopLimiters})?Liquidador\s*?:?.+?[\s\.]*(Disoluci[oó]n\s?\.\s*(.+?))(({bormeLimiters}).*)?$#isu",
+									match: "$2"
+								},
+								{
+									type: "lint"
+								}
+							]
+						},
+						entityEndExecutorStart: { // Nombramiento: [...] Liquidador: ...
+							// means the company is shut down?
+							match: "$6",
+							transform: [
+								{
+									type: "regexpMatch",
+									regexp: "#^.*?Nombrami?entos?\.?\s*:?\s*(?:{bormeTopLimiters})?Liquidador\s*?:?(.+?)[\s\.]*(({bormeLimiters}).*)?$#isu",
+									match: "$1"
+								},
+								{	
+									type: "splitBy",
+									regexp: "#[,;]#"
+								},
+								{
+									type: "grepLegalEntities",
+									allowOtherValue: true,
+									entityExtra: {
+										type: "person"
+									}
+								},
+								{
+									type: "lint"
+								}
+							]
+						},
+						entityEndExecutorEnd: { // Ceses/Dimisiones: [...] Liquidador. ...
+							match: "$6",
+							transform: [
+								{
+									type: "regexpMatch",
+									regexp: "#^.*?Ceses?[\s\.]*/[\s\.]*Dimisi[oó]n(es)?\.?\s*:?\s*(?:{bormeTopLimiters})?Liquidador:?(.+?)[\s\.]*(({bormeLimiters}).*)?$#isu",
+									match: "$2"
+								},
+								{
+									type: "grepLegalEntities",
+									allowOtherValue: true,
+									entityExtra: {
+										type: "person"
+									}
+								},
+								{
+									type: "lint"
+								}
+							]
+						},
+						operationStart: { // Comienzo de operaciones: ...
+							match: "$6",
+							transform: [
+								{
+									type: "regexpMatch",
+									regexp: "#^.*?Comienzo\s*de\s*operaciones\s*:\s*([0-9]{1,2})[\.-]([0-9]{1,2})[\.-]([0-9]{2}).*?$#isu",
+									match: "$3-$2-$1"
+								},
+								{
+									type: "parseDate",
+									dateFormat: "y-m-d"
+								}
+							]
+						},
+						socialStatus: { // Objeto social: ...
+							match: "$6",
+							transform: [
+								{
+									type: "regexpMatch",
+									regexp: "#^.*?\bObjeto\s*social\b\s*:\s*(.*?)(\.[^\.]*:.*)?(({bormeLimiters}).*?)?$#isu",
+									match: "$1"
+								},
+								{
+									type: "lint"
+								}
+							]
+						},
+						location: { // Domicilio social: ...
+							match: "$6",
+							transform: [
+								{
+									type: "regexpMatch",
+									regexp: "#^.*?\bDomicilio(?:\s+social)?\.?\s*:?\s*(.+?)[\s\.]\s*(({bormeLimiters}).*?)*$#isu",
+									match: "$1"
+								},
+								{
+									type: "lint"
+								}
+							]
+						},
+						registryId: { // Datos registrales: ...
+							match: "$6",
+							transform: [
+								{
+									type: "regexpMatch",
+									regexp: "#^.*?\bDatos\s+registrales\.?\s*:?\s*(.+?)[\s\.]\s*((\([0-9]{2}\.[0-9]{2}\.[0-9]{2}.*|{bormeLimiters}).*?)?$#isu",
+									match: "$1"
+								},
+								{
+									type: "lint"
+								}
+							]
+						},
+						registryDate: { // Datos registrales: ...
+							match: "$6",
+							transform: [
+								{
+									type: "regexpMatch",
+									regexp: "#^.*?Datos\s+registrales\.?\s*:?\s*(.+?)[\s\.]\s*((\((([0-9]{2})\.([0-9]{2})\.([0-9]{2})).*).*?)?$#isu",
+									match: "$5/$6/$7"
+								},
+								{
+									type: "parseDate",
+									dateFormat: "d/m/y"
+								}
+							]
+						},
+						
+						publicChallengeJudges: { // not working so well, seem to select only one judge, not all of them
+							match: "$6",
+							transform: [
+								{
+									type: "regexpMatch",
+									regexp: "#^.*?Juez\s*:?(.+?)[\s\.]*(({bormeLimiters}).*?)?$#isu",
+									match: "$1"
+								},
+								{
+									type: "grepLegalEntities",
+									allowOtherValue: true,
+									entityExtra: {
+										type: "person"
+									}
+								}
+							]
+						},
+						
+						publicChallengeSituations: { // could split deeper.. (detect 'Se declara la dis. Disolución. Otras Causas' for example)
+							match: "$6",
+							transform: [
+								{
+									type: "splitBy",
+									regexp: "#Situaci[óo]n\s+Concursal\.?#isu",
+									ifNoMatch: null
+								},
+								{
+									type: "lint"
+								}
+							]
+						},
+						
+						content: "$6"
+					}
+				}
+			}
+		},
+		documentXml: {
+			type: "document",
+			format: "xml",
+			protocole: {
+				published: {
+					selector: "/documento/metadatos/fecha_publicacion",
+					transform: [
+						{
+							type: "parseDate",
+							dateFormat: "Ymd"
+						}
+					]
+				},
+				title: "/documento/metadatos/titulo",
+				
+				// missing title detections:
+				// ANTA BANDERAS, S.L. (SOCIEDAD ESCINDIDA) ANTA BODEGAS, S.L. (SOCIEDAD BENEFICIARIA DE NUEVA CREACIÓN)
+				// AD SIRO AUTOMOCIÓN, S.L.U. (SOCIEDAD SEGREGADA) AD SIRO SUMINISTROS AUTOMOCION, S.L.U. (SOCIEDAD BENEFICIARIA)
+				
+				about: {
+					selector: "/documento/metadatos/titulo",
+					transform: [
+						{
+							type: "regexpReplace",
+							regexp: "#\((?:SOCIEDAD(?:ES)?|FONDO(?:S)?|COMPARTIMENTOS?)\s+[^\)]*?\)#ius",
+							replace: ", "
+						},
+						{
+							type: "grepLegalEntities",
+							entityExtra: {
+								type: "company"
+							},
+							strict: false
+						}
+					]
+				},
+				
+				absorbing: {
+					selector: "/documento/metadatos/titulo",
+					transform: [
+						{
+							type: "regexpMatch",
+							regexp: "#^(?:.*SOCIEDADE?S?\s*ABSORBENTES?\s*)?(.*?)\((?:SOCIEDAD(?:ES)?|FONDO(?:S)?|COMPARTIMENTOS?)\s*ABSORBENTES?\)[\s,\.]*.*#ius",
+							match: "$1"
+						},
+						{
+							type: "grepLegalEntities",
+							entityExtra: {
+								type: "company"
+							},
+							strict: false
+						}
+					]
+				},
+				
+				target: {
+					selector: "/documento/metadatos/titulo",
+					transform: [
+						{
+							type: "regexpMatch",
+							regexp: "#^(?:.*(?:SOCIEDAD(?:ES)?|FONDO(?:S)?|COMPARTIMENTOS?)\s*ABSORBENTES?\s*\)\s*)?(.*?)\(SOCIEDAD(?:ES)?\s*ABSORBIDAS?\)[\s,\.]*.*#ius",
+							match: "$1"
+						},
+						{
+							type: "grepLegalEntities",
+							entityExtra: {
+								type: "company"
+							},
+							strict: false
+						}
+					]
+				},
+				
+				children: {
+					articles: {
+						selector: "/documento/texto",
+						content: "."
+					}
+				}
+			}
+		}
+	},
+	
+	extractProtocoles: { 																	// ## Extract parts of parsed object
+		
+		administration: {
+			title: "Legal changes",														
+			selector: "//sections//articles", 		// extract specific items // later, add [legalEntity]
+			parts: ["schema", "id", "title", "location", "legalEntity", "administratorContractStart", "administratorReelected", "administratorContractEnd", "unipersonalTypeDeclaration", "counselorNew", "presidentNew", "capitalCreation", "capitalIncrease", "entityEndReason", "content", "legalEntityNameChange", "socialStatus"],
+			previewParts: {																// parts to preview
+				id: {
+					title: "Bulletin ID",
+					transform: [
+						{
+							type: "linkBulletin",
+							entityType: "document"
+						}
+					]
+				},	
+				related: {
+					var: "legalEntity",
+					title: "Legal entity",
+					columns: ["name", "subtype"]
+				},
+				name: {
+					_type: "name",
+					_action: "update",
+					_attr: "target",
+					var: "legalEntityNameChange",
+					title: "New legal name",
+					columns: ["name", "subtype"]
+				},
+				socialStatus: {
+					_type: "object",
+					_action: "new",
+					_attr: "note",
+					title: "Social object"
+				},
+				location: {
+					_type: "location",
+					_action: "new",
+					_attr: "note",
+					title: "Location"
+				},
+				administratorStart: {
+					_type: "administrator",
+					_action: "start",
+					_attr: "target",
+					var: "administratorContractStart",
+					title: "Administrator start",
+					columns: ["name", "subtype"]
+				},
+				administratorKeep: {
+					_type: "administrator",
+					_action: "keep",
+					_attr: "target",
+					var: "administratorReelected",
+					title: "Administrator reelected",
+					columns: ["name", "subtype"]
+				},
+				administratorEnd: {
+					_type: "administrator",
+					_action: "end",
+					_attr: "target",
+					var: "administratorContractEnd",
+					title: "Administrator end",
+					columns: ["name", "subtype"]
+				},
+				title: {
+					title: "Original title"
+				},
+				text: { // this special attibrute 'text' will be detected as the reference text for the statuses
+					var: "content",
+					title: "Original text"
+				},
+				unipersonalTypeDeclaration: {
+					_type: "owner",
+					_action: "update",
+					title: "Unique owner",
+					_attr: "target"
+				},
+				capitalCreation: {
+					_type: "capital",
+					_action: "new",
+					_attr: "amount",
+					title: "Creation capital", 
+					transform: [
+						{
+							type: "formatCurrency"
+						}
+					]
+				},
+				capitalIncrease: {
+					_type: "capital",
+					_action: "increase",
+					_attr: "amount",
+					title: "Creation increase", 
+					transform: [
+						{
+							type: "formatCurrency"
+						}
+					]
+				},
+				entityEndReason: {
+					_type: "name",
+					_action: "end",
+					_attr: "note",
+					title: "Reason of end"
+				},
+				counselorNew: {
+					_type: "counselor",
+					_action: "new",
+					_attr: "target",
+					title: "Counselor start",
+					columns: ["name", "subtype"]
+				},
+				presidentNew: {
+					_type: "president",
+					_action: "new",
+					_attr: "target",
+					title: "President start",
+					columns: ["name", "subtype"]
+				},
+				secretarioNew: {
+					_type: "secretary",
+					_action: "new",
+					_attr: "target",
+					title: "Secretary start",
+					columns: ["name", "subtype"]
+				}
+			}
+		},
+		
+		fusions: {	
+			title: "Absorptions",													
+			selector: "//followed[target]", 		// extract specific items // later, add [legalEntity]
+			parts: ["schema", "id", "about", "target", "absorbing", "title", "articles"],
+			content: ".",
+			previewParts: {	
+				_type: "absorb",
+				_action: "new",																// parts to preview
+				about: {
+					title: "About legal entities",
+					columns: ["name", "subtype"]
+				},
+				target: {
+					title: "Absorbed legal entity",
+					columns: ["name", "subtype"]
+				},
+				related: {
+					var: "absorbing",
+					title: "Absorbing legal entity",
+					columns: ["name", "subtype"]
+				},
+				title: {
+					title: "Original title"
+				},
+				text: {
+					var: "articles",
+					title: "Original text"
+				}
+			}
+		}
+	}
+}

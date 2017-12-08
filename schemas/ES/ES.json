@@ -1,0 +1,367 @@
+{
+	id: "ES",																		// full path/ID to this schema
+	type: "country",
+	originalName: "España",															// country name in the country language
+	name: "Spain",																	// country name in English
+	continent: "EU",
+	
+	officialCurrencies: ["EUR"],													// national currencies, first being the default one
+	
+	vocabulary: {
+		months: ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
+		numberLabels: ["cero", ["un", "uno", "una"], "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve", "diez", "once", "doce", "trece", "catorce", "quince", 16, 17, 18, 19, "veinte", "veinte uno", "veinte dos", "veinte tres", "veinte cuatro", "treinta", "cuarenta", "cincuenta", "sesenta", "setenta", "ochenta", "noventa"], 																// from zero to twenty-four, then from thirty to ninety by 10
+		
+		basicVocabulary: {
+			and: "y",
+			personTitles: ["Don", "Doña", "Señor(es)?", "Señoras?", "Señoritos?", "Señoritas?"] // TODO: strip this from names! see DON EMILIO PORTA ARTIGAS at http://localhost/boe/application/api/es/borme/2010-03-08/extract/1
+		},
+		
+		dateFormats: [																// all the ways to express a date, a time, or both
+			"Y-m-d", "d \d\e F \d\e Y", "j \d\e F \d\e Y", "d \d\e F", "j \d\e F", "d F Y", "j F Y", "d/m/Y H:i", "d/m/Y G:i", "d/m/Y", "j/m/Y H:i", "j/m/Y G:i", "j/m/Y", "d-m-Y H:i", "d-m-Y G:i", "d-m-Y", "j-m-Y H:i", "j-m-Y G:i", "j-m-Y", "d.m.y H:i", "d.m.y G:i", "d.m.y", "j.m.y H:i", "j.m.y G:i", "j.m.y", "y-m-d H:i", "y-m-d G:i", "y-m-d", "y-m-j H:i", "y-m-j G:i", "y-m-j", "y.m.d H:i", "y.m.d G:i", "y.m.d", "y.m.j H:i", "y.m.j G:i", "y.m.j", "H:i \h\o\r\a", "H,i \h\o\r\a", "H.i \h\o\r\a", "\a \l\a\s G \h\o\r\a\s \y m \m\i\n\u\t\o\s", "\a \l\a\s G \h\o\r\a\s", "\a \l\a\s H:i", "\a \l\a\s H,i", "\a \l\a\s H.i", "G:i \h\o\r\a", "G,i \h\o\r\a", "G.i \h\o\r\a", "\a \l\a\s G:i", "\a \l\a\s G,i", "\a \l\a\s G.i", "\a \l\a G", "\d\e G.m \a", "\d\e\s\d\e \l\a\s H.m", "\d\e\s\d\e \l\a\s G.m", "\d\e H.m \a", "\d\e H,m \a", "\d\e H:m \a", "\d\e G \a", "Ymd", "dmY"
+		],
+		
+		legalIdNumbers: {															// patterns for legal id (national) numbers
+			NIF: {
+				name: "??",
+				pattern: "[KLM][0-9]{7}[A-Z]",
+				type: "company"
+			},
+			DNI: {
+				name: "Documento Nacional de Identidad",
+				pattern: "[0-9]{8}[A-Z]",
+				type: "person"
+			},
+			NIE: {
+				name: "Número de Identidad de Extranjero",
+				pattern: "(?:X[0-9]{7,8}|[YZ][0-9]{7})[A-Z]",
+				type: "person"
+			}
+		},
+		
+		legalEntityName: {
+			pattern: "[\pL0-9][\pL-_0-9\.&][\s\pL-_0-9\.&]*",											// pattern of entity names (companies), without the suffix (S.L/S.A./..)
+			exception: "[0-9\.,\)\(:;]+"
+		},
+		
+		legalEntityTypes: {																// patterns for legal entities (companies amongst them)
+			SCOOP: {
+				name: "Sociedad Cooperativa",
+				shortName: "S.Coop.",
+				strictPatterns: [
+				],
+				caseInsensitivePatterns: [
+					"{legalEntityPattern}(S\.?\s?C\.?\s?o\.?\s?o\.?\s?p\.?)",
+					"{legalEntityPattern}(Sociedad\s*Cooperativa(?:\s*Espa[ñn]ola)?)"
+				]
+			},
+			SLNE: {
+				name: "Sociedad Limitada Nueva Empresa",
+				shortName: "S.L.N.E.",
+				strictPatterns: [
+					"{legalEntityPattern}(S\.?\s?L\.?\s?N\.?\s?E\.?)"
+				],
+				caseInsensitivePatterns: [
+					"{legalEntityPattern}(Sociedad\s*Limitada\s*Nueva\s*Empresa(?:\s*Espa[ñn]ola)?)"
+				]
+			},
+			SLFS: {
+				name: "Sociedad Limitada de Formación Succesiva",
+				shortName: "S.L.F.S.",
+				strictPatterns: [
+					"{legalEntityPattern}(S\.?\s?L\.?\s?F\.?\s?S\.?)"
+				],
+				caseInsensitivePatterns: [
+					"{legalEntityPattern}(Sociedad\s*Limitada\s*(?:de\s*)?Formaci[óo]n\s*Succ?esiva(?:\s*Espa[ñn]ola)?)"
+				]
+			},
+			SLP: {
+				name: "Sociedad Limitada Profesional",
+				shortName: "S.L.P.",
+				strictPatterns: [
+					"{legalEntityPattern}(S\.?\s?L\.?\s??P\.?)"
+				],
+				caseInsensitivePatterns: [
+					"{legalEntityPattern}(Sociedad\s*(?:Limitada\s*)?Profesional(?:\s*Espa[ñn]ola)?)",
+					"{legalEntityPattern}(S\.?\s*L\.?\s*Profesional(?:\s*Espa[ñn]ola)?)"
+				]
+			},
+			SLU: {
+				name: "Sociedad Limitada Unipersonal",
+				shortName: "S.L.U.",
+				strictPatterns: [
+					"{legalEntityPattern}(S\.?L\.?\s?,?\s*[sS][oO][cC][iI][eE][dD][aA][dD]\s+[uU][nN][iI][pP][eE][rR][sS][oO][nN][aA][lL])",
+					"{legalEntityPattern}(\bS\.?\s?L\.?\s*[Uu][Nn][Ii][Pp][Ee][Rr][Ss][Oo][Nn][Aa][Ll]\b\.?)",
+					"{legalEntityPattern}(\bS\.\s*L\.\s*U\b)",
+					"{legalEntityPattern}(\bS\.?\s?L\.?\s?U\.?\b)"
+				],
+				caseInsensitivePatterns: [
+					"{legalEntityPattern}(Sociedad\s*Limitada['\(\s]*\s+Uni-?\s*personal(?:\s*Espa[ñn]ola)?)",
+					"{legalEntityPattern}(S\.?\s*L\.?\s*Uni-?\s*personal(?:\s*Espa[ñn]ola)?)"
+				]
+			},
+			SLL: {
+				name: "Sociedad Limitada Laboral",
+				shortName: "S.L.L.",
+				namePosition: "before",
+				strictPatterns: [
+					"{legalEntityPattern}(S\.?\s?L\.?\s?L\.?)"
+				],
+				caseInsensitivePatterns: [
+					"{legalEntityPattern}(Sociedad\s+Limitada\s+Laboral(?:\s*Espa[ñn]ola)?)",
+					"{legalEntityPattern}(S\.?\s*L\.?\s*Laboral(?:\s*Espa[ñn]ola)?)"
+				]
+			},
+			SL: {
+				type: "LLC",
+				name: "Sociedad Limitada",
+				shortName: "S.L.",
+				namePosition: "before",											// position of the name (before means the name is before the patterns: MYCOMPANY S.L.)
+				strictPatterns: [
+					"{legalEntityPattern}(S\.?\s?(?:R\.?\s?)?L\.?)",
+					"{legalEntityPattern}(B\.?\s?V\.?)" 						// SL from Netherlands
+				],
+				caseInsensitivePatterns: [
+					"{legalEntityPattern}(Sociedad\s*(?:de\s*Responsabilidad\s*)?Limitada(?:\s*Espa[ñn]ola)?)",
+					"{legalEntityPattern}((?:Ltd|Limited)\.?(?:\s+Sucursal)?(?:\s+Espa[ñn]a)?)",
+					"{legalEntityPattern}(Sucursal\s+en\s+Espa[nñ]a)", // may add 'not preceeded by SA'
+					"{legalEntityPattern}(GmbH\.?)"								// SL from Germany
+				],
+				urls: {
+					en: "https://en.wikipedia.org/wiki/Limited_liability_company",
+					es: "https://es.wikipedia.org/wiki/Sociedad_de_responsabilidad_limitada"
+				}
+			},
+			SAU: {
+				name: "Sociedad Anónima Unipersonal",
+				shortName: "S.A.U.",
+				namePosition: "before",
+				strictPatterns: [
+					"{legalEntityPattern}(S\.?\s?A\.?\s?U\.?)"
+				],
+				caseInsensitivePatterns: [
+					"{legalEntityPattern}(Sociedad\s*An[óo]nima\s*Unipersonal(?:\s*Espa[ñn]ola)?)"
+				]
+			},
+			SAL: {
+				name: "Sociedad Anónima Laboral",
+				shortName: "S.A.L.",
+				namePosition: "before",
+				strictPatterns: [
+					"{legalEntityPattern}(S\.?\s?A\.?\s?L\.?)"
+				],
+				caseInsensitivePatterns: [
+					"{legalEntityPattern}(Sociedad\s*An[óo]nima\s*Laboral(?:\s*Espa[ñn]ola)?)"
+				]
+			},
+			SAD: {
+				name: "Sociedad Anónima Deportiva",
+				shortName: "S.A.D.",
+				namePosition: "before",
+				urls: {
+					en: "https://en.wikipedia.org/wiki/Sociedad_An%C3%B3nima_Deportiva"
+				},
+				strictPatterns: [
+					"{legalEntityPattern}(S\.?\s?A\.?\s?D\.?)"
+				],
+				caseInsensitivePatterns: [
+					"{legalEntityPattern}(Sociedad\s*An[óo]nima\s*Deportiva(?:\s*Espa[ñn]ola)?)"
+				]
+			},
+			SA: {
+				name: "Sociedad Anónima",
+				shortName: "S.A.",
+				namePosition: "before",
+				strictPatterns: [
+					"{legalEntityPattern}(S\.?\s?A\.?)",
+					"{legalEntityPattern}(s\.a\.?)"
+				],
+				caseInsensitivePatterns: [
+					"{legalEntityPattern}(Sociedad\s*An[óo]nima(?:\s*Espa[ñn]ola)?)",
+					"(Sociedad\s*An[óo]nima(?:\s*Espa[ñn]ola)?\s*){legalEntityPattern}"
+				],
+				urls: {
+					es: "https://es.wikipedia.org/wiki/Sociedad_an%C3%B3nima"
+				}
+			},
+			SCRA: {
+				name: "Sociedad Comanditaria",
+				shortName: "S.Cra.",
+				namePosition: "before",
+				urls: {
+					es: "https://es.wikipedia.org/wiki/Sociedad_en_comandita"
+				},
+				strictPatterns: [
+					"{legalEntityPattern}(S\.?\s?CRA\.?)",
+					"{legalEntityPattern}(S\.?\s?Cra\.?)",
+					"{legalEntityPattern}(s\.cra\.?)"
+				],
+				caseInsensitivePatterns: [
+					"{legalEntityPattern}(Sociedad(?:\s*Espa[ñn]ola)?\s*en\s*Comandita)",
+					"(Sociedad(?:\s*Espa[ñn]ola)?\s*en\s*Comandita\s*){legalEntityPattern}",
+					"{legalEntityPattern}(Sociedad\s*Comanditaria(?:\s*Espa[ñn]ola)?)",
+					"(Sociedad\s*Comanditaria(?:\s*Espa[ñn]ola)?\s*){legalEntityPattern}"
+				]
+			},
+			SC: {
+				name: "Sociedad Colectiva",
+				shortName: "S.C.",
+				namePosition: "before",
+				strictPatterns: [
+					"{legalEntityPattern}(S\.?\s?C\.?)",
+					"{legalEntityPattern}(s\.c\.?)"
+				],
+				caseInsensitivePatterns: [
+					"{legalEntityPattern}(Sociedad\s*Colectiva(?:\s*Espa[ñn]ola)?)",
+					"(Sociedad\s*Colectiva(?:\s*Espa[ñn]ola)?\s*){legalEntityPattern}"
+				]
+			},
+			UTE: {
+				name: "Unión Temporal de Empresas",
+				shortName: "U.T.E.",
+				namePosition: "before",
+				strictPatterns: [
+					"{legalEntityPattern}((?:en\s+)?U\.?\s?T\.?\s?E\.?)",
+					"(U\.?\s?T\.?\s?E\.?){legalEntityPattern}"
+				],
+				caseInsensitivePatterns: [
+					"{legalEntityPattern}(\,?\s*(?:\s+en)?\s+Unión\s*Temporal\s+de\s+Empresas)"
+				],
+				exceptions: [
+					"(?:constituid(?:[ao]s?))?\s*en,? U\.?\s?T\.?\s?E\.?.*",
+					"(?:constituid(?:[ao]s?))?\s*en,? (?:\s+en)?\s+Unión\s*Temporal\s+de\s+Empresas.*"
+				]
+			},
+			FI: {
+				name: "Fondo de Inversión",
+				shortName: "F.I.",
+				namePosition: "before",
+				strictPatterns: [
+					"{legalEntityPattern}(F\.?\s?I\.?)",
+					"(F\.?\s?I\.?){legalEntityPattern}"
+				],
+				caseInsensitivePatterns: [
+					"{legalEntityPattern}(\,?\s*Fondo\s+(?:de\s+)inversi[oó]n)"
+				]
+			}
+		},
+		
+		legalTaxonomies: {															// interesting sentence patterns to detect
+			adjudge: {																// pattern lot ID
+				"adjudicado por": {													// the sentence pattern to detect (spaces are replaced by \s+)
+					transfer: "rtl"													// order of transfer (of power, money..): ltf (left-to-right) or rtl (right-to-left)
+				},
+				"adjudicado a": {
+					transfer: "ltr"
+				},
+				"adjudic\S+": {
+					transfer: "ltr"
+				}
+			}
+		},
+		
+		stateLevels: {
+			country: {
+				name: "país",
+				plural: "países",
+				patterns: [
+					{
+						regexp: "(?:en|de) España"
+					},
+					{
+						regexp: "español(?:as?|es)?"
+					}
+				],
+				coordinates: [40.42028, -3.70578], // taken from api.here.com
+				institutions: {
+					minister: {
+						name: "ministerio",
+						plural: "ministerio",
+						patterns: [
+							{
+								regexp: "miniterio\s+de\s+(\b[^\.;:]+\b)(\s+de\s+(\b[^\.;:]+\b))?",
+								matches: {
+									"$1": "minister",
+									"$3": "country"
+								}
+							}
+						]
+					}
+				}
+			},
+			province: {
+				name: "provincia",
+				plural: "provincias",
+				parentType: "country",
+				patterns: [
+					{
+						regexp: "provincia(?:s)?(?:auton[oó]mas?\s+)?\s+(?:de\s+)?([^\.;:]+)",
+						matches: {
+							"$1": "province"
+						}
+					}
+				]
+			},
+			community: {
+				name: "comunidad",
+				plural: "comunidades",
+				parentType: "province",
+				patterns: [
+					{
+						regexp: "comunidad(?:es)?\s+(?:auton[oó]mas?\s+)?(?:de\s+)?([^\.;:]+)",
+						matches: {
+							"$1": "community"
+						}
+					}
+				]
+			},
+			city: {
+				name: "ciudad",
+				plural: "ciudades",
+				parentType: "community",
+				patterns: [
+					{
+						regexp: "ciudad(?:es)?\s+(?:de\s+)?([^\.;:]+)",
+						matches: {
+							"$1": "city"
+						}
+					}
+				],
+				institutions: {
+					cityhall: {
+						name: "ayuntamiento",
+						plural: "ayuntamientos",
+						patterns: [
+							{
+								regexp: "ayuntamiento\s+de\s+([^\.;:]+)",
+								matches: {
+									"$1": "city"
+								}
+							}
+						]
+					}
+				}
+			}
+		}
+	},
+	
+	exceptions: {
+		
+		legalEntityNames: [															// entity names that have been crossed without their suffix (S.L./S.A./...) 
+																					// ver http://localhost/boe/application/api/es/boe/2015-03-03/extract
+			"Distribuziones",
+			"Endesa Distribución",
+			"Zurich Insurance PCL"
+		]
+		
+	},
+	
+	ambassadors: [
+		{
+			name: "Kaos155 hacker team",
+			users: ["statemapper"],
+			nodes: ["hash_bla"] // IPNS addresses
+		}
+	]
+}
+						
+			

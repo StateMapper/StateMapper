@@ -1,0 +1,12 @@
+{
+	id: "EU/EFSI",
+	type: "bulletin",
+	providerId: "EU/EIB",
+	official: true,
+	continent: "EU",
+	name: "EFSI project list",
+	shortName: "EFSI",
+	siteUrl: "http://www.eib.org/efsi/efsi-projects/index.htm",
+	searchUrl: "http://www.eib.org/efsi/efsi-projects/index.htm",
+	onProgress: true
+}

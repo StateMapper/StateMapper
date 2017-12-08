@@ -1,0 +1,592 @@
+{
+	id: "ES/BOE",											// the schema's path/ID
+	type: "bulletin",										// the type of entity described (bulletin, institution, country...)
+	providerId: "ES/AGENCIA_ESTATAL",						// the full schema path/ID of the bulletin's provider
+	official: true,											// set to true for offical bulletins
+	name: "Boletín Oficial del Estado",						// the bulletin's full name
+	shortName: "BOE",										// the bulletin's short name
+	siteUrl: "https://www.boe.es/",							// the bulletin's main site URL
+	searchUrl: "https://www.boe.es/diario_boe/", 			// the bulletin's web search URL
+					
+	frequency: {
+		weekDays: ["MO", "TU", "WE", "TH", "FR", "SA"] 		// weekdays of publication
+	},
+	
+	idFormats: [
+		"BOE-[A-Z0-9-_]+"
+	],
+	
+	guesses: {
+		type: {
+			id: [
+				{
+					pattern: "#^(BOE-[ABL]-[0-9]{4}-[0-9]+)$#i",
+					transform: [
+						{
+							type: "assign",
+							value: "document"
+						}
+					]
+				},
+				{
+					pattern: "#^(BOE-S-[0-9]{4}-[0-9]+)$#i",
+					transform: [
+						{
+							type: "assign",
+							value: "Summary"
+						}
+					]
+				}
+			]
+		}
+	},
+															//
+	fetchProtocoles: { 										// ## FETCH PROTOCOLES
+		summary: {
+			type: "Summary", 								// type of entity fetched with this protocole
+			protocoles: [
+				{
+					input: {
+						format: "xml", 					// original output format
+						parameters: ["date"]				// input parameters needed for such fetch protocole
+					},
+					protocole: {
+						default: {
+							steps: [						// steps to get the output
+								{
+									type: "HTTP",			// an HTTP request
+									method: "GET",			// a GET HTTP request
+									url: "https://www.boe.es/diario_boe/xml.php?id=BOE-S-{date:formatDate(Ymd)}" 
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		document: {
+			type: "document", 								// type of entity fetched with this protocole
+			protocoles: [
+				{
+					input: {
+						format: "xml",
+						parameters: ["id"]
+					},
+					protocole: {
+						default: {
+							steps: [
+								{
+									type: "HTTP",
+									method: "GET",
+									url: "https://www.boe.es/diario_boe/xml.php?id={id}"
+								}
+							]
+						}
+					}
+				}
+			]
+		}
+	},														
+															//
+	parsingProtocoles: { 									// ## PARSING PROTOCOLES
+		summaries: {
+			type: "Summary", 								// parsing protocole for Summary types (and xml format)
+			format: "xml", 
+			protocole: { 									// the parsed root object description
+				published: { 								// an attribute of the root object
+					selector: "/sumario/meta/fecha", 		// the xpath of such attribute
+					transform: [							// transformations applied to the attribute's value
+						{
+							type: "parseDate",				// parse the value as a date
+							dateFormat: "d/m/Y"				// with this date format
+						}
+					]
+				},
+				children: {									// this is an array of objects (as attributes)
+					sections: {								// an array attribute sections
+						title: {							// .. with each object a title attribute
+							selector: "@nombre",			// .. which is the object's nombre (xml) attribute
+							transform: [
+								{
+									type: "parseList",		// parse the value as a list
+									delimiter: "."			// .. with a dot delimiter
+								}
+							]
+						},
+						num: {
+							selector: "@num"
+						},
+						selector: "//seccion",
+						childrenWhere: {
+							or: {
+								num: "#^(?:5A|5B|L)$#",
+								title: "#(Contrataci[oó]n|licitaci[óo]n)#ius"
+							}
+						},
+						children: {
+							departments: {
+								name: "@nombre",
+								selector: "./departamento",
+								children: {
+									title: "@nombre",
+									epigraphs: {
+										selector: "./epigrafe",
+										children: {
+											items: {
+												selector: "./item",
+												schema: "ES/BOE",		// the schema of the entity
+												id: "@id",
+												title: "./titulo",
+												type: "document",		// the entity type (as described in this schema)
+												follow: true			// set follow to true to allow following with a sub-request, or use an object to follow according to conditions of attributes
+											}
+										}
+									},
+									items: {
+										selector: "./item",
+										schema: "ES/BOE",
+										id: "@id",
+										title: "./titulo",
+										type: "document",
+										follow: true
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		document: {
+			format: "xml",
+			protocole: {
+				title: "/documento/metadatos/titulo/text()[1]",
+				contractType: "/documento/analisis/tipo/text()[1]",
+				contractTypeId: "/documento/analisis/tipo/@codigo",
+				modality: "/documento/analisis/modalidad",
+				modalityId: "/documento/analisis/modalidad/@codigo",
+				
+				serviceLabel: {
+					selector: "/documento/analisis/materias_cpv",
+					transform: [
+						{
+							type: "splitBy",
+							regexp: "#([0-9 ]{3,40}000\s*)#us",
+							includeSeparator: true
+						},
+						{
+							type: "regexpMatch",
+							regexp: "#^([0-9 ]+)\s*(.*?)$#us",
+							match: "$2"
+						}
+					],
+					value: ".",
+					else: {
+						selector: "/documento/analisis/materias",
+						transform: [
+							{
+								type: "splitBy",
+								regexp: "#([0-9 ]{3,40}(?:000)?\s*)#us",
+								includeSeparator: true
+							},
+							{
+								type: "regexpMatch",
+								regexp: "#^([0-9 ]+)\s*(.*?)$#us",
+								match: "$2"
+							}
+						],
+						value: "."
+					}
+				},
+				serviceCode: {
+					selector: "/documento/analisis/materias_cpv",
+					transform: [
+						{
+							type: "splitBy",
+							regexp: "#([0-9 ]{3,40}000\s*)#us",
+							includeSeparator: true
+						},
+						{
+							type: "regexpMatch",
+							regexp: "#^([0-9 ]+)\s*(.*?)$#us",
+							match: "$1"
+						}
+					],
+					value: ".",
+					else: {
+						selector: "/documento/analisis/materias",
+						transform: [
+							{
+								type: "splitBy",
+								regexp: "#([0-9 ]{3,40}000\s*)#us",
+								includeSeparator: true
+							},
+							{
+								type: "regexpMatch",
+								regexp: "#^([0-9 ]+)\s*(.*?)$#us",
+								match: "$1"
+							}
+						],
+						value: "."
+					}
+				},
+				
+				price: {
+					selector: "/documento/analisis/precio",
+					transform: [
+						{ 
+							type: "parseMonetary"
+						}
+					]
+				},
+				amount: {
+					selector: "/documento/texto",
+					transform: [
+						{
+							type: "parseMonetary",
+							
+							outerSelector: "\bImporte(?:\s*o canon)?\s*de\s*adjudicaci[óo]n\s*[:\.]?\s*(.*?)([abcdefgh]\s*\).*)?$",
+							
+							wrapGroups: [ // TODO: To implement + put previous regexpMatch as outerSelector for parseMonetary 
+							// ------------------------------------ <<<
+								 "\bLotes?\b\s+([A-Z0-9\s,]+):?\s+"
+							],
+							groups: [
+								"\s*\(?\s*Lotes?\s*(?:adjudicados?\s*)?[A-Z0-9\s,]+(?:(?:\s+[y&]|\s*,)(?:\s+lotes?\s+[A-Z0-9]+)*\s+[A-Z0-9]+)*\s*\)?:?\s*"
+							],
+							groupsDelimiters: [
+								"[\(\):;]",
+								"\s*Lotes?\s*",
+								"\s*,\s+",
+								"\s+[y&]\s+"
+							],
+							amountTypeDelimiters: {
+								"\bImporte\s+neto\b": "net",
+								"\bImporte\s+bruto\b": "gross",
+								"\bImporte\s+total\b": "total"
+							},
+							stripBeforeMatch: [
+								"#\(?\s*IVA\s*(?:no\s*-?)?(?:ex|in)cluido\s*\)?#ius",						// strip (IVA excluido)
+								"#adjudicad[ao]\s+a\s+(la\s+empresa\s+)?#ius"
+							]
+						}
+					],
+					else: {
+						selector: "/documento/analisis/importe",
+						transform: [
+							{ 
+								type: "parseMonetary",
+								outputAsGroup: true
+							}
+						],
+						else: {
+							selector: "/documento/texto",
+							transform: [
+								{
+									type: "regexpMatch",
+									regexp: "#\bImporte(?:\s*o canon)?\s*de\s*adjudicaci[óo]n\s*[:\.]?\s*(?:(?:[\s\pL-_\(0-9,\.])*?\bneto\s*:)?(?:[\s\pL-_\(0-9,\.])*?\s*(?:(?:importe\s*)?total\s*:?\s*)?(?:[\s\pL-_\(]*)?\s*([0-9\.,\s]+)#ius",
+									match: "$1"
+								},
+								{ 
+									type: "parseMonetary",
+									outputAsGroup: true
+								}
+							]
+						}
+					}
+				},
+				public: "/documento/analisis/procedimiento",
+				tramitation: {
+					selector: "/documento/analisis/tramitacion"
+				},
+				opening: {
+					selector: "/documento/analisis/fecha_apertura_ofertas",
+					transform: [
+						{
+							type: "parseDatetime"
+						}
+					]
+				},
+				presentation: {
+					selector: "/documento/analisis/fecha_presentacion_ofertas",
+					transform: [
+						{
+							type: "parseDatetime"
+						}
+					]
+				},
+				location: {
+					region: {
+						selector: "/documento/analisis/ambito_geografico"
+					}
+				},
+				
+				publicationMedia: {
+					selector: "/documento/texto",
+					transform: [
+						{
+							type: "regexpMatch",
+							regexp: "#^.*[a-z]\s*\)\s*\bMedio\s*de\s*publicaci[oó]n\s*del\s*anuncio\s*de\s*licitaci[oó]n\b\s*:\s*(.+?)\s*\.?\s*(?:\s[0-9][0-9]?\.|[abcdefgh]\s*\)).*$#iusm",
+							match: "$1"
+						}
+					]
+				},
+				
+				publicationDate: {
+					selector: "/documento/texto",
+					transform: [
+						{
+							type: "regexpMatch",
+							regexp: "#^.*[a-z]\s*\)\s*\bFecha\s*de\s*publicaci[oó]n\s*del\s*anuncio\s*de\s*licitaci[oó]n\b\s*:\s*(.+?)\s*\.?\s*(?:\s[0-9][0-9]?\.|[abcdefgh]\s*\)).*$#iusm",
+							match: "$1"
+						},
+						{
+							type: "parseDate"
+						}
+					]
+				},
+				
+				note: "/documento/analisis/observaciones",
+
+				nationalIds: {
+					selector: "/documento/texto",
+					transform: [
+						{
+							type: "grepNationalIds"
+						}
+					]
+				},
+				
+				contractTargetEntities: {
+					selector: "/documento/texto",
+					transform: [
+						{
+							type: "grepLegalEntities",
+							outerSelector: "\bcontratista\s*:\s*(.+?)\s*(?:\.*\s*\b[bcdefgh]\s*\).*)$",						// an outer selector to grep legalEntities from. First match will be used! use (?: to not match some patterns
+							
+							wrapGroups: [
+								 "\bLotes?\b\s+([A-Z0-9\s,]+):?\s+"
+							],
+							
+							groups: [
+								"\s*\(?\s*(?:[y,\.:;]\s+)?\bLotes?\s*(?:adjudicados?\s*)?[A-Z0-9\s,]+(?:(?:\s+[y&]|\s*,)(?:\s+\blotes?\s+[A-Z0-9]+)*\s+[A-Z0-9]+)*\s*\)?:?\s*"
+							],
+							groupsDelimiters: [
+								"[\(\):;]",
+								"\s*(?:[y,\.:;]\s+)?Lotes?\s*",
+								"\s*,\s+",
+								"\s+[y&]\s+"
+							],
+							stripBeforeMatch: [
+								//#\(\s*Lotes?\s*(?:adjudicados?\s*)?[A-Z0-9\s,]+(?:\s*y\s*[A-Z0-9]+)*\s*\)#ius,
+								"#[0-9\.,]+\s+(?:euro?s?\b|€)(?:\s*;)?#ius",							// strip thing like 127.650,00 €
+								"#\(?\s*IVA\s*(?:no\s*-?)?(?:ex|in)cluido\s*\)?#ius",						// strip (IVA excluido)
+								"#adjudicad[ao]\s+a\s+(la\s+empresa\s+)?#ius",						
+								//#(?:Lotes?\s+(?:adjudicados?\s*)?[A-Z0-9]+(?:\s+y\s+[A-Z0-9]+)*\s*:\s*\.?)#ius,
+								"#(?:Lotes?\s+(?:adjudicados?\s*)?[A-Z0-9]+(?:\s+y\s+[A-Z0-9]+)*\s*:\s*desiertos?\b\.?)#ius",
+								"#((?:Sucursal\s+)?en\s+Espa[nñ]a)#ius"
+							],
+							stripFromMatch: [													// strip things between parenthesis
+								"#\s*\b[a-z]\)$#ius",
+								//#^([A-Z][A-Z0-9-]{3}\.)#us,											// some codes than appear in front of lotes, with a dot
+								//#^([A-Z][A-Z]{2}-[0-9]{2}\.)#us,											// some codes than appear in front of lotes, with a dot
+								"#(Ver\s+Perfil\s+del\s+Contratante:?\s*)#ius",
+								"#(\.\s*[a-z])$#ius"											// some codes than appear after name, after a dot	
+							],
+							entityExtra: {
+								type: "company"
+							},
+							allowEntityPrefix: "(?:(?:[Ee][Ll]|[Ll][Oo][Ss]\s+)?[Ll][Oo][Tt][Ee][Ss]?\s*(?:adjudicados?\s*:?\s*)?(?:[A-Z0-9/\.,:y«–-]+\b\s*,?\s*)+\s*[\.-]?\s*:?\s*)*"		// can be matched before entities (but stripped from result). Nothing must be matches! please use (?: 
+						}
+					]
+				},
+				
+				originalText: {
+					selector: "/documento/texto"
+				},
+				
+				contractExecutive: {
+					selector: "/documento/texto",
+					transform: [
+						{
+							type: "regexpMatch",
+							regexp: "#^(?:.*)(?:[abcde]\)\s*Organismo\s*:\s*?(.+?)(\s+[23]\s*\.\s*\bObjeto del contrato\b.*)?[\.\s]*[bcdefgh]\s*\))(?:.*)$#iusm",
+							match: "$1"
+						},
+						{
+							type: "grepLegalEntities",
+							entityExtra: {
+								type: "institution"
+							}
+						}
+					]
+				},
+				
+				contractExpedientId: {
+					selector: "/documento/texto",
+					transform: [
+						{
+							type: "regexpMatch",
+							regexp: "#^(.*)[abcdef]\s*\)\s*N[úu]m(ero)?\s*de\s*expediente\s*:\s*([\s0-9A-Z-_\./]+?)\s*[^0-9\)]*(\s[0-9]+\.|[abcdefgh]\s*\))(.*)$#iusm",
+							match: "$3"
+						}
+					]
+				},
+				
+				pros: {
+					selector: "/documento/texto",
+					transform: [
+						{
+							type: "regexpMatch",
+							regexp: "#^(?:.*)[a-z]\s*\)\s*Ventajas\s+de\s+la\s+oferta\s+adjudicataria\s*:?\s*:\s*(.*?)(?:\s*\.\s*)?(?:\b[a-z]\s*\).*)?$#iusm",
+							match: "$1"
+						}
+					]
+				},
+				
+				adjudgeSentences: {
+					selector: "/documento/texto",
+					transform: [
+						{
+							type: "grepSentence", 										// grabbing sentences that contain 'adjudge' vocabulary
+							vocabulary: "adjudge"
+						}
+					]
+				},
+
+				published: {
+					selector: "/documento/metadatos/fecha_publicacion",
+					transform: {
+						type: "parseDate",
+						dateFormat: "Ymd"
+					}
+				},
+				updated: {
+					selector: "/@fecha_actualizacion",
+					transform: {
+						type: "parseDatetime",
+						dateFormat: "YmdHis"
+					}
+				},
+
+				legalEntity: {
+					selector: "/documento/metadatos/departamento",
+					transform: [
+						{
+							type: "grepLegalEntities",
+							entityExtra: {
+								type: "institution"
+							}
+						}
+					]
+				},
+				
+				children: {
+					previousReferences: {
+						selector: "/documento/analisis/referencias/anteriores/anterior",
+						reference: "@referencia",
+						title: "./palabra",
+						content: "./texto"
+					},
+					nextReferences: {
+						selector: "/documento/analisis/referencias/posteriores/posterior",
+						reference: "@referencia",
+						title: "./palabra",
+						content: "./texto"
+					}
+				}
+			}
+		}
+	},
+	
+	extractProtocoles: { 																	// ## Extract parts of parsed object
+																							//
+		directAdjudge: {
+			title: "Adjudges",														
+			//selector: //sections//items//followed[modalityId='#^[FL]$#iu' OR contractType='#Adjudica#iu'], 		// extract specific items .. [amount>=1]
+			
+			selector: "//sections//items//followed[modality='#Formalización#iu' OR contractType='#Adjudica#iu']", 		// extract specific items .. [amount>=1]
+			
+			
+			// BETTER: selector: followed[modalityId='#^F$#iu' OR modalityId='#^L$#iu' OR contractType='#Adjudica#iu'][amount>=1]
+			
+			
+			content: ".",
+			parts: ["publish", "schema", "id", "url", "amount", "contractType", "modality", "modalityId", "serviceCode", "serviceLabel", "contractExpedientId", "legalEntity", "contractExecutive", "contractTargetEntities", "originalText", "nationalIds", "currency"],					// parts to keep
+			
+			previewParts: {																	// parts to preview
+				_type: "fund",
+				_action: "new",
+				
+				id: {
+					title: "Bulletin ID",
+					transform: [
+						{
+							type: "linkBulletin",
+							entityType: "document"
+						}
+					]
+				},
+				issuing: {
+					var: "contractExecutive",
+					title: "Issuing", 
+					transform: [
+						{
+							type: "formatEntities"
+						}
+					]
+				},
+				related: {
+					var: "contractTargetEntities",
+					title: "Related", 
+					transform: [
+						{
+							type: "formatEntities"
+						}
+					]
+				},
+				amount: {
+					title: "Amounts",
+					transform: [
+						{
+							type: "formatGroupAmounts"
+						}
+					]
+				},
+				type: {
+					var: "modality",
+					title: "Contract Type"
+				},
+				sector: {
+					var: "contractType",
+					title: "Service Type"
+				},
+				service: {
+					var: "serviceLabel",
+					title: "Sector"
+				},
+				text: {
+					var: "originalText",
+					title: "Original text"
+				}
+			}
+		}
+	},
+	
+	soldiers: [
+		{
+			name: "Kaos155 hacker team",
+			users: ["statemapper"]
+		}
+	]
+	
+}
+
+// reserved schema keywords:
+// - selector: an xpath to select
+// - regexp: a regexp pattern to match
+// - match: select the regexp match to take
+// - transform: apply transformations to the matches
+// - children: build an array of objects as an attribute 
+//
+//

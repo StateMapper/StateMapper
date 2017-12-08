@@ -1,0 +1,12 @@
+{
+	id: "EU/EURLEX",
+	type: "bulletin",
+	providerId: "EU/PUBLI_OFFICE",
+	official: true,
+	continent: "EU",
+	name: "EUR-Lex, Access to European Union Law",
+	shortName: "EUR-Lex",
+	siteUrl: "http://eur-lex.europa.eu/homepage.html",
+	searchUrl: "http://eur-lex.europa.eu/oj/direct-access.html",
+	onProgress: true
+}
