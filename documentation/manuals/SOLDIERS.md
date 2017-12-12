@@ -10,7 +10,7 @@
 -----
 
 
-**Index:** [Introduction](#introduction) · [Enrollment](#enrollment) · [Instructions](#instructions) · [References](#references)
+**Index:** [Introduction](#introduction) · [Enrollment](#enrollment) · [Instructions](#instructions) · [Schema structure](#schema-structure) · [Schema transformations](#schema-transformations) · [References](#references)
    
 If you consider contributing to this project, we highly recommend you read and follow our [Team privacy guide](PRIVACY.md#top) before you continue reading.
 
