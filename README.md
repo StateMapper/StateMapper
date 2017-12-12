@@ -23,7 +23,7 @@ The imminent generalized collapse has numerous causes, among them political corr
 
 Our social relations, the world's economy and the entire planet are tragically affected by these disturbances, to such an extent that the people are now pure political commodities.
 
-Humanists, Activists, [Strategists, Soldiers and Ambassadors](https://github.com/stateMapper/StateMapper#contribute), Humans... together we must create the tools of the 99%. It only takes a handful of enthusiasts' efforts to highlight the deceits of History, and prevent further damage.
+Humanists, Activists, [Strategists, Soldiers and Ambassadors](#contribute), Humans... together we must create the tools of the 99%. It only takes a handful of enthusiasts' efforts to highlight the deceits of History, and prevent further damage.
 
 StateMapper was born with the aim of being a reviewing and monitoring tool for all public data, an open and collaborative tool destined to link citizens and anti-corruption professionals, so that together we be real counter-powers. StateMapper is a drop of water in a desert, and with everyone's contribution someday it will become an ocean.
 
