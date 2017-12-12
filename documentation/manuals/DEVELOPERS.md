@@ -71,20 +71,20 @@ Source file can be found in ```documentation/database_diagram.mwb``` and edited 
 | [bulletins/](../../bulletins) | where bulletins are stored after download |
 | [scripts/](../../scripts) | bash scripts (```smap``` command) |
 | [documentation/](../../documentation) | documentation files (graphic material, diagrams, manuals..) |
-| [app/](../../app) | core files of the app |
-| [app/controller/](../../app/controller) | controller layer |
-| [app/fetcher/](../../app/fetcher) | fetch layer |
-| [app/parser/](../../app/parser) | parse layer |
-| [app/extractor/](../../app/extractor) | extract layer |
-| [app/spider/](../../app/spider) | spider (and workers) layer |
-| [app/api/](../../app/api) | api controller layer |
-| [app/browser/](../../app/browser) | frontend browser |
-| [app/templates/](../../app/templates) | page and partial template files |
-| [app/helpers/](../../app/helpers) | helper functions |
-| [app/addons/](../../app/addons) | addons likes Wikipedia suggs, Geoencoding, Website autodetection..  |
-| [app/languages/](../../app/languages) | translation files |
-| [app/database/](../../app/database) | database .sql files |
-| [app/assets/](../../app/assets) | web assets of the app (images, fonts, .css, .js) |
+| [src/](../../app) | core files of the app |
+| [src/controller/](../../src/controller) | controller layer |
+| [src/fetcher/](../../src/fetcher) | fetch layer |
+| [src/parser/](../../src/parser) | parse layer |
+| [src/extractor/](../../src/extractor) | extract layer |
+| [src/spider/](../../src/spider) | spider (and workers) layer |
+| [src/api/](../../src/api) | api controller layer |
+| [src/browser/](../../src/browser) | frontend browser |
+| [src/templates/](../../src/templates) | page and partial template files |
+| [src/helpers/](../../src/helpers) | helper functions |
+| [src/addons/](../../src/addons) | addons likes Wikipedia suggs, Geoencoding, Website autodetection..  |
+| [src/languages/](../../src/languages) | translation files |
+| [src/database/](../../src/database) | database .sql files |
+| [src/assets/](../../src/assets) | web assets of the app (images, fonts, .css, .js) |
 
 
 ## URI structure:
@@ -127,7 +127,7 @@ find /path/to/statemapper/data/ -name "*.pdf" -type f -delete
 * To read/edit ```documentation/classes_diagram.dia```, you may use [Dia](http://dia-installer.de/download/linux.html): ```sudo apt-get install dia```
 * In general, you may use "?stop=1" to stop auto-refreshing (the rewind map, for example), and be able to edit the DOM/CSS more easily.
 * In general, you may use "?human=1" to format a raw JSON output for humans.
-* The main logo was made using the [Nasalization font](../../app/assets/font/nasalization) and the [FontAwesome](http://fontawesome.io/icons/)'s "map-signs" icon.
+* The main logo was made using the [Nasalization font](../../src/assets/font/nasalization) and the [FontAwesome](http://fontawesome.io/icons/)'s "map-signs" icon.
 * Favicons can be generated from FontAwesome icons through [this page](https://paulferrett.com/fontawesome-favicon/) or [this one](https://gauger.io/fonticon/).
 
 
