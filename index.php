@@ -1,0 +1,108 @@
+<?php
+/*
+ * StateMapper, an official bulletins browser and corruption analyzer.
+ * Copyright (C) 2017  Ingoberlab <hacklab@ingobernable.net> & StateMapper.net <statemapper@riseup.net>
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */ 
+
+@session_start();
+
+// CLI
+define('KAOS_IS_CLI', !empty($argv));
+
+libxml_disable_entity_loader(true); // protect against XEE. See: https://www.owasp.org/index.php/XML_External_Entity_(XXE)_Prevention_Cheat_Sheet#PHP
+
+
+// define constants
+define('BASE_PATH', dirname(__FILE__));
+define('APP_PATH', BASE_PATH.'/app');
+define('ASSETS_PATH', BASE_PATH.'/app/assets');
+
+require BASE_PATH.'/config.php'; // leave here, important!
+
+define('APP_URL', BASE_URL.'/app');
+define('ASSETS_URL', BASE_URL.'/app/assets');
+define('SCHEMAS_PATH', BASE_PATH.'/schemas');
+
+ini_set('max_execution_time', MAX_EXECUTION_TIME);
+
+// constants to lighten the database
+define('FIRST_NAME', 1);
+define('LAST_NAME', 2);
+
+// output
+define('P_DILIMITER', "\n\n"); // paragraph delimiter
+
+// includes
+require APP_PATH.'/helpers/core.php';
+
+// lang
+if (!empty($_GET['lang']))
+	kaosSetLocale($_GET['lang']);
+if (defined('LANG') && LANG)
+	kaosSetLocale(LANG);
+if (!defined('LANG'))
+	define('LANG', 'en_US');
+
+// includes
+require APP_PATH.'/controller/Controller.php';
+require APP_PATH.'/fetcher/BulletinFetcher.php';
+require APP_PATH.'/parser/BulletinParser.php';
+require APP_PATH.'/extractor/BulletinExtractor.php';
+
+// init globals 
+global $kaosCall;
+$kaosCall = array(
+	'begin' => time(),
+	'cliArgs' => !empty($argv) ? array_slice($argv, 1) : null,
+	'query' => array(),
+	'debug' => false,
+);
+
+
+if ($kaosCall['cliArgs']){
+	// CLI license print
+	if (in_array('-l', $kaosCall['cliArgs'])){
+		echo file_get_contents(BASE_PATH.'/COPYING');
+		exit();
+	}
+	
+	// CLI debug mode
+	if (in_array('-d', $kaosCall['cliArgs'])){
+		$kaosCall['debug'] = true;
+		array_splice($kaosCall['cliArgs'], array_search('-d', $kaosCall['cliArgs']), 1);
+	}
+		
+	// copy -KEY=VALUE CLI params to $_GET variable
+	do {
+		$changed = false;
+		foreach ($kaosCall['cliArgs'] as $a)
+			if (preg_match('#^[-]([^=]+)=(.*)$#iu', $a, $m)){
+				$_GET[$m[1]] = $m[2];
+				array_splice($kaosCall['cliArgs'], array_search($a, $kaosCall['cliArgs']), 1);
+				$changed = true;
+				break;
+			}
+	} while ($changed);
+}
+
+// project constants
+define('KAOS_GITHUB_REPOSITORY', 'StateMapper/StateMapper');
+	
+// call the controller
+$c = new Controller();
+$c->exec();
+exit();
+
