@@ -1,0 +1,15 @@
+{
+	id: "ES/RMERC_MAD",
+	type: "institution",
+	name: "Registro Mercantil de Madrid",
+	shortName: "Registro Mercantil de Madrid",
+	siteUrl: "https://www.rmercantilmadrid.com/",
+	address: "Paseo de la Castellana, 44",
+	city: "Madrid",
+	region: "Communidad de Madrid",
+	country: "ES",
+	continent: "Europe",
+	email: "madrid@registromercantil.org",
+	locale: "es_ES",
+	gmtOffset: 2
+}

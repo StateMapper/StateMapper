@@ -4,7 +4,7 @@
 	
 	id: "ES/BORME",
 	type: "bulletin",
-	providerId: "ES/AGENCIA_ESTATAL",
+	providerId: "ES/RMERC_MAD",
 	official: true,
 	name: "Boletín Oficial del Registro Mercantil",
 	shortName: "BORME",

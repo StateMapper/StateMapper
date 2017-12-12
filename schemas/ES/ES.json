@@ -359,7 +359,7 @@
 		{
 			name: "Kaos155 hacker team",
 			users: ["statemapper"],
-			nodes: ["hash_bla"] // IPNS addresses
+			nodes: ["IPFS_hash_x0123456789"] // IPNS addresses
 		}
 	]
 }
