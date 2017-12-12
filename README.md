@@ -28,7 +28,7 @@ Humanists, Activists, [Strategists, Soldiers and Ambassadors](https://github.com
 StateMapper was born with the aim of being a reviewing and monitoring tool for all public data, an open and collaborative tool destined to link citizens and anti-corruption professionals, so that together we be real counter-powers. StateMapper is a drop of water in a desert, and with everyone's contribution someday it will become an ocean.
 
 <p align="right">
-	<a href="https://github.com/StateMapper/StateMapper/blob/master/documentation/guides/MANIFEST-ES.md#top">Spanish version</a>
+	<a href="https://github.com/StateMapper/StateMapper/blob/master/documentation/guides/MANIFEST-ES.md#top">Spanish version &rarr;</a>
 </p>
 
 
