@@ -1,6 +1,6 @@
 {Include header(DEVELOPERS GUIDE)}
 
-{IncludeInline beforeIndex}[Workflow](#data-workflow) · [Extraction](#extraction) · [Folder structure](#folder-structure) · [URI structure](#uri-structure) · [Tips & tricks](#tips--tricks)
+{IncludeInline beforeIndex}[Workflow](#workflow) · [Extraction](#extraction) · [Folder structure](#folder-structure) · [URI structure](#uri-structure) · [Tips & tricks](#tips--tricks)
 
 {Include privacyAlert}
 
