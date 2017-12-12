@@ -112,7 +112,7 @@ Then modify the ```DATA_PATH``` in ```config.php```.
 find /path/to/statemapper/data/ -name "*.pdf" -type f -delete
 ```
 
-* If needed, please edit Github manuals from ```documentation/guides/templates``` and ```documentation/guides/parts```, then compile them to ```documentation/guides``` with ```smap compile``` (before commiting). The root ```README.md``` can be edited directly from the root folder.
+* If needed, please edit Github manuals from ```documentation/manuals/templates``` and ```documentation/manuals/parts```, then compile them to ```documentation/manuals``` with ```smap compile``` (before commiting). The root ```README.md``` can be edited directly from the root folder.
 * To read/edit ```documentation/classes_diagram.dia```, you may use [Dia](http://dia-installer.de/download/linux.html): ```sudo apt-get install dia```
 * In general, you may use "?stop=1" to stop auto-refreshing (the rewind map, for example), and be able to edit the DOM/CSS more easily.
 * In general, you may use "?human=1" to format a raw JSON output for humans.

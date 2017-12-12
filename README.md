@@ -28,13 +28,13 @@ Humanists, Activists, [Strategists, Soldiers and Ambassadors](#contribute), Huma
 StateMapper was born with the aim of being a reviewing and monitoring tool for all public data, an open and collaborative tool destined to link citizens and anti-corruption professionals, so that together we be real counter-powers. StateMapper is a drop of water in a desert, and with everyone's contribution someday it will become an ocean.
 
 <p align="right">
-	<a href="https://github.com/StateMapper/StateMapper/blob/master/documentation/guides/MANIFEST-ES.md#top">Spanish version &rarr;</a>
+	<a href="https://github.com/StateMapper/StateMapper/blob/master/documentation/manuals/MANIFEST-ES.md#top">Spanish version &rarr;</a>
 </p>
 
 
 ## Installation:
 
-Please refer to the [Installation guide](documentation/guides/INSTALL.md#top).
+Please refer to the [Installation guide](documentation/manuals/INSTALL.md#top).
 
 
 ## Contribute:
@@ -44,15 +44,15 @@ If you like this project, whatever skills you have, there surely is a way you ca
 | Commission | Responsability | Profile | Instructions |
 | ----- | ------ | ---- | ---- |
 | [Counter-bribery Strategists](https://github.com/StateMapper/StateMapper/projects/1) | to elaborate the best strategy and endorse public communications | political scientists, journalists, magistrates, social activists | |
-| [Core Wizards](https://github.com/StateMapper/StateMapper/projects/2) | to develop and maintain the core code | PHP/MySQL/JS/Regexp experts | [Developers guide &rarr;](documentation/guides/DEVELOPERS.md#top) |
-| [Schema Soldiers](https://github.com/StateMapper/StateMapper/projects/3) | to implement and maintain bulletin schemas | JSON/Regexp experts | [Soldiers guide &rarr;](documentation/guides/SOLDIERS.md#top) |
-| [Country Ambassadors](https://github.com/StateMapper/StateMapper/projects/4) | to host bulletins backup nodes, check bulletins' integrity and translate the UI | collectives of social rights | [Ambassadors' guide &rarr;](documentation/guides/AMBASSADORS.md#top) |
+| [Core Wizards](https://github.com/StateMapper/StateMapper/projects/2) | to develop and maintain the core code | PHP/MySQL/JS/Regexp experts | [Developers guide &rarr;](documentation/manuals/DEVELOPERS.md#top) |
+| [Schema Soldiers](https://github.com/StateMapper/StateMapper/projects/3) | to implement and maintain bulletin schemas | JSON/Regexp experts | [Soldiers guide &rarr;](documentation/manuals/SOLDIERS.md#top) |
+| [Country Ambassadors](https://github.com/StateMapper/StateMapper/projects/4) | to host bulletins backup nodes, check bulletins' integrity and translate the UI | collectives of social rights | [Ambassadors' guide &rarr;](documentation/manuals/AMBASSADORS.md#top) |
 
 If you wish to get involved into one of them, please do not hesitate in [contacting us](#contact--support)! A list of active Soldiers and Ambassadors is available on the [bulletin providers' page](https://statemapper.com/api).
 
 You may also help this project by:
 
-- **Translating it to a new language:** it is really easy to translate StateMapper to whatever language you speak, and it can really help the project spread! Please read the [Translation guide](documentation/guides/TRANSLATE.md#top) for more details.
+- **Translating it to a new language:** it is really easy to translate StateMapper to whatever language you speak, and it can really help the project spread! Please read the [Translation guide](documentation/manuals/TRANSLATE.md#top) for more details.
 
 - **Sharing this project:** tell your most important contacts how this project can help us out with the world's dramatic public bribery situation. Please use the [#StateMapper](https://twitter.com/search?q=%23StateMapper) hashtag to link your publications to a same stream ;)
 
