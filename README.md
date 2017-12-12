@@ -10,7 +10,9 @@
 	<a href="https://github.com/StateMapper/StateMapper#contact--support"><img src="https://img.shields.io/badge/chat-XMPP-ff69b4.svg" /></a>
 </p>
 
+<p align="center" id="badges">
 *This software is a PHP/MySQL redesign of [Kaos155](https://github.com/Ingobernable/kaos155/), developped by the same [Ingoberlab](https://hacklab.ingobernable.net/) team.*
+</p>
 
 -----
 
