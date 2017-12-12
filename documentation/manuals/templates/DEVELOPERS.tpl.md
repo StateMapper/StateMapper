@@ -60,7 +60,7 @@ Source file can be found in ```documentation/database_diagram.mwb``` and edited 
 | [bulletins/](../../bulletins) | where bulletins are stored after download |
 | [scripts/](../../scripts) | bash scripts (```smap``` command) |
 | [documentation/](../../documentation) | documentation files (graphic material, diagrams, manuals..) |
-| [src/](../../app) | core files of the app |
+| [src/](../../src) | core files of the app |
 | [src/controller/](../../src/controller) | controller layer |
 | [src/fetcher/](../../src/fetcher) | fetch layer |
 | [src/parser/](../../src/parser) | parse layer |
