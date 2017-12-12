@@ -127,7 +127,7 @@ Reserved attributes are:
 
 # References:
 
-Reading the [Developer's guide](DEVELOPERS.md#top) can also help, since it contains important information about the software's processing layer.
+Reading the [Developer's guide](DEVELOPERS.md#top) can also be useful, since it contains important information about the software's processing layers.
 
 
 
