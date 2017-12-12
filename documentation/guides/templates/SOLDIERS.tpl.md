@@ -1,19 +1,8 @@
-<p align="center" id="top">
-	<a href="https://github.com/StateMapper/StateMapper" title="Go to the project's homepage"><img src="../../app/assets/images/logo/logo-black-big.png" /></a>
-</p>
-<p align="center">
-	<strong>SOLDIERS' GUIDE</strong>
-</p>
+{Include header(SOLDIERS' GUIDE)}
 
-*[&larr; Project's homepage](https://github.com/StateMapper/StateMapper#top)*
-
------
-
-
-**Index:** [Introduction](#introduction) · [Enrollment](#enrollment) · [Instructions](#instructions) · [References](#references)
+{IncludeInline beforeIndex}[Introduction](#introduction) · [Enrollment](#enrollment) · [Instructions](#instructions) · [References](#references)
    
-If you consider contributing to this project, we highly recommend you read and follow our [Team privacy guide](PRIVACY.md#top) before you continue reading.
-
+{Include privacyAlert}
 
 A list of active Soldiers is available on the [bulletin providers' page](https://statemapper.com/api).
 
@@ -106,6 +95,7 @@ Reserved attributes are:
 | value | the value to take |
 | follow | indicates the object is a sub-fetch to execute |
 | schema | schema to associate with the object |
+| inject | define variables to inject into regular expressions |
 
 
 ## Schema transformations:
@@ -129,8 +119,4 @@ Reserved attributes are:
 Reading the [Developer's guide] can also help, since it contains important information about the software's processing layer.
 
 
-
------
-
-*[&larr; Project's homepage](https://github.com/StateMapper/StateMapper#top) · Copyright &copy; 2017 [StateMapper.net](https://statemapper.net) · Licensed under [GNU GPLv3](../../COPYING) · [&uarr; top](#top)* <img src="[![Bitbucket issues](https://img.shields.io/bitbucket/issues/atlassian/python-bitbucket.svg?style=social" align="right" /> <img src="http://hits.dwyl.com/StateMapper/StateMapper.svg?style=flat-square" align="right" />
-
+{Include footer()}

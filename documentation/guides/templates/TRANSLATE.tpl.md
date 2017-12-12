@@ -1,16 +1,6 @@
-<p align="center" id="top">
-	<a href="https://github.com/StateMapper/StateMapper" title="Go to the project's homepage"><img src="../../app/assets/images/logo/logo-black-big.png" /></a>
-</p>
-<p align="center">
-	<strong>TRANSLATION GUIDE</strong>
-</p>
+{Include header(TRANSLATION GUIDE)}
 
-*[&larr; Project's homepage](https://github.com/StateMapper/StateMapper#top)*
-
------
-
-
-**Index:** [Requirements](#requirements) · [Configuration](#configuration) · [Translation instructions](#translation-instructions)
+{IncludeInline beforeIndex}[Requirements](#requirements) · [Configuration](#configuration) · [Translation instructions](#translation-instructions)
 
 If you consider contributing to this project, we highly recommend you read and follow our [Team privacy guide](PRIVACY.md#top) before you continue reading.
 
@@ -66,8 +56,4 @@ If you consider contributing to this project, we highly recommend you read and f
    Then enter your credentials and confirm. We might accept your push request within 24-48h, thank you very much for your contribution!
    
    
-
------
-
-*[&larr; Project's homepage](https://github.com/StateMapper/StateMapper#top) · Copyright &copy; 2017 [StateMapper.net](https://statemapper.net) · Licensed under [GNU GPLv3](../../COPYING) · [&uarr; top](#top)* <img src="[![Bitbucket issues](https://img.shields.io/bitbucket/issues/atlassian/python-bitbucket.svg?style=social" align="right" /> <img src="http://hits.dwyl.com/StateMapper/StateMapper.svg?style=flat-square" align="right" />
-
+{Include footer()}

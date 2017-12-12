@@ -1,19 +1,8 @@
-<p align="center" id="top">
-	<a href="https://github.com/StateMapper/StateMapper" title="Go to the project's homepage"><img src="../../app/assets/images/logo/logo-black-big.png" /></a>
-</p>
-<p align="center">
-	<strong>DEVELOPERS GUIDE</strong>
-</p>
+{Include header(DEVELOPERS GUIDE)}
 
-*[&larr; Project's homepage](https://github.com/StateMapper/StateMapper#top)*
+{IncludeInline beforeIndex}[Data workflow](#data-workflow) · [Folder structure](#folder-structure) · [Schema structure](#schema-structure) · [Schema transformations](#schema-transformations) · [Data extraction](#data-extraction) · [URI structure](#uri-structure) · [Tips & tricks](#tips--tricks)
 
------
-
-
-**Index:** [Data workflow](#data-workflow) · [Folder structure](#folder-structure) · [Schema structure](#schema-structure) · [Schema transformations](#schema-transformations) · [Data extraction](#data-extraction) · [URI structure](#uri-structure) · [Tips & tricks](#tips--tricks)
-
-If you consider contributing to this project, we highly recommend you read and follow our [Team privacy guide](PRIVACY.md#top) before you continue reading.
-
+{Include privacyAlert}
 
 
 ## Workflow:
@@ -130,8 +119,4 @@ find /path/to/statemapper/data/ -name "*.pdf" -type f -delete
 * The main logo was made using the [Nasalization font](../../app/assets/font/nasalization) and the [FontAwesome](http://fontawesome.io/icons/)'s "map-signs" icon.
 * Favicons can be generated from FontAwesome icons through [this page](https://paulferrett.com/fontawesome-favicon/) or [this one](https://gauger.io/fonticon/).
 
-
------
-
-*[&larr; Project's homepage](https://github.com/StateMapper/StateMapper#top) · Copyright &copy; 2017 [StateMapper.net](https://statemapper.net) · Licensed under [GNU GPLv3](../../COPYING) · [&uarr; top](#top)* <img src="[![Bitbucket issues](https://img.shields.io/bitbucket/issues/atlassian/python-bitbucket.svg?style=social" align="right" /> <img src="http://hits.dwyl.com/StateMapper/StateMapper.svg?style=flat-square" align="right" />
-
+{Include footer()}

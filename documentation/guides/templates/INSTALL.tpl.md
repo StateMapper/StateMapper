@@ -1,16 +1,6 @@
-<p align="center" id="top">
-	<a href="https://github.com/StateMapper/StateMapper" title="Go to the project's homepage"><img src="../../app/assets/images/logo/logo-black-big.png" /></a>
-</p>
-<p align="center">
-	<strong>INSTALLATION GUIDE</strong>
-</p>
+{Include header(INSTALLATION GUIDE)}
 
-*[&larr; Project's homepage](https://github.com/StateMapper/StateMapper#top)*
-
------
-
-
-**Index:** [Requirements](#requirements) · [Installation](#installation) · [Daemon commands](#daemon-commands)
+{IncludeInline beforeIndex}[Requirements](#requirements) · [Installation](#installation) · [Daemon commands](#daemon-commands)
 
 
 ## Requirements:
@@ -101,8 +91,4 @@ smap daemon stop 		# stop it smoothly (wait for the workers)
 smap daemon kill 		# kill it (for emergencies only)
 ```
 
-
------
-
-*[&larr; Project's homepage](https://github.com/StateMapper/StateMapper#top) · Copyright &copy; 2017 [StateMapper.net](https://statemapper.net) · Licensed under [GNU GPLv3](../../COPYING) · [&uarr; top](#top)* <img src="[![Bitbucket issues](https://img.shields.io/bitbucket/issues/atlassian/python-bitbucket.svg?style=social" align="right" /> <img src="http://hits.dwyl.com/StateMapper/StateMapper.svg?style=flat-square" align="right" />
-
+{Include footer()}
