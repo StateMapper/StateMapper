@@ -4,7 +4,7 @@
 </p>
 <p align="center" id="badges">
 	<img src="https://img.shields.io/badge/manuals-on%20progress-red.svg?style=flat-square" />
-	<a href="http://php.net/"><img src="https://img.shields.io/badge/language-PHP-yellow.svg?style=flat-square" /></a>
+	<a href="http://php.net/"><img src="https://img.shields.io/badge/language-PHP-5A4A97.svg?style=flat-square" /></a>
 	<a href="https://www.debian.org/derivatives/"><img src="https://img.shields.io/badge/platform-Linux-lightgrey.svg?style=flat-square" /></a>
 	<a href="https://github.com/StateMapper/StateMapper/blob/master/COPYING"><img src="https://img.shields.io/badge/license-GPLv3-green.svg?style=flat-square" /></a>
 	<a href="https://github.com/StateMapper/StateMapper#contact--support"><img src="https://img.shields.io/badge/chat-XMPP-ff69b4.svg" /></a>
