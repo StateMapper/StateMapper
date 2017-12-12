@@ -1,6 +1,6 @@
 {Include header(DEVELOPERS GUIDE)}
 
-{IncludeInline beforeIndex}[Data workflow](#data-workflow) · [Folder structure](#folder-structure) · [Schema structure](#schema-structure) · [Schema transformations](#schema-transformations) · [Data extraction](#data-extraction) · [URI structure](#uri-structure) · [Tips & tricks](#tips--tricks)
+{IncludeInline beforeIndex}[Workflow](#data-workflow) · [Extraction](#extraction) · [Folder structure](#folder-structure) · [URI structure](#uri-structure) · [Tips & tricks](#tips--tricks)
 
 {Include privacyAlert}
 

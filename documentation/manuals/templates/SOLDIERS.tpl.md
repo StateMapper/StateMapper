@@ -1,6 +1,6 @@
 {Include header(SOLDIERS' GUIDE)}
 
-{IncludeInline beforeIndex}[Introduction](#introduction) · [Enrollment](#enrollment) · [Instructions](#instructions) · [References](#references)
+{IncludeInline beforeIndex}[Introduction](#introduction) · [Enrollment](#enrollment) · [Instructions](#instructions) · [Schema structure](#schema-structure) · [Schema transformations](#schema-transformations) · [References](#references)
    
 {Include privacyAlert}
 
