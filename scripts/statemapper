@@ -51,7 +51,6 @@ then
 		then
 			if ps -p "$PID" > /dev/null 2>&1
 			then
-			
 				# kill the daemon
 				if [ "$2" = "kill" ]
 				then
