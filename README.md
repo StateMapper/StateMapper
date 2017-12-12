@@ -1,15 +1,16 @@
 <p align="center" id="top">
-	<img src="app/assets/images/logo/logo-black-big.png" />
+	<img src="app/assets/images/logo/logo-black-big.png" /><br>
+	International, collaborative, public data reviewing and monitoring tool.
 </p>
 <p align="center" id="badges">
+	<img src="https://img.shields.io/badge/state-on%20progress-red.svg?style=flat-square" />
 	<a href="http://php.net/"><img src="https://img.shields.io/badge/language-PHP-yellow.svg?style=flat-square" /></a>
 	<a href="https://www.debian.org/derivatives/"><img src="https://img.shields.io/badge/platform-Linux-lightgrey.svg?style=flat-square" /></a>
 	<a href="https://github.com/StateMapper/StateMapper/blob/master/COPYING"><img src="https://img.shields.io/badge/license-GPLv3-green.svg?style=flat-square" /></a>
 	<a href="https://github.com/StateMapper/StateMapper#contact--support"><img src="https://img.shields.io/badge/chat-XMPP-ff69b4.svg" /></a>
 </p>
 
-
-*This software is a PHP/MySQL rewrite/redesign of [Kaos155](https://github.com/Ingobernable/kaos155/), developped by the same [Ingoberlab](https://hacklab.ingobernable.net/) team. It aims at providing a browser of all the world's public bulletins' data, and altogether analyze how bribery has been hiding through history.*
+*This software is a PHP/MySQL redesign of [Kaos155](https://github.com/Ingobernable/kaos155/), developped by the same [Ingoberlab](https://hacklab.ingobernable.net/) team.*
 
 -----
 
@@ -18,7 +19,17 @@
 
 ## Manifest:
 
-Official bulletins are a mess: unpublished or in unstructured manner, lots of plain text to read, no browser. And this is a key point to hide public bribary. StateMapper is born short after project Kaos155 has been uncovered, [... to be continued/replaced]
+The imminent generalized collapse has numerous causes, among them political corruption and its ability to hide from journalistic and judicial investigations; consuming all the common budget through the years and decades.
+
+Our social relations, the world's economy and the entire planet are tragically affected by these disturbances, to such an extent that the people are now pure political commodities.
+
+Humanists, Activists, [Strategists, Soldiers and Ambassadors](https://github.com/stateMapper/StateMapper#contribute), Humans... together we must create the tools of the 99%. It only takes a handful of enthusiasts' efforts to highlight the deceits of History, and prevent further damage.
+
+StateMapper was born with the aim of being a reviewing and monitoring tool for all public data, an open and collaborative tool destined to link citizens and anti-corruption professionals, so that together we be real counter-powers. StateMapper is a drop of water in a desert, and with everyone's contribution someday it will become an ocean.
+
+<p align="right">
+	<a href="https://github.com/StateMapper/StateMapper/blob/master/documentation/guides/MANIFEST-ES.md#top">Spanish version</a>
+</p>
 
 
 ## Installation:
@@ -28,31 +39,31 @@ Please refer to the [Installation guide](documentation/guides/INSTALL.md#top).
 
 ## Contribute:
 
-If you like this project, whatever skills you have, there surely is a way you can help! The project's current workforce splits into the following [four commissions](https://github.com/StateMapper/StateMapper/projects):
+If you like this project, whatever skills you have, there surely is a way you can participate! The project's current workforce splits into the following [four commissions](https://github.com/StateMapper/StateMapper/projects):
 
-| Commission | Responsability | Profile | Please read |
+| Commission | Responsability | Profile | Instructions |
 | ----- | ------ | ---- | ---- |
 | [Counter-bribery Strategists](https://github.com/StateMapper/StateMapper/projects/1) | to elaborate the best strategy and endorse public communications | political scientists, journalists, magistrates, social activists | |
-| [Core Wizards](https://github.com/StateMapper/StateMapper/projects/2) | to develop and maintain the core code | PHP/MySQL/JS/Regexp experts | [Developers guide](documentation/guides/DEVELOPERS.md) |
-| [Schema Soldiers](https://github.com/StateMapper/StateMapper/projects/3) | to implement and maintain bulletin schemas | JSON/Regexp experts | [Soldiers guide](documentation/guides/SOLDIERS.md) |
-| [Country Ambassadors](https://github.com/StateMapper/StateMapper/projects/4) | to host bulletins backup nodes, check bulletins' integrity and translate the UI | collectives of social rights | [Ambassadors' guide](documentation/guides/AMBASSADORS.md) |
+| [Core Wizards](https://github.com/StateMapper/StateMapper/projects/2) | to develop and maintain the core code | PHP/MySQL/JS/Regexp experts | [Developers guide &rarr;](documentation/guides/DEVELOPERS.md) |
+| [Schema Soldiers](https://github.com/StateMapper/StateMapper/projects/3) | to implement and maintain bulletin schemas | JSON/Regexp experts | [Soldiers guide &rarr;](documentation/guides/SOLDIERS.md) |
+| [Country Ambassadors](https://github.com/StateMapper/StateMapper/projects/4) | to host bulletins backup nodes, check bulletins' integrity and translate the UI | collectives of social rights | [Ambassadors' guide &rarr;](documentation/guides/AMBASSADORS.md) |
 
 If you wish to get involved into one of them, please do not hesitate in [contacting us](#contact--support)! A list of active Soldiers and Ambassadors is available on the [bulletin providers' page](https://statemapper.com/api).
 
 You may also help this project by:
 
-- **Translating to a new language:** it is really easy to translate StateMapper to whatever language you speak, and it can really help the project spread! Please read the [Translation guide](documentation/guides/TRANSLATE.md#top) for more details.
+- **Translating it to a new language:** it is really easy to translate StateMapper to whatever language you speak, and it can really help the project spread! Please read the [Translation guide](documentation/guides/TRANSLATE.md#top) for more details.
 
-- **Sharing this project:** tell your most important contacts how this project can help us out with the world's dramatic public bribery situation.
+- **Sharing this project:** tell your most important contacts how this project can help us out with the world's dramatic public bribery situation. Please use the [#StateMapper](https://twitter.com/search?q=%23StateMapper) hashtag to link your publications to a same stream ;)
 
-- **Donating to us**: come to visit us at [La Ingobernable](https://ingobernable.net) (Madrid, Spain), and ask for the Kaos155 [hacker team](https://hacklab.ingobernable.net) :)
+- **Donating to this project**: come to visit us at [La Ingobernable](https://ingobernable.net) (Madrid, Spain), and ask for the Kaos155 [hacker team](https://hacklab.ingobernable.net) :)
 
 
 ## Roadmap:
 
 - **Q1 2018:** stable live version with near 100% parsed information from ES/BOE and ES/BORME.
 - **Q2 2018:** allow persistent user customization, add a cooperation/social layer.
-- **Q3 2018:** implement machine learning and suspition patterns, manage Soldiers in most rich countries.
+- **Q3 2018:** implement machine learning and suspition patterns, manage Soldiers in most western countries.
 
 ## License:
 
