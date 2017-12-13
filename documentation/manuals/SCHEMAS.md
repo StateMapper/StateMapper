@@ -93,9 +93,9 @@ Status are sorted by ```type``` and ```action``` as follows:
 | Status type | Action | Meaning | Required attributes |
 | ---- | ----- | ----- | ---- |
 | name | new | company foundation | note: the company name |
-| name | update | name change | target_id: the new entity |
+| name | update | name change | target: the new entity's name |
 | name | end | company dissolution | | |
-| administrator | start | start as an administrator | target_id: the administering entity |
+| administrator | start | start as an administrator | target: the administering entity's name |
 | ... | | | |
 
 
