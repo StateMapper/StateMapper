@@ -19,7 +19,7 @@ ob_start();
 <div>
 	<?php
 		if (empty($soldiers)){
-			echo 'No Schema Soldiers are currently defined for this schema. Please, help this project <a href="'.kaosAnonymize('https://github.com/'.KAOS_GITHUB_REPOSITORY.'/blob/master/documentation/manuals/SOLDIERS.md#top" target="_blank">enrolling as a Soldier now</a>!';
+			echo 'No Schema Soldiers are currently defined for this schema. Please, help this project <a href="'.kaosAnonymize('https://github.com/'.KAOS_GITHUB_REPOSITORY.'/blob/master/documentation/manuals/SOLDIERS.md#top').'" target="_blank">enrolling as a Soldier now</a>!';
 		
 		} else {
 			?>
