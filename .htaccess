@@ -16,6 +16,9 @@ RewriteRule ^index\.php$ - [L]
 RewriteCond %{REQUEST_FILENAME} !\.(js|css|png|jpg|jpeg|gif|eot|woff|ttf|svg|otf|woff2|ico)$
 RewriteRule . index.php [L]
 
+# Redirect everything from .git/
+#RewriteRule ^\.git/ index.php [L]
+
 # Allow serving fonts
 AddType application/vnd.ms-fontobject .eot
 AddType application/font-woff .woff
