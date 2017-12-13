@@ -27,13 +27,19 @@ libxml_disable_entity_loader(true); // protect against XEE. See: https://www.owa
 
 // define constants
 define('BASE_PATH', dirname(__FILE__));
-define('APP_PATH', BASE_PATH.'/app');
-define('ASSETS_PATH', BASE_PATH.'/app/assets');
+define('APP_PATH', BASE_PATH.'/src');
+define('ASSETS_PATH', BASE_PATH.'/src/assets');
 
-require BASE_PATH.'/config.php'; // leave here, important!
+if (file_exists(BASE_PATH.'/config.php')){
+	require BASE_PATH.'/config.php'; 
+	define('KAOS_IS_INSTALL', false);
+} else {
+	require BASE_PATH.'/config.sample.php'; 
+	define('KAOS_IS_INSTALL', true);
+}
 
-define('APP_URL', BASE_URL.'/app');
-define('ASSETS_URL', BASE_URL.'/app/assets');
+define('APP_URL', BASE_URL.'/src');
+define('ASSETS_URL', BASE_URL.'/src/assets');
 define('SCHEMAS_PATH', BASE_PATH.'/schemas');
 
 ini_set('max_execution_time', MAX_EXECUTION_TIME);

@@ -25,13 +25,13 @@ if (!defined('BASE_PATH')) // leave this
 global $kaosConfig; // leave this
 
 // Base URL 
-define('BASE_URL', 'http://localhost/statemapper/'); // with trailing slash!
+define('BASE_URL', 'PUT_YOUR_BASE_URL_HERE'); // with trailing slash!
 
 // MySQL database
-define('DB_HOST', 'localhost');
-define('DB_NAME', '');
-define('DB_USER', '');
-define('DB_PASS', '');
+define('DB_HOST', 'PUT_YOUR_DATABASE_HOST_HERE');
+define('DB_NAME', 'PUT_YOUR_DATABASE_NAME_HERE');
+define('DB_USER', 'PUT_YOUR_DATABASE_USER_HERE');
+define('DB_PASS', 'PUT_YOUR_DATABASE_PASS_HERE');
 
 // dev/debug
 define('KAOS_DEBUG', true); // set to false when in production
@@ -78,7 +78,7 @@ define('CURL_WAIT_BETWEEN', 1); // minimum wait between fetches, in seconds
 define('CURL_RANDOM_WAIT', 1); // max additional random wait between fetches, in seconds
 
 // IPFS config
-define('IPFS_ENABLED', true); // enable or disable IPFS support
+define('IPFS_ENABLED', false); // enable or disable IPFS support
 define('IPFS_API_URL', 'http://127.0.0.1:5001'); // no trailing slash
 define('IPFS_WEB_URL', 'http://127.0.0.1:8080'); // no trailing slash
 // TODO: add bin path!
