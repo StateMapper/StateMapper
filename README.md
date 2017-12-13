@@ -4,14 +4,14 @@
 </p>
 <p align="center" id="badges">
 	<img src="https://img.shields.io/badge/manuals-on%20progress-red.svg?style=flat-square" />
-	<a href="http://php.net/"><img src="https://img.shields.io/badge/language-PHP-yellow.svg?style=flat-square" /></a>
+	<a href="http://php.net/"><img src="https://img.shields.io/badge/language-PHP%2FMySQL-yellow.svg?style=flat-square" /></a>
 	<a href="https://www.debian.org/derivatives/"><img src="https://img.shields.io/badge/platform-Linux-lightgrey.svg?style=flat-square" /></a>
 	<a href="https://github.com/StateMapper/StateMapper/blob/master/COPYING"><img src="https://img.shields.io/badge/license-GPLv3-green.svg?style=flat-square" /></a>
 	<a href="https://github.com/StateMapper/StateMapper#contact--support"><img src="https://img.shields.io/badge/chat-XMPP-ff69b4.svg" /></a>
 </p>
 
 <p align="center" id="badges">
-<i>This software is a PHP/MySQL redesign of <a href="https://github.com/Ingobernable/kaos155/" target="_blank">Kaos155</a>, developed by the same <a href="https://hacklab.ingobernable.net/" target="_blank">Ingoberlab</a> team.</i>
+<i>Redesign of <a href="https://github.com/Ingobernable/kaos155/" target="_blank">Kaos155</a>, developed by the same <a href="https://hacklab.ingobernable.net/" target="_blank">Ingoberlab</a> team.</i>
 </p>
 
 -----
