@@ -43,15 +43,23 @@ function stop {
 # git shortcuts
 if [ "$CMD" = "push" ]
 then
+	cd "$BASE_DIR/.."
+	git add *
 	if [ "$2" = "-m" ]
 	then
-		git add "$BASE_DIR/../*" && git commit -m "$3" && git push
+		git commit -m "$3" && git push
 	else
-		git add "$BASE_DIR/../*" && git commit && git push
+		git commit && git push
 	fi
 	exit
 fi
+if [ "$CMD" = "pull" ]
+then
+	cd "$BASE_DIR/.." && git pull
+	exit
+fi
 
+# daemon
 if [ "$CMD" = "daemon" ]
 then
 	# daemonizing
