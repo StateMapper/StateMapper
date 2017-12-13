@@ -29,7 +29,10 @@ The processing layers can be described as follows:
 | extract | extract precepts and status from parsed objects |
 | controller + api | route calls and prepare data for the templates |
 
-The daemon throws spiders (one per type of bulletin), which throw workers (one per day and type of bulletin). Workers call the parser (parse layer), which call the fetcher (fetch layer) every time it needs (once for the daily summary, and often many time more for sub-documents). Then the workers, if configured to, can call the extractor (extract layer) on the parsed object to convert it to *entities* (*institutions*, *companies* and *people*), *precepts* (small texts) and *statuses* (tiny pieces of information). The controller and api layers are only here to route HTTP and CLI calls to the frontend GUI, and to each processing layer separately.
+- The daemon throws spiders (one per type of bulletin), which throw workers (one per day and type of bulletin). 
+- Workers call the parser (parse layer), which call the fetcher (fetch layer) every time it needs (once for the daily summary, and often many times more for sub-documents).
+- Then the workers, if configured to, can call the extractor (extract layer) on the parsed object to convert it to *entities* (*institutions*, *companies* and *people*), *precepts* (small texts) and *statuses* (tiny pieces of information). 
+- The controller and api layers are only here to route HTTP and CLI calls to the frontend GUI, and to each processing layer separately.
 
 ![Classes diagram](../classes_diagram.png)
 
