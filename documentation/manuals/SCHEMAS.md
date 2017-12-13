@@ -90,7 +90,7 @@ While implementing the parsingProtocoles, the following attributes have special 
 
 Status are sorted by ```type``` and ```action``` as follows:
 
-| Status type | Action | Meaning | Arguments |
+| Status type | Action | Meaning | Required attributes |
 | ---- | ----- | ----- | ---- |
 | name | new | company foundation | note: the company name |
 | name | update | name change | target_id: the new entity |
