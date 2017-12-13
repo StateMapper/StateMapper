@@ -104,7 +104,7 @@ Please refer to the [Schemas documentation](SCHEMAS.md#top).
 
 ## Manuals:
 
-If needed, please edit Github manuals from ```documentation/manuals/templates``` (```.tpl.md``` files) and ```documentation/manuals/parts```, then compile them to ```documentation/manuals``` with the ```smap compile``` command (before commiting the changes). 
+If needed, please edit Github manuals from ```documentation/manuals/templates``` (```.tpl.md``` files) and ```documentation/manuals/parts``` (```.part.md``` files), then compile them to ```documentation/manuals``` with the ```smap compile``` command (before commiting the changes). 
 
 Patterns like ```{Include[Inline] name_of_part_file}``` and ```{Include[Inline] name_of_part_file(var1[, var2, ..])}``` will be replaced with the part file ```documentation/manuals/parts/name_of_part_file.part.md```, with patterns ```{$1}```, ```{$2}```, .. replaced with arguments ```var1```, ```var2```, ..
 
