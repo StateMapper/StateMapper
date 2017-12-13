@@ -10,7 +10,7 @@
 -----
 
 
-**Index:** [File structure](#file-structure) · [Sections](#sections) · [Reserved attributes](#reserved-attributes) · [Transformations](#transformations)
+**Index:** [File structure](#file-structure) · [Sections](#sections) · [Reserved attributes](#reserved-attributes) · [Transformations](#transformations) · [Extraction format](#extraction-format)
 
 If you consider contributing to this project, we highly recommend you read and follow our [Team privacy guide](PRIVACY.md#top) before you continue reading.
 
@@ -43,12 +43,14 @@ To implement a new schema, please take example on [ES/ES](../../schemas/ES/ES.js
 
 ## Reserved attributes:
 
+While implementing the parsingProtocoles, the following attributes have special meanings:
+
 | Reserved attribute | Use |
 | ---- | ---- |
 | selector | an xpath to select
 | regexp | a regexp pattern to match |
 | match | the regexp match to stay with |
-| transform | transformations to apply to the value |
+| transform | transformations to apply to the value (see next section) |
 | children | description of array children attributes to parse |
 | childrenWhere | conditions to match to parse a child |
 | else | cascaded alternatives if no value is found |
@@ -72,6 +74,18 @@ To implement a new schema, please take example on [ES/ES](../../schemas/ES/ES.js
 | grepNationalIds | try grabbing national IDs |
 | grepLegalEntities | grab legal entities from a string |
 | grepSentence | *deprecated* |
+
+
+## Extraction format:
+
+| Attribute | Description |
+| ---- | ---- |
+| ```issuing``` (required) | the issuing entity name |
+| ```related``` (required) | the entity name the status is related to |
+| ```amount``` | whatever meaningful amount (currency or not) |
+| ```note``` | whatever meaningful ID or natural label |
+| ```target``` | an entity name the status is targetting |
+
 
 
 -----
