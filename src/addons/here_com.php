@@ -8,6 +8,10 @@ if (!defined('BASE_PATH'))
 //add_action('insert_location', 'kaosHereComConvertLocation');
 
 function kaosHereComConvertLocation($locationStr, $country, $tryId = false){
+	if (!defined('HERE_COM_APP_ID') || !HERE_COM_APP_ID
+		|| !define('HERE_COM_APP_SECRET') || !HERE_COM_APP_SECRET)
+		return null;
+		
 	if (!is_object($country))
 		$country = kaosGetCountrySchema($country);
 	

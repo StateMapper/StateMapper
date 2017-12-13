@@ -77,6 +77,10 @@ define('CURL_RETRY', 2); // better leave to 3 when not rewinding?
 define('CURL_WAIT_BETWEEN', 1); // minimum wait between fetches, in seconds
 define('CURL_RANDOM_WAIT', 1); // max additional random wait between fetches, in seconds
 
+// Here.com
+define('HERE_COM_APP_ID', false); // copy your app ID from https://developer.here.com/projects
+define('HERE_COM_APP_SECRET', false); // copy the corresponding app secret
+
 // IPFS config
 define('IPFS_ENABLED', false); // enable or disable IPFS support
 define('IPFS_API_URL', 'http://127.0.0.1:5001'); // no trailing slash
@@ -86,12 +90,12 @@ define('IPFS_WEB_URL', 'http://127.0.0.1:8080'); // no trailing slash
 $kaosConfig['IPFS'] = array( // list of Kaos IPFS nodes
 	'fetchFrom' => array(
 		'/ipns/QmPxfeJeq97aK5Xr26eG1caWz4Q7qeqMhD7EiNNXWtxXFK' => array(
-			'name' => 'Main Kaos node', // main Kaos IPFS node
+			'name' => 'Main StateMapper node', // main Kaos IPFS node
 		),
 	),
 	'uploadTo' => array(
 		'/ipns/QmPxfeJeq97aK5Xr26eG1caWz4Q7qeqMhD7EiNNXWtxXFK' => array(
-			'name' => 'Main Kaos node', // main Kaos IPFS node
+			'name' => 'Main StateMapper node', // main Kaos IPFS node
 		),
 	)
 );
