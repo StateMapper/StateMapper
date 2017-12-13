@@ -2,7 +2,7 @@
 	<a href="https://github.com/StateMapper/StateMapper#top"><img src="src/assets/images/logo/logo-black-big.png" /></a>
 </p>
 <p align="center" id="top">
-	<h4>International, collaborative, public data reviewing and monitoring tool.</h4>
+	<h3 align="center">International, collaborative, public data reviewing and monitoring tool.</h3>
 </p>
 <p align="center" id="badges">
 	<img src="https://img.shields.io/badge/manuals-on%20progress-red.svg?style=flat-square" />
