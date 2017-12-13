@@ -24,16 +24,16 @@ if (!empty($_POST['kaosInstall'])){
 			$conn = @(new mysqli($args['host'], $args['user'], $args['pass']));
 		} catch (Exception $e){
 			$conn = false;
-			$error = 'db connection failed: '.$e->getMessage();
+			$error = 'Database connection failed: '.$e->getMessage();
 		}
 		if ($conn && $conn->connect_error){
 			$err = $conn->connect_error;
 			$conn = false;
-			$error = 'db connection failed: '.$err;
+			$error = 'Database connection failed: '.$err;
 		}
 		if ($conn && !mysqli_select_db($conn, $args['name'])){
 			$conn = false;
-			$error = 'db '.$args['name'].' not found';
+			$error = 'Database "'.htmlentities($args['name']).'" not found, please create it first!';
 		}
 		
 		if (!$error){
@@ -54,11 +54,11 @@ if (!empty($_POST['kaosInstall'])){
 			if (!$count){
 				exec('mysql -u'.$args['user'].(!empty($args['pass']) ? ' -p'.$args['pass'] : '').' -h '.$args['host'].' '.$args['name'].' < "'.BASE_PATH.'/database/structure.sql"', $output, $return);
 				if (!empty($return))
-					$error = 'An error occured during the database structure importation.';
+					$error = 'An error occured during the database structure setup.';
 			}
 			if (!$error){
 				if (!@file_put_contents(BASE_PATH.'/config.php', $content))
-					$error = 'couldn\'t write '.BASE_PATH.'/config.php';
+					$error = BASE_PATH.'/config.php couldn\'t be written. Please make '.BASE_PATH.' writtable.';
 				else
 					redirect($args['base_url'].'?install=1');
 			}
