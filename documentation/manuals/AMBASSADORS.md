@@ -13,7 +13,7 @@
 If you consider contributing to this project, we highly recommend you read and follow our [Team privacy guide](PRIVACY.md#top) before you continue reading.
 
 
-A list of active Ambassadors is available on the [bulletin providers' page](https://statemapper.com/api).
+A list of active Ambassadors is available on the [bulletin providers' page](https://statemapper.net/api).
 
 **This page is still under construction. Please contact us by [other means](https://github.com/StateMapper/StateMapper#top).**
 
