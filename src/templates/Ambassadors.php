@@ -20,7 +20,7 @@ ob_start();
 <div>
 	<?php
 		if (empty($ambassadors)){
-			echo 'No Country Ambassadors are currently defined for this schema. Please, help this project <a href="https://github.com/StateMapper/StateMapper/blob/master/documentation/guides/AMBASSADORS.md#top" target="_blank">enrolling as an Ambassador now</a>!';
+			echo 'No Country Ambassadors are currently defined for this schema. Please, help this project <a href="'.kaosAnonymize('https://github.com/'.KAOS_GITHUB_REPOSITORY.'/blob/master/documentation/manuals/AMBASSADORS.md#top').'" target="_blank">enrolling as an Ambassador now</a>!';
 		
 		} else {
 			?>
