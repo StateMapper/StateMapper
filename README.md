@@ -1,6 +1,8 @@
 <div align="center" id="top" valign="top">
-	<a href="https://github.com/StateMapper/StateMapper#top"><img src="src/assets/images/logo/logo-black-big-spaced.png" /></a>
-	<h3>International, collaborative, public data reviewing and monitoring tool.</h3>
+	<h3 align="center">
+		<a href="https://github.com/StateMapper/StateMapper#top"><img src="src/assets/images/logo/logo-black-big-spaced.png" /></a><br>
+		International, collaborative, public data reviewing and monitoring tool.
+	</h3>
 </div>
 <p align="center" id="badges">
 	<img src="https://img.shields.io/badge/manuals-on%20progress-red.svg?style=flat-square" />
@@ -10,7 +12,9 @@
 	<a href="https://github.com/StateMapper/StateMapper#contact--support"><img src="https://img.shields.io/badge/chat-XMPP-ff69b4.svg" /></a>
 </p>
 
-<h6 align="center" id="badges"><i>Redesign of <a href="https://github.com/Ingobernable/kaos155/" target="_blank">Kaos155</a>, by the same <a href="https://hacklab.ingobernable.net/" target="_blank">Ingoberlab</a> team.</i></h6>
+<p align="center" id="badges">
+<i>Redesign of <a href="https://github.com/Ingobernable/kaos155/" target="_blank">Kaos155</a>, by the same <a href="https://hacklab.ingobernable.net/" target="_blank">Ingoberlab</a> team.</i>
+</p>
 
 -----
 
