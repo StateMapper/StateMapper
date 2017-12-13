@@ -50,7 +50,7 @@ To enroll as a Soldier, it is enough to follow these instructions until the end,
    | fetch: | first you gonna have to precise how to retrieve the bulletin for a given date, id, format, or whatever combination of them. This is mostly done using parameter URLs with patterns like {date:format(m/d/Y)}. | fetchProtocoles |
    | parse: | then you gonna have to describe, for each format (now available: pdf, xml and html), the way to understand the retrieved bulletin. Often you are going to use XPath and Regular Expressions. Use ```follow: true``` to fetch pertinent sub-documents. | parsingProtocoles |
    | rewind: | you should now be able to download many years of bulletins to your machine. make sure the daemon is started, and enable the spider from the rewind tab. | |
-   | extract: | now you can focus on extracting ```statuses```. You have to describe how to obtain them from a similar structure, with the attributes described in the [Extraction section of the Schema documentation](SCHEMAS.md#extraction-format) | extractProtocoles |
+   | extract: | now you can focus on extracting ```statuses```. You have to describe how to obtain them from a similar structure, with the attributes described in the [Extraction section of the Schemas documentation](SCHEMAS.md#extraction-format) | extractProtocoles |
    | rewind: | rewind again, enabling the ```extract``` option of your spider. | extractProtocoles |
 
 5. Push your schema to the project's repository:

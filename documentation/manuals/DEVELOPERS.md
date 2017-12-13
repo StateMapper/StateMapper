@@ -49,15 +49,7 @@ The extraction layer is where data is finally saved to the database in the form 
 | amounts | amounts related with the status, with units and USD values |
 | locations | locations related with the status |
 
-Status are sorted by ```type``` and ```action``` as follows:
-
-| Status type | Action | Meaning | Arguments |
-| ---- | ----- | ----- | ---- |
-| name | new | company foundation | note: the company name |
-| name | update | name change | target_id: the new entity |
-| name | end | company dissolution | | |
-| administrator | start | start as an administrator | target_id: the administering entity |
-| ... | | | |
+Please read the [Extraction section of the Schemas documentation](SCHEMAS.md#extraction-format) for more details about the extraction format.
 
 Here is an overview of the database tables:
 

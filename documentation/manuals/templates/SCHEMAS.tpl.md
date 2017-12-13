@@ -69,11 +69,22 @@ While implementing the parsingProtocoles, the following attributes have special 
 
 | Attribute | Description |
 | ---- | ---- |
+| ```type``` (required) | the type of status |
+| ```action``` (required) | the action of the status |
 | ```issuing``` (required) | the issuing entity name |
 | ```related``` (required) | the entity name the status is related to |
 | ```amount``` | whatever meaningful amount (currency or not) |
 | ```note``` | whatever meaningful ID or natural label |
 | ```target``` | an entity name the status is targetting |
 
+Status are sorted by ```type``` and ```action``` as follows:
+
+| Status type | Action | Meaning | Arguments |
+| ---- | ----- | ----- | ---- |
+| name | new | company foundation | note: the company name |
+| name | update | name change | target_id: the new entity |
+| name | end | company dissolution | | |
+| administrator | start | start as an administrator | target_id: the administering entity |
+| ... | | | |
 
 {Include footer()}
