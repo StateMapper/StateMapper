@@ -9,5 +9,5 @@
 config.php
 
 # Bulletins
-bulletins/*
+# bulletins/*
 
