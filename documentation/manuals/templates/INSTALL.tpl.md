@@ -28,11 +28,8 @@ StateMapper might work just fine on any [Debian-based](https://www.debian.org/de
 
 3. Secure your database entering ```mysql_secure_installation```.
 
-4. Fix Apache permissions and enable mod_rewrite: *(replace ```www-data``` and ```/var/www/html``` if convenient)*
+4. Enable Apache's mod_rewrite: *(replace ```www-data``` and ```/var/www/html``` if convenient)*
    ```bash
-   sudo chgrp -R www-data /var/www/html
-   sudo find /var/www/html -type d -exec chmod g+rx {} +
-   sudo find /var/www/html -type f -exec chmod g+r {} +
    sudo a2enmod rewrite		# enable mod_rewrite
    sudo service apache2 restart 	# restart Apache
    ```
@@ -66,8 +63,14 @@ StateMapper might work just fine on any [Debian-based](https://www.debian.org/de
    ```
    *Alternatively, if you already have the files, you can simply extract them to ```/var/www/html/statemapper```.*
 
-8. Edit ```config.php``` and change the constants according to your needs (follow the instructions in comments).
 
+8. Fix Apache permissions: *(replace ```www-data``` and ```/var/www/html``` if convenient)*
+   ```bash
+   sudo chgrp -R www-data /var/www/html
+   sudo find /var/www/html -type d -exec chmod g+rx {} +
+   sudo find /var/www/html -type f -exec chmod g+r {} +
+   ```
+   
 9. OPTIONAL: Create an ```smap``` alias to access the CLI API easily from anywhere. Enter:
 
    ```bash 
@@ -78,8 +81,9 @@ StateMapper might work just fine on any [Debian-based](https://www.debian.org/de
    
    *Disclaimer: all ```smap``` calls require root login because PHP requires to be executed with the same user as the Apache server to be able to read-write files correctly.*
 
-
 10. Open a browser, navigate to http://localhost/statemapper/ and follow the instructions.
+
+11. OPTIONAL: Edit ```config.php``` and change the constants according to your needs (follow the instructions in comments).
 
 
 ## Daemon commands:
