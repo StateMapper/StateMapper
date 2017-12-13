@@ -118,12 +118,12 @@ The root ```README.md``` can be edited directly from the root folder, and cannot
 * If you ever need to hide yourself when pushing changes, we recommend you create a Github user with a dedicated mailbox from [RiseUp](https://account.riseup.net/user/new) or [ProtonMail](https://protonmail.com/signup). Also, we recommend you also use RiseUp's [VPN Red](https://riseup.net/en/vpn). To do so, follow [these instructions](https://riseup.net/en/vpn/vpn-red/linux).
 
 
-### Shortcuts:
+**Shortcuts:**
 
 * ```smap push``` and ```smap push -m "some comment"``` will compile manuals and push all local changes (not only to manuals) to the repository.
 * ```smap pull``` will update the local files with the repository's.
 
-### Disk space:
+**Disk space:**
 
 * When developping and fetching lots of bulletins, sometimes you won't have enough space on your local disk.
 To move everything to a new disk, we recommend using the following command:
@@ -140,12 +140,12 @@ Then modify the ```DATA_PATH``` in ```config.php```.
 find /var/www/html/statemapper/bulletins/ -name "*.pdf" -type f -delete
 ```
 
-### Special URL parameters:
+**Special URL parameters:**
 
 * In general, you may use "?stop=1" to stop auto-refreshing (the rewind map, for example), and be able to edit the DOM/CSS more easily.
 * In general, you may use "?human=1" to format a raw JSON output for humans.
 
-### Graphics:
+**Graphics:**
 
 * The main logo was made using the [Nasalization font](../../src/assets/font/nasalization) and the [FontAwesome](http://fontawesome.io/icons/)'s "map-signs" icon.
 * Favicons can be generated from FontAwesome icons through [this page](https://paulferrett.com/fontawesome-favicon/) or [this one](https://gauger.io/fonticon/).
