@@ -56,7 +56,7 @@ To enroll as a Soldier, it is enough to follow these instructions until the end,
       - ```amount```: whatever meaningful amount (currency or not)
       - ```note```: whatever meaningful ID or natural label
       - ```target```: an entity name the status is targetting | extractProtocoles |
-   | rewind: | rewind again, enabling the ```extract``` option of your spider. | |
+   | rewind: | rewind again, enabling the ```extract``` option of your spider. | extractProtocoles |
 
 5. Push your schema to the project's repository:
    ```
