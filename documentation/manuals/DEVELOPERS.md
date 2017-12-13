@@ -127,7 +127,7 @@ The root ```README.md``` must be edited directly from the root folder, and canno
 
 **Disk space:**
 
-* When developping and fetching lots of bulletins, sometimes you won't have enough space on your local disk.
+* When developing and fetching lots of bulletins, sometimes you won't have enough space on your local disk.
    To move everything to a new disk, we recommend using the following command:
 
    ```bash

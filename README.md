@@ -11,7 +11,7 @@
 </p>
 
 <p align="center" id="badges">
-<i>This software is a PHP/MySQL redesign of <a href="https://github.com/Ingobernable/kaos155/" target="_blank">Kaos155</a>, developped by the same <a href="https://hacklab.ingobernable.net/" target="_blank">Ingoberlab</a> team.</i>
+<i>This software is a PHP/MySQL redesign of <a href="https://github.com/Ingobernable/kaos155/" target="_blank">Kaos155</a>, developed by the same <a href="https://hacklab.ingobernable.net/" target="_blank">Ingoberlab</a> team.</i>
 </p>
 
 -----
