@@ -3,6 +3,7 @@
 if (!defined('BASE_PATH'))
 	die();
 
+
 require('spiders.php');
 require('string.php');
 require('currency.php');
@@ -146,8 +147,8 @@ function head($title = null){
 	<!--
 	StateMapper
 
-	This program is a PHP/MySQL rewrite/fork of Kaos155 <....>, developped by the same team.
-	It aims at providing a nice website for anyone to browse efficiently any of the world's bulletins' data.
+	This program is a PHP/MySQL redesign of Kaos155 <https://github.com/ingobernable/Kaos155>, developped by the same Ingoberlab team.
+	It aims at providing an international, collaborative, public data reviewing and monitoring tool.
 
     Copyright (C) <?= getCopyrightRange() ?>  StateMapper <https://statemapper.net>
 
@@ -167,12 +168,11 @@ function head($title = null){
 
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
 
-	<link rel="stylesheet" type="text/css" href="<?= APP_URL ?>/assets/lib/font-awesome-4.7.0/css/font-awesome.min.css" />
-	<link rel="stylesheet" type="text/css" href="<?= APP_URL ?>/assets/css/api.css" />
-	<!-- <link rel="stylesheet" type="text/css" href="<?= APP_URL ?>/assets/lib/tippyjs-2.0.0-beta.2/dist/tippy.css" /> -->
+	<link rel="stylesheet" type="text/css" href="<?= ASSETS_URL ?>/lib/font-awesome-4.7.0/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" href="<?= ASSETS_URL ?>/css/api.css" />
 
-	<script type="text/javascript" src="<?= APP_URL ?>/assets/lib/jquery-3.2.1/jquery-3.2.1.min.js"></script>
-	<script type="text/javascript" src="<?= APP_URL ?>/assets/lib/tippyjs-2.0.0-beta.2/dist/tippy.all.min.js"></script>
+	<script type="text/javascript" src="<?= ASSETS_URL ?>/lib/jquery-3.2.1/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="<?= ASSETS_URL ?>/lib/tippyjs-2.0.0-beta.2/dist/tippy.all.min.js"></script>
 
 	<script type="text/javascript">
 		var KAOS = {

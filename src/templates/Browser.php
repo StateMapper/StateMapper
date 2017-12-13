@@ -202,7 +202,7 @@ $searchInput = ob_get_clean();
 							<div class="browser-center-msg">
 								<div>
 									<div class="logo-root-big-wrap"><img src="<?= ASSETS_URL ?>/images/logo/logo-black-big.png" class="logo-root-big" /></div>
-									<div class="root-slogan"><?= _('International, Open-Source, <br>Official Bulletin browser') ?></div>
+									<div class="root-slogan"><?= _('International, Collaborative, <br>Public data reviewing and monitoring tool') ?></div>
 									<div class="search-root-big-wrap"><?= $searchInput ?></div>
 									<div class="browser-center-links">
 										<a href="<?= kaosAnonymize('https://twitter.com/search?q=%23OpenCorruption') ?>" target="_blank">#OpenCorruption</a>

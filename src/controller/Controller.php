@@ -54,14 +54,17 @@ class Controller {
 		
 		global $kaosPage;
 		$kaosPage = $bits ? array_shift($bits) : 'browser';
+		
+		if (KAOS_IS_INSTALL)
+			$kaosPage = 'install';
 
-		if (preg_match('#^[a-z]{2}$#', $kaosPage)){
+		else if (preg_match('#^[a-z]{2}$#', $kaosPage)){
 			$kaosCall['query']['country'] = $kaosPage;
 			$kaosPage = $bits ? array_shift($bits) : 'browser';
 		}
 		
 		$kaosCall['currentQuery'] = !empty($_GET['q']) ? $_GET['q'] : '';
-				
+		
 		switch ($kaosPage){
 				
 			case 'logout':
@@ -75,6 +78,9 @@ class Controller {
 					kaosDie('Operation forbidden');
 
 			case 'install':
+				if (!KAOS_IS_INSTALL)
+					kaosDie();
+					
 				require APP_PATH.'/templates/'.ucfirst($kaosPage).'.php';
 				exit();
 				
@@ -287,6 +293,9 @@ function kaosGetTemplate($id, $vars = array()){
 }
 
 function cleanLocks($all = false){
+	if (KAOS_IS_INSTALL)
+		return;
+		
 	static $lastCleaned = null;
 	if ($all)
 		query('DELETE FROM locks');
