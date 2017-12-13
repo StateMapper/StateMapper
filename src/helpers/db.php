@@ -124,7 +124,7 @@ function insert($table, $vars = array()){
 	if (!($conn = getConnexion()) || kaosIsError($conn))
 		return $conn;
 		
-		kaosJSON($vars);
+//		kaosJSON($vars);
 	
 	$values = array();
 	foreach ($vars as $k => $v)
