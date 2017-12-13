@@ -40,6 +40,13 @@ function stop {
 	exit 0
 }
 
+# git shortcuts
+if [ "$CMD" = "push" ]
+then
+	git add "$BASE_DIR/*" && git commit && git push
+	exit
+fi
+
 if [ "$CMD" = "daemon" ]
 then
 	# daemonizing
