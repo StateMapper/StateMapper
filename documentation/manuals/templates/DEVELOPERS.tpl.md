@@ -121,6 +121,7 @@ Then modify the ```DATA_PATH``` in ```config.php```.
 
 ```bash
 find /var/www/html/statemapper/bulletins/ -name "*.pdf" -type f -delete
+```
 
 * In general, you may use "?stop=1" to stop auto-refreshing (the rewind map, for example), and be able to edit the DOM/CSS more easily.
 * In general, you may use "?human=1" to format a raw JSON output for humans.
