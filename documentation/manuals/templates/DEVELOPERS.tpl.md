@@ -25,7 +25,7 @@ The processing layers can be described as follows:
 
 ![Classes diagram](../classes_diagram.png)
 
-Source file can be found in ```documentation/classes_diagram.dia``` and edited with [Dia](http://dia-installer.de/download/linux.html): ```sudo apt-get install dia```
+Source file for this diagram can be found in ```documentation/classes_diagram.dia``` and edited with [Dia](http://dia-installer.de/download/linux.html): ```sudo apt-get install dia```
 
 
 ## Extraction:
@@ -46,7 +46,7 @@ Here is an overview of the database tables:
 
 ![Database diagram](../database_diagram.png)
 
-Source file can be found in ```documentation/database_diagram.mwb``` and edited with [MySQL Workbench](https://www.mysql.com/products/workbench/design/).
+Source file for this diagram can be found in ```documentation/database_diagram.mwb``` and edited with [MySQL Workbench](https://www.mysql.com/products/workbench/design/).
 
 
 ## Folder structure:
