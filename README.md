@@ -1,3 +1,8 @@
+<style>
+
+.markdown-preview.markdown-preview { p, ul, ol {font-size: 1.2em;} }
+
+</style>
 <div align="center" id="top" valign="top">
 	<a href="https://github.com/StateMapper/StateMapper#top"><img src="src/assets/images/logo/logo-black-big-spaced.png" /></a>
 	<h3>International, collaborative, public data reviewing and monitoring tool.</h3>
