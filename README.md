@@ -1,6 +1,6 @@
 <div align="center" id="top">
 	<h3 align="center">
-		<a href="https://github.com/StateMapper/StateMapper#top"><img src="src/assets/images/logo/logo-black-big.png" /></a><br><br>
+		<a href="https://github.com/StateMapper/StateMapper#top"><img src="src/assets/images/logo/logo-black-big.png" /></a><br>
 		International, collaborative, public data reviewing and monitoring tool.
 	</h3>
 </div>
