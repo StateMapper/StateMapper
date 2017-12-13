@@ -112,7 +112,7 @@ The root ```README.md``` can be edited directly from the root folder, and cannot
 To move everything to a new disk, we recommend using the following command:
 
 ```bash
-rsync -arv --size-only /path/to/statemapper/data/ /path/to/your/external_disk/statemapper/data
+rsync -arv --size-only /var/www/html/statemapper/bulletins/ /path/to/your/external_disk/statemapper/data
 ```
 
 Then modify the ```DATA_PATH``` in ```config.php```.
@@ -120,7 +120,7 @@ Then modify the ```DATA_PATH``` in ```config.php```.
 * To delete all files from a specific extension (say .pdf), use the following:
 
 ```bash
-find /path/to/statemapper/data/ -name "*.pdf" -type f -delete
+find /var/www/html/statemapper/bulletins/ -name "*.pdf" -type f -delete
 
 * In general, you may use "?stop=1" to stop auto-refreshing (the rewind map, for example), and be able to edit the DOM/CSS more easily.
 * In general, you may use "?human=1" to format a raw JSON output for humans.
