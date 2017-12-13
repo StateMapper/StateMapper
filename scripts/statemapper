@@ -45,9 +45,9 @@ if [ "$CMD" = "push" ]
 then
 	if [ "$2" = "-m" ]
 	then
-		git add "$BASE_DIR/*" && git commit -m "$3" && git push
+		git add "$BASE_DIR/../*" && git commit -m "$3" && git push
 	else
-		git add "$BASE_DIR/*" && git commit && git push
+		git add "$BASE_DIR/../*" && git commit && git push
 	fi
 	exit
 fi
