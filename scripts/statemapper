@@ -43,7 +43,12 @@ function stop {
 # git shortcuts
 if [ "$CMD" = "push" ]
 then
-	git add "$BASE_DIR/*" && git commit && git push
+	if [ "$2" = "-m" ]
+	then
+		git add "$BASE_DIR/*" && git commit -m "$3" && git push
+	else
+		git add "$BASE_DIR/*" && git commit && git push
+	fi
 	exit
 fi
 
