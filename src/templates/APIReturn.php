@@ -232,10 +232,10 @@ if (!isset($title))
 								echo 'Rewinding is the step where you get to fetch all documents for as long as you can.';
 								break;
 							case 'soldiers':
-								echo 'The Soldiers are the developers that implement and maintain the bulletins\' schemas. More information about StateMapper\'s commissions <a href="https://github.com/StateMapper/StateMapper#contribute" target="_blank">here</a>.';
+								echo 'The Soldiers are the developers that implement and maintain the bulletins\' schemas. More information about StateMapper\'s commissions <a href="'.kaosAnonymize('https://github.com/'.KAOS_GITHUB_REPOSITORY.'#contribute').'" target="_blank">here</a>.';
 								break;
 							case 'ambassadors':
-								echo 'Ambassadors are social collectives that host all bulletins of one country, check their integrity, and maintain translations. More information about StateMapper\'s commissions <a href="https://github.com/StateMapper/StateMapper#contribute" target="_blank">here</a>.';
+								echo 'Ambassadors are social collectives that host all bulletins of one country, check their integrity, and maintain translations. More information about StateMapper\'s commissions <a href="'.kaosAnonymize('https://github.com/'.KAOS_GITHUB_REPOSITORY.'#contribute').'" target="_blank">here</a>.';
 								break;
 						}
 					else
