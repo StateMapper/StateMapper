@@ -1,5 +1,5 @@
 <p align="center" id="top">
-	<img src="src/assets/images/logo/logo-black-big.png" /><br>
+	<a href="https://github.com/StateMapper/StateMapper#top"><img src="src/assets/images/logo/logo-black-big.png" /></a><br>
 	International, collaborative, public data reviewing and monitoring tool.
 </p>
 <p align="center" id="badges">
