@@ -81,6 +81,8 @@ define('CURL_RANDOM_WAIT', 1); // max additional random wait between fetches, in
 define('HERE_COM_APP_ID', false); // copy your app ID from https://developer.here.com/projects
 define('HERE_COM_APP_SECRET', false); // copy the corresponding app secret
 
+define('GITHUB_SYNC', false); // sync schema Soldiers and Ambassadors with the ones from the repository
+
 // IPFS config
 define('IPFS_ENABLED', false); // enable or disable IPFS support
 define('IPFS_API_URL', 'http://127.0.0.1:5001'); // no trailing slash
