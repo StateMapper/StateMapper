@@ -25,6 +25,8 @@ The processing layers can be described as follows:
 
 ![Classes diagram](../classes_diagram.png)
 
+Source file can be found in ```documentation/classes_diagram.dia``` and edited with [Dia](http://dia-installer.de/download/linux.html): ```sudo apt-get install dia```
+
 
 ## Extraction:
 
@@ -119,8 +121,7 @@ Then modify the ```DATA_PATH``` in ```config.php```.
 
 ```bash
 find /path/to/statemapper/data/ -name "*.pdf" -type f -delete
-```
-* To read/edit ```documentation/classes_diagram.dia```, you may use [Dia](http://dia-installer.de/download/linux.html): ```sudo apt-get install dia```
+
 * In general, you may use "?stop=1" to stop auto-refreshing (the rewind map, for example), and be able to edit the DOM/CSS more easily.
 * In general, you may use "?human=1" to format a raw JSON output for humans.
 * The main logo was made using the [Nasalization font](../../src/assets/font/nasalization) and the [FontAwesome](http://fontawesome.io/icons/)'s "map-signs" icon.
