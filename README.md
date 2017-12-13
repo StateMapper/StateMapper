@@ -1,5 +1,5 @@
-<div align="center" id="top">
-	<h3 align="center">
+<div align="center" id="top" valign="top">
+	<h3 align="center" valign="top">
 		<a href="https://github.com/StateMapper/StateMapper#top"><img src="src/assets/images/logo/logo-black-big-spaced.png" /></a><br>
 		International, collaborative, public data reviewing and monitoring tool.
 	</h3>
