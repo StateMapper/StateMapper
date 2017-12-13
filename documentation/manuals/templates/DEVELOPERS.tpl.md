@@ -115,19 +115,19 @@ The root ```README.md``` can be edited directly from the root folder, and cannot
 **Disk space:**
 
 * When developping and fetching lots of bulletins, sometimes you won't have enough space on your local disk.
-To move everything to a new disk, we recommend using the following command:
+   To move everything to a new disk, we recommend using the following command:
 
    ```bash
-rsync -arv --size-only /var/www/html/statemapper/bulletins/ /path/to/your/external_disk/statemapper/data
-```
+   rsync -arv --size-only /var/www/html/statemapper/bulletins/ /path/to/your/external_disk/statemapper/data
+   ```
 
    Then modify the ```DATA_PATH``` in ```config.php```.
 
 * To delete all files from a specific extension (say .pdf), use the following:
 
    ```bash
-find /var/www/html/statemapper/bulletins/ -name "*.pdf" -type f -delete
-```
+   find /var/www/html/statemapper/bulletins/ -name "*.pdf" -type f -delete
+   ```
 
 **Special URL parameters:**
 
