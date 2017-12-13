@@ -100,9 +100,11 @@ The source file of this diagram can be found at ```documentation/database_diagra
 | [/api](https://statemapper.net/api) | list of countries, bulletin providers and schemas |
 | [/api/xx](https://statemapper.net/api/es) | list of bulletin providers and schemas for country xx (example: /api/es) |
 
+
 ## Schemas:
 
 Please refer to the [Schemas documentation](SCHEMAS.md#top).
+
 
 ## Manuals:
 
