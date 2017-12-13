@@ -3,21 +3,15 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Nov 24, 2017 at 04:18 AM
--- Server version: 5.7.20-0ubuntu0.16.04.1
+-- Generation Time: Dec 13, 2017 at 03:21 AM
+-- Server version: 10.0.31-MariaDB-0ubuntu0.16.04.2
 -- PHP Version: 7.0.22-0ubuntu0.16.04.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
 --
--- Database: `boe`
+-- Database: `statemapper`
 --
 
 -- --------------------------------------------------------
@@ -32,7 +26,7 @@ CREATE TABLE `amounts` (
   `originalUnit` varchar(4) NOT NULL,
   `value` bigint(20) NOT NULL,
   `unit` varchar(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=TokuDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -54,7 +48,7 @@ CREATE TABLE `bulletins` (
   `created` datetime DEFAULT NULL,
   `done` datetime DEFAULT NULL,
   `status` varchar(25) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=TokuDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -66,7 +60,7 @@ CREATE TABLE `bulletin_uses_bulletin` (
   `id` bigint(11) NOT NULL,
   `bulletin_id` bigint(11) NOT NULL,
   `bulletin_in` bigint(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=TokuDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -87,7 +81,7 @@ CREATE TABLE `entities` (
   `national_id` varchar(30) DEFAULT NULL,
   `parent_id` bigint(20) DEFAULT NULL,
   `keywords` varchar(400) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=TokuDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -106,8 +100,9 @@ CREATE TABLE `locations` (
   `street` varchar(100) DEFAULT NULL,
   `housenumber` varchar(8) DEFAULT NULL,
   `postalcode` varchar(8) DEFAULT NULL,
-  `updated` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `updated` datetime DEFAULT NULL,
+  `relevance` smallint(6) DEFAULT NULL
+) ENGINE=TokuDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -119,7 +114,7 @@ CREATE TABLE `locks` (
   `id` bigint(20) NOT NULL,
   `target` varchar(30) NOT NULL,
   `created` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=TokuDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -131,7 +126,7 @@ CREATE TABLE `names` (
   `id` bigint(20) NOT NULL,
   `type` tinyint(4) NOT NULL,
   `name` varchar(80) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=TokuDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -143,7 +138,7 @@ CREATE TABLE `options` (
   `id` bigint(20) NOT NULL,
   `name` varchar(100) NOT NULL,
   `value` longtext NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=TokuDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -157,7 +152,7 @@ CREATE TABLE `precepts` (
   `issuing_id` bigint(20) DEFAULT NULL,
   `title` longtext,
   `text` longtext NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=TokuDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -172,8 +167,9 @@ CREATE TABLE `spiders` (
   `pid` bigint(20) DEFAULT NULL,
   `date_back` date DEFAULT NULL,
   `workers_count` mediumint(9) NOT NULL,
-  `cpu_rate` tinyint(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `cpu_rate` tinyint(4) NOT NULL,
+  `extract` tinyint(4) NOT NULL DEFAULT '0'
+) ENGINE=TokuDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -194,7 +190,7 @@ CREATE TABLE `statuses` (
   `contract_type_id` bigint(6) DEFAULT NULL,
   `sector_id` bigint(6) DEFAULT NULL,
   `note` text
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=TokuDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -206,7 +202,7 @@ CREATE TABLE `status_has_service` (
   `id` int(11) NOT NULL,
   `status_id` bigint(20) NOT NULL,
   `service_id` bigint(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=TokuDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -222,7 +218,7 @@ CREATE TABLE `workers` (
   `status` varchar(20) NOT NULL,
   `pid` bigint(20) DEFAULT NULL,
   `started` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=TokuDB DEFAULT CHARSET=latin1;
 
 --
 -- Indexes for dumped tables
@@ -242,9 +238,9 @@ ALTER TABLE `amounts`
 --
 ALTER TABLE `bulletins`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `bulletin_schema` (`bulletin_schema`),
-  ADD KEY `date` (`date`),
-  ADD KEY `external_id` (`external_id`);
+  ADD UNIQUE KEY `bulletin_schema` (`bulletin_schema`,`date`),
+  ADD KEY `external_id` (`external_id`),
+  ADD KEY `created` (`created`);
 
 --
 -- Indexes for table `bulletin_uses_bulletin`
@@ -344,32 +340,32 @@ ALTER TABLE `workers`
 -- AUTO_INCREMENT for table `amounts`
 --
 ALTER TABLE `amounts`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=564;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4259;
 --
 -- AUTO_INCREMENT for table `bulletins`
 --
 ALTER TABLE `bulletins`
-  MODIFY `id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=269447;
+  MODIFY `id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=487931;
 --
 -- AUTO_INCREMENT for table `bulletin_uses_bulletin`
 --
 ALTER TABLE `bulletin_uses_bulletin`
-  MODIFY `id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=266057;
+  MODIFY `id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=482451;
 --
 -- AUTO_INCREMENT for table `entities`
 --
 ALTER TABLE `entities`
-  MODIFY `id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2633;
+  MODIFY `id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11294;
 --
 -- AUTO_INCREMENT for table `locations`
 --
 ALTER TABLE `locations`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=306;
 --
 -- AUTO_INCREMENT for table `locks`
 --
 ALTER TABLE `locks`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65683;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=366;
 --
 -- AUTO_INCREMENT for table `names`
 --
@@ -379,12 +375,12 @@ ALTER TABLE `names`
 -- AUTO_INCREMENT for table `options`
 --
 ALTER TABLE `options`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75887;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76047;
 --
 -- AUTO_INCREMENT for table `precepts`
 --
 ALTER TABLE `precepts`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2478;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8483;
 --
 -- AUTO_INCREMENT for table `spiders`
 --
@@ -394,7 +390,7 @@ ALTER TABLE `spiders`
 -- AUTO_INCREMENT for table `statuses`
 --
 ALTER TABLE `statuses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9291;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43921;
 --
 -- AUTO_INCREMENT for table `status_has_service`
 --
@@ -404,7 +400,4 @@ ALTER TABLE `status_has_service`
 -- AUTO_INCREMENT for table `workers`
 --
 ALTER TABLE `workers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3802;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
