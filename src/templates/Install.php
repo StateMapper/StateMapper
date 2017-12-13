@@ -33,7 +33,7 @@ if (!empty($_POST['kaosInstall'])){
 		}
 		if ($conn && !mysqli_select_db($conn, $args['name'])){
 			$conn = false;
-			$error = 'db '.DB_NAME.' not found';
+			$error = 'db '.$args['name'].' not found';
 		}
 		
 		if (!$error){
@@ -71,6 +71,12 @@ if (!empty($_POST['kaosInstall'])){
 		<head>
 			<?php head('Install'); ?>
 			<style>
+				.kaosError {
+					border: 1px solid red;
+					color: red;
+					padding: 5px 10px;
+					margin: 10px 0 20px;
+				}
 				#wrap {
 					line-height: normal;
 				}
@@ -110,7 +116,7 @@ if (!empty($_POST['kaosInstall'])){
 		<body>
 			<div id="wrap">
 				<form action="<?= kaosCurrentURL() ?>" method="POST">
-					<h1>Kaos Installation</h1>
+					<h1>StateMapper Installation</h1>
 					<?php
 						if ($error)
 							echo '<div class="kaosError">'.$error.'</div>';
@@ -118,31 +124,31 @@ if (!empty($_POST['kaosInstall'])){
 					<div>
 						<label>Application base URL:</label>
 						<div class="kaos-install-field">
-							<input type="text" name="kaosInstall_base_url" value="<?= (!empty($_SERVER['REQUEST_SCHEME']) ? $_SERVER['REQUEST_SCHEME'] : 'http') ?>://<?= (!empty($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost') ?>/<?= preg_replace('#^(/var/www(/html)?/?)(.*?)$#i', '$3', BASE_PATH) ?>" />
+							<input type="text" name="kaosInstall_base_url" value="<?= esc_attr(!empty($_SERVER['REQUEST_SCHEME']) ? $_SERVER['REQUEST_SCHEME'] : 'http') ?>://<?= (!empty($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost') ?>/<?= preg_replace('#^(/var/www(/html)?/?)(.*?)$#i', '$3', BASE_PATH) ?>" />
 						</div>
 					</div>
 					<div>
 						<label>Database host:</label>
 						<div class="kaos-install-field">
-							<input name="kaosInstall_host" type="text" value="<?= (!empty($args['host']) ? $args['host'] : 'localhost') ?>" />
+							<input name="kaosInstall_host" type="text" value="<?= (!empty($args['host']) ? esc_attr($args['host']) : 'localhost') ?>" />
 						</div>
 					</div>
 					<div>
 						<label>Database user:</label>
 						<div class="kaos-install-field">
-							<input name="kaosInstall_user"type="text" value="<?= (!empty($args['user']) ? $args['user'] : 'root') ?>" />
+							<input name="kaosInstall_user" type="text" value="<?= (!empty($args['user']) ? esc_attr($args['user']) : 'root') ?>" />
 						</div>
 					</div>
 					<div>
 						<label>Database password:</label>
 						<div class="kaos-install-field">
-							<input name="kaosInstall_pass"type="password" value="" />
+							<input name="kaosInstall_pass" type="password" value="" />
 						</div>
 					</div>
 					<div>
 						<label>Database name:</label>
 						<div class="kaos-install-field">
-							<input name="kaosInstall_name"type="text" value="<?= (!empty($args['name']) ? $args['name'] : 'statemapper') ?>" />
+							<input name="kaosInstall_name" type="text" value="<?= (!empty($args['name']) ? esc_attr($args['name']) : 'statemapper') ?>" />
 						</div>
 					</div>
 					<!--
