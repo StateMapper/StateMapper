@@ -124,6 +124,8 @@ function insert($table, $vars = array()){
 	if (!($conn = getConnexion()) || kaosIsError($conn))
 		return $conn;
 		
+//		kaosJSON($vars);
+	
 	$values = array();
 	foreach ($vars as $k => $v)
 		$values[] = $v === null ? 'NULL' : "'".mysqli_real_escape_string($conn, $v)."'";
