@@ -1,6 +1,6 @@
 <div align="center" id="top" valign="top">
 	<a href="https://github.com/StateMapper/StateMapper#top"><img src="src/assets/images/logo/logo-black-big-spaced.png" /></a>
-	<h2>International, collaborative, public data reviewing and monitoring tool.</h2>
+	<h3>International, collaborative, public data reviewing and monitoring tool.</h3>
 </div>
 <p align="center" id="badges">
 	<img src="https://img.shields.io/badge/manuals-on%20progress-red.svg?style=flat-square" />
