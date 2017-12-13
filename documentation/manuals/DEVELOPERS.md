@@ -10,7 +10,7 @@
 -----
 
 
-**Index:** [Workflow](#workflow) · [Extraction](#extraction) · [Folder structure](#folder-structure) · [URI structure](#uri-structure) · [Schemas](#schemas) · [Tips & tricks](#tips--tricks)
+**Index:** [Workflow](#workflow) · [Extraction](#extraction) · [Folder structure](#folder-structure) · [URI structure](#uri-structure) · [Schemas](#schemas) · [Manuals](#manuals) · [Tips & tricks](#tips--tricks)
 
 If you consider contributing to this project, we highly recommend you read and follow our [Team privacy guide](PRIVACY.md#top) before you continue reading.
 
@@ -102,9 +102,20 @@ Source file can be found in ```documentation/database_diagram.mwb``` and edited 
 
 Please refer to the [Schemas documentation](SCHEMAS.md#top).
 
+## Manuals:
+
+If needed, please edit Github manuals from ```documentation/manuals/templates``` (```.tpl.md``` files) and ```documentation/manuals/parts```, then compile them to ```documentation/manuals``` with the ```smap compile``` command (before commiting the changes). 
+
+Patterns like ```{Include[Inline] name_of_part_file}``` and ```{Include[Inline] name_of_part_file(var1[, var2, ..])}``` will be replaced with the part file ```documentation/manuals/parts/name_of_part_file.part.md```, with patterns ```{$1}```, ```{$2}```, .. replaced with arguments ```var1```, ```var2```, ..
+
+The root ```README.md``` can be edited directly from the root folder, and cannot use includes yet.
+
+
 ## Tips & tricks:
 
 * If you ever need to hide yourself when pushing changes, we recommend you create a Github user with a dedicated mailbox from [RiseUp](https://account.riseup.net/user/new) or [ProtonMail](https://protonmail.com/signup). Also, we recommend you also use RiseUp's [VPN Red](https://riseup.net/en/vpn). To do so, follow [these instructions](https://riseup.net/en/vpn/vpn-red/linux).
+
+* ```smap push``` and ```smap push -m "some comment"``` will compile maunals and push all local changes to the repository. ```smap pull``` will update the local files with the repository's.
 
 * When developping and fetching lots of bulletins, sometimes you won't have enough space on your local disk.
 To move everything to a new disk, we recommend using the following command:
@@ -120,8 +131,6 @@ Then modify the ```DATA_PATH``` in ```config.php```.
 ```bash
 find /path/to/statemapper/data/ -name "*.pdf" -type f -delete
 ```
-
-* If needed, please edit Github manuals from ```documentation/manuals/templates``` and ```documentation/manuals/parts```, then compile them to ```documentation/manuals``` with ```smap compile``` (before commiting). The root ```README.md``` can be edited directly from the root folder.
 * To read/edit ```documentation/classes_diagram.dia```, you may use [Dia](http://dia-installer.de/download/linux.html): ```sudo apt-get install dia```
 * In general, you may use "?stop=1" to stop auto-refreshing (the rewind map, for example), and be able to edit the DOM/CSS more easily.
 * In general, you may use "?human=1" to format a raw JSON output for humans.
