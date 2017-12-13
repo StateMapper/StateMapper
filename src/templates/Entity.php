@@ -48,15 +48,10 @@ $stats = array_merge($stats, query('
 '));
 
 
-$location = get('SELECT note FROM statuses WHERE related_id = %s AND type = "location" AND action = "new" ORDER BY id DESC LIMIT 1', $entity['id']);
+$location = getLocationById($entity['id']);
 
-$locationObj = null;
-if ($location){
-	$locationObj = kaosHereComConvertLocation($location, $entity['country'], true);
-	kaosSaveLocation($locationObj);
-}
-
-//kaosJSON($stats);
+$locationObj = apply_filters('location_lint', null, $location, $entity['country']);
+	
 
 ?>
 <div>
@@ -84,8 +79,8 @@ if ($location){
 				?></span><?php
 
 				if ($locationObj){
-					echo '<i class="entity-intro-sep fa fa-angle-right"></i><span class="clean-links entity-breadcrumb-state">'.$locationObj['state'].'</span>';
-					echo '<i class="entity-intro-sep fa fa-angle-right"></i><span class="clean-links entity-breadcrumb-city">'.$locationObj['city'].'</span>';
+					echo '<i class="entity-intro-sep fa fa-angle-right"></i><span class="clean-links entity-breadcrumb-state">'.getStateName($locationObj['state']).'</span>';
+					echo '<i class="entity-intro-sep fa fa-angle-right"></i><span class="clean-links entity-breadcrumb-city">'.getCityName($locationObj['city']).'</span>';
 				}
 
 			?><i class="entity-intro-sep fa fa-angle-right"></i><span class="entity-breadcrumb-type clean-links"><?php

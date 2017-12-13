@@ -1,7 +1,7 @@
 <?php
 /*
  * StateMapper, an official bulletins browser and corruption analyzer.
- * Copyright (C) 2017  Ingoberlab <hacklab@ingobernable.net> & StateMapper.net <statemapper@riseup.net>
+ * Copyright (C) 2017  StateMapper.net <https://statemapper.net>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,6 +51,10 @@ define('LAST_NAME', 2);
 // output
 define('P_DILIMITER', "\n\n"); // paragraph delimiter
 
+// project constants
+define('KAOS_GITHUB_REPOSITORY', 'StateMapper/StateMapper');
+	
+	
 // includes
 require APP_PATH.'/helpers/core.php';
 
@@ -104,9 +108,6 @@ if ($kaosCall['cliArgs']){
 	} while ($changed);
 }
 
-// project constants
-define('KAOS_GITHUB_REPOSITORY', 'StateMapper/StateMapper');
-	
 // call the controller
 $c = new Controller();
 $c->exec();

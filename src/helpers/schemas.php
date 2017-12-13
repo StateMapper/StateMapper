@@ -141,8 +141,6 @@ function kaosSchemaHasFeature($schema, $feature){
 
 function kaosAPIGetSchemas($filter = null){
 
-	// TODO: when a continent is given as a $filter, loop over its countries
-
 	$files = kaosAPIPrintDir(SCHEMAS_PATH.($filter ? '/'.$filter : ''));
 	if ($filter)
 		array_unshift($files, $filter);

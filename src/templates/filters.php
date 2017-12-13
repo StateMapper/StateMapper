@@ -5,12 +5,85 @@ if (!defined('BASE_PATH'))
 	
 global $kaosCall, $kaosPage;
 if ($kaosPage == 'browser' || !empty($kaosCall['entity'])){
+	$cbs = '<i class="fa fa-square-o cb-off multisel-cb"></i><i class="fa fa-check-square-o cb-on multisel-cb"></i>';
 
 	?>
 	<div class="header-filters"<?php if (hasFilter()) echo ' style="display: block"'; ?>>
 		<ul>
 			<?php if (empty($kaosCall['entity'])){ ?>
-				<li id="top-filter-location" class="menu"><span class="menu-button">Location <i class="fa fa-angle-down"></i></span></li>
+				<li id="top-filter-location" class="menu<?php if (!empty($_GET['etype'])) echo ' top-filter-active'; ?>"><span class="menu-button">Location<?php
+
+					$loc = !empty($_GET['loc']) ? explode(' ', $_GET['loc']) : array(); 
+					if ($loc){
+						$str = array();
+						foreach ($loc as $l){
+							$l = explode(':', $l);
+							if ($c = kaosGetCountrySchema(array_shift($l))){
+								if (!$l)
+									$str[] = $c->name; // country
+								else if ($s = getStateName(array_shift($l))){
+									if (!$l)
+										$str[] = $s.' ('.$c->id.')';
+									else if ($s2 = getCountyName(array_shift($l))){
+										if (!$l)
+											$str[] = $s2.' ('.$c->id.')';
+										else if ($s3 = getCityName(array_shift($l))){
+											if (!$l)
+												$str[] = $s3.' ('.$s2.', '.$c->id.')';
+										}
+									}
+								}
+									
+									
+							}
+						}
+						if ($str)
+							echo ': '.implode(', ', $str);
+					}
+
+					?> <i class="fa fa-angle-down"></i></span><?php
+					?>
+					<div class="top-filter-menu menu-wrap multisel">
+						<div class="menu-menu">
+							<ul class="menu-inner">
+								<li class="menu-item-blank <?php if (!$loc) echo 'menu-item-active'; ?>"><a href="<?= remove_url_arg('loc') ?>">Any</a></li>
+								<?php
+									foreach (kaosAPIGetSchemas() as $l){
+										$l = kaosGetSchema($l);
+										if (!in_array($l->type, array('continent', 'country')))
+											continue;
+											
+										?>
+										<li class="<?php if ($l->type == 'country') echo 'menu-item-level-2 '; if (in_array($l->id, $loc)) echo 'menu-item-active'; ?>"><a href="<?= add_url_arg('loc', $l->id) ?>"><?= $cbs ?> <?= htmlentities($l->name) ?></a></li>
+										<?php
+										
+										foreach (query('SELECT id, name FROM location_states WHERE country = %s', $l->id) as $s){
+											$cid = $l->id.':'.$s['id'];
+											?>
+											<li class="menu-item-level-3 <?php if (in_array($cid, $loc)) echo 'menu-item-active'; ?>"><a href="<?= add_url_arg('loc', $cid) ?>"><?= $cbs ?> <?= htmlentities($s['name']) ?></a></li>
+											<?php
+											
+											foreach (query('SELECT id, name FROM location_counties WHERE country = %s AND state_id = %s', array($l->id, $s['id'])) as $c){
+												$cid = $l->id.':'.$s['id'].':'.$c['id'];
+												?>
+												<li class="menu-item-level-4 <?php if (in_array($cid, $loc)) echo 'menu-item-active'; ?>"><a href="<?= add_url_arg('loc', $cid) ?>"><?= $cbs ?> <?= htmlentities($c['name']) ?></a></li>
+												<?php
+												
+												foreach (query('SELECT id, name FROM location_cities WHERE country = %s AND county_id', array($l->id, $c['id'])) as $cc){
+													$cid = $l->id.':'.$s['id'].':'.$c['id'].':'.$cc['id'];
+													?>
+													<li class="menu-item-level-5 <?php if (in_array($cid, $loc)) echo 'menu-item-active'; ?>"><a href="<?= add_url_arg('loc', $cid) ?>"><?= $cbs ?> <?= htmlentities($cc['name']) ?></a></li>
+													<?php
+												}
+											}
+										}
+									}
+								?>
+							</ul>
+						</div>
+					</div>
+					<?php
+				?></li>
 				<li id="top-filter-entity-type" class="menu<?php if (!empty($_GET['etype'])) echo ' top-filter-active'; ?>"><span class="menu-button">Entity type<?php
 					if (!empty($_GET['etype'])){
 						echo ': ';
@@ -24,7 +97,6 @@ if ($kaosPage == 'browser' || !empty($kaosCall['entity'])){
 							<ul class="menu-inner">
 								<?php 
 									$etype = !empty($_GET['etype']) ? explode(' ', $_GET['etype']) : array(); 
-									$cbs = '<i class="fa fa-square-o cb-off multisel-cb"></i><i class="fa fa-check-square-o cb-on multisel-cb"></i>';
 								?>
 								<li class="menu-item-blank <?php if (!$etype) echo 'menu-item-active'; ?>"><a href="<?= remove_url_arg('etype') ?>">Any</a></li>
 								<li class="<?php if (in_array('person', $etype)) echo 'menu-item-active'; ?>"><a href="<?= add_url_arg('etype', 'person') ?>"><?= $cbs ?> People</a></li>

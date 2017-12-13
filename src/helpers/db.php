@@ -123,6 +123,8 @@ function query($query, $injectVars = array(), $returnType = null){
 function insert($table, $vars = array()){
 	if (!($conn = getConnexion()) || kaosIsError($conn))
 		return $conn;
+		
+		kaosJSON($vars);
 	
 	$values = array();
 	foreach ($vars as $k => $v)

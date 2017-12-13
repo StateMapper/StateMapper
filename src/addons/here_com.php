@@ -5,11 +5,20 @@ if (!defined('BASE_PATH'))
 
 
 
-//add_action('insert_location', 'kaosHereComConvertLocation');
+add_filter('location_lint', 'kaosHereComLintLocation');
+function kaosHereComLintLocation($locationObj, $location, $country){
+	if ($location){
+		$locationObj = kaosHereComConvertLocation($location, $country, true);
+		if ($locationObj)
+			kaosSaveLocation($locationObj);
+	}
+	return $locationObj;
+}
+
 
 function kaosHereComConvertLocation($locationStr, $country, $tryId = false){
 	if (!defined('HERE_COM_APP_ID') || !HERE_COM_APP_ID
-		|| !define('HERE_COM_APP_SECRET') || !HERE_COM_APP_SECRET)
+		|| !defined('HERE_COM_APP_SECRET') || !HERE_COM_APP_SECRET)
 		return null;
 		
 	if (!is_object($country))
@@ -27,7 +36,7 @@ function kaosHereComConvertLocation($locationStr, $country, $tryId = false){
 		if ($loc = getRow('SELECT * FROM locations WHERE country = %s AND original = %s', array($country->id, $locationStr)))
 			return $loc;
 
-	// debug..
+	// debug (force geolocation again) while admin with ?geoloc=1
 	} else {
 		$force = true;
 		if ($tryId && is_numeric($locationStr)){
@@ -40,7 +49,7 @@ function kaosHereComConvertLocation($locationStr, $country, $tryId = false){
 		
 	$coordinates = @$country->vocabulary->stateLevels->country->coordinates;
 	if (empty($coordinates))
-		die('no coordinates specified for '.strtoupper($country).' (at ->vocabulary->stateLevels->country->coordinates)');
+		kaosDie('here.com addon: geolocation not possible, no coordinates specified in schema '.$country->ID.' (at ->vocabulary->stateLevels->country->coordinates)');
 		
 	$url = 'https://geocoder.cit.api.here.com/6.2/geocode.json';
 	$args = array(
@@ -53,7 +62,7 @@ function kaosHereComConvertLocation($locationStr, $country, $tryId = false){
 		'noUserAgent' => true,
 		'accept' => 'application/json',
 	);
-
+echo "CALL";
 	$resp = kaosFetch($url, $args + array(
 		'searchtext' => urlencode($locationStr),
 		//'Geolocation' => urlencode('geo:'.implode(',', $coordinates)),
@@ -73,12 +82,15 @@ function kaosHereComConvertLocation($locationStr, $country, $tryId = false){
 	if (!empty($a->Country)){
 		$country = $a->Country;
 		
+		// TODO: put other ISO country codes in a new attribute in country schemas.
 		$conv = array(
 			'MEX' => 'MX',
 			'ESP' => 'ES',
 		);
 		if (isset($conv[$country]))
 			$country = $conv[$country];
+		
+		// TODO: check we know this country? (exists as a country schema)
 	}
 	
 	// recheck
@@ -107,10 +119,35 @@ function kaosHereComConvertLocation($locationStr, $country, $tryId = false){
 	);
 }
 
-function kaosSaveLocation($loc){
-	return !empty($loc['id']) ? $loc['id'] : insert('locations', $loc);
+function kaosSaveLocation(&$loc){
+	if (empty($loc['id'])){
+		
+		// save state
+		if ($loc['state'] && !is_numeric($loc['state'])){
+			if ($id = get('SELECT id FROM location_states WHERE country = %s AND name = %s', array($loc['country'], $loc['state'])))
+				$loc['state'] = $id;
+			else 
+				$loc['state'] = insert('location_states', array('name' => $loc['state'], 'country' => $loc['country']));
+		}
+		
+		// save county
+		if ($loc['county'] && !is_numeric($loc['county'])){
+			if ($id = get('SELECT id FROM location_counties WHERE country = %s AND state_id = %s AND name = %s', array($loc['country'], $loc['state'], $loc['county'])))
+				$loc['county'] = $id;
+			else 
+				$loc['county'] = insert('location_counties', array('name' => $loc['county'], 'state_id' => $loc['state'], 'country' => $loc['country']));
+		}
+		
+		// save city
+		if ($loc['city'] && !is_numeric($loc['city'])){
+			if ($id = get('SELECT id FROM location_cities WHERE country = %s AND state_id = %s AND county_id = %s AND name = %s', array($loc['country'], $loc['state'], $loc['county'], $loc['city'])))
+				$loc['city'] = $id;
+			else 
+				$loc['city'] = insert('location_cities', array('name' => $loc['city'], 'county_id' => $loc['county'], 'state_id' => $loc['state'], 'country' => $loc['country']));
+		}
+		
+		$loc['id'] = insert('locations', $loc);
+	}
+	return $loc['id'];
 }
 	
-function kaosGetLocationLabel($loc){
-	return '<span title="'.esc_attr('<u>Full address</u>: '.$loc['label'].'<br><br><u>Original</u>: '.$loc['original']).'">'.$loc['postalcode'].' '.$loc['city'].', '.$loc['state'].' <img src="'.kaosGetFlagUrl($loc['country']).'" /></span>';
-}

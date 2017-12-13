@@ -5,6 +5,7 @@ if (!defined('BASE_PATH'))
 
 
 require('spiders.php');
+require('locations.php');
 require('string.php');
 require('currency.php');
 require('fetch.php');
@@ -910,3 +911,31 @@ function redirect($url){
 	header('Location: '.$url);
 	exit();
 }
+
+
+function add_filter($name, $cb = null){
+	static $cbs = array();
+	if ($cb){
+		if (!isset($cbs[$name]))
+			$cbs[$name] = array();
+		$cbs[$name][] = $cb;
+	
+	} 
+	return $cbs;
+}
+
+function apply_filters($name){
+	$cbs = add_filter($name);
+	if (isset($cbs[$name])){
+		$vars = func_get_args();
+		array_shift($vars);
+		$var = $vars[0];
+		foreach ($cbs[$name] as $cb){
+			$cvars = $vars;
+			$cvars[0] = $var;
+			$var = call_user_func_array($cb, $cvars);
+		}
+	}
+	return $var;
+}
+

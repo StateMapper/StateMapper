@@ -953,6 +953,18 @@ img.kaos-api-result-title-flag {
     border-left: 25px solid #fcfcfc;
     padding-left: 7px;
 }
+.menu-inner li.menu-item-level-3 a {
+    border-left: 50px solid #fcfcfc;
+    padding-left: 7px;
+}
+.menu-inner li.menu-item-level-4 a {
+    border-left: 75px solid #fcfcfc;
+    padding-left: 7px;
+}
+.menu-inner li.menu-item-level-5 a {
+    border-left: 100px solid #fcfcfc;
+    padding-left: 7px;
+}
 .menu-inner li.menu-item-active a {
 	font-weight: bold;
 }
@@ -1605,12 +1617,6 @@ span.entity-stat-date-ind {
 .entity-sheet-detail {
     display: table-row;
 }
-.entity-sheet-detail-location img {
-    height: 12px;
-    position: relative;
-    top: -3px;
-    margin-left: 2px;
-}
 .entity-sheet-label {
     width: 69px;
     display: table-cell;
@@ -2198,4 +2204,15 @@ a.revert-color:hover {
 
 .popup {
 	display: none;
+}
+
+.location-full {
+	position: relative;
+}
+
+.location-full img {
+    height: 12px;
+    position: relative;
+    top: -3px;
+    margin-left: 2px;
 }

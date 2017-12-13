@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Dec 13, 2017 at 03:21 AM
+-- Generation Time: Dec 13, 2017 at 08:01 PM
 -- Server version: 10.0.31-MariaDB-0ubuntu0.16.04.2
 -- PHP Version: 7.0.22-0ubuntu0.16.04.1
 
@@ -103,6 +103,45 @@ CREATE TABLE `locations` (
   `updated` datetime DEFAULT NULL,
   `relevance` smallint(6) DEFAULT NULL
 ) ENGINE=TokuDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `location_cities`
+--
+
+CREATE TABLE `location_cities` (
+  `id` bigint(20) NOT NULL,
+  `name` varchar(200) NOT NULL,
+  `county_id` bigint(20) NOT NULL,
+  `state_id` bigint(20) NOT NULL,
+  `country` varchar(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `location_counties`
+--
+
+CREATE TABLE `location_counties` (
+  `id` bigint(20) NOT NULL,
+  `name` varchar(200) NOT NULL,
+  `state_id` bigint(20) NOT NULL,
+  `country` varchar(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `location_states`
+--
+
+CREATE TABLE `location_states` (
+  `id` bigint(20) NOT NULL,
+  `name` varchar(200) NOT NULL,
+  `country` varchar(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -271,6 +310,30 @@ ALTER TABLE `locations`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `location_cities`
+--
+ALTER TABLE `location_cities`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `country_id` (`country`,`name`(20)),
+  ADD KEY `state_id` (`state_id`),
+  ADD KEY `county_id` (`county_id`);
+
+--
+-- Indexes for table `location_counties`
+--
+ALTER TABLE `location_counties`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `country_id` (`country`,`name`(20)),
+  ADD KEY `state_id` (`state_id`);
+
+--
+-- Indexes for table `location_states`
+--
+ALTER TABLE `location_states`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `country_id` (`country`,`name`(20));
+
+--
 -- Indexes for table `locks`
 --
 ALTER TABLE `locks`
@@ -360,7 +423,22 @@ ALTER TABLE `entities`
 -- AUTO_INCREMENT for table `locations`
 --
 ALTER TABLE `locations`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=306;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `location_cities`
+--
+ALTER TABLE `location_cities`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `location_counties`
+--
+ALTER TABLE `location_counties`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `location_states`
+--
+ALTER TABLE `location_states`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `locks`
 --
