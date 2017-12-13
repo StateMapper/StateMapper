@@ -112,7 +112,7 @@ If needed, please edit Github manuals from ```documentation/manuals/templates```
 
 Before commiting your changes, compile the manuals to ```documentation/manuals``` (```.md``` files) with ```smap compile```. 
 
-The root ```README.md``` can be edited directly from the root folder, and cannot use includes yet.
+The root ```README.md``` must be edited directly from the root folder, and cannot use includes yet.
 
 
 ## Tips & tricks:
