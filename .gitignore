@@ -8,6 +8,9 @@
 # Main configuration file
 config.php
 
+# Daemon lock
+scripts/.statemapper.lock
+
 # Bulletins
-# bulletins/*
+bulletins/*
 
