@@ -14,6 +14,7 @@
 
 If you consider contributing to this project, we highly recommend you read and follow our [Team privacy guide](PRIVACY.md#top) before you continue reading.
 
+
 ## Requirements:
 
 - a [Github user account](https://github.com/join)
@@ -37,7 +38,7 @@ If you consider contributing to this project, we highly recommend you read and f
    
 3. To add a new language, copy the ```es_ES``` translation folder as follows:
    ```
-   cp -fR app/languages/es_ES app/languages/xx_YY
+   cp -fR src/languages/es_ES src/languages/xx_YY
    ```
    ..where ```xx``` is an [ISO-639-1 language code](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) and ```YY``` is an [ISO-3166 Alpha-2 country code](https://www.iso.org/obp/ui/#search/code/).
 
@@ -45,7 +46,7 @@ If you consider contributing to this project, we highly recommend you read and f
 
 *All commands below must be entered from your StateMapper's local folder.*
 
-1. To start PoEdit, enter: ```poedit app/languages/xx_YY/LC_MESSAGES/kaos.po```
+1. To start PoEdit, enter: ```poedit src/languages/xx_YY/LC_MESSAGES/kaos.po```
 
 2. If you just created this language file, click ```Catalog > Properties...```, correct the ```Language``` field and click ```OK```.
 
@@ -59,7 +60,7 @@ If you consider contributing to this project, we highly recommend you read and f
 
 7. Push your translation files to the project's repository:
    ```
-   git add app/languages/xx_YY
+   git add src/languages/xx_YY
    git commit -m "A nice message of your choice, in English!"
    git push 
    ```

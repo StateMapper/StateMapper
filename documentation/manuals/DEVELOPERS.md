@@ -106,6 +106,9 @@ Source file can be found in ```documentation/database_diagram.mwb``` and edited 
 | [/api](https://statemapper.net/api) | list of countries, bulletin providers and schemas |
 | [/api/xx](https://statemapper.net/api/es) | list of bulletin providers and schemas for country xx (example: /api/es) |
 
+## Schemas:
+
+Please refer to the [Schemas documentation](SCHEMAS.md#top).
 
 ## Tips & tricks:
 
