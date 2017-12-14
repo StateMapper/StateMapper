@@ -33,12 +33,23 @@ function contains {
 }
 
 # grab Ctrl+C and interrupt the call beautifully
+SMAP_TTY_ORIGIN=`stty -g`
+export SMAP_TTY_ORIGIN
 trap stop INT TSTP
 stty -echo -icanon time 2 || exit $?
-
 function stop {
 	echo "User interruption, plan unexpected results!"
+	stty $SMAP_TTY_ORIGIN
 	exit 1
+}
+function end {
+	stty $SMAP_TTY_ORIGIN
+	if [ "$1" = "" ]
+	then
+		exit
+	else
+		exit "$1"
+	fi
 }
 
 # git shortcuts
@@ -56,12 +67,12 @@ then
 		git commit
 	fi
 	git push
-	exit
+	end
 fi
 if [ "$CMD" = "pull" ]
 then
 	cd "$BASE_DIR/.." && git pull
-	exit
+	end
 fi
 
 # daemon
@@ -81,7 +92,7 @@ then
 				if [ "$DAEMON_CMD" = "status" ]
 				then
 					echo "StateMapper daemon running with PID $PID"
-					exit 0
+					end 0
 				fi
 				
 				# kill the daemon
@@ -90,7 +101,7 @@ then
 					sudo kill -9 "$PID" 
 					rm "$BASE_DIR/.statemapper.lock"
 					echo "StateMapper daemon killed"
-					exit 0
+					end 0
 				fi
 				
 				# stop the daemon, waiting for workers
@@ -106,14 +117,14 @@ then
 					fi
 					if [ "$DAEMON_CMD" = "stop" ]
 					then
-						exit 0
+						end 0
 					else
 						DAEMON_CMD="start"
 					fi
 
 				else
 					echo "StateMapper daemon already running with PID $PID"
-					exit 1
+					end 1
 				fi
 				
 			fi
@@ -124,7 +135,7 @@ then
 	if contains "kill stop status" "$DAEMON_CMD"
 	then
 		echo "StateMapper daemon not running"
-		exit 1
+		end 1
 	fi
 	
 	if contains "-d -dd" "$DAEMON_CMD"
@@ -152,4 +163,4 @@ else
 	sudo su - $APACHE_USER -s /bin/bash -c "$PHP_CMD"
 fi
 
-exit 0
+end 0
