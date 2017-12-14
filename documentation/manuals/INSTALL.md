@@ -107,7 +107,7 @@ smap daemon stop 		# stop it smoothly (wait for the workers)
 smap daemon kill 		# kill it (for emergencies only)
 ```
 
-To be able to see the spiders' start/stop buttons on the rewind pages, please log in from the copyright's menu.
+If you don't see the spiders' start/stop buttons on the rewind pages, please make sure you are logged in (from the copyright's menu).
 
 To automatically start the daemon at every server startup, add ```smap daemon start``` at the beginning of your ```/etc/rc.local``` file (only recommended for production).
 
