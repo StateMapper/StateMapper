@@ -52,9 +52,14 @@ function kaosHereComConvertLocation($locationStr, $country, $tryId = false){
 		kaosDie('here.com addon: geolocation not possible, no coordinates specified in schema '.$country->ID.' (at ->vocabulary->stateLevels->country->coordinates)');
 		
 	$url = 'https://geocoder.cit.api.here.com/6.2/geocode.json';
+
+	//echo "geocoding $locationStr<br>";
+
 	$args = array(
 		'app_id' => HERE_COM_APP_ID,
 		'app_code' => HERE_COM_APP_SECRET,
+		'searchtext' => urlencode($locationStr.', '.$country->name),
+		//'Geolocation' => urlencode('geo:'.implode(',', $coordinates)),
 	);
 	$opts = array(
 		'allowTor' => false, 
@@ -62,20 +67,19 @@ function kaosHereComConvertLocation($locationStr, $country, $tryId = false){
 		'noUserAgent' => true,
 		'accept' => 'application/json',
 	);
-	//echo "geocoding $locationStr<br>";
-	
-	$args += array(
-		'searchtext' => urlencode($locationStr.', '.$country->name),
-		//'Geolocation' => urlencode('geo:'.implode(',', $coordinates)),
-	);
 	$resp = kaosFetch($url, $args, true, false, $opts);
 	
 	//kaosJSON($args);
 	//kaosJSON($resp);
-	debug($resp);
+
 	$resp = @json_decode($resp);
-	if (!$resp || empty($resp->Response->View) || empty($resp->Response->View[0]->Result))
+	if (!$resp || empty($resp->Response->View) || empty($resp->Response->View[0]->Result)){
+		if (isAdmin()){
+			echo 'error geocoding: ';
+			debug($resp);
+		}
 		return false;
+	}
 	
 	$resp = $resp->Response->View[0]->Result[0];
 	$relevance = $resp->Relevance;
