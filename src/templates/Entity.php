@@ -54,7 +54,7 @@ $locationObj = apply_filters('location_lint', null, $location, $entity['country'
 	
 ?>
 <div>
-	<div class="entity-header entity-header-entity-<?= $entity['id'] ?>" data-kaos-related="<?= esc_json(array('id' => $entity['id'])) ?>">
+	<div class="entity-header entity-header-entity-<?= $entity['id'] ?>" <?= kaosRelated(array('id' => $entity['id'])) ?>>
 		<div class="entity-intro">
 			<span class="entity-country">
 			<?php
@@ -112,7 +112,7 @@ $locationObj = apply_filters('location_lint', null, $location, $entity['country'
 			?></span>
 		</div>
 		<div class="entity-name entity-title">
-			<div class="entity-title-inner"><a href="<?= BASE_URL ?><?php
+			<div class="entity-title-inner"><a class="entity-title-icon" href="<?= BASE_URL ?><?php
 
 				$conv = array(
 					'institution' => array(
@@ -130,7 +130,7 @@ $locationObj = apply_filters('location_lint', null, $location, $entity['country'
 				);
 				echo $conv[$entity['type']]['uri'];
 
-			?>" title="<?= $conv[$entity['type']]['title'] ?>"><?= '<i class="fa fa-'.kaosGetEntityIcon($entity).'"></i>' ?></a> <?= (!empty($entity) ? kaosGetEntityTitle($entity) : '') ?>
+			?>" title="<?= $conv[$entity['type']]['title'] ?>"><?= '<i class="fa fa-'.kaosGetEntityIcon($entity).'"></i>' ?></a> <?= (!empty($entity) ? kaosGetEntityTitle($entity) : '') ?><?= buggyButton('entity', 'Mark this name as buggy') ?>
 			</div>
 		</div>
 		<?php

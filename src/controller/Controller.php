@@ -395,3 +395,65 @@ function kaosAjaxLoadStatuses($args){
 
 	return array('success' => true, 'html' => ob_get_clean());
 }
+
+function kaosAjaxStatusAction($args){
+	if (empty($args['related']))
+		return 'Bad id';
+	if (empty($args['status_action']))
+		return 'Bad action';
+	
+	$abits = explode(':', $args['status_action']);
+	switch (array_shift($abits)){
+		
+		case 'markAsBuggy':
+			$bug = null;
+			switch ($abits ? $abits[0] : ''){
+				
+				case 'status':
+					if (empty($args['related']['status_id']) || !($status = getRow('SELECT * FROM statuses WHERE id = %s', $args['related']['status_id'])))
+						return 'Bad status id';
+					
+					$a = $status['amount'] ? kaosGetAmount($status['amount']) : null;
+					
+					$arg3 = null;
+					if (!empty($status['target_id'])){
+						$arg3 = kaosGetEntityById($status['target_id']);
+						$arg3 = $arg3 ? kaosGetEntityTitle($arg3, true) : $arg3;
+					}
+					
+					$bug = array(
+						'type' => 'status',
+						'related_id' => $status['id'],
+						'arg1' => $status['type'],
+						'arg2' => $status['action'],
+						'arg3' => $arg3,
+						'arg4' => $a && (is_object($a) || is_array($a)) ? serialize($a) : $a, // TODO: get real amount
+						'arg5' => $status['note'],
+					);
+					break;
+				
+				case 'entity':	
+					if (empty($args['related']['id']) || !($entity = kaosGetEntityById($args['related']['id'])))
+						return 'Bad entity id';
+						
+					$bug = array(
+						'type' => 'entity',
+						'related_id' => $entity['id'],
+						'arg1' => $entity['type'],
+						'arg2' => $entity['subtype'],
+						'arg3' => $entity['name'],
+						'arg4' => $entity['first_name'],
+					);
+					break;
+			}
+			if ($bug){
+				// TODO: implement a bug tracking table and web UX. it must be very flexible, and not related to auto_incremeneted ids (because it's gonna remain through re-parsings!)
+				
+				debug($bug); die();
+				insert('bugs', $bug);
+				return array('success' => true);
+			}
+			break;
+	}
+	return 'Bad action';
+}

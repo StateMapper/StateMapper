@@ -938,3 +938,13 @@ function apply_filters($name){
 	return $var;
 }
 
+function buggyButton($type, $title){
+	if (!isAdmin())
+		return '';
+		
+	ob_start();
+	?>
+	<span class="status-alert status-alert-buggy"><a href="#" class="status-action" data-kaos-status-action="markAsBuggy:<?= $type ?>" title="<?= esc_attr($title) ?>"><i class="fa fa-flag"></i></a></span>
+	<?php
+	return ob_get_clean();
+}

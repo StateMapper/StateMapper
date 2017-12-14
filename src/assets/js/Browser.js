@@ -196,6 +196,17 @@ jQuery(document).ready(function(){
 			jQuery(this).parent().find('.kaos-folding').first().toggle();
 		}
 	});
+	
+	// status actions
+	jQuery('body').on('click', '.status-action', function(e){
+		var t = jQuery(e.target).closest('a');
+		var related = t.kaosGetRelated();
+		var action = t.data('kaos-status-action');
+		kaosAjax('statusAction', {status_action: action, related: related}, function(data, success){
+			debugger;
+		});
+		return false;
+	});
 });
 
 jQuery.fn.kaosGetRelated = function(){

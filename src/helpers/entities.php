@@ -706,7 +706,7 @@ function kaosPrintStatuses($statuses, $target = null, $headerEntityId = null, $d
 				<div class="kaos-status-debug kaos-debug">Status #<?= $p['status_id'] ?>: <?= $p['_type'].' / '.$p['_action'] ?></div>
 			</div> -->
 			<span class="kaos-date"><?= date_i18n('M j', strtotime($date)) ?><span><?= date_i18n(', Y', strtotime($date)) ?></span></span>
-			<div class="kaos-status-body">
+			<div class="kaos-status-body" <?= kaosRelated(array('status_id' => $p['status_id'])) ?>">
 
 				<div class="status-title">
 					<?php if ($printAsTopLevel){ ?>
@@ -736,9 +736,9 @@ function kaosPrintStatuses($statuses, $target = null, $headerEntityId = null, $d
 					</div>
 				<?php } ?>
 				<div class="kaos-source">
-					<span class="status-id">#<?= $p['status_id'] ?></span>
-					<span class="status-date"><a href="<?= kaosGetUrl($topDocQuery, 'fetch') ?>" target="_blank"><i class="fa fa-clock-o"></i> <?= date_i18n('M j, Y', strtotime($date)) ?></a></span>
-					<span class="status-bulletin"><a href="<?= kaosGetUrl($docQuery, 'fetch') ?>" target="_blank"><i class="fa fa-book"></i><?= $schema->shortName ?></a><a href="#" class="extract-link" onclick="<?= $js ?>"><i class="fa fa-caret-down"></i></a></span><?php echo implode('', $icons); ?>
+					<?= buggyButton('status', 'Mark status #'.$p['status_id'].' as buggy') ?>
+					<span class="status-date"><a title="<?= esc_attr('Published on '.date_i18n('M j, Y', strtotime($date)).'. <br>Click to show the original bulletin summary.') ?>" href="<?= kaosGetUrl($topDocQuery, 'fetch') ?>" target="_blank"><i class="fa fa-clock-o"></i> <?= date_i18n('M j, Y', strtotime($date)) ?></a></span>
+					<span class="status-bulletin"><a title="<?= esc_attr('Published in '.$schema->name.'. <br>Click to show the original bulletin document.') ?>" href="<?= kaosGetUrl($docQuery, 'fetch') ?>" target="_blank"><i class="fa fa-book"></i><?= $schema->shortName ?></a><a href="#" title="Click to unfold the original text" class="extract-link" onclick="<?= $js ?>"><i class="fa fa-caret-down"></i></a></span><?php echo implode('', $icons); ?>
 				</div>
 				<div class="kaos-folding">
 					<div class="kaos-extract">

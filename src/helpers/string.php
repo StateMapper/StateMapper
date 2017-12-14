@@ -379,9 +379,12 @@ function kaosJSON($json, $echo = true){
 	return $ret;
 }
 
-if (!function_exists('debug')){ // simple alias debug->kaosJSON
+if (!function_exists('debug')){ 
 	function debug($json, $echo = true){
-		return kaosJSON($json, $echo);
+		if (defined('IS_AJAX') && IS_AJAX)
+			return print_r($json, !$echo);
+		else
+			return kaosJSON($json, $echo);
 	}
 }
 
