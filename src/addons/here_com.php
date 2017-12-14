@@ -3,8 +3,6 @@
 if (!defined('BASE_PATH'))
 	die();
 
-
-
 add_filter('location_lint', 'kaosHereComLintLocation');
 function kaosHereComLintLocation($locationObj, $location, $country){
 	if ($location){
