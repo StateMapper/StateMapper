@@ -38,14 +38,13 @@ stty -echo -icanon time 2 || exit $?
 
 function stop {
 	echo "User interruption, plan unexpected results!"
-	exit 0
+	exit 1
 }
 
 # git shortcuts
 if [ "$CMD" = "push" ]
 then
-	cd "$BASE_DIR"
-	cd ..
+	cd "$BASE_DIR/.."
 	sudo su - $APACHE_USER -s /bin/bash -c "$BASE_CMD compile" # compile manuals
 	
 	git add *
