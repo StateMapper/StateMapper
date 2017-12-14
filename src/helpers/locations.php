@@ -34,7 +34,7 @@ function getCountyName($id){
 }
 
 function getCityName($id){
-	if (!is_numeric($id))
+	if (empty($id) || !is_numeric($id))
 		return $id;
 	return get('SELECT name FROM location_cities WHERE id = %s', $id);
 }
