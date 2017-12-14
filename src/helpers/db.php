@@ -80,9 +80,8 @@ function queryPrepare($query, $injectVars){
 		$injectVars = array($injectVars);
 		
 	// TODO: protect against double injecting with %s in first injection: use pair number of quotes before %s in regexp
-	if ($injectVars)
-		foreach ($injectVars as $v)
-			$query = preg_replace('/%s/', "'".mysqli_real_escape_string($conn, $v)."'", $query, 1);
+	foreach ($injectVars as $v)
+		$query = preg_replace('/%s/', "'".mysqli_real_escape_string($conn, $v)."'", $query, 1);
 
 	//echo "FINAL QUERY: ".$query.PHP_EOL;		
 	return $query;
