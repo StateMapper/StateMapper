@@ -191,13 +191,23 @@ class Controller {
 				
 				if (!empty($kaosCall['currentQuery']) || hasFilter()){
 					$etype = !empty($_GET['etype']) ? explode(' ', $_GET['etype']) : null;
-
-
-//							if (count($etype) > 2 && ($s = kaosGetCountrySchema(strtoupper($etype[1].'/'.$etype[2])))){
-					
+					$loc = null;
+					if (!empty($_GET['loc'])){
+						$loc = array();
+						foreach (explode(' ', $_GET['loc']) as $l){
+							$l = explode(':', $l);
+							$loc[] = array(
+								'country' => array_shift($l),
+								'state' => array_shift($l),
+								'county' => array_shift($l),
+								'city' => array_shift($l),
+							);
+						}
+					}
 					$ret['query'] = $kaosCall['query'] = array(
 						'query' => !empty($kaosCall['currentQuery']) ? $kaosCall['currentQuery'] : null,
 						'etypes' => $etype,
+						'locations' => $loc,
 						'limit' => min(200, !empty($_GET['limit']) ? intval($_GET['limit']) : 77),
 						'misc' => !empty($_GET['misc']) ? $_GET['misc'] : null,
 					);

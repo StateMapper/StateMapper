@@ -583,6 +583,7 @@ function kaosSearchResults($args, &$count = null){
 		'etype' => null,
 		'esubtype' => null,
 		'country' => null,
+		'locations' => null,
 		'etypes' => array(), // array of person, institution, company or company/es/sl
 		'misc' => null, // [buggy]
 	);
@@ -599,8 +600,14 @@ function kaosSearchResults($args, &$count = null){
 		$where[] = queryPrepare('type = %s', $args['etype']);
 	if ($args['esubtype'])
 		$where[] = queryPrepare('subtype = %s', $args['esubtype']);
+
 	if ($args['country'])
 		$where[] = queryPrepare('country = %s', $args['country']);
+
+	if ($args['locations'])
+		foreach ($args['locations'] as $l){
+			// TODO: join with statuses on location type and filter where
+		}
 
 	if ($args['etypes']){
 		$subwhere = array();
