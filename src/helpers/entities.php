@@ -717,23 +717,24 @@ function kaosPrintStatuses($statuses, $target = null, $headerEntityId = null, $d
 
 					?>
 				</div>
-				<div class="kaos-status-services">
-					<?php foreach ($services as $v){ ?>
-						<div><?= $v['label'] ?> <span>(<?= $v['id'] ?>)</span></div>
-					<?php }
-					if ($contract_type || $sector){
-						echo ' (';
-						if ($contract_type)
-							echo $contract_type;
-						if ($sector)
-							echo ' of '.$sector;
-						echo ')';
-					}
-
-
-					// .($cleanId ? ' '.$cleanId : '') ? of <?= date_i18n('M j, Y', strtotime($date)) ?
-					?>
-				</div>
+				<?php if ($services || $contract_type || $sector){ ?>
+					<div class="kaos-status-services">
+						<?php foreach ($services as $v){ ?>
+							<div><?= $v['label'] ?> <span>(<?= $v['id'] ?>)</span></div>
+						<?php }
+						if ($contract_type || $sector){
+							if ($services)
+								echo ' (';
+							if ($contract_type)
+								echo $contract_type;
+							if ($sector)
+								echo ' of '.$sector;
+							if ($services)
+								echo ')';
+						}
+						?>
+					</div>
+				<?php } ?>
 				<div class="kaos-source">
 					<span class="status-id">#<?= $p['status_id'] ?></span>
 					<span class="status-date"><a href="<?= kaosGetUrl($topDocQuery, 'fetch') ?>" target="_blank"><i class="fa fa-clock-o"></i> <?= date_i18n('M j, Y', strtotime($date)) ?></a></span>
