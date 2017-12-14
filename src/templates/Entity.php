@@ -78,8 +78,11 @@ $locationObj = apply_filters('location_lint', null, $location, $entity['country'
 				?></span><?php
 
 				if ($locationObj){
-					echo '<i class="entity-intro-sep fa fa-angle-right"></i><span class="clean-links entity-breadcrumb-state">'.getStateName($locationObj['state']).'</span>';
-					echo '<i class="entity-intro-sep fa fa-angle-right"></i><span class="clean-links entity-breadcrumb-city">'.getCityName($locationObj['city']).'</span>';
+					if ($locationObj['state'])
+						echo '<i class="entity-intro-sep fa fa-angle-right"></i><span class="clean-links entity-breadcrumb-state">'.getStateName($locationObj['state']).'</span>';
+					
+					if ($locationObj['city'])
+						echo '<i class="entity-intro-sep fa fa-angle-right"></i><span class="clean-links entity-breadcrumb-city">'.getCityName($locationObj['city']).'</span>';
 				}
 
 			?><i class="entity-intro-sep fa fa-angle-right"></i><span class="entity-breadcrumb-type clean-links"><?php
