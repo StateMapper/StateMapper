@@ -76,7 +76,7 @@ function queryPrepare($query, $injectVars){
 	if (!($conn = getConnexion()) || kaosIsError($conn))
 		return $conn;
 		
-	if (!empty($injectVars) && !is_array($injectVars))
+	if (!is_array($injectVars))
 		$injectVars = array($injectVars);
 		
 	// TODO: protect against double injecting with %s in first injection: use pair number of quotes before %s in regexp
