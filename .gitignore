@@ -1,8 +1,8 @@
 
-# Windows temp files
+# Windows temporary files
 *.DS_Store
 
-# Unix temp files
+# Unix temporary files
 *~
 
 # Main configuration file
@@ -14,3 +14,5 @@ scripts/.statemapper.lock
 # Bulletins
 bulletins/*
 
+# Allow to customize the .gitignore
+.gitignore
