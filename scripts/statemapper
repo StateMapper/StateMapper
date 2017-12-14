@@ -47,7 +47,8 @@ then
 	cd "$BASE_DIR/.."
 	sudo su - $APACHE_USER -s /bin/bash -c "$BASE_CMD compile" # compile manuals
 	
-	git add *
+	git add * 
+	git add .*
 	if [ "$2" = "-m" ]
 	then
 		git commit -m "$3"

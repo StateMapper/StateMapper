@@ -9,7 +9,7 @@ A list of active Soldiers is available on the [bulletin providers' page](https:/
 
 ## Introduction:
 
-Schema Soldiers are developers from all around the world, that in a collaborative effort to help clean the public sector from trans-national bribery, decide to give away a bit of their time adding bulletin definitions (called *schemas*) of their choice to StateMapper. This task requires:
+Schema Soldiers are developers from all around the world, that in a collaborative effort to help cleaning the public sector, decide to give away a bit of their time adding bulletin definitions (called *schemas*) of their choice to StateMapper. This task requires:
 
 - advanced knowledge of [Regular Expressions](https://www.regular-expressions.info/)
 - basic knowledge of the [JSON](https://www.json.org/) format
