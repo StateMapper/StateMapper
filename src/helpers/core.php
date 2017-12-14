@@ -581,26 +581,30 @@ function printQueryLine($q, $onlySlow = false){
 			// and https://stackoverflow.com/questions/1157970/understanding-mysql-explain
 			
 			$icon = 'key';
+			$suffix = '';
 			if (in_array($type, array('system', 'const', 'eq_ref')) || $l['rows'] <= 1){
 				$status = 'best-optimized';
 				$statusStr = 'Query is GREATLY OPTIMIZED';
 				$icon = 'star';
 			
-			} else if ($type == 'ref'){
-				$status = 'optimized';
-				$statusStr = 'Query is OPTIMIZED';
-
-			} else if (!empty($l['possible_keys'])){
-				$status = 'optimizable';
-				$statusStr = 'Query COULD BE OPTIMIZED';
-
 			} else {
-				$status = 'not-optimized';
-				$statusStr = 'Query is NOT OPTIMIZED';
+				$suffix = '<span>'.$l['key'].'</span>';
+				if ($type == 'ref' && $l['rows'] < 2000){
+					$status = 'optimized';
+					$statusStr = 'Query COULD BE OPTIMIZED (though few matches)';
+
+				} else if (!empty($l['possible_keys'])){
+					$status = 'optimizable';
+					$statusStr = 'Query COULD BE OPTIMIZED';
+
+				} else {
+					$status = 'not-optimized';
+					$statusStr = 'Query is NOT OPTIMIZED';
+				}
 			}
-				
+			
 			$iclass = 'query-key-icon query-key-icon-'.$type.' query-key-status-'.$status;
-			$str[] = '<i class="fa fa-'.$icon.' '.$iclass.'" title="'.esc_attr('<div style="text-align: left"><strong>'.$statusStr.':</strong><br>'.debug($l, false).'</div>').'"></i>';
+			$str[] = '<span class="'.$iclass.'" title="'.esc_attr('<div style="text-align: left"><strong>'.$statusStr.':</strong><br>'.debug($l, false).'</div>').'"><i class="fa fa-'.$icon.'"></i>'.$suffix.'</span>';
 		}
 	echo '<tr class="'.$class.'"><td class="kaos-api-queries-prefix">'.str_pad('['.humanTimeDiff(0, $q['duration']).']', 5, ' ').' </td><td class="query-key-td">'.implode('', $str).'</td><td class="kaos-api-queries-val">'.$q['query'].'</td></tr>';
 }

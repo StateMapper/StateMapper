@@ -2240,6 +2240,10 @@ a.revert-color:hover {
 .query-key-icon {
 	text-align: left;
 }
+.query-key-icon span {
+	margin-left: 3px;
+    vertical-align: top;
+}
 .query-key-status-optimized {
 	color: #57d857;
 }
