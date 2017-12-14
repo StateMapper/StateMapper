@@ -17,7 +17,7 @@ CMD=$1
 BASE_DIR=$(dirname "$0")
 
 # change the nice levels at your convenency (using the smallest now)
-BASE_CMD="ionice -c $IONICE nice -n $NICE php $BASE_DIR/../index.php"
+BASE_CMD="ionice -c $IONICE nice -n $NICE php \"$BASE_DIR/../index.php\""
 PHP_CMD="$BASE_CMD $*"
 
 function contains {
