@@ -50,10 +50,11 @@ then
 	git add *
 	if [ "$2" = "-m" ]
 	then
-		git commit -m "$3" && git push
+		git commit -m "$3"
 	else
-		git commit && git push
+		git commit
 	fi
+	git push
 	exit
 fi
 if [ "$CMD" = "pull" ]
