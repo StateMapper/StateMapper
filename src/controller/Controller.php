@@ -271,7 +271,6 @@ class Controller {
 						}
 					}
 				
-				echo PHP_EOL;
 				echo 'generated '.number_format($count, 0).' manuals'.PHP_EOL;
 				exit(0);
 		}
