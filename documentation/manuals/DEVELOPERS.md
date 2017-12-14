@@ -121,6 +121,7 @@ The root ```README.md``` must be edited directly from the root folder, and canno
 
 * the ```debug($whatever, $echo = true)``` will print whatever variable in a JSON human-readable way.
 * the ```kaosDie($string, $opts = array())``` will generate a beautiful error on the web GUI (and a nice response on the JSON API too).
+* when logged in (from the copyright's menu), executed queries can be displayed clicking the "X queries" icon in the footer.
 
 **Shortcuts:**
 
