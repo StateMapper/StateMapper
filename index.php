@@ -1,7 +1,7 @@
 <?php
 /*
- * StateMapper, an official bulletins browser and corruption analyzer.
- * Copyright (C) 2017  StateMapper.net <https://statemapper.net>
+ * StateMapper: an international, collaborative, public data reviewing and monitoring tool.
+ * Copyright (C) 2017  StateMapper.net <statemapper@riseup.net>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

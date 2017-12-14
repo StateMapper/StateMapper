@@ -108,6 +108,10 @@ The root ```README.md``` must be edited directly from the root folder, and canno
 
 * If you ever need to hide yourself when pushing changes, we recommend you create a Github user with a dedicated mailbox from [RiseUp](https://account.riseup.net/user/new) or [ProtonMail](https://protonmail.com/signup). Also, we recommend you also use RiseUp's [VPN Red](https://riseup.net/en/vpn). To do so, follow [these instructions](https://riseup.net/en/vpn/vpn-red/linux).
 
+**Debug & errors:**
+
+* the ```debug($whatever, $echo = true)``` will print whatever variable in a JSON human-readable way.
+* the ```kaosDie($string, $opts = array())``` will generate a beautiful error on the web GUI (and a nice response on the JSON API too).
 
 **Shortcuts:**
 

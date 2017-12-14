@@ -1,22 +1,5 @@
 <?php
 
-/*
- * 
- * BOE's groupAmounts old first tr
-{
-	type: "regexpMatch",
-	regexp: "#\bImporte(?:\s*o canon)?\s*de\s*adjudicaci[óo]n\s*[:\.]?\s*(.*?)([abcdefgh]\s*\).*)?$#ius",
-	match: "$1"
-},
-GROUP: {
-	name: "Grupo",
-	shortName: "Grupo",
-	namePosition: "before",
-	strictPatterns: [
-		"(Grupo){legalEntityPattern}"
-	]
-}*/
-
 if (!defined('BASE_PATH'))
 	die();
 	
@@ -154,7 +137,6 @@ class BulletinParser {
 			return $parsed;
 		
 		$saved = $bulletinFetcher->saveProcessedContent($parsed, '.parsed.json', $query);
-		
 		
 		return kaosIsError($saved) ? $saved : $parsed;
 	}
@@ -608,7 +590,7 @@ class BulletinParser {
 						if ($j >= $lastAmountType){
 							$v = $g;
 							if ($lastVal !== null)
-								$g['value'] = $lastVal['value'];
+								$g['value'] = !empty($lastVal['value']) ? $lastVal['value'] : null;
 							else
 								$g['value'] = null;
 							$lastVal = $v;
@@ -618,7 +600,7 @@ class BulletinParser {
 					
 				if ($lastVal){
 					$group['amountType'] = $lastVal['amountType'];
-					$group['value'] = $lastVal['value'];
+					$group['value'] = !empty($lastVal['value']) ? $lastVal['value'] : null;
 				}
 				$groups[] = $group;
 						
@@ -640,7 +622,10 @@ class BulletinParser {
 			
 			case 'parseMonetary':
 			case 'parseNumber':
+			//echo '<br><br><strong>'.$value['value'].'</strong><br>';
+
 				// check "orte neto: 6.39" at http://localhost/boe/application/api/es/boe/2017-01-05/parse
+
 				$debug = false;//stripos($value['value'], '854.057,00 euros') !== false;
 				$countrySchema = kaosGetCountrySchema($this->query['schema']);
 				
@@ -650,7 +635,6 @@ class BulletinParser {
 				
 				$wrapGroups = cutByGroups($tr, $value['value']);
 				$groups = array();
-
 
 				// DEBUG: 
 				/*static $iiii = 0;
@@ -762,7 +746,7 @@ class BulletinParser {
 						$this->queueGroup($groups, $ccvalue, true, $tr);
 					}
 				}
-
+				
 				// factorize to a beautiful tree
 				$values = array();
 				foreach ($groups as $val){
@@ -834,8 +818,10 @@ class BulletinParser {
 					}
 				}
 				
-				if (!$values)
+				if (!$values){
+//					echo "NONE #1<br>";
 					return null;
+				}
 				$value = !empty($tr->groups) ? ($values ? $values : null) : array_shift($values);
 				
 				if ($value && empty($tr->groups) && !empty($tr->outputAsGroup))
@@ -933,11 +919,15 @@ class BulletinParser {
 					}
 					unset($c);
 					
-					if (!$count)
+					if (!$count){
+						//echo "NONE<br>";
 						return null;
+					}
 						
 					$value = $ret;
 				}
+				
+				//debug($value);
 				
 				break;
 			

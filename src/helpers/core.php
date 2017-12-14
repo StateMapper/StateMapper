@@ -146,12 +146,10 @@ function head($title = null){
 	);
 	?>
 	<!--
-	StateMapper
+	StateMapper: an international, collaborative, public data reviewing and monitoring tool.
+	Redesign of Kaos155 <https://github.com/ingobernable/Kaos155>, by the same Ingoberlab team.
 
-	This program is a PHP/MySQL redesign of Kaos155 <https://github.com/ingobernable/Kaos155>, developped by the same Ingoberlab team.
-	It aims at providing an international, collaborative, public data reviewing and monitoring tool.
-
-    Copyright (C) <?= getCopyrightRange() ?>  StateMapper <https://statemapper.net>
+    Copyright (C) <?= getCopyrightRange() ?>  StateMapper.net <statemapper@riseup.net>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -764,7 +762,7 @@ function kaosGetUrl($query, $apiCall = null, $passCurrentArgs = array()){
 		$url .= '/'.$schema;
 
 	if ($apiCall){
-		if (!in_array($apiCall, array('schema', 'rewind')) && is_array($query)){
+		if (in_array($apiCall, array('fetch', 'parse', 'extract')) && is_array($query)){
 			if (!empty($query['date']))
 				$url .= '/'.$query['date'];
 			if (!empty($query['id']) && $schema && !in_array($schema, array('parse', 'extract')))

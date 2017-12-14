@@ -67,11 +67,11 @@ StateMapper might work just fine on any [Debian-based](https://www.debian.org/de
 8. Fix Apache permissions: *(replace ```www-data``` and ```/var/www/html``` if convenient)*
    ```bash
    sudo chgrp -R www-data /var/www/html
-   sudo find /var/www/html -type d -exec chmod g+rx {} +
-   sudo find /var/www/html -type f -exec chmod g+r {} +
+   sudo find /var/www/html/statemapper -type d -exec chmod g+rx {} +
+   sudo find /var/www/html/statemapper -type f -exec chmod g+r {} +
    ```
    
-9. OPTIONAL: Create an ```smap``` alias to access the CLI API easily from anywhere. Enter:
+9. RECOMMENDED: Create an ```smap``` alias to access the CLI API easily from anywhere by entering:
 
    ```bash 
    echo 'alias smap="/var/www/html/statemapper/scripts/statemapper "' >> ~/.bashrc
@@ -83,7 +83,7 @@ StateMapper might work just fine on any [Debian-based](https://www.debian.org/de
 
 10. Open a browser, navigate to http://localhost/statemapper/ and follow the instructions.
 
-11. OPTIONAL: Edit ```config.php``` and change the constants according to your needs (follow the instructions in comments).
+11. RECOMMENDED: Edit ```config.php``` and change the constants according to your needs (follow the instructions in comments).
 
 
 ## Daemon commands:
@@ -92,6 +92,8 @@ If you want the spiders to be able to start, it is required to start the daemon 
 
 ```bash
 smap daemon [start] 		# start the daemon in the background
+smap daemon restart 		# restart the daemon
+smap daemon status 		# print the daemon's status
 smap daemon -d 			# start it in debug mode (do not daemonize)
 smap daemon stop 		# stop it smoothly (wait for the workers)
 smap daemon kill 		# kill it (for emergencies only)

@@ -66,6 +66,7 @@ fi
 if [ "$CMD" = "daemon" ]
 then
 	# daemonizing
+	DAEMON_CMD="$2"
 	
 	if [ -f "$BASE_DIR/.statemapper.lock" ]
 	then
@@ -74,57 +75,70 @@ then
 		then
 			if ps -p "$PID" > /dev/null 2>&1
 			then
+				# print the daemon status
+				if [ "$DAEMON_CMD" = "status" ]
+				then
+					echo "StateMapper daemon running with PID $PID"
+					exit 0
+				fi
+				
 				# kill the daemon
-				if [ "$2" = "kill" ]
+				if [ "$DAEMON_CMD" = "kill" ]
 				then
 					sudo kill -9 "$PID" 
 					rm "$BASE_DIR/.statemapper.lock"
-					echo "Kaos daemon killed"
+					echo "StateMapper daemon killed"
 					exit 0
 				fi
 				
 				# stop the daemon, waiting for workers
-				if [ "$2" = "stop" ]
+				if contains "stop restart" "$DAEMON_CMD"
 				then
-					sudo echo "Stopping the Kaos daemon"
-					PHP_CMD="$PHP_CMD daemon stop"
-					sudo su - $APACHE_USER -s /bin/bash -c "$PHP_CMD" 2> /dev/null
+					sudo echo "Stopping the StateMapper daemon"
+					sudo su - $APACHE_USER -s /bin/bash -c "$BASE_CMD daemon stop" 2> /dev/null
 					if [ $? -eq 0 ]
 					then
 						rm "$BASE_DIR/.statemapper.lock"
-						echo "Kaos daemon stopped"
+						echo "StateMapper daemon stopped"
 					else
-						echo "Could not stop the Kaos daemon"
+						echo "Could not stop the StateMapper daemon"
 					fi
-					exit 0
+					if [ "$DAEMON_CMD" = "stop" ]
+					then
+						exit 0
+					else
+						DAEMON_CMD="start"
+					fi
+
+				else
+					echo "StateMapper daemon already running with PID $PID"
+					exit 1
 				fi
 				
-				echo "Kaos daemon already running with pid $PID"
-				exit 1
 			fi
 		fi
 	fi
 
 	# daemon is not running
-	if contains "kill stop" "$2"
+	if contains "kill stop status" "$DAEMON_CMD"
 	then
-		echo "Kaos daemon not running"
+		echo "StateMapper daemon not running"
 		exit 1
 	fi
 	
-	if contains "-d -debug --d --debug" "$2"
+	if contains "-d -debug --d --debug" "$DAEMON_CMD"
 	then
 		# debug, not daemonized
-		sudo echo "Kaos daemon debugging.."
+		sudo echo "StateMapper daemon debugging.."
 		PHP_CMD="$PHP_CMD "'echo "$!"'
 		sudo su - $APACHE_USER -s /bin/bash -c "$PHP_CMD"
 	else
 	
-		# daemonize and print pid into .lock file
+		# daemonize and print PID into .lock file
 		PHP_CMD="nohup $PHP_CMD >/dev/null 2>&1 &"'echo "$!"'
 		sudo su - $APACHE_USER -s /bin/bash -c "$PHP_CMD" > $BASE_DIR/.statemapper.lock
 		PID=$(cat $BASE_DIR/.statemapper.lock)
-		echo "Kaos daemon started with pid $PID"
+		echo "StateMapper daemon started with PID $PID"
 	fi
 
 else

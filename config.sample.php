@@ -1,7 +1,7 @@
 <?php
 /*
- * StateMapper, an official bulletins browser and corruption analyzer.
- * Copyright (C) 2017  StateMapper.net <statemapper@riseup.net> & Ingoberlab <hacklab@ingobernable.net>
+ * StateMapper: an international, collaborative, public data reviewing and monitoring tool.
+ * Copyright (C) 2017  StateMapper.net <statemapper@riseup.net>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,7 +55,7 @@ define('KAOS_PROCESSED_FILE_CACHE', false);//true); // enable or disable process
 define('KAOS_DISKSPACE_CHECK_FREQUENCY', '3 minutes'); // how often to recalculate free and folder disk space
 
 // spiders' default behavour
-define('KAOS_SPIDE_WORKER_COUNT', 80); // should be less than max connection count
+define('KAOS_SPIDE_WORKER_COUNT', 80); // should be less than MySQL's max connection count
 define('KAOS_SPIDE_CPU_MAX', 20); // proportion of CPU to use for the spider (%)
 
 // define('LANG', 'es_ES'); // do not set (or comment) to leave it in English

@@ -7,14 +7,14 @@ if (!defined('BASE_PATH'))
 function kaosPrintCLIRoot(){
 	ob_start();
 			
-?>StateMapper Copyright (C) 2017  Ingoberlab <hacklab@ingobernable.net> 
+?>StateMapper Copyright (C) <?= getCopyrightRange() ?>  StateMapper.net <statemapper@riseup.net> 
   
   * This program comes with ABSOLUTELY NO WARRANTY; type the same command followed by "-l" for details.
   * This is free software, and you are welcome to redistribute it
   * under certain conditions; type the same command followed by "-l" for details.
 	
-  * This program is a PHP/MySQL rewrite/fork of Kaos155, developped by the same team. 
-  * It aims at providing a nice website for anyone to browse efficiently any of the world's bulletins' data.
+  * This program is a PHP/MySQL redesign of Kaos155 <https://github.com/ingobernable/Kaos155> developped by the same Ingoberlab team.
+  * It aims at providing an international, collaborative, public data reviewing and monitoring tool.
 
 [ Usage: ] _______________________________________________________________
 
@@ -45,10 +45,12 @@ function kaosPrintCLIRoot(){
   
   Daemon commands: _______________________
   
-  smap daemon [start]			  - start the daemon
-  smap daemon -d				  - start the daemon in debug mode (not daemonized)
-  smap daemon stop				  - stop the daemon (waiting for workers)
-  smap daemon kill				  - kill the daemon (emergency use only)
+  smap daemon [start]		  - start the daemon
+  smap daemon restart		  - restart the daemon
+  smap daemon status		  - print the daemon's status
+  smap daemon -d		  - start the daemon in debug mode (not daemonized)
+  smap daemon stop		  - stop the daemon (waiting for workers)
+  smap daemon kill		  - kill the daemon (emergency use only)
 
 [ Schema list: ] _________________________________________________________
 

@@ -379,6 +379,11 @@ function kaosJSON($json, $echo = true){
 	return $ret;
 }
 
+if (!function_exists('debug')){ // simple alias debug->kaosJSON
+	function debug($json, $echo = true){
+		return kaosJSON($json, $echo);
+	}
+}
 
 function kaosLint($str){
 	if (is_array($str)){ // recursion
