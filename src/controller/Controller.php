@@ -155,6 +155,7 @@ class Controller {
 					
 					sleep(5);
 					
+					$begin = time();
 					while (($pid = pcntl_waitpid(0, $status)) != -1){ 
 						$status = pcntl_wexitstatus($status); 
 						$schema = $pids[$pid];
@@ -163,6 +164,15 @@ class Controller {
 							kaosPrintLog('spider '.$schema.' crashed', array('color' => 'red', 'spider_schema' => $schema));
 						}
 						unset($pids[$pid]);
+						
+						if (time() - $begin > 20) 
+							break;
+						
+						$countPids = array_filter($pids, function($x){ 
+							return !empty($x); 
+						});
+						if (!$countPids)
+							break;
 					} 
 				}
 				//echo getmypid(); // to fill the daemon lock
