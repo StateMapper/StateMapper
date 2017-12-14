@@ -101,7 +101,11 @@ function kaosFetch($url, $data = array(), $isFinalURL = true, $filePath = false,
 		return true;
 	}
 
-	if ($response['http_code'] == 200 && trim($content) != ''){ // do not accept empty content as valid file
+	if ($response['http_code'] != 200){
+		if (!empty($_GET['debug']) && isAdmin())
+			echo 'bad HTTP response code: '.$response['http_code'].'<br>';
+	
+	} else if (trim($content) != ''){ // do not accept empty content as valid file
 		// success
 		if ($filePath){
 			if ($fp = fopen($filePath, 'w')){
