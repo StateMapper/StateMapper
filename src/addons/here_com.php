@@ -70,8 +70,8 @@ function kaosHereComConvertLocation($locationStr, $country, $tryId = false){
 	//kaosJSON($args);
 	//kaosJSON($resp);
 
-	$resp = @json_decode($resp);
-	if (!$resp || empty($resp->Response->View) || empty($resp->Response->View[0]->Result)){
+	$json = @json_decode($resp);
+	if (!$json || empty($json->Response->View) || empty($json->Response->View[0]->Result)){
 		if (isAdmin()){
 			echo 'error geocoding: ';
 			debug($resp);
@@ -79,9 +79,9 @@ function kaosHereComConvertLocation($locationStr, $country, $tryId = false){
 		return false;
 	}
 	
-	$resp = $resp->Response->View[0]->Result[0];
-	$relevance = $resp->Relevance;
-	$a = $resp->Location->Address;
+	$json = $json->Response->View[0]->Result[0];
+	$relevance = $json->Relevance;
+	$a = $json->Location->Address;
 	
 	//kaosJSON($a);
 	

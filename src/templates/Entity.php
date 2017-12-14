@@ -52,7 +52,6 @@ $location = getLocationById($entity['id']);
 
 $locationObj = apply_filters('location_lint', null, $location, $entity['country']);
 	
-
 ?>
 <div>
 	<div class="entity-header entity-header-entity-<?= $entity['id'] ?>" data-kaos-related="<?= esc_json(array('id' => $entity['id'])) ?>">
