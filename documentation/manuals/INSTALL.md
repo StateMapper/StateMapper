@@ -107,7 +107,7 @@ smap daemon stop 		# stop it smoothly (wait for the workers)
 smap daemon kill 		# kill it (for emergencies only)
 ```
 
-To automatically start the daemon at every server startup, add ```smap daemon start``` at the beginning of your ```/etc/rc.local``` file.
+To automatically start the daemon at every server startup, add ```smap daemon start``` at the beginning of your ```/etc/rc.local``` file (only recommended for production).
 
 
 
