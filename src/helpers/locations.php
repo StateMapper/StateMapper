@@ -11,9 +11,9 @@ function getLocationById($id){
 
 function kaosGetLocationLabel($loc){
 	
-	if (is_numeric($loc['state']))
+	if ($loc['state'] && is_numeric($loc['state']))
 		$loc['state'] = getStateName($loc['state']);
-	if (is_numeric($loc['county']))
+	if ($loc['county'] && is_numeric($loc['county']))
 		$loc['county'] = getCountyName($loc['county']);
 	if ($loc['city'] && is_numeric($loc['city']))
 		$loc['city'] = getCityName($loc['city']);
