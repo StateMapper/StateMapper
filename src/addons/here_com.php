@@ -69,6 +69,9 @@ function kaosHereComConvertLocation($locationStr, $country, $tryId = false){
 	
 	//kaosJSON($args);
 	//kaosJSON($resp);
+	
+	if (isAdmin() && !empty($_GET['show_geoloc']))
+		echo 'geolocating '.$locationStr.'<br>';
 
 	$json = @json_decode($resp);
 	if (!$json || empty($json->Response->View) || empty($json->Response->View[0]->Result)){
