@@ -494,33 +494,31 @@ class BulletinExtractor {
 					die('cant insert precept: '.print_r($p, true));
 				
 				if ($nCur['related']){
-					
+
 					if (!empty($nCur['_type']))
 						array_unshift($updates, $nCur);
 						
-					$targets = array();
 					$relateds = array();
-					
-					if (!empty($nCur['related']))
-						foreach (is_array($nCur['related']) ? $nCur['related'] : array($nCur['related']) as $related){
-							$e = array(
-								'name' => $related['name'],
-								'type' => $related['type'],
-								'subtype' => $related['subtype'],
-								'country' => $country,
-							);
-							$related_id = insertGetEntity($e);
+					foreach (is_array($nCur['related']) && isset($nCur['related'][0]) ? $nCur['related'] : array($nCur['related']) as $related){
+						$e = array(
+							'name' => $related['name'],
+							'type' => $related['type'],
+							'subtype' => $related['subtype'],
+							'country' => $country,
+						);
+						$related_id = insertGetEntity($e);
 
-							if (!$related_id)
-								die('cant insert related: '.print_r($related, true));
-								
-							$e['id'] = $related_id;
-							$e += $related;
-							$relateds[] = $e;
-						}
+						if (!$related_id)
+							die('cant insert related: '.print_r($related, true));
+							
+						$e['id'] = $related_id;
+						$e += $related;
+						$relateds[] = $e;
+					}
 						
+					$targets = array();
 					if (!empty($nCur['target']))
-						foreach (is_array($nCur['target']) ? $nCur['target'] : array($nCur['target']) as $target){
+						foreach (is_array($nCur['target']) && isset($nCur['target'][0]) ? $nCur['target'] : array($nCur['target']) as $target){
 							$e = array(
 								'name' => $target['name'],
 								'first_name' => isset($target['first_name']) ? $target['first_name'] : null,
@@ -536,6 +534,7 @@ class BulletinExtractor {
 							$targets[] = $ctarget;
 						}
 					
+					// add a target-less status if no target at all
 					if (!$targets)
 						$targets[] = null;
 						
@@ -554,11 +553,13 @@ class BulletinExtractor {
 								if (empty($u['note']))
 									continue;
 									
-								if ($u['_type'] == 'location'){
+								/* TODO: geoloc on the fly or in a different spider?
+								 * 
+								 * if ($u['_type'] == 'location'){
 									$loc = kaosHereComConvertLocation($u['note'], $countrySchema);
 									if ($loc)
 										$u['note'] = kaosSaveLocation($loc);
-								}
+								}*/
 								break;
 						}
 						
@@ -604,10 +605,12 @@ class BulletinExtractor {
 								if ($amount = kaosConvertAmount($a, $schemaObj->id))
 									$amountIds[] = insert('amounts', $amount);
 
+							// add an amount-less status if no amount at all
 							if (!$amountIds)
 								$amountIds[] = null;
 								
 							$ctargets = array();
+							
 							foreach (!empty($u['target']) ? $u['target'] : $targets as $target){
 								if (is_array($target)){
 									$e = array(
@@ -624,6 +627,11 @@ class BulletinExtractor {
 									$ctargets[] = $ctarget;
 								}
 							}
+							
+							// add a target-less status if no target at all
+							if (!$ctargets)
+								$ctargets[] = null;
+							
 							
 							//echo 'targets: ';
 							//kaosJSON($ctargets);
