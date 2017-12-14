@@ -582,8 +582,9 @@ function kaosPrintStatuses($statuses, $target = null, $headerEntityId = null, $d
 				$note = $p['note'];
 				if ($p['_type'] == 'location'){
 					$countrySchema = kaosGetCountrySchema($schema);
-					$note = kaosHereComConvertLocation($p['note'], $countrySchema, true);
-					$note = $note ? kaosGetLocationLabel($note) : '';
+					
+					$locationObj = apply_filters('location_lint', null, $p['note'], $countrySchema->id);
+					$note = $locationObj ? kaosGetLocationLabel($locationObj) : '';
 				}
 				if ($note != '')
 					$note = '<span class="status-note">"'.$note.'"</span>';
