@@ -45,8 +45,6 @@ function kaosHereComConvertLocation($locationStr, $country, $tryId = false){
 	if (is_numeric($locationStr))
 		return null;
 		
-		echo "IN";
-		
 	$coordinates = @$country->vocabulary->stateLevels->country->coordinates;
 	if (empty($coordinates))
 		kaosDie('here.com addon: geolocation not possible, no coordinates specified in schema '.$country->ID.' (at ->vocabulary->stateLevels->country->coordinates)');
