@@ -166,8 +166,8 @@ function kaosSqlQuery($conn, $query){
 	$begin = time();
 	$ret = mysqli_query($conn, $query);
 
+	$explain = array();
 	if (KAOS_DEBUG && (KAOS_IS_CLI || isAdmin())){
-		$explain = array();
 		if ($eRet = mysqli_query($conn, 'EXPLAIN '.$query))
 			while ($eRow = mysqli_fetch_assoc($eRet))
 				$explain[] = $eRow;
