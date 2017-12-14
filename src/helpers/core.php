@@ -575,8 +575,21 @@ function printQueryLine($q, $onlySlow = false){
 	$str = array();
 	if (!empty($q['explain']))
 		foreach ($q['explain'] as $l){
-			$iclass = 'query-key-icon query-key-icon-'.strtolower($l['type']);
-			$str[] = '<i class="fa fa-key '.$iclass.'" title="'.esc_attr('<div style="text-align: left">'.debug($l, false).'</div>').'"></i>';
+			$type = strtolower($l['type']);
+			
+			if ($type == 'ref'){
+				$status = 'optimized';
+				$statusStr = 'Query is OPTIMIZED';
+			} else if (!empty($l['possible_keys'])){
+				$status = 'optimizable';
+				$statusStr = 'Query COULD BE OPTIMIZED';
+			} else {
+				$status = 'not-optimized';
+				$statusStr = 'Query is NOT OPTIMIZED';
+			}
+				
+			$iclass = 'query-key-icon query-key-icon-'.$type.' query-key-status-'.$status;
+			$str[] = '<i class="fa fa-key '.$iclass.'" title="'.esc_attr('<div style="text-align: left"><strong>'.$statusStr.':</strong><br>'.debug($l, false).'</div>').'"></i>';
 		}
 	echo '<tr class="'.$class.'"><td class="kaos-api-queries-prefix">'.str_pad('['.humanTimeDiff(0, $q['duration']).']', 5, ' ').' </td><td class="query-key-td">'.implode('', $str).'</td><td class="kaos-api-queries-val">'.$q['query'].'</td></tr>';
 }

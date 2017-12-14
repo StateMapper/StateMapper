@@ -2240,11 +2240,14 @@ a.revert-color:hover {
 .query-key-icon {
 	text-align: left;
 }
-.query-key-icon-ref {
+.query-key-status-optimized {
 	color: green;
 }
-.query-key-icon-all {
+.query-key-status-not-optimized {
 	color: red;
+}
+.query-key-status-optimizable {
+	color: orange;
 }
 
 .query-key-td {
