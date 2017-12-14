@@ -14,5 +14,5 @@ scripts/.statemapper.lock
 # Bulletins
 bulletins/*
 
-# Allow to customize the .gitignore
+# Allow customizing the .gitignore
 .gitignore
