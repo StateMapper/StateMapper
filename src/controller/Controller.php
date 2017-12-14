@@ -245,6 +245,8 @@ class Controller {
 				
 				echo 'generating manuals..'.PHP_EOL;
 				
+				// TODO: generate .md tables from kaosGetStatusLabels() (after putting it to a JSON for pushes) with dynamic (fav?)icons thanks to http://php.net/manual/es/function.imageloadfont.php
+				
 				$count = 0;
 				foreach (kaosLsdir(BASE_PATH.'/documentation/manuals/templates') as $file)
 					if (preg_match('#^(.*)\.tpl\.md$#iu', $file, $fileParts)){
