@@ -11,11 +11,11 @@ function getLocationById($id){
 
 function kaosGetLocationLabel($loc){
 	
-	if ($loc['state'] && is_numeric($loc['state']))
+	if ($loc['state'] !== null && is_numeric($loc['state']))
 		$loc['state'] = getStateName($loc['state']);
-	if ($loc['county'] && is_numeric($loc['county']))
+	if ($loc['county'] !== null && is_numeric($loc['county']))
 		$loc['county'] = getCountyName($loc['county']);
-	if ($loc['city'] && is_numeric($loc['city']))
+	if ($loc['city'] !== null && is_numeric($loc['city']))
 		$loc['city'] = getCityName($loc['city']);
 		
 	return '<span class="location-full" title="'.esc_attr('<u>Full address</u>: '.$loc['label'].'<br><br><u>Original</u>: '.$loc['original']).'">'.$loc['postalcode'].' '.$loc['city'].', '.$loc['state'].' <img src="'.kaosGetFlagUrl($loc['country']).'" /></span>';
