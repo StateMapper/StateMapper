@@ -122,10 +122,10 @@ The root ```README.md``` must be edited directly from the root folder, and canno
 **Disk space:**
 
 * When developing and fetching lots of bulletins, sometimes you won't have enough space on your local disk.
-   To move everything to a new disk, we recommend using the following command:
+   To move everything to a new disk, we recommend using the following command (respecting the trailing slashes):
 
    ```bash
-   rsync -arv --size-only /var/www/html/statemapper/bulletins/ /path/to/your/external_disk/statemapper/data
+   rsync -arv --size-only /var/www/html/statemapper/bulletins/ /path/to/your/external_disk/statemapper/bulletins
    ```
 
    Then modify the ```DATA_PATH``` in ```config.php```.

@@ -427,6 +427,8 @@ class BulletinExtractor {
 				
 				if (empty($nCur['schema']) && !empty($cur['schema']))
 					$nCur['schema'] = $cur['schema'];
+					
+				debug($nCur);
 				
 				if (empty($nCur['related'])){ // empty($nCur['amount']) || 
 					//echo "NO RELATED";
