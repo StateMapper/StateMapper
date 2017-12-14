@@ -102,7 +102,7 @@ If you want the spiders to be able to start, it is required to start the daemon 
 smap daemon [start] 		# start the daemon in the background
 smap daemon restart 		# restart the daemon
 smap daemon status 		# print the daemon's status
-smap daemon -d 			# start it in debug mode (do not daemonize)
+smap daemon -d 			# start it in debug mode (do not daemonize, print information)
 smap daemon stop 		# stop it smoothly (wait for the workers)
 smap daemon kill 		# kill it (for emergencies only)
 ```
