@@ -583,7 +583,7 @@ function kaosPrintStatuses($statuses, $target = null, $headerEntityId = null, $d
 				if ($p['_type'] == 'location'){
 					$countrySchema = kaosGetCountrySchema($schema);
 					
-					$locationObj = apply_filters('location_lint', null, $p['note'], $countrySchema->id);
+					$locationObj = apply_filters('location_lint', null, $p['note'], $countrySchema);
 					$note = $locationObj ? kaosGetLocationLabel($locationObj) : $note;
 				}
 				if ($note != '')
