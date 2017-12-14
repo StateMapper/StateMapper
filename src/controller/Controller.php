@@ -156,7 +156,7 @@ class Controller {
 					sleep(5);
 					
 					$begin = time();
-					while (($pid = pcntl_waitpid(0, $status)) != -1){ 
+					while (($pid = pcntl_waitpid(0, $status, WNOHANG)) != -1){ 
 						$status = pcntl_wexitstatus($status); 
 						$schema = $pids[$pid];
 						if ($status !== 0){
@@ -165,7 +165,7 @@ class Controller {
 						}
 						unset($pids[$pid]);
 						
-						if (time() - $begin > 20) 
+						if (time() - $begin > 20) // allow many spiders at once
 							break;
 						
 						$countPids = array_filter($pids, function($x){ 
