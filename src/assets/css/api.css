@@ -2241,13 +2241,16 @@ a.revert-color:hover {
 	text-align: left;
 }
 .query-key-status-optimized {
-	color: green;
+	color: #57d857;
 }
 .query-key-status-not-optimized {
-	color: red;
+	color: #fb5b5b;
 }
 .query-key-status-optimizable {
-	color: orange;
+	color: #ffb835;
+}
+.query-key-status-best-optimized {
+	color: #f5f553;
 }
 
 .query-key-td {
