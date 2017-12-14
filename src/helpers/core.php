@@ -496,15 +496,8 @@ function footer(){
 						<div class="kaos-api-queries-title">Top 10 slow queries:</div>
 						<table border="0">
 						<?php
-							foreach ($slow as $q){
-								$class = '';
-								if ($q['duration'] < 1)
-									continue;
-
-								$class .= 'kaos-api-queries-slow';
-
-								echo '<tr class="'.$class.'"><td class="kaos-api-queries-prefix">'.str_pad('['.humanTimeDiff(0, $q['duration']).']', 5, ' ').' </td><td class="kaos-api-queries-val">'.$q['query'].'</td></tr>';
-							}
+							foreach ($slow as $q)
+								printQueryLine($q, true);
 						?>
 						</table>
 					<?php
@@ -513,13 +506,8 @@ function footer(){
 				<div class="kaos-api-queries-title">All <?= number_format(count($kaosCall['queries']), 0) ?> queries:</div>
 				<table border="0">
 				<?php
-					foreach ($kaosCall['queries'] as $q){
-						$class = '';
-						if ($q['duration'] >= 1)
-							$class .= 'kaos-api-queries-slow';
-
-						echo '<tr class="'.$class.'"><td class="kaos-api-queries-prefix">'.str_pad('['.humanTimeDiff(0, $q['duration']).']', 5, ' ').' </td><td class="kaos-api-queries-val">'.$q['query'].'</td></tr>';
-					}
+					foreach ($kaosCall['queries'] as $q)
+						printQueryLine($q);
 				?>
 				</table>
 			</div>
@@ -574,6 +562,23 @@ function footer(){
 		</div>
 	</div>
 	<?php
+}
+
+function printQueryLine($q, $onlySlow = false){
+	$class = '';
+	if ($q['duration'] < 1){
+		if ($onlySlow)
+			return;
+	} else
+		$class .= 'kaos-api-queries-slow';
+		
+	$str = array();
+	if (!empty($q['explain']))
+		foreach ($q['explain'] as $l){
+			$iclass = 'query-key-icon query-key-icon-'.strtolower($l['type']);
+			$str[] = '<i class="fa fa-key '.$iclass.'" title="'.esc_attr('<div style="text-align: left">'.debug($l, false).'</div>').'"></i>';
+		}
+	echo '<tr class="'.$class.'"><td class="kaos-api-queries-prefix">'.str_pad('['.humanTimeDiff(0, $q['duration']).']', 5, ' ').' </td><td class="query-key-td">'.implode('', $str).'</td><td class="kaos-api-queries-val">'.$q['query'].'</td></tr>';
 }
 
 

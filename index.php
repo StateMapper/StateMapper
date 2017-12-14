@@ -25,7 +25,7 @@ define('KAOS_IS_CLI', !empty($argv));
 libxml_disable_entity_loader(true); // protect against XEE. See: https://www.owasp.org/index.php/XML_External_Entity_(XXE)_Prevention_Cheat_Sheet#PHP
 
 // increment to force recaching the project's CSS and JS files
-define('KAOS_ASSETS_INC', 7);
+define('KAOS_ASSETS_INC', 9);
 
 // define constants
 define('BASE_PATH', dirname(__FILE__));

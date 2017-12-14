@@ -165,13 +165,24 @@ function kaosSqlQuery($conn, $query){
 		$kaosCall['queries'] = array();
 	$begin = time();
 	$ret = mysqli_query($conn, $query);
+
+	if (KAOS_DEBUG && (KAOS_IS_CLI || isAdmin())){
+		$explain = array();
+		if ($eRet = mysqli_query($conn, 'EXPLAIN '.$query))
+			while ($eRow = mysqli_fetch_assoc($eRet))
+				$explain[] = $eRow;
+	}
+			
 	if (!KAOS_IS_CLI){
 		$kaosCall['queries'][] = array(
 			'query' => $query,
+			'explain' => $explain,
 			'duration' => time() - $begin,
 		);
+	
 	} else if (!empty($kaosCall['debugQueries']))
 		kaosPrintLog('[SQL] '.$query.' ('.(time() - $begin).'s)', array('color' => 'grey'));
+	
 	return $ret;
 }
 

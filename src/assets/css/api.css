@@ -1918,7 +1918,7 @@ span.kaos-api-month-workers-ind > span > span {
 }
 .kaos-api-queries-val,
 .kaos-api-queries-prefix {
-	padding-bottom: 5px;
+	padding-bottom: 8px;
 	padding-right: 5px;
 	vertical-align: top;
 }
@@ -2235,4 +2235,20 @@ a.revert-color:hover {
 }
 .entity-title-inner .status-alert-buggy a {
     font-size: 18px;
+}
+
+.query-key-icon {
+	text-align: left;
+}
+.query-key-icon-ref {
+	color: green;
+}
+.query-key-icon-all {
+	color: red;
+}
+
+.query-key-td {
+	padding-right: 10px;
+	white-space: nowrap;
+	vertical-align: top;
 }
