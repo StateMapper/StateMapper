@@ -887,7 +887,7 @@ function remove_url_arg($name, $url = null){
 }
 
 function hasFilter(){
-	return !empty($_GET['etype']) || !empty($_GET['esubtype']) || !empty($_GET['year']);
+	return !empty($_GET['etype']) || !empty($_GET['esubtype']) || !empty($_GET['year']) || !empty($_GET['atype']);
 }
 
 function isHome($root = false){
