@@ -44,7 +44,8 @@ function stop {
 # git shortcuts
 if [ "$CMD" = "push" ]
 then
-	cd "$BASE_DIR/.."
+	cd "$BASE_DIR"
+	cd ..
 	sudo su - $APACHE_USER -s /bin/bash -c "$BASE_CMD compile" # compile manuals
 	
 	git add *
