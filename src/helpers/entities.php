@@ -345,11 +345,11 @@ function insertGetPrecept($p){
 
 	if ($pid){
 		if (KAOS_IS_CLI)
-			kaosPrintLog('found precept "'.$p['title'].'"', array('color' => 'grey'));
+			kaosPrintLog('found precept "'.(!empty($p['title']) ? $p['title'] : $p['text']).'"', array('color' => 'grey'));
 		return $pid;
 	}
 	if (KAOS_IS_CLI)
-		kaosPrintLog('inserting precept "'.$p['title'].'"', array('color' => 'grey'));
+		kaosPrintLog('inserting precept "'.(!empty($p['title']) ? $p['title'] : $p['text']).'"', array('color' => 'grey'));
 	return insert('precepts', $p);
 }
 

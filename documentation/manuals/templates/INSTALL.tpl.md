@@ -95,6 +95,7 @@ smap daemon [start] 		# start the daemon in the background
 smap daemon restart 		# restart the daemon
 smap daemon status 		# print the daemon's status
 smap daemon -d 			# start it in debug mode (do not daemonize, print information)
+smap daemon -dd 		# start it in advanced debug mode (same as -d but printing SQL queries too)
 smap daemon stop 		# stop it smoothly (wait for the workers)
 smap daemon kill 		# kill it (for emergencies only)
 ```

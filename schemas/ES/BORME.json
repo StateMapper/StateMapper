@@ -992,5 +992,12 @@
 				}
 			}
 		}
-	}
+	},
+	
+	soldiers: [
+		{
+			name: "Kaos155 hacker team",
+			users: ["statemapper"]
+		}
+	]
 }

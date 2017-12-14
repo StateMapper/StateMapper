@@ -137,7 +137,7 @@ while (true){
 			} else if (in_array($bulletinStatus, array('none', 'extracting', 'extracted')))
 				$stop = false;
 			
-			// case fetched
+			// case fetched (and not extracting)
 			else if (!$config['extract'] && in_array($bulletinStatus, array('fetched', 'parsed')))
 				$stop = false;
 				
@@ -188,7 +188,7 @@ while (true){
 			
 			$bulletinParser = new BulletinParser();
 			
-			kaosPrintLog('starting fetch for '.$query['schema'].'/'.$query['date'].(!empty($query['id']) ? '/'.$query['id'] : ''));
+			kaosPrintLog('starting fetch for '.$query['schema'].'/'.$query['date'].(!empty($query['id']) ? '/'.$query['id'] : '').($config['extract'] ? ' (extracting)' : ' (not extracting)'));
 			$ret = $bulletinParser->fetchAndParseBulletin($query);
 			
 			if (!$ret || kaosIsError($ret))

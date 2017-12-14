@@ -352,7 +352,7 @@ function kaosPrintLog($str, $opts = array()){
 		return;
 		
 	// see https://unix.stackexchange.com/questions/148/colorizing-your-terminal-and-shell-environment for colors
-	$color = "";
+	$color = '';
 	if (!empty($opts['color']))
 		switch ($opts['color']){
 			case 'grey': $color = "\e[0;30m"; break;
@@ -796,6 +796,7 @@ function kaosGetSlug($table, $col, $title, $length = null){
 	$i = 1;
 	do {
 		$slug = $title.($i > 1 ? '-'.$i : '');
+		$i++;
 	} while (get('SELECT COUNT(*) FROM '.$table.' WHERE '.$col.' = %s', array($slug)));
 	return $slug;
 }

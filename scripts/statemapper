@@ -96,7 +96,6 @@ then
 				# stop the daemon, waiting for workers
 				if contains "stop restart" "$DAEMON_CMD"
 				then
-					sudo echo "Stopping the StateMapper daemon"
 					sudo su - $APACHE_USER -s /bin/bash -c "$BASE_CMD daemon stop" 2> /dev/null
 					if [ $? -eq 0 ]
 					then
@@ -128,16 +127,21 @@ then
 		exit 1
 	fi
 	
-	if contains "-d -debug --d --debug" "$DAEMON_CMD"
+	if contains "-d -dd" "$DAEMON_CMD"
 	then
 		# debug, not daemonized
-		sudo echo "StateMapper daemon debugging.."
-		PHP_CMD="$PHP_CMD "'echo "$!"'
+		if contains "-d" "$DAEMON_CMD"
+		then
+			sudo echo "StateMapper daemon debugging.."
+		else
+			sudo echo "StateMapper daemon advanced debugging.."
+		fi
+		#PHP_CMD="$PHP_CMD "'echo "$!"'
 		sudo su - $APACHE_USER -s /bin/bash -c "$PHP_CMD"
 	else
 	
 		# daemonize and print PID into .lock file
-		PHP_CMD="nohup $PHP_CMD >/dev/null 2>&1 &"'echo "$!"'
+		PHP_CMD="nohup $PHP_CMD >/dev/null 2>&1 &"' echo "$!"'
 		sudo su - $APACHE_USER -s /bin/bash -c "$PHP_CMD" > $BASE_DIR/.statemapper.lock
 		PID=$(cat $BASE_DIR/.statemapper.lock)
 		echo "StateMapper daemon started with PID $PID"

@@ -90,7 +90,11 @@ if ($kaosCall['cliArgs']){
 	}
 	
 	// CLI debug mode
-	if (in_array('-d', $kaosCall['cliArgs'])){
+	if (in_array('-dd', $kaosCall['cliArgs'])){
+		$kaosCall['debug'] = true;
+		$kaosCall['debugQueries'] = true;
+		array_splice($kaosCall['cliArgs'], array_search('-dd', $kaosCall['cliArgs']), 1);
+	} else if (in_array('-d', $kaosCall['cliArgs'])){
 		$kaosCall['debug'] = true;
 		array_splice($kaosCall['cliArgs'], array_search('-d', $kaosCall['cliArgs']), 1);
 	}

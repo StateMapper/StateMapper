@@ -62,12 +62,16 @@ function kaosHereComConvertLocation($locationStr, $country, $tryId = false){
 		'noUserAgent' => true,
 		'accept' => 'application/json',
 	);
-echo "CALL";
-	$resp = kaosFetch($url, $args + array(
-		'searchtext' => urlencode($locationStr),
-		//'Geolocation' => urlencode('geo:'.implode(',', $coordinates)),
-	), true, false, $opts);
+	//echo "geocoding $locationStr<br>";
 	
+	$args += array(
+		'searchtext' => urlencode($locationStr.', '.$country->name),
+		//'Geolocation' => urlencode('geo:'.implode(',', $coordinates)),
+	);
+	$resp = kaosFetch($url, $args, true, false, $opts);
+	
+	//kaosJSON($args);
+	//kaosJSON($resp);
 	$resp = @json_decode($resp);
 	if (!$resp || empty($resp->Response->View) || empty($resp->Response->View[0]->Result))
 		return false;

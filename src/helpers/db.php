@@ -170,7 +170,8 @@ function kaosSqlQuery($conn, $query){
 			'query' => $query,
 			'duration' => time() - $begin,
 		);
-	}
+	} else if (!empty($kaosCall['debugQueries']))
+		kaosPrintLog('[SQL] '.$query.' ('.(time() - $begin).'s)', array('color' => 'grey'));
 	return $ret;
 }
 

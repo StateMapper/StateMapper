@@ -93,19 +93,22 @@ class Controller {
 					
 					query('UPDATE spiders SET status = "stopped" WHERE status = "stopping"');
 					query('UPDATE spiders SET status = "waiting" WHERE status = "active"');
-
+					
+					$i = 0;
 					while (true){
-						
 						$count = 0;
 						foreach (getCol('SELECT pid FROM workers') as $pid)
 							if (isActivePid($pid))
 								$count++;
 								
-						echo $count.' workers remaining..'.PHP_EOL;
 						if (!$count)
 							break;
 						
-						sleep(3);
+						if (!$i)
+							echo 'Stopping the StateMapper daemon..'.PHP_EOL;
+						echo $count.' workers remaining..'.PHP_EOL;
+						sleep(5);
+						$i++;
 					}
 					echo 'All workers stopped'.PHP_EOL;
 					exit(0);
@@ -162,6 +165,7 @@ class Controller {
 						unset($pids[$pid]);
 					} 
 				}
+				//echo getmypid(); // to fill the daemon lock
 				exit(0);
 			
 			case 'api':
@@ -361,6 +365,7 @@ function kaosAjaxDeleteExtractedData($args){
 		if (!query('TRUNCATE '.$table))
 			$error++;
 	
+	cleanLocks(true);
 	query('UPDATE bulletins SET status = "fetched" WHERE status IN ( "extracting", "extracted" )');
 		
 	return array('success' => true, 'msg' => 'Tables '.implode(', ', $tables).' were '.($error ? 'emptied with '.$error.' errors' : 'successfuly empties'));

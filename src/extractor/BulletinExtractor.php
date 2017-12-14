@@ -345,20 +345,20 @@ class BulletinExtractor {
 		$schemaObj = kaosGetSchema($query['schema']);
 		$countrySchema = kaosGetCountrySchema($schemaObj);
 		
-		// clean extracted precepts and statuses from same bulletin and date
-		
 		if (!empty($_GET['filter']))
 			return;
 		
 		ignore_user_abort(true);
 		
+		// clean extracted precepts and statuses from same bulletin and date
+
 		if (!empty($_GET['precept']) && is_numeric($_GET['precept'])){
 			query('DELETE s FROM bulletins AS b LEFT JOIN bulletin_uses_bulletin AS bb ON b.id = bb.bulletin_in LEFT JOIN bulletins AS b_id ON bb.bulletin_id = b_id.id LEFT JOIN precepts AS p ON b_id.id = p.bulletin_id LEFT JOIN statuses AS s ON p.id = s.precept_id WHERE b.bulletin_schema = %s AND b.date = %s AND p.id = %s', array($query['schema'], $query['date'], $_GET['precept']));
 			query('DELETE p FROM bulletins AS b LEFT JOIN bulletin_uses_bulletin AS bb ON b.id = bb.bulletin_in LEFT JOIN bulletins AS b_id ON bb.bulletin_id = b_id.id LEFT JOIN precepts AS p ON b_id.id = p.bulletin_id WHERE b.bulletin_schema = %s AND b.date = %s AND p.id = %s', array($query['schema'], $query['date'], $_GET['precept']));
 		
 		} else {
-			query('DELETE s FROM bulletins AS b LEFT JOIN precepts AS p ON b.id = p.bulletin_id LEFT JOIN statuses AS s ON p.id = s.precept_id WHERE b.bulletin_schema = %s AND b.date = %s', array($query['schema'], $query['date']));
-			query('DELETE p FROM bulletins AS b LEFT JOIN precepts AS p ON b.id = p.bulletin_id WHERE b.bulletin_schema = %s AND b.date = %s', array($query['schema'], $query['date']));
+			query('DELETE s FROM bulletins AS b LEFT JOIN bulletin_uses_bulletin AS bb ON b.id = bb.bulletin_in LEFT JOIN bulletins AS b_id ON bb.bulletin_id = b_id.id LEFT JOIN precepts AS p ON b_id.id = p.bulletin_id LEFT JOIN statuses AS s ON p.id = s.precept_id WHERE b.bulletin_schema = %s AND b.date = %s', array($query['schema'], $query['date']));
+			query('DELETE p FROM bulletins AS b LEFT JOIN bulletin_uses_bulletin AS bb ON b.id = bb.bulletin_in LEFT JOIN bulletins AS b_id ON bb.bulletin_id = b_id.id LEFT JOIN precepts AS p ON b_id.id = p.bulletin_id WHERE b.bulletin_schema = %s AND b.date = %s', array($query['schema'], $query['date']));
 
 		}
 		
@@ -553,7 +553,7 @@ class BulletinExtractor {
 								if (empty($u['note']))
 									continue;
 									
-								/* TODO: geoloc on the fly or in a different spider?
+								/* TODO: geoloc on the fly or in a different spider? (anyway, go through filter 'location_lint')
 								 * 
 								 * if ($u['_type'] == 'location'){
 									$loc = kaosHereComConvertLocation($u['note'], $countrySchema);
