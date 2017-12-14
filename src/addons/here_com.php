@@ -72,7 +72,7 @@ function kaosHereComConvertLocation($locationStr, $country, $tryId = false){
 
 	$json = @json_decode($resp);
 	if (!$json || empty($json->Response->View) || empty($json->Response->View[0]->Result)){
-		if (isAdmin() && !empty($_GET['geoloc'])){
+		if (isAdmin() && !empty($_GET['debug'])){
 			echo 'error geocoding: ';
 			debug($resp);
 		}
