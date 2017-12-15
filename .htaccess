@@ -19,6 +19,11 @@ RewriteRule . index.php [L]
 # Redirect everything from .git/
 #RewriteRule ^\.git/ index.php [L]
 
+# Redirect if file doesn't exist
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule . index.php [L]
+
+
 # Allow serving fonts
 AddType application/vnd.ms-fontobject .eot
 AddType application/font-woff .woff
