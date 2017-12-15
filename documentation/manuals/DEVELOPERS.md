@@ -152,7 +152,7 @@ The root ```README.md``` must be edited directly from the root folder, and canno
 
 **Graphics:**
 
-* The main logo was made using the [Nasalization font](../../src/assets/font/nasalization) and the [FontAwesome](http://fontawesome.io/icons/)'s "map-signs" icon.
+* The main logo was made using the [Megrim font](../../src/assets/font/megrim) and the [FontAwesome](http://fontawesome.io/icons/)'s "map-signs" icon.
 * Favicons can be generated from FontAwesome icons through [this page](https://paulferrett.com/fontawesome-favicon/) or [this one](https://gauger.io/fonticon/).
 
 
