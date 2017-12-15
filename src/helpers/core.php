@@ -719,46 +719,48 @@ function headerRight(){
 					} else { 
 						?>
 						<a href="<?= kaosGetUrl($kaosCall['query'], 'schema') ?>" title="" class="<?php if (kaosIsCall('schema')) echo 'kaos-top-action-active'; ?>"><i class="fa fa-book"></i><span>Schema</span></a>
-						<a href="<?= kaosGetUrl($kaosCall['query'], 'fetch') ?>" title="" class="<?php
+						
+						<?php if ($schema->type == 'bulletin'){ ?>
+							<a href="<?= kaosGetUrl($kaosCall['query'], 'fetch') ?>" title="" class="<?php
 
-							if (kaosIsCall('fetch'))
-								echo 'kaos-top-action-active';
+								if (kaosIsCall('fetch'))
+									echo 'kaos-top-action-active';
 
-							$fetchClass = $class = '';
-							if (!kaosSchemaHasFeature($kaosCall['query']['schema'], 'fetch'))
-								$fetchClass = $class = ' kaos-top-action-disabled';
-							echo $class;
+								$fetchClass = $class = '';
+								if (!kaosSchemaHasFeature($kaosCall['query']['schema'], 'fetch'))
+									$fetchClass = $class = ' kaos-top-action-disabled';
+								echo $class;
 
-							?>"><i class="fa fa-cloud-download"></i><span>Fetch</span></a>
-						<?php if (in_array($kaosCall['call'], array('fetch')) && kaosSchemaHasFeature($kaosCall['query']['schema'], 'fetch')){ ?>
-							<a href="<?= kaosGetUrl($kaosCall['query'], 'fetch/raw') ?>" title="" class="<?= $class ?>"><i class="fa fa-arrows-alt"></i><span>Fullscreen</span></a>
-							<a href="<?= kaosGetUrl($kaosCall['query'], 'download') ?>" title="" class="<?= $class ?>"><i class="fa fa-download"></i><span>Download</span></a>
-						<?php } ?>
-						<?php if (in_array($kaosCall['call'], array('fetch', 'lint')) && kaosSchemaHasFeature($kaosCall['query']['schema'], 'fetch')){ ?>
-							<a href="<?= kaosGetUrl($kaosCall['query'], 'lint') ?>" title="" class="<?php if (kaosIsCall('lint')) echo 'kaos-top-action-active'; echo $class; ?>"><i class="fa fa-file-text-o"></i><span>Lint</span></a>
-
-							<?php if (in_array($kaosCall['call'], array('lint'))){ ?>
-								<a href="<?= kaosGetUrl($kaosCall['query'], 'lint/raw') ?>" title="" class="<?= $class ?>"><i class="fa fa-arrows-alt"></i><span>Fullscreen</span></a>
+								?>"><i class="fa fa-cloud-download"></i><span>Fetch</span></a>
+							<?php if (in_array($kaosCall['call'], array('fetch')) && kaosSchemaHasFeature($kaosCall['query']['schema'], 'fetch')){ ?>
+								<a href="<?= kaosGetUrl($kaosCall['query'], 'fetch/raw') ?>" title="" class="<?= $class ?>"><i class="fa fa-arrows-alt"></i><span>Fullscreen</span></a>
+								<a href="<?= kaosGetUrl($kaosCall['query'], 'download') ?>" title="" class="<?= $class ?>"><i class="fa fa-download"></i><span>Download</span></a>
 							<?php } ?>
+							<?php if (in_array($kaosCall['call'], array('fetch', 'lint')) && kaosSchemaHasFeature($kaosCall['query']['schema'], 'fetch')){ ?>
+								<a href="<?= kaosGetUrl($kaosCall['query'], 'lint') ?>" title="" class="<?php if (kaosIsCall('lint')) echo 'kaos-top-action-active'; echo $class; ?>"><i class="fa fa-file-text-o"></i><span>Lint</span></a>
 
-							<a href="<?= kaosGetUrl(array('format' => kaosGetFormatByQuery($kaosCall['query'])) + $kaosCall['query'], 'redirect') ?>" title="" target="_blank" class="<?= $class ?>"><i class="fa fa-external-link-square"></i><span>Redirect</span></a>
-						<?php } ?>
-						<?php
-						$class = '';
-						if (!kaosSchemaHasFeature($kaosCall['query']['schema'], 'parse'))
-							$class = ' kaos-top-action-disabled';
-						?>
-						<a href="<?= kaosGetUrl($kaosCall['query'], 'parse', $tr) ?>" title="" class="<?php if (kaosIsCall('parse')) echo 'kaos-top-action-active'; echo $class; ?>"><i class="fa fa-tree"></i><span>Parse</span></a>
-						<?php
-						$class = '';
-						if (!kaosSchemaHasFeature($kaosCall['query']['schema'], 'extract'))
-							$class = ' kaos-top-action-disabled';
+								<?php if (in_array($kaosCall['call'], array('lint'))){ ?>
+									<a href="<?= kaosGetUrl($kaosCall['query'], 'lint/raw') ?>" title="" class="<?= $class ?>"><i class="fa fa-arrows-alt"></i><span>Fullscreen</span></a>
+								<?php } ?>
 
-						?>
-						<a href="<?= kaosGetUrl($kaosCall['query'], 'extract', $tr) ?>" title="" class="<?php if (kaosIsCall('extract')) echo 'kaos-top-action-active'; echo $class; ?>"><i class="fa fa-magic"></i><span>Extract</span></a>
-						<a href="<?= kaosGetUrl($kaosCall['query'], 'rewind') ?>" title="" class="<?php if (kaosIsCall('rewind')) echo 'kaos-top-action-active'; echo $fetchClass; ?>"><i class="fa fa-backward"></i><span>Rewind</span></a>
-					
-						<?php
+								<a href="<?= kaosGetUrl(array('format' => kaosGetFormatByQuery($kaosCall['query'])) + $kaosCall['query'], 'redirect') ?>" title="" target="_blank" class="<?= $class ?>"><i class="fa fa-external-link-square"></i><span>Redirect</span></a>
+							<?php } ?>
+							<?php
+							$class = '';
+							if (!kaosSchemaHasFeature($kaosCall['query']['schema'], 'parse'))
+								$class = ' kaos-top-action-disabled';
+							?>
+							<a href="<?= kaosGetUrl($kaosCall['query'], 'parse', $tr) ?>" title="" class="<?php if (kaosIsCall('parse')) echo 'kaos-top-action-active'; echo $class; ?>"><i class="fa fa-tree"></i><span>Parse</span></a>
+							<?php
+							$class = '';
+							if (!kaosSchemaHasFeature($kaosCall['query']['schema'], 'extract'))
+								$class = ' kaos-top-action-disabled';
+
+							?>
+							<a href="<?= kaosGetUrl($kaosCall['query'], 'extract', $tr) ?>" title="" class="<?php if (kaosIsCall('extract')) echo 'kaos-top-action-active'; echo $class; ?>"><i class="fa fa-magic"></i><span>Extract</span></a>
+							<a href="<?= kaosGetUrl($kaosCall['query'], 'rewind') ?>" title="" class="<?php if (kaosIsCall('rewind')) echo 'kaos-top-action-active'; echo $fetchClass; ?>"><i class="fa fa-backward"></i><span>Rewind</span></a>
+							<?php
+						}
 					}
 				?>
 			</div>
