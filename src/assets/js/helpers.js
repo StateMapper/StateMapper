@@ -259,6 +259,11 @@ jQuery(document).ready(function(){
 			jQuery(this).remove();
 		});
 	});
+	
+	// front warnings
+	jQuery('.front-warning span').click(function(){
+		jQuery(this).fadeOut('slow');
+	});
 });
 
 function argsToObject(search){

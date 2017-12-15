@@ -73,7 +73,7 @@ if (!empty($_POST['kaosInstall'])){
 					$error = BASE_PATH.'/config.php couldn\'t be written. Please make '.BASE_PATH.' writtable.';
 				else {
 					ignore_user_abort(false);
-					redirect($args['base_url'].'?install=1');
+					redirect($args['base_url'].'?installed=1');
 				}
 				ignore_user_abort(false);
 			}

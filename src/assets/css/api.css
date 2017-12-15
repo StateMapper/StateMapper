@@ -2295,6 +2295,7 @@ a.revert-color:hover {
     line-height: normal;
 }
 .front-warning > span {
+	cursor: pointer;
     display: inline-block;
     font-size: 14px;
     padding: 4px 14px;
@@ -2308,4 +2309,7 @@ a.revert-color:hover {
 
 .front-warning.front-warning-debug > span {
 	margin: 20px 0 0;
+}
+.front-warning.front-warning-success > span {
+	background: #00c700;
 }
