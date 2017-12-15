@@ -6,7 +6,7 @@ if (!defined('BASE_PATH'))
 //if (!empty($_GET['reload_names'])) 
 //	loadNames(); 
 	
-function loadNames($conn = null){ // provide $conn if installing only
+function loadNames($conn = null, $args = array()){ // provide $conn if installing only
 	
 	// empty the names table
 	if ($conn)
@@ -15,41 +15,50 @@ function loadNames($conn = null){ // provide $conn if installing only
 		query('DELETE * FROM names');
 	
 	foreach (array(
-		'first_names.txt' => FIRST_NAME,
-		'last_names.txt' => LAST_NAME,
+		'first_names' => FIRST_NAME,
+		'last_names' => LAST_NAME,
 	) as $f => $type){
-		//echo 'loading '.$f.'<br>';
 		
-		$handle = fopen(BASE_PATH.'/database/'.$f, 'r');
-		if (!$handle)
-			return 'Could not read '.BASE_PATH.'/database/'.$f;
-		
-		if ($handle){
-			$last = '';
-			while (!feof($handle)){
-				$name = fgets($handle, 500);
+		// import from .sql? (installation mode only)
+		if ($args && is_file(BASE_PATH.'/database/'.$f.'.sql')){
+			exec('mysql -u'.$args['user'].(!empty($args['pass']) ? ' -p'.$args['pass'] : '').' -h '.$args['host'].' '.$args['name'].' < "'.BASE_PATH.'/database/'.$f.'.sql"', $output, $return);
 				
-				if (!$name){
-					if ($last != '')
-						loadName($last, $type, $conn);
-					break;
-				}
-				$name = $last.$name;
+			if (!empty($return))
+				return 'Could not import '.BASE_PATH.'/database/'.$f.'.sql';
 		
-				$names = preg_split("/\\r\\n|\\r|\\n/", $name);
-				if ($names){
-					$count = count($names);
-					$i = 0;
-					foreach ($names as $name){
-						if ($i == $count-1)
-							$last = $name;
-						else if (trim($name) != '')
-							loadName($name, $type, $conn);
-						$i++;
+		// import from .txt otherwise
+		} else {
+			$handle = fopen(BASE_PATH.'/database/'.$f.'.txt', 'r');
+			if (!$handle)
+				return 'Could not read '.BASE_PATH.'/database/'.$f.'.txt';
+			
+			if ($handle){
+				$last = '';
+				while (!feof($handle)){
+					$name = fgets($handle, 500);
+					
+					if (!$name){
+						if ($last != '')
+							loadName($last, $type, $conn);
+						break;
+					}
+					$name = $last.$name;
+			
+					$names = preg_split("/\\r\\n|\\r|\\n/", $name);
+					if ($names){
+						$count = count($names);
+						$i = 0;
+						foreach ($names as $name){
+							if ($i == $count-1)
+								$last = $name;
+							else if (trim($name) != '')
+								loadName($name, $type, $conn);
+							$i++;
+						}
 					}
 				}
+				fclose($handle);
 			}
-			fclose($handle);
 		}
 	}
 	return true;

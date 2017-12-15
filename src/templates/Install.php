@@ -70,7 +70,7 @@ if (!empty($_POST['kaosInstall'])){
 				if (!mysqli_num_rows($resNames)){
 				
 					// if no names found, load them
-					$cerror = loadNames($conn);
+					$cerror = loadNames($conn, $args);
 					if ($cerror !== true){
 						$error = $cerror;
 						mysqli_query($conn, 'DELETE * FROM names');
