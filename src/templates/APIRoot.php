@@ -88,11 +88,12 @@ ob_start();
 							$name = $schema->name;
 							if (!empty($schema->shortName) && !preg_match('#\b'.preg_quote($schema->shortName, '#').'\b#ius', $schema->name))
 								$name .= ' ('.$schema->shortName.')';
+								
 							if (!empty($schema->searchUrl))
 								echo '<a title="'.esc_attr('Go to the bulletin\'s original search form: '.$schema->searchUrl).'" href="'.kaosAnonymize($schema->searchUrl).'" target="blank">'.$name.'</a>';
 							else if (!empty($schema->siteUrl))
 								echo '<a title="'.esc_attr('Go to the provider\'s website: '.$schema->siteUrl).'" href="'.kaosAnonymize($schema->siteUrl).'" target="blank">'.$name.'</a>';
-							else if (empty($kaosCall['rootSchema']) && preg_match('#^([A-Z]+)$#', $schema->id))
+							else if (preg_match('#^([A-Z]+)$#', $schema->id))
 								echo '<a title="'.esc_attr('Only show entries from '.$schema->name).'" href="'.BASE_URL.'api/'.strtolower($schema->id).'">'.$name.'</a>';
 							else
 								echo $name;
