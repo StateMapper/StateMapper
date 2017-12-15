@@ -704,8 +704,8 @@ function headerRight(){
 					</span>
 				<?php } ?>
 				<?php
+					$schema = kaosGetSchema($kaosCall['query']['schema']);
 					if (kaosIsCall(array('soldiers', 'ambassadors'))){
-						$schema = kaosGetSchema($kaosCall['query']['schema']);
 						if (in_array($schema->type, array('bulletin', 'institution'))){
 							?>
 							<a href="<?= kaosGetUrl($kaosCall['query'], 'soldiers') ?>" title="" class="<?php if (kaosIsCall('soldiers')) echo 'kaos-top-action-active'; ?>"><i class="fa fa-fire"></i><span>Soldiers</span></a>
