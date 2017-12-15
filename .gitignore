@@ -6,13 +6,13 @@
 *~
 
 # Main configuration file
-config.php
+/config.php
 
 # Daemon lock
-scripts/.statemapper.lock
+/scripts/.statemapper.lock
 
 # Bulletins
-bulletins/*
+/bulletins/*
 
-# Allow customizing the .gitignore
+# Allow customizing all .gitignore
 .gitignore

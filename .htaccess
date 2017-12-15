@@ -17,7 +17,7 @@ RewriteCond %{REQUEST_FILENAME} !\.(js|css|png|jpg|jpeg|gif|eot|woff|ttf|svg|otf
 RewriteRule . index.php [L]
 
 # Redirect everything from .git/
-#RewriteRule ^\.git/ index.php [L]
+RewriteRule ^\.git/ index.php [L]
 
 # Redirect if file doesn't exist
 RewriteCond %{REQUEST_FILENAME} !-f
