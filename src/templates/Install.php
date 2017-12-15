@@ -7,6 +7,8 @@ $error = null;
 $args = array();
 
 if (!empty($_POST['kaosInstall'])){
+	// sent the install form
+	
 	$args = array(
 		'host' => @$_POST['kaosInstall_host'],
 		'user' => @$_POST['kaosInstall_user'],
@@ -38,6 +40,7 @@ if (!empty($_POST['kaosInstall'])){
 		
 		if (!$error){
 			// really install
+			ignore_user_abort(true);
 			$content = file_get_contents(BASE_PATH.'/config.sample.php');
 			
 			foreach (array(
@@ -49,18 +52,30 @@ if (!empty($_POST['kaosInstall'])){
 			) as $rep => $val)
 				$content = str_replace('PUT_YOUR_'.$rep.'_HERE', $val, $content);
 			
+			// count tables
 			$res = mysqli_query($conn, 'SELECT * FROM information_schema.tables WHERE table_schema = "'.$args['name'].'"');
 			$count = mysqli_num_rows($res);
 			if (!$count){
+				
+				// if no table found, import the db structure
 				exec('mysql -u'.$args['user'].(!empty($args['pass']) ? ' -p'.$args['pass'] : '').' -h '.$args['host'].' '.$args['name'].' < "'.BASE_PATH.'/database/structure.sql"', $output, $return);
+				
 				if (!empty($return))
 					$error = 'An error occured during the database structure setup.';
+					
+				else {
+					// load first and last names
+					loadNames(); 
+				}
 			}
 			if (!$error){
 				if (!@file_put_contents(BASE_PATH.'/config.php', $content))
 					$error = BASE_PATH.'/config.php couldn\'t be written. Please make '.BASE_PATH.' writtable.';
-				else
+				else {
+					ignore_user_abort(false);
 					redirect($args['base_url'].'?install=1');
+				}
+				ignore_user_abort(false);
 			}
 		}
 	}

@@ -3,7 +3,7 @@
 if (!defined('BASE_PATH'))
 	die();
 	
-require_once(APP_PATH.'/helpers/entities.php');
+
 
 class BulletinParser {
 	

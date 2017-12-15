@@ -12,10 +12,12 @@ html, body {
 }
 html {
 	overflow: hidden;
+	min-height: 100vh;
 }
 
 body {
 	overflow: auto;
+    background: url(../images/bg.jpg) repeat top center transparent;
 }
 
 a {
@@ -105,10 +107,11 @@ a.kaos-convert-url:hover {
 /* API result */
 
 .kaos-api-result-header {
-    background: #eee;
     position: relative;
     z-index: 100;
-    box-shadow: 0px -2px 12px 3px #777;
+    border-bottom: 1px solid #ccc;
+    background: url(../images/bg.jpg);
+    box-shadow: 0px -2px 11px 3px #ddd;
 }
 .kaos-api-result-header-right {
 	display: table-cell;
@@ -117,8 +120,9 @@ a.kaos-convert-url:hover {
     vertical-align: top;
 }
 .kaos-api-result-intro {
-    min-height: 57px;
+    min-height: 66px;
     display: table;
+    background: rgba(0,0,0,0.04);
     width: 100%;
 }
 .kaos-api-result-intro-name {
@@ -143,6 +147,11 @@ a.kaos-convert-url:hover {
 .kaos-api-result-body {
 	text-align: left;
 	font-family: monospace;
+}
+
+#main {
+	min-height: 100vh;
+	background: rgba(255,255,255,0.8);
 }
 .kaos-api-result-body-type-rewind {
 	margin-bottom: 70px;
@@ -800,15 +809,16 @@ img.kaos-api-result-title-flag {
 }
 #kaosSearch {
     font-size: 20px;
-    padding: 6px 32px 6px 8px;
+    padding: 8px 32px 8px 8px;
     width: 500px;
     box-sizing: border-box;
 }
 #kaosSearch,
 #kaosSearch:focus,
 #kaosSearch:active {
+    border: 1px solid #ccc;
     outline: 0 !important;
-    box-shadow: none !important;
+    box-shadow: 3px 3px 5px -3px #ccc !important;
 }
 .kaos-search-icon {
     position: absolute;
@@ -973,11 +983,14 @@ img.kaos-api-result-title-flag {
     color: black;
 }
 
-.kaos-api-result-intro-name > * {
+.kaos-api-result-intro-name > a {
+    top: 3px;
     text-decoration: none;
     color: inherit;
     display: inline-block;
-    padding: 3px 5px;
+    position: absolute;
+    left: 0;
+    padding: 0;
     outline: 0 !important;
 }
 
@@ -1724,19 +1737,24 @@ a.clean-links:hover {
 }
 
 .browser-directories {
-	text-align: center;
-	padding: 0 20px;
-    margin: 80px 0 40px;
-}
+    text-align: center;
+    padding: 0;
+    margin: 10px 0 0;
+    line-height: normal;
 
+}
 .browser-directories div {
-    padding: 8px 10px;
-    background: #fcfcfc;
+    margin: 0;
+    padding: 0 0 6px;
     display: inline-block;
+    vertical-align: top;
+    line-height: normal;
+    background: white;
+    background: rgba(255,255,255,0.7);
 }
 .browser-directories a,
 .browser-directories span {
-    margin: 0 10px;
+    padding: 5px 10px;
     color: #777;
     font-size: 13px;
 }
@@ -1988,7 +2006,7 @@ a.kaos-top-action-disabled {
 .header-filters > ul > li > .menu-button,
 .header-filters-advanced > ul > li > .menu-button {
     display: inline-block;
-    padding: 15px 8px 10px;
+    padding: 15px 8px;
 }
 .top-filter-menu {
 	position: absolute;
@@ -2133,7 +2151,10 @@ a.kaos-top-filter-ind:hover i {
 
 
 
-.kaos-root .kaos-api-result-header {
+.kaos-root .kaos-api-result-intro,
+.kaos-root .kaos-api-result-header,
+.kaos-root .kaos-api-result-body,
+.kaos-root #main {
     background: none;
     border: none;
     box-shadow: none;
@@ -2144,7 +2165,6 @@ a.kaos-top-filter-ind:hover i {
 }
 
 .search-root-big-wrap {
-	margin: 20px 0 14px;
 }
 
 a.revert-color {
@@ -2261,4 +2281,31 @@ a.revert-color:hover {
 	padding-right: 10px;
 	white-space: nowrap;
 	vertical-align: top;
+}
+
+.root-slogan {
+
+    font-size: 19px;
+    font-family: monospace;
+    line-height: 30px;
+    margin: 50px 0 100px;
+}
+
+.front-warning {
+    line-height: normal;
+}
+.front-warning > span {
+    display: inline-block;
+    font-size: 14px;
+    padding: 4px 14px;
+    background: orange;
+    color: white;
+    font-weight: bold;
+    margin: 0 0 20px;
+    vertical-align: top;
+    border-radius: 4px;
+}
+
+.front-warning.front-warning-debug > span {
+	margin: 20px 0 0;
 }

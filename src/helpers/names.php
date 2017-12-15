@@ -4,20 +4,13 @@ if (!defined('BASE_PATH'))
 	die();
 
 
-
-if (!empty($_GET['loadNames'])){
-	loadNames();
-	echo '<br>done';
-	die();
-}
-
 function loadNames(){
 	foreach (array(
 		'first_names.txt' => FIRST_NAME,
 		'last_names.txt' => LAST_NAME,
 	) as $f => $type){
-		echo 'loading '.$f.'<br>';
-		$names = preg_split("/\\r\\n|\\r|\\n/", file_get_contents(DATA_PATH.'/names/'.$f));
+		//echo 'loading '.$f.'<br>';
+		$names = preg_split("/\\r\\n|\\r|\\n/", file_get_contents(BASE_PATH.'/database/'.$f));
 		if ($names){
 			$i = 0;
 			foreach ($names as $name)
@@ -29,10 +22,10 @@ function loadNames(){
 					$i++;
 				}
 			
-			echo 'loaded '.$i.' names<br>';
-		} else
-			echo 'error!<br>';
-		echo '<br>';
+			//echo 'loaded '.$i.' names<br>';
+		} //else
+			//echo 'error!<br>';
+		//echo '<br>';
 	}
 }
 

@@ -375,6 +375,12 @@ function kaosAjaxDeleteExtractedData($args){
 		'statuses', 
 		'status_has_service', 
 		'amounts', 
+		'locations',
+		'location_countries',
+		'location_states',
+		'location_counties',
+		'location_cities',
+		
 		/* TODO: implement hard-reset button
 		'bulletins',
 		'bulletin_uses_bulletin',

@@ -4,6 +4,7 @@ if (!defined('BASE_PATH'))
 	die();
 
 
+require('entities.php');
 require('spiders.php');
 require('locations.php');
 require('string.php');
@@ -422,11 +423,11 @@ function logo(){
 		<?php
 			if (isHome(true)){
 				?>
-				<a href="#" onclick="jQuery('#kaosSearch').focus().select(); return false"><img src="<?= ASSETS_URL.'/images/logo/logo-black.png' ?>" /></a>
+				<a href="#" onclick="jQuery('#kaosSearch').focus().select(); return false"><img src="<?= ASSETS_URL.'/images/logo/logo-transparent.png?v='.KAOS_ASSETS_INC ?>" /></a>
 				<?php
 			} else {
 				?>
-				<a href="<?= BASE_URL.($kaosPage == 'api' && !empty($kaosCall['call']) ? 'api' : '') ?>" title="<?= ($kaosPage == 'api' && !empty($kaosCall['call']) ? 'Go back to bulletins' : 'Go to homepage') ?>"><img src="<?= ASSETS_URL.'/images/logo/logo-black.png' ?>" /></a>
+				<a href="<?= BASE_URL.($kaosPage == 'api' && !empty($kaosCall['call']) ? 'api' : '') ?>" title="<?= ($kaosPage == 'api' && !empty($kaosCall['call']) ? 'Go back to bulletins' : 'Go to homepage') ?>"><img src="<?= ASSETS_URL.'/images/logo/logo-transparent.png?v='.KAOS_ASSETS_INC ?>" /></a>
 				<?php
 			}
 		?>
@@ -802,10 +803,10 @@ function kaosGetUrl($query, $apiCall = null, $passCurrentArgs = array()){
 		$url .= '/'.$schema;
 
 	if ($apiCall){
-		if (in_array($apiCall, array('fetch', 'parse', 'extract')) && is_array($query)){
+		if ($schema && in_array($apiCall, array('fetch', 'lint', 'parse', 'extract', 'redirect', 'download')) && is_array($query)){
 			if (!empty($query['date']))
 				$url .= '/'.$query['date'];
-			if (!empty($query['id']) && $schema && !in_array($schema, array('parse', 'extract')))
+			if (!empty($query['id']))
 				$url .= '/'.$query['id'];
 		}
 		$url .= '/'.$apiCall;

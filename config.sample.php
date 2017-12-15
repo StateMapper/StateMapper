@@ -36,6 +36,7 @@ define('DB_PASS', 'PUT_YOUR_DATABASE_PASS_HERE');
 // dev/debug
 define('KAOS_DEBUG', true); // set to false when in production
 define('KAOS_DEV_REDUCE_ENTITIES', false); // set to 5 to reduce dev time, set to false in production or real rewind mode!!
+define('KAOS_FRONTPAGE_MESSAGE', false);
 
 // print all PHP errors
 if (KAOS_DEBUG){
