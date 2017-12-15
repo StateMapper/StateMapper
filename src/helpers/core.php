@@ -197,7 +197,7 @@ function head($title = null){
 		
 	?>
 	<title><?= ($title ? $title.' - ' : '').'StateMapper' ?></title>
-	<link rel="icon" href="<?= ASSETS_URL.'/images/favicons/'.$fav.'.ico' ?>" type="image/x-icon" />
+	<link rel="icon" href="<?= APP_URL.'/addons/fontawesome_favicons/'.$fav.'.ico' ?>" type="image/x-icon" />
 
 	<style>
 		@font-face {

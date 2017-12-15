@@ -45,8 +45,8 @@ if (BASE_URL == 'PUT_YOUR_BASE_URL_HERE')
 else
 	define('REAL_BASE_URL', BASE_URL);
 
-define('APP_URL', REAL_BASE_URL.'/src');
-define('ASSETS_URL', REAL_BASE_URL.'/src/assets');
+define('APP_URL', REAL_BASE_URL.'src');
+define('ASSETS_URL', REAL_BASE_URL.'src/assets');
 define('SCHEMAS_PATH', BASE_PATH.'/schemas');
 
 ini_set('max_execution_time', MAX_EXECUTION_TIME);
@@ -119,8 +119,9 @@ if ($kaosCall['cliArgs']){
 	} while ($changed);
 }
 
-// call the controller
-$c = new Controller();
-$c->exec();
-exit();
-
+if (!defined('LOAD_ONLY_CONFIG') || !LOAD_ONLY_CONFIG){
+	// call the controller
+	$c = new Controller();
+	$c->exec();
+	exit();
+}

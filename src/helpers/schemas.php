@@ -36,7 +36,7 @@ function kaosGetSchema($type, $raw = false){
 	if (!file_exists($schemaUrl) || !is_file($schemaUrl))
 		return false;
 
-	if (!($schema = @file_get_contents($schemaUrl)))
+	if (!($schema = file_get_contents($schemaUrl)))
 		return false;
 
 	if ($raw)

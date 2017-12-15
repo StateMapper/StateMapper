@@ -1,0 +1,12 @@
+
+<IfModule mod_rewrite.c>
+
+Options -Indexes
+
+RewriteEngine On
+
+# Redirect everything to index.php
+RewriteRule . index.php [L]
+
+</IfModule>
+
