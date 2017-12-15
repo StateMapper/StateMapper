@@ -1,17 +1,9 @@
--- phpMyAdmin SQL Dump
--- version 4.5.4.1deb2ubuntu2
--- http://www.phpmyadmin.net
---
--- Host: localhost
--- Generation Time: Dec 13, 2017 at 08:01 PM
--- Server version: 10.0.31-MariaDB-0ubuntu0.16.04.2
--- PHP Version: 7.0.22-0ubuntu0.16.04.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 --
--- Database: `statemapper`
+-- Database: `statemapper_dev2`
 --
 
 -- --------------------------------------------------------
@@ -162,10 +154,9 @@ CREATE TABLE `locks` (
 --
 
 CREATE TABLE `names` (
-  `id` bigint(20) NOT NULL,
-  `type` tinyint(4) NOT NULL,
-  `name` varchar(80) NOT NULL
-) ENGINE=TokuDB DEFAULT CHARSET=latin1;
+  `name` varchar(80) NOT NULL,
+  `type` tinyint(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -344,9 +335,7 @@ ALTER TABLE `locks`
 -- Indexes for table `names`
 --
 ALTER TABLE `names`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `name` (`name`),
-  ADD KEY `type` (`type`);
+  ADD PRIMARY KEY (`name`);
 
 --
 -- Indexes for table `options`
@@ -403,79 +392,74 @@ ALTER TABLE `workers`
 -- AUTO_INCREMENT for table `amounts`
 --
 ALTER TABLE `amounts`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4259;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1985;
 --
 -- AUTO_INCREMENT for table `bulletins`
 --
 ALTER TABLE `bulletins`
-  MODIFY `id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=487931;
+  MODIFY `id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=489300;
 --
 -- AUTO_INCREMENT for table `bulletin_uses_bulletin`
 --
 ALTER TABLE `bulletin_uses_bulletin`
-  MODIFY `id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=482451;
+  MODIFY `id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=483801;
 --
 -- AUTO_INCREMENT for table `entities`
 --
 ALTER TABLE `entities`
-  MODIFY `id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11294;
+  MODIFY `id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8695;
 --
 -- AUTO_INCREMENT for table `locations`
 --
 ALTER TABLE `locations`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `location_cities`
 --
 ALTER TABLE `location_cities`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `location_counties`
 --
 ALTER TABLE `location_counties`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `location_states`
 --
 ALTER TABLE `location_states`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `locks`
 --
 ALTER TABLE `locks`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=366;
---
--- AUTO_INCREMENT for table `names`
---
-ALTER TABLE `names`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=251288;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=585;
 --
 -- AUTO_INCREMENT for table `options`
 --
 ALTER TABLE `options`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76047;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76078;
 --
 -- AUTO_INCREMENT for table `precepts`
 --
 ALTER TABLE `precepts`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8483;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6346;
 --
 -- AUTO_INCREMENT for table `spiders`
 --
 ALTER TABLE `spiders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `statuses`
 --
 ALTER TABLE `statuses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43921;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8473;
 --
 -- AUTO_INCREMENT for table `status_has_service`
 --
 ALTER TABLE `status_has_service`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=603;
 --
 -- AUTO_INCREMENT for table `workers`
 --
 ALTER TABLE `workers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;

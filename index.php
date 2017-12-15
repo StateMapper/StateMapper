@@ -40,8 +40,13 @@ if (file_exists(BASE_PATH.'/config.php')){
 	define('KAOS_IS_INSTALL', true);
 }
 
-define('APP_URL', BASE_URL.'/src');
-define('ASSETS_URL', BASE_URL.'/src/assets');
+if (BASE_URL == 'PUT_YOUR_BASE_URL_HERE')
+	define('REAL_BASE_URL', !empty($_POST['kaosInstall_base_url']) ? $_POST['kaosInstall_base_url'] : '.');
+else
+	define('REAL_BASE_URL', BASE_URL);
+
+define('APP_URL', REAL_BASE_URL.'/src');
+define('ASSETS_URL', REAL_BASE_URL.'/src/assets');
 define('SCHEMAS_PATH', BASE_PATH.'/schemas');
 
 ini_set('max_execution_time', MAX_EXECUTION_TIME);

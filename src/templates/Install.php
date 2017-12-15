@@ -63,20 +63,34 @@ if (!empty($_POST['kaosInstall'])){
 				if (!empty($return))
 					$error = 'An error occured during the database structure setup.';
 					
-				else {
-					// load first and last names
-					loadNames(); 
+			}
+
+			if (!$error){
+				$resNames = mysqli_query($conn, 'SELECT * FROM names LIMIT 1');
+				if (!mysqli_num_rows($resNames)){
+				
+					// if no names found, load them
+					$cerror = loadNames($conn);
+					if ($cerror !== true){
+						$error = $cerror;
+						mysqli_query($conn, 'DELETE * FROM names');
+					}
 				}
 			}
+
 			if (!$error){
 				if (!@file_put_contents(BASE_PATH.'/config.php', $content))
 					$error = BASE_PATH.'/config.php couldn\'t be written. Please make '.BASE_PATH.' writtable.';
 				else {
 					ignore_user_abort(false);
+					mysqli_close($conn);
+					
+					$_SESSION['kaos_justinstalled'] = 1;
 					redirect($args['base_url'].'?installed=1');
 				}
-				ignore_user_abort(false);
 			}
+			ignore_user_abort(false);
+			mysqli_close($conn);
 		}
 	}
 }
@@ -91,6 +105,7 @@ if (!empty($_POST['kaosInstall'])){
 					color: red;
 					padding: 5px 10px;
 					margin: 10px 0 20px;
+					background: white;
 				}
 				#wrap {
 					line-height: normal;
@@ -127,10 +142,27 @@ if (!empty($_POST['kaosInstall'])){
 					margin-bottom: 20px;
 				}
 			</style>
+			<script>
+			jQuery(document).ready(function(){
+				var f = jQuery('#kaos-install-form');
+				
+				// submit the install form only once, and change the submit button's label
+				f.submit(function(e){
+					if (f.is('.installing')){
+						e.preventDefault();
+						e.stopPropagation();
+						return false;
+					}
+					f.addClass('installing');
+					var b = f.find('.install-submit');
+					b.attr('value', b.data('kaos-installing'));
+				});
+			});
+			</script>
 		</head>
 		<body>
 			<div id="wrap">
-				<form action="<?= kaosCurrentURL() ?>" method="POST">
+				<form id="kaos-install-form" action="<?= kaosCurrentURL() ?>" method="POST">
 					<h1>StateMapper Installation</h1>
 					<?php
 						if ($error)
@@ -214,7 +246,7 @@ if (!empty($_POST['kaosInstall'])){
 					-->
 					<div>
 						<div>
-							<input type="submit" name="kaosInstall" value="Install" />
+							<input class="install-submit" type="submit" name="kaosInstall" value="Install" data-kaos-installing="Installing, please be patient..." />
 						</div>
 					</div>
 				</form>

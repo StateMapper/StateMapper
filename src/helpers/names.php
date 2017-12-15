@@ -3,30 +3,67 @@
 if (!defined('BASE_PATH'))
 	die();
 
-
-function loadNames(){
+//if (!empty($_GET['reload_names'])) 
+//	loadNames(); 
+	
+function loadNames($conn = null){ // provide $conn if installing only
+	
+	// empty the names table
+	if ($conn)
+		mysqli_query($conn, 'DELETE * FROM names');
+	else
+		query('DELETE * FROM names');
+	
 	foreach (array(
 		'first_names.txt' => FIRST_NAME,
 		'last_names.txt' => LAST_NAME,
 	) as $f => $type){
 		//echo 'loading '.$f.'<br>';
-		$names = preg_split("/\\r\\n|\\r|\\n/", file_get_contents(BASE_PATH.'/database/'.$f));
-		if ($names){
-			$i = 0;
-			foreach ($names as $name)
-				if (trim($name) != ''){
-					insert('names', array(
-						'type' => $type,
-						'name' => mb_strtolower(remove_accents(preg_replace('#\s+#', ' ', trim($name)))),
-					));
-					$i++;
+		
+		$handle = fopen(BASE_PATH.'/database/'.$f, 'r');
+		if (!$handle)
+			return 'Could not read '.BASE_PATH.'/database/'.$f;
+		
+		if ($handle){
+			$last = '';
+			while (!feof($handle)){
+				$name = fgets($handle, 500);
+				
+				if (!$name){
+					if ($last != '')
+						loadName($last, $type, $conn);
+					break;
 				}
-			
-			//echo 'loaded '.$i.' names<br>';
-		} //else
-			//echo 'error!<br>';
-		//echo '<br>';
+				$name = $last.$name;
+		
+				$names = preg_split("/\\r\\n|\\r|\\n/", $name);
+				if ($names){
+					$count = count($names);
+					$i = 0;
+					foreach ($names as $name){
+						if ($i == $count-1)
+							$last = $name;
+						else if (trim($name) != '')
+							loadName($name, $type, $conn);
+						$i++;
+					}
+				}
+			}
+			fclose($handle);
+		}
 	}
+	return true;
+}
+
+function loadName($name, $type, $conn = null){
+	$cname = mb_strtolower(remove_accents(preg_replace('#\s+#', ' ', trim($name))));
+	if ($conn)
+		mysqli_query($conn, "INSERT INTO names (type, name) VALUES ('".mysqli_real_escape_string($conn, $type)."', '".mysqli_real_escape_string($conn, $cname)."')");
+	else
+		insert('names', array(
+			'type' => $type,
+			'name' => $cname,
+		));
 }
 
 function kaosIsName($str, $type = null, $soft = false){
@@ -174,28 +211,3 @@ function lintName($name){
 	}
 	return $name;
 }
-
-/*
-if (1){
-	foreach (array(
-		'Martinez Pradas Enrique',
-		'Alexander Sonderer',
-		'Alexander John Oliver Sonderer',
-		'Sonderer Alexander John Oliver',
-		'Ruiz Peinado Miguel Angel',
-		'Escudero Rodriguez Maria Purificacion',
-		'Escudero Rodriguez María Purificación',
-		'Ahata Julienne Kongo Lumumba',
-		'Mooij Anna Maria Elisabeth',
-		'Madueño Ruiz Florencio Victor',
-		'Menezes Guilhermina-Maria-Joanesse',
-	) as $name)
-		echo print_r(kaosLintPerson(array(
-			'original' => $name,
-			'name' => $name,
-			'first_name' => null
-		)), true).'<br>';
-
-	die();
-}
-*/

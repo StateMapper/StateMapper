@@ -201,7 +201,7 @@ $searchInput = ob_get_clean();
 									<div>
 										<div class="logo-root-big-wrap"><img src="<?= ASSETS_URL.'/images/logo/logo-square-transparent.png?v='.KAOS_ASSETS_INC ?>" class="logo-root-big" /></div>
 										<?php
-											if (!empty($_GET['installed']))
+											if (!empty($_GET['installed']) && !empty($_SESSION['kaos_justinstalled']))
 												echo '<div class="front-warning front-warning-success"><span>'._('The installation was completed successfully!').'</span></div>';
 											else if (defined('KAOS_FRONTPAGE_MESSAGE') && KAOS_FRONTPAGE_MESSAGE)
 												echo '<div class="front-warning front-warning-custom"><span>'.KAOS_FRONTPAGE_MESSAGE.'</span></div>';
