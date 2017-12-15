@@ -17,7 +17,11 @@ if ($icon)
 if (!$icon || !preg_match('#^[a-z0-9-]+$#i', $icon))
 	die('no symbol specified in URL');
 
-$icoPath = $tempFolder ? $tempFolder.'/favicon-fa-'.$icon.'.png' : null;
+$bg = !empty($_GET['bg']) && preg_match('#^[a-f0-9]{6}$#i', $_GET['bg']) ? $_GET['bg'] : 'ffffff';
+$color = !empty($_GET['color']) && preg_match('#^[a-f0-9]{6}$#i', $_GET['color']) ? $_GET['color'] : '000000';
+$isTransparent = empty($_GET['bg']) || $_GET['bg'] == 'transparent';
+
+$icoPath = $tempFolder ? $tempFolder.'/favicon-fa--'.$icon.'--'.$color.'-'.($isTransparent ? 'transparent' : $bg).'.png' : null;
 if (!$tempFolder || !file_exists($icoPath)){
 		
 	// loads constants (only), to get 'ASSETS_PATH'
@@ -38,14 +42,12 @@ if (!$tempFolder || !file_exists($icoPath)){
 	$im = imagecreatetruecolor(16, 16);
 	imagesavealpha($im, true);
 
-	$bg = !empty($_GET['bg']) && preg_match('#^[a-f0-9]{6}$#i', $_GET['bg']) ? $_GET['bg'] : 'ffffff';
 	list($r, $g, $b) = sscanf('#'.$bg, "#%02x%02x%02x");
-	$bg = imagecolorallocatealpha($im, $r, $g, $b, empty($_GET['bg']) || $_GET['bg'] == 'transparent' ? 127 : 0);
+	$bg = imagecolorallocatealpha($im, $r, $g, $b, $isTransparent ? 127 : 0);
 	imagefill($im, 0, 0, $bg);
 
 	//imagealphablending($im, true)
 
-	$color = !empty($_GET['color']) && preg_match('#^[a-f0-9]{6}$#i', $_GET['color']) ? $_GET['color'] : '000000';
 	list($r, $g, $b) = sscanf('#'.$color, "#%02x%02x%02x");
 	$color = imagecolorallocatealpha($im, $r, $g, $b, 0);
 
