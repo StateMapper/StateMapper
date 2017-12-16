@@ -9,8 +9,8 @@
 
 The processing layers can be described as follows:
 
-| Layer name | Responsability |
-| -------- | ---- |
+| | Layer name | Responsability |
+| -------- | ---- | --- |
 | <img src="https://statemapper.net/src/addons/fontawesome_favicons/terminal.ico" valign="middle" /> | daemon | start and stop bulletin spiders |
 | <img src="https://statemapper.net/src/addons/fontawesome_favicons/bug.ico" valign="middle" /> | spider | trigger workers to fetch, parse and extract bulletins |
 | <img src="https://statemapper.net/src/addons/fontawesome_favicons/cloud-download.ico" valign="middle" /> | fetch | download bulletins from bulletin providers |
