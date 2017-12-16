@@ -54,11 +54,11 @@ If you wish to get involved into one of them, please do not hesitate in [contact
 
 You may also help this project by:
 
-- **Translating it to a new language:** it is really easy to translate StateMapper to whatever language you speak, and it can really help the project spread! Please read the [Translation guide](documentation/manuals/TRANSLATE.md#top) for more details.
+- <img src="https://statemapper.net/src/addons/fontawesome_favicons/language.ico" /> **Translating it to a new language:** it is really easy to translate StateMapper to whatever language you speak, and it can really help the project spread! Please read the [Translation guide](documentation/manuals/TRANSLATE.md#top) for more details.
 
-- **Sharing this project:** tell your most important contacts how this project can help us out with the world's dramatic public bribery situation. Please use the [#StateMapper](https://twitter.com/search?q=%23StateMapper) hashtag to link your publications to a same stream ;)
+- <img src="https://statemapper.net/src/addons/fontawesome_favicons/bullhorn.ico" /> **Sharing this project:** tell your most important contacts how this project can help us out with the world's dramatic public bribery situation. Please use the [#StateMapper](https://twitter.com/search?q=%23StateMapper) hashtag to link your publications to a same stream ;)
 
-- **Donating to this project**: come to visit us at [La Ingobernable](https://ingobernable.net) (Madrid, Spain), and ask for the Kaos155 [hacker team](https://hacklab.ingobernable.net) :)
+- <img src="https://statemapper.net/src/addons/fontawesome_favicons/money.ico" /> **Donating to this project**: come to visit us at [La Ingobernable](https://ingobernable.net) (Madrid, Spain), and ask for the Kaos155 [hacker team](https://hacklab.ingobernable.net) :)
 
 
 ## Roadmap:
