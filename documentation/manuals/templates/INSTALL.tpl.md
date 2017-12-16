@@ -10,9 +10,10 @@ StateMapper might work just fine on any [Debian-based](https://www.debian.org/de
 * [PHP4+](http://php.net/) *(best PHP7+)*
 * [MariaDB](https://mariadb.com/) with its [TokuDB plugin](https://mariadb.com/kb/en/library/tokudb/) *(though MySQL may be enough for local development)*
 * [Apache](https://httpd.apache.org/) 2.2+ with [mod_rewrite](http://httpd.apache.org/docs/current/mod/mod_rewrite.html) enabled
-* [cURL](http://php.net/manual/en/intro.curl.php)
-* [SimpleXML](http://php.net/manual/en/book.simplexml.php)
-* [Multibyte String](http://php.net/manual/en/book.mbstring.php)
+* [cURL](http://php.net/manual/en/intro.curl.php) PHP module
+* [SimpleXML](http://php.net/manual/en/book.simplexml.php) PHP module
+* [GD](http://php.net/manual/es/book.image.php) PHP module
+* [Multibyte String](http://php.net/manual/en/book.mbstring.php) PHP module
 * [pdftotext](https://poppler.freedesktop.org/) *(from Poppler)*
 * [git](https://git-scm.com/docs/gittutorial) *(or simply download the files from this repository)*
 
@@ -24,7 +25,7 @@ StateMapper might work just fine on any [Debian-based](https://www.debian.org/de
 
 1. Install dependencies: *(if MySQL is installed, it will be replaced by MariaDB)*
    ```bash
-   sudo apt-get install php7.0 apache2 libapache2-mod-php php-mysql mariadb-plugin-tokudb php-mcrypt curl php-curl php-mbstring php-xml poppler-utils git
+   sudo apt-get install php7.0 apache2 libapache2-mod-php php-mysql mariadb-plugin-tokudb php-mcrypt curl php-curl php-mbstring php-xml php-gd poppler-utils git
    ```
 2. Install TokuDB following [these instructions](https://mariadb.com/kb/en/library/enabling-tokudb/). 
 
@@ -71,6 +72,7 @@ StateMapper might work just fine on any [Debian-based](https://www.debian.org/de
    sudo chgrp -R www-data /var/www/html
    sudo find /var/www/html/statemapper -type d -exec chmod g+rx {} +
    sudo find /var/www/html/statemapper -type f -exec chmod g+r {} +
+   sudo chmod -f 777 /var/www/html/statemapper/src/assets/images/tmp
    ```
    
 9. RECOMMENDED: Create an ```smap``` alias to access the CLI API easily from anywhere by entering:
