@@ -36,7 +36,7 @@ The extraction layer is where data is finally saved to the database in the form 
 | ---- | ----- |
 | precepts | original text to extract information from |
 | statuses | single, small information about one or several entities |
-| entities | legal actors; currently of three types: *<img src="https://statemapper.net/src/addons/fontawesome_favicons/user-circle-o.ico" /> person*, *company* and *institution* |
+| entities | legal actors; currently of three types: <img src="https://statemapper.net/src/addons/fontawesome_favicons/user-circle-o.ico" /> *person*, <img src="https://statemapper.net/src/addons/fontawesome_favicons/industry.ico" /> *company* and <img src="https://statemapper.net/src/addons/fontawesome_favicons/university.ico" /> *institution* |
 | amounts | amounts related with the status, with units and USD values |
 | locations | locations related with the status |
 
