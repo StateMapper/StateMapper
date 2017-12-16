@@ -39,9 +39,8 @@ function kaosGetYearStats($schema, $year){
 		'not_fetched' => 0,
 		'not_published' => 0,
 		'error' => 0,
-		'fetched' => !empty($stats['waiting']) ? $stats['waiting'] : 0,
+		'fetched' => (!empty($stats['fetched']) ? $stats['fetched'] : 0) + (!empty($stats['extracting']) ? $stats['extracting'] : 0) + (!empty($stats['extracted']) ? $stats['extracted'] : 0),
 	);
-	unset($stats['waiting']);
 	
 	/*static $acc = 0;
 	$begin = time();
