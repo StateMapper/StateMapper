@@ -47,7 +47,7 @@ If you like this project, whatever skills you have, there surely is a way you ca
 | ----- | ------ | ---- | ---- |
 | [Counter-bribery **Strategists**](https://github.com/StateMapper/StateMapper/projects/1) | to elaborate the best strategy and endorse public communications | political scientists, journalists, magistrates, social activists | |
 | [Core **Wizards**](https://github.com/StateMapper/StateMapper/projects/2) | to develop and maintain the core code | PHP/MySQL/JS/Regexp experts | [Developers guide &rarr;](documentation/manuals/DEVELOPERS.md#top) |
-| <img src="https://statemapper.net/src/addons/fontawesome_favicons/fire.ico" /> [Schema **Soldiers**](https://github.com/StateMapper/StateMapper/projects/3) | to implement and maintain bulletin schemas | JSON/Regexp experts | [Soldiers guide &rarr;](documentation/manuals/SOLDIERS.md#top) |
+| [<img src="https://statemapper.net/src/addons/fontawesome_favicons/fire.ico" /> Schema **Soldiers**](https://github.com/StateMapper/StateMapper/projects/3) | to implement and maintain bulletin schemas | JSON/Regexp experts | [Soldiers guide &rarr;](documentation/manuals/SOLDIERS.md#top) |
 | [Country **Ambassadors**](https://github.com/StateMapper/StateMapper/projects/4) | to host bulletins backup nodes, check bulletins' integrity and translate the UI | collectives of social rights | [Ambassadors' guide &rarr;](documentation/manuals/AMBASSADORS.md#top) |
 
 If you wish to get involved into one of them, please do not hesitate in [contacting us](#contact--support)! A list of active Soldiers and Ambassadors is available on the [bulletin providers' page](https://statemapper.net/api).
