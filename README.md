@@ -47,18 +47,18 @@ If you like this project, whatever skills you have, there surely is a way you ca
 | ----- | ------ | ---- | ---- |
 | [Counter-bribery **Strategists**](https://github.com/StateMapper/StateMapper/projects/1) | to elaborate the best strategy and endorse public communications | political scientists, journalists, magistrates, social activists | |
 | [Core **Wizards**](https://github.com/StateMapper/StateMapper/projects/2) | to develop and maintain the core code | PHP/MySQL/JS/Regexp experts | [Developers guide &rarr;](documentation/manuals/DEVELOPERS.md#top) |
-| [<img src="https://statemapper.net/src/addons/fontawesome_favicons/fire.ico?color=0366d6" /> Schema **Soldiers**](https://github.com/StateMapper/StateMapper/projects/3) | to implement and maintain bulletin schemas | JSON/Regexp experts | [Soldiers guide &rarr;](documentation/manuals/SOLDIERS.md#top) |
-| [<img src="https://statemapper.net/src/addons/fontawesome_favicons/globe.ico?color=0366d6" /> Country **Ambassadors**](https://github.com/StateMapper/StateMapper/projects/4) | to host bulletins backup nodes, check bulletins' integrity and translate the UI | collectives of social rights | [Ambassadors' guide &rarr;](documentation/manuals/AMBASSADORS.md#top) |
+| [<img src="https://statemapper.net/src/addons/fontawesome_favicons/fire.ico?color=0366d6" valign="middle" /> Schema **Soldiers**](https://github.com/StateMapper/StateMapper/projects/3) | to implement and maintain bulletin schemas | JSON/Regexp experts | [Soldiers guide &rarr;](documentation/manuals/SOLDIERS.md#top) |
+| [<img src="https://statemapper.net/src/addons/fontawesome_favicons/globe.ico?color=0366d6" valign="middle" /> Country **Ambassadors**](https://github.com/StateMapper/StateMapper/projects/4) | to host bulletins backup nodes, check bulletins' integrity and translate the UI | collectives of social rights | [Ambassadors' guide &rarr;](documentation/manuals/AMBASSADORS.md#top) |
 
 If you wish to get involved into one of them, please do not hesitate in [contacting us](#contact--support)! A list of active Soldiers and Ambassadors is available on the [bulletin providers' page](https://statemapper.net/api).
 
 You may also help this project by:
 
-- <img src="https://statemapper.net/src/addons/fontawesome_favicons/language.ico" /> **Translating it to a new language:** it is really easy to translate StateMapper to whatever language you speak, and it can really help the project spread! Please read the [Translation guide](documentation/manuals/TRANSLATE.md#top) for more details.
+- <img src="https://statemapper.net/src/addons/fontawesome_favicons/language.ico" valign="middle" /> **Translating it to a new language:** it is really easy to translate StateMapper to whatever language you speak, and it can really help the project spread! Please read the [Translation guide](documentation/manuals/TRANSLATE.md#top) for more details.
 
-- <img src="https://statemapper.net/src/addons/fontawesome_favicons/bullhorn.ico" /> **Sharing this project:** tell your most important contacts how this project can help us out with the world's dramatic public bribery situation. Please use the [#StateMapper](https://twitter.com/search?q=%23StateMapper) hashtag to link your publications to a same stream ;)
+- <img src="https://statemapper.net/src/addons/fontawesome_favicons/bullhorn.ico" valign="middle" /> **Sharing this project:** tell your most important contacts how this project can help us out with the world's dramatic public bribery situation. Please use the [#StateMapper](https://twitter.com/search?q=%23StateMapper) hashtag to link your publications to a same stream ;)
 
-- <img src="https://statemapper.net/src/addons/fontawesome_favicons/money.ico" /> **Donating to this project**: come to visit us at [La Ingobernable](https://ingobernable.net) (Madrid, Spain), and ask for the Kaos155 [hacker team](https://hacklab.ingobernable.net) :)
+- <img src="https://statemapper.net/src/addons/fontawesome_favicons/money.ico" valign="middle" /> **Donating to this project**: come to visit us at [La Ingobernable](https://ingobernable.net) (Madrid, Spain), and ask for the Kaos155 [hacker team](https://hacklab.ingobernable.net) :)
 
 
 ## Roadmap:

@@ -20,12 +20,12 @@ The processing layers can be described as follows:
 
 | Layer name | Responsability |
 | -------- | ---- |
-| <img src="https://statemapper.net/src/addons/fontawesome_favicons/terminal.ico" valign="middle" /> daemon | start and stop bulletin spiders |
-| <img src="https://statemapper.net/src/addons/fontawesome_favicons/bug.ico" valign="middle" /> spider | trigger workers to fetch, parse and extract bulletins |
-| <img src="https://statemapper.net/src/addons/fontawesome_favicons/cloud-download.ico" valign="middle" /> fetch | download bulletins from bulletin providers |
-| <img src="https://statemapper.net/src/addons/fontawesome_favicons/tree.ico" valign="middle" /> parse | parse bulletins and trigger subsequent fetches (follows) |
-| <img src="https://statemapper.net/src/addons/fontawesome_favicons/magic.ico" valign="middle" /> extract | extract precepts and status from parsed objects |
-| <img src="https://statemapper.net/src/addons/fontawesome_favicons/usb.ico" valign="middle" /> controller + api | route calls and prepare data for the templates |
+| <img src="https://statemapper.net/src/addons/fontawesome_favicons/terminal.ico" valign="middle" /> | daemon | start and stop bulletin spiders |
+| <img src="https://statemapper.net/src/addons/fontawesome_favicons/bug.ico" valign="middle" /> | spider | trigger workers to fetch, parse and extract bulletins |
+| <img src="https://statemapper.net/src/addons/fontawesome_favicons/cloud-download.ico" valign="middle" /> | fetch | download bulletins from bulletin providers |
+| <img src="https://statemapper.net/src/addons/fontawesome_favicons/tree.ico" valign="middle" /> | parse | parse bulletins and trigger subsequent fetches (follows) |
+| <img src="https://statemapper.net/src/addons/fontawesome_favicons/magic.ico" valign="middle" /> | extract | extract precepts and status from parsed objects |
+| <img src="https://statemapper.net/src/addons/fontawesome_favicons/usb.ico" valign="middle" /> | controller + api | route calls and prepare data for the templates |
 
 - The daemon throws spiders (one per type of bulletin), which throw workers (one per day and type of bulletin). 
 - Workers call the parser (parse layer), which call the fetcher (fetch layer) every time it needs (once for the daily summary, and often many times more for sub-documents).
