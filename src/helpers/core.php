@@ -299,6 +299,8 @@ function waitForLock($key, $timeout = 5){ // timeout in seconds
 
 function lock($key){
 	$id = insert('locks', array('target' => $key, 'created' => date('Y-m-d H:i:s')));
+	if (!$id)
+		return false;
 	$lock_id = get('SELECT id FROM locks WHERE target = %s ORDER BY id ASC', array($key));
 	return $id === intval($lock_id) ? $key : false;
 }

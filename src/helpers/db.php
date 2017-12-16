@@ -131,11 +131,7 @@ function insert($table, $vars = array()){
 
 	$query = 'INSERT INTO '.$table.' ( '.implode(', ', array_keys($vars)).' ) VALUES ( '.implode(', ', $values).' )';
 		
-	$result = kaosSqlQuery($conn, $query);
-	if (!$result)
-		return false;
-	
-	return mysqli_insert_id($conn);
+	return kaosSqlQuery($conn, $query, true);
 }
 
 function update($table, $data = array(), $where = array(), $notWhere = array()){
@@ -158,12 +154,14 @@ function update($table, $data = array(), $where = array(), $notWhere = array()){
 	return mysqli_affected_rows($conn);
 }
 
-function kaosSqlQuery($conn, $query){
+function kaosSqlQuery($conn, $query, $returnInsertedId = false){
 	global $kaosCall;
 	if (empty($kaosCall['queries']))
 		$kaosCall['queries'] = array();
 	$begin = time();
 	$ret = mysqli_query($conn, $query);
+	if ($returnInsertedId)
+		$ret = $ret ? mysqli_insert_id($conn) : false;
 
 	$explain = array();
 	if (KAOS_DEBUG && (KAOS_IS_CLI || isAdmin())){
