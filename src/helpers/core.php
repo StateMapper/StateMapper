@@ -541,7 +541,7 @@ function footer(){
 			<span class="menu-wrap">
 				<span class="menu-menu">
 					<ul class="menu-inner">
-						<?php if (!isAdmin()){ ?>
+						<?php if (!isAdmin() && ALLOW_LOGIN){ ?>
 							<li><a href="<?= esc_attr(BASE_URL.'login?redirect='.urlencode(kaosCurrentURL())) ?>"><i class="fa fa-sign-in"></i> Login</a></li>
 						<?php } ?>
 						
@@ -560,6 +560,9 @@ function footer(){
 			</span>
 		</span>
 	</div>
+	<?php
+	/* TODO: login form and process
+	 * 
 	<div class="login-popup popup">
 		<div class="popup-bg"></div>
 		<div class="popup-inner">
@@ -575,6 +578,7 @@ function footer(){
 		</div>
 	</div>
 	<?php
+	 */
 }
 
 function printQueryLine($q, $onlySlow = false){

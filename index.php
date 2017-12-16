@@ -39,6 +39,7 @@ if (file_exists(BASE_PATH.'/config.php')){
 	require BASE_PATH.'/config.sample.php'; 
 	define('KAOS_IS_INSTALL', true);
 }
+define('ALLOW_LOGIN', KAOS_DEBUG); // for the moment, only allow login on development
 
 if (BASE_URL == 'PUT_YOUR_BASE_URL_HERE')
 	define('REAL_BASE_URL', !empty($_POST['kaosInstall_base_url']) ? $_POST['kaosInstall_base_url'] : '.');

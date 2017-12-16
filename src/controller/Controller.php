@@ -69,6 +69,9 @@ class Controller {
 				
 			case 'logout':
 			case 'login':
+				if ($kaosPage == 'login' && !ALLOW_LOGIN)
+					kaosDie();
+
 				$_SESSION['kaos_authed'] = $kaosPage == 'login' ? 1 : 0; // TODO: implement a login form/system
 				header('Location: '.(!empty($_GET['redirect']) ? $_GET['redirect'] : BASE_URL));
 				exit();
