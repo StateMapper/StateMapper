@@ -349,7 +349,7 @@ function insertGetPrecept($p){
 		return $pid;
 	}
 	if (KAOS_IS_CLI)
-		kaosPrintLog('inserting precept "'.mb_substr(!empty($p['title']) ? $p['title'] : $p['text'], 0, 50).'[...]"', array('color' => 'grey'));
+		kaosPrintLog('inserting precept "'.preg_replace("/\n+/", '', mb_substr(!empty($p['title']) ? $p['title'] : $p['text'], 0, 50)).'[...]"', array('color' => 'grey'));
 	return insert('precepts', $p);
 }
 
