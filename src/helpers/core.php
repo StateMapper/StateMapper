@@ -75,13 +75,23 @@ function kaosDie($str_or_error = null, $error = null){
 		$str_or_error = 'Operation forbidden';
 
 	$msg = (is_string($str_or_error) ? $str_or_error : $str_or_error->msg).($error ? $error->msg : '');
-
+	
+	
 	if (!empty($kaosCall) && !KAOS_IS_CLI){
-		kaosAPIReturn(array(
+		if (!isAdmin())
+			$msg = 'An error occured'; // hide errors to no-admins
+			
+		$obj = array(
 			'success' => false,
 			'query' => isset($kaosCall['query']) ? $kaosCall['query'] : null,
 			'error' => $msg
-		), 'Error');
+		);
+		if (defined('IS_AJAX') && IS_AJAX){
+			header('Content-type: application/json');
+			echo json_encode($obj, JSON_UNESCAPED_UNICODE);
+			exit();
+		}
+		kaosAPIReturn($obj, 'Error');
 	}
 
 	// cli or not api
