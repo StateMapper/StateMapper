@@ -579,7 +579,7 @@ class BulletinExtractor {
 									foreach (array('total', 'net') as $type)
 										if (isset($u['amount'][$type], $u['amount'][$type]['groups'])){
 											foreach ($u['amount'][$type]['groups'] as $group => $camount)
-												if (in_array($group, $related['groups'])){ 
+												if ($related['groups'] && in_array($group, $related['groups'])){ 
 													
 													// TODO: improve matching by tolerating mispelling (like an "I" becoming an "1", or the reverse)
 													
