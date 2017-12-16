@@ -11,6 +11,7 @@ StateMapper might work just fine on any [Debian-based](https://www.debian.org/de
 * [MariaDB](https://mariadb.com/) with its [TokuDB plugin](https://mariadb.com/kb/en/library/tokudb/) *(though MySQL may be enough for local development)*
 * [Apache](https://httpd.apache.org/) 2.2+ with [mod_rewrite](http://httpd.apache.org/docs/current/mod/mod_rewrite.html) enabled
 * [cURL](http://php.net/manual/en/intro.curl.php)
+* [SimpleXML](http://php.net/manual/en/book.simplexml.php)
 * [pdftotext](https://poppler.freedesktop.org/) *(from Poppler)*
 * [git](https://git-scm.com/docs/gittutorial) *(or simply download the files from this repository)*
 
@@ -22,7 +23,7 @@ StateMapper might work just fine on any [Debian-based](https://www.debian.org/de
 
 1. Install dependencies: *(if MySQL is installed, it will be replaced by MariaDB)*
    ```bash
-   sudo apt-get install php7.0 apache2 libapache2-mod-php mariadb-plugin-tokudb php-mcrypt php-mysql curl poppler-utils git
+   sudo apt-get install php7.0 apache2 libapache2-mod-php php-mysql mariadb-plugin-tokudb php-mcrypt curl php-curl php-xml poppler-utils git
    ```
 2. Install TokuDB following [these instructions](https://mariadb.com/kb/en/library/enabling-tokudb/). 
 
@@ -64,7 +65,7 @@ StateMapper might work just fine on any [Debian-based](https://www.debian.org/de
    *Alternatively, if you already have the files, you can simply extract them to ```/var/www/html/statemapper```.*
 
 
-8. Fix Apache permissions: *(replace ```www-data``` and ```/var/www/html``` if convenient)*
+8. Fix folder permissions: *(replace ```www-data``` and ```/var/www/html``` if convenient)*
    ```bash
    sudo chgrp -R www-data /var/www/html
    sudo find /var/www/html/statemapper -type d -exec chmod g+rx {} +

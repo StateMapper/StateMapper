@@ -167,6 +167,9 @@ if (!empty($_POST['kaosInstall'])){
 					<?php
 						if ($error)
 							echo '<div class="kaosError">'.$error.'</div>';
+							
+						// TODO: add some system checks!!
+						// function_exists('simplexml_load_file') for simplexml, for example
 					?>
 					<div>
 						<label>Application base URL:</label>
