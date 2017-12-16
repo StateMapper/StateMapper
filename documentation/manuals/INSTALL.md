@@ -20,6 +20,7 @@ StateMapper might work just fine on any [Debian-based](https://www.debian.org/de
 * [Apache](https://httpd.apache.org/) 2.2+ with [mod_rewrite](http://httpd.apache.org/docs/current/mod/mod_rewrite.html) enabled
 * [cURL](http://php.net/manual/en/intro.curl.php)
 * [SimpleXML](http://php.net/manual/en/book.simplexml.php)
+* [Multibyte String](http://php.net/manual/en/book.mbstring.php)
 * [pdftotext](https://poppler.freedesktop.org/) *(from Poppler)*
 * [git](https://git-scm.com/docs/gittutorial) *(or simply download the files from this repository)*
 
@@ -31,7 +32,7 @@ StateMapper might work just fine on any [Debian-based](https://www.debian.org/de
 
 1. Install dependencies: *(if MySQL is installed, it will be replaced by MariaDB)*
    ```bash
-   sudo apt-get install php7.0 apache2 libapache2-mod-php php-mysql mariadb-plugin-tokudb php-mcrypt curl php-curl php-xml poppler-utils git
+   sudo apt-get install php7.0 apache2 libapache2-mod-php php-mysql mariadb-plugin-tokudb php-mcrypt curl php-curl php-mbstring php-xml poppler-utils git
    ```
 2. Install TokuDB following [these instructions](https://mariadb.com/kb/en/library/enabling-tokudb/). 
 

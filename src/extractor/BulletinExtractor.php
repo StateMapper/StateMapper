@@ -601,9 +601,13 @@ class BulletinExtractor {
 
 							// store amounts in a different table
 							$amountIds = array();
-							foreach ($amounts as $a)
-								if ($amount = kaosConvertAmount($a, $schemaObj->id))
+							foreach ($amounts as $a){
+								if (is_array($a) && count($a) == 1 && isset($a['value']))
+									$a = $a['value'];
+								
+								if ($a && ($amount = kaosConvertAmount($a, $schemaObj->id)))
 									$amountIds[] = insert('amounts', $amount);
+							}
 
 							// add an amount-less status if no amount at all
 							if (!$amountIds)

@@ -84,7 +84,7 @@ function kaosConvertAmount($amount, $schema){
 	}
 */
 	if (!isset($amount['amount']) || !isset($amount['unit']))
-		die('bad formed amount given: '.print_r($amount, true));
+		die('bad formed amount given: '.print_r($amount, true)); // TODO: should log this somewhere visible
 		
 	$v = $amount['amount'];
 		
