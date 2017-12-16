@@ -156,7 +156,10 @@ class Controller {
 					sleep(5);
 					
 					$begin = time();
-					while (($pid = pcntl_waitpid(0, $status, WNOHANG)) != -1){ 
+					while (($pid = pcntl_waitpid(0, $status, WNOHANG)) != -1){ // -1 forno more pid to wait for
+						if ($pid === 0) // get 0 for no pid returned
+							break;
+							
 						$status = pcntl_wexitstatus($status); 
 						$schema = $pids[$pid];
 						if ($status !== 0){
