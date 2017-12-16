@@ -83,8 +83,11 @@ function kaosConvertAmount($amount, $schema){
 		print_r($amount);
 	}
 */
-	if (!isset($amount['amount']) || !isset($amount['unit']))
-		die('bad formed amount given: '.print_r($amount, true)); // TODO: should log this somewhere visible
+	if (!isset($amount['amount']) || !isset($amount['unit'])){
+		if (KAOS_IS_CLI)
+			kaosPrintLog('bad formed amount given: '.print_r($amount, true), array('color' => 'red')); // TODO: should log this somewhere visible
+		return null;
+	}
 		
 	$v = $amount['amount'];
 		
