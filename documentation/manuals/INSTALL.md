@@ -18,10 +18,7 @@ StateMapper might work just fine on any [Debian-based](https://www.debian.org/de
 * [PHP4+](http://php.net/) *(best PHP7+)*
 * [MariaDB](https://mariadb.com/) with its [TokuDB plugin](https://mariadb.com/kb/en/library/tokudb/) *(though MySQL may be enough for local development)*
 * [Apache](https://httpd.apache.org/) 2.2+ with [mod_rewrite](http://httpd.apache.org/docs/current/mod/mod_rewrite.html) enabled
-* [cURL](http://php.net/manual/en/intro.curl.php) PHP module
-* [SimpleXML](http://php.net/manual/en/book.simplexml.php) PHP module
-* [GD](http://php.net/manual/es/book.image.php) PHP module
-* [Multibyte String](http://php.net/manual/en/book.mbstring.php) PHP module
+* [cURL](http://php.net/manual/en/intro.curl.php), [SimpleXML](http://php.net/manual/en/book.simplexml.php), [GD](http://php.net/manual/es/book.image.php) and [Multibyte String](http://php.net/manual/en/book.mbstring.php) PHP modules
 * [pdftotext](https://poppler.freedesktop.org/) *(from Poppler)*
 * [git](https://git-scm.com/docs/gittutorial) *(or simply download the files from this repository)*
 
