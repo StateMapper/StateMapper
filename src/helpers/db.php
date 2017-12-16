@@ -103,6 +103,7 @@ function query($query, $injectVars = array(), $returnType = null){
 	if (!$result){
 		$err = mysqli_error($conn);
 		$err = preg_replace('#\s*'.preg_quote('You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ', '#').'(.*)\s*$#ius', 'syntax error near $1', $err);
+		
 		kaosDie('MySQL query error: <b>'.$err.'</b> about query <b>'.$query.'</b>');
 		return false;
 	}

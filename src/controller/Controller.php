@@ -379,7 +379,6 @@ function kaosAjaxDeleteExtractedData($args){
 		'status_has_service', 
 		'amounts', 
 		'locations',
-		'location_countries',
 		'location_states',
 		'location_counties',
 		'location_cities',
