@@ -216,6 +216,10 @@ function head($title = null){
 		}
 	</style>
 	<?php
+	
+	// allow extra head tags (do not put addons/extra_head.php on github!!)
+	if (is_file(APP_PATH.'/addons/extra_head.php'))
+		include(APP_PATH.'/addons/extra_head.php');
 }
 
 function add_js($js = null){
@@ -561,6 +565,11 @@ function footer(){
 		</span>
 	</div>
 	<?php
+	
+	// allow extra footer tags (do not put addons/extra_footer.php on github!!)
+	if (is_file(APP_PATH.'/addons/extra_footer.php'))
+		include(APP_PATH.'/addons/extra_footer.php');
+		
 	/* TODO: login form and process
 	 * 
 	<div class="login-popup popup">
