@@ -234,6 +234,7 @@ class BulletinAPI {
 				exit;
 
 			case 'rewind':
+			case 'rewind+extract':
 				if (KAOS_IS_CLI){
 					define('KAOS_FORCE_OUTPUT', true);
 
@@ -241,6 +242,7 @@ class BulletinAPI {
 						'schema' => $kaosCall['query']['schema'],
 						'status' => 'manual',
 						'dateBack' => $kaosCall['query']['date'],
+						'extract' => $kaosCall['call'] == 'rewind+extract',
 					) + kaosGetDefaultSpiderConfig(false);
 
 					define('KAOS_SPIDER_ID', 0);

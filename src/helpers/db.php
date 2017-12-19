@@ -11,19 +11,20 @@ function getConnexion($closing = false){
 			$conn = new mysqli(DB_HOST, DB_USER, DB_PASS);
 		} catch (Exception $e){
 			$conn = false;
-			return new KaosError('db connection failed: '.$e->getMessage());
+			kaosDie('db connection failed: '.$e->getMessage());
 		}
 		if ($conn->connect_error){
 			$err = $conn->connect_error;
 			$conn = false;
-			return new KaosError('db connection failed: '.$err);
+			kaosDie('db connection failed: '.$err);
 		}
 		if (!mysqli_select_db($conn, DB_NAME)){
 			$conn = false;
-			return new KaosError('db '.DB_NAME.' not found');
+			kaosDie('db '.DB_NAME.' not found');
 		}
 
 		kaosSqlQuery($conn, 'SET sql_mode = ""');
+		
 	} else if ($conn === false)
 		return false;
 	
