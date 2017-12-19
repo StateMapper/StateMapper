@@ -1,6 +1,6 @@
 <?php
 /*
- * StateMapper: an international, collaborative, public data reviewing and monitoring tool.
+ * StateMapper: worldwide, collaborative, public data reviewing and monitoring tool.
  * Copyright (C) 2017  StateMapper.net <statemapper@riseup.net>
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -25,7 +25,7 @@ define('KAOS_IS_CLI', !empty($argv));
 libxml_disable_entity_loader(true); // protect against XEE. See: https://www.owasp.org/index.php/XML_External_Entity_(XXE)_Prevention_Cheat_Sheet#PHP
 
 // increment to force recaching the project's CSS and JS files
-define('KAOS_ASSETS_INC', 12);
+define('KAOS_ASSETS_INC', 13);
 
 // define constants
 define('BASE_PATH', dirname(__FILE__));

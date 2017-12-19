@@ -157,7 +157,7 @@ function head($title = null){
 	);
 	?>
 	<!--
-	StateMapper: an international, collaborative, public data reviewing and monitoring tool.
+	StateMapper: worldwide, collaborative, public data reviewing and monitoring tool.
 	Redesign of Kaos155 <https://github.com/ingobernable/Kaos155>, by the same Ingoberlab team.
 
     Copyright (C) <?= getCopyrightRange() ?>  StateMapper.net <statemapper@riseup.net>

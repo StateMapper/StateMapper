@@ -218,7 +218,11 @@ $searchInput = ob_get_clean();
 											if (KAOS_DEBUG)
 												echo '<div class="front-warning front-warning-debug"><span>Debug mode enabled</span></div>';
 										?>
-										<div class="root-slogan"><?= _('International, collaborative, public data reviewing and monitoring tool') ?></div>
+										<div class="root-slogan"><?= _('Worldwide, collaborative, public data reviewing and monitoring tool') ?></div>
+										<div class="root-slogan-sub">
+											<div><span> &rarr;</span><a href="<?= esc_attr(kaosAnonymize(getRepositoryUrl('#top'))) ?>">Read the manifest! &rarr;</a></div>
+											<div><span> &rarr;</span><a href="<?= esc_attr(kaosAnonymize(getRepositoryUrl('#contribute'))) ?>">Contribute! &rarr;</a></div>
+										</div>
 									</div>
 								</div>
 								<?php

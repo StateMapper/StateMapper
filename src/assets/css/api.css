@@ -2284,13 +2284,26 @@ a.revert-color:hover {
 }
 
 .root-slogan {
-
     font-size: 19px;
     font-family: monospace;
     line-height: 30px;
-    margin: 50px 0 100px;
+    margin: 50px 0 0;
 }
 
+.root-slogan-sub {
+    margin: 6px 0 100px;
+    line-height: normal;
+    font-size: 14px;
+}
+.root-slogan-sub a {
+    color: inherit;
+    padding: 7px 0;
+    display: inline-block;
+}
+
+.root-slogan-sub span {
+	color: transparent;
+}
 .front-warning {
     line-height: normal;
 }

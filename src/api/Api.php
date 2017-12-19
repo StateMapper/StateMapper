@@ -233,8 +233,11 @@ class BulletinAPI {
 				));
 				exit;
 
-			case 'rewind':
 			case 'rewindextract':
+				if (!KAOS_IS_CLI && $kaosCall['call'] == 'rewindextract')
+					kaosDie();
+					
+			case 'rewind':
 				if (KAOS_IS_CLI){
 					define('KAOS_FORCE_OUTPUT', true);
 
@@ -248,7 +251,7 @@ class BulletinAPI {
 					define('KAOS_SPIDER_ID', 0);
 					require(APP_PATH.'/spider/spider.php');
 					exit();
-				}
+				} 
 				kaosAPIReturn(include(APP_PATH.'/templates/APIMapYear.php'));
 				exit;
 				
@@ -261,7 +264,7 @@ class BulletinAPI {
 				exit;
 
 		}
-		kaosDie('unkwown api call');
+		kaosDie('unknown api call');
 	}
 }
 

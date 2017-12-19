@@ -13,8 +13,8 @@ function kaosPrintCLIRoot(){
   * This is free software, and you are welcome to redistribute it
   * under certain conditions; type the same command followed by "-l" for details.
 	
-  * This program is a PHP/MySQL redesign of Kaos155 <https://github.com/ingobernable/Kaos155> developped by the same Ingoberlab team.
-  * It aims at providing an international, collaborative, public data reviewing and monitoring tool.
+  * This program is a redesign of Kaos155 <https://github.com/ingobernable/Kaos155> developped by the same Ingoberlab team.
+  * It aims at providing a worldwide, collaborative, public data reviewing and monitoring tool.
 
 [ Usage: ] _______________________________________________________________
 
