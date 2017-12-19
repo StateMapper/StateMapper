@@ -129,10 +129,10 @@ class BulletinAPI {
 		if (!($kaosCall['schemaObj'] = kaosGetSchema($query['schema'])))
 			kaosDie('no such schema '.$query['schema']);
 
-		if (in_array($kaosCall['call'], array('parse', 'rewind', 'extract', 'spide')) && $query['followLevels'] < 1)
+		if (in_array($kaosCall['call'], array('parse', 'rewind', 'rewindextract', 'extract', 'spide')) && $query['followLevels'] < 1)
 			$query['followLevels'] = 1;
 
-		$query['allowProcessedCache'] = empty($_GET['noProcessedCache']) && !in_array($kaosCall['call'], array('rewind', 'spide'));
+		$query['allowProcessedCache'] = empty($_GET['noProcessedCache']) && !in_array($kaosCall['call'], array('rewind', 'rewindextract', 'spide'));
 		$kaosCall['query'] = $query;
 
 		switch ($kaosCall['call']){
@@ -234,7 +234,7 @@ class BulletinAPI {
 				exit;
 
 			case 'rewind':
-			case 'rewind+extract':
+			case 'rewindextract':
 				if (KAOS_IS_CLI){
 					define('KAOS_FORCE_OUTPUT', true);
 
@@ -242,7 +242,7 @@ class BulletinAPI {
 						'schema' => $kaosCall['query']['schema'],
 						'status' => 'manual',
 						'dateBack' => $kaosCall['query']['date'],
-						'extract' => $kaosCall['call'] == 'rewind+extract',
+						'extract' => $kaosCall['call'] == 'rewindextract',
 					) + kaosGetDefaultSpiderConfig(false);
 
 					define('KAOS_SPIDER_ID', 0);
