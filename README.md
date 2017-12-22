@@ -4,6 +4,7 @@
 </div>
 <p align="center" id="badges">
 	<img src="https://img.shields.io/badge/manuals-draft-red.svg?style=flat-square" />
+	<img src="https://img.shields.io/badge/code-prototype-red.svg?style=flat-square" />
 	<a href="http://php.net/"><img src="https://img.shields.io/badge/language-PHP%2FMySQL-yellow.svg?style=flat-square" /></a>
 	<a href="https://www.debian.org/derivatives/"><img src="https://img.shields.io/badge/platform-Linux-lightgrey.svg?style=flat-square" /></a>
 	<a href="https://github.com/StateMapper/StateMapper/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-AGPLv3-green.svg?style=flat-square" /></a>
