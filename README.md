@@ -91,7 +91,7 @@ Please feel free to contact us through the following channels:
 
 - **Bugs & suggestions:** If it's about a critical issue, please write us privately at [statemapper@riseup.net](mailto:statemapper@riseup.net). Otherwise, [report an issue](https://github.com/StateMapper/StateMapper/issues) on our Github repository.
 
-- **Press & enrollment:** Write us at [statemapper@riseup.net](mailto:statemapper@riseup.net) or chat with us through our [Jabber/XMPP](https://jabber.at/p/clients/) public chat room at [statemapper@conference.riseup.net](statemapper@conference.riseup.net).
+- **Press & enrollment:** Write us at [statemapper@riseup.net](mailto:statemapper@riseup.net) or chat with us through our [Jabber/XMPP](https://jabber.at/p/clients/) public chat room at [statemapper@conference.riseup.net](statemapper@conference.riseup.net). Recommended softwares: <img src="https://statemapper.net/src/addons/fontawesome_favicons/linux.ico" valign="middle" /> <img src="https://statemapper.net/src/addons/fontawesome_favicons/windows.ico" valign="middle" /> <a href="https://gajim.org/" target="_blank">Gajim</a>, <img src="https://statemapper.net/src/addons/fontawesome_favicons/apple.ico" valign="middle" /> <a href="https://adium.im/" target="_blank">Adium</a>.
 
 
 -----
