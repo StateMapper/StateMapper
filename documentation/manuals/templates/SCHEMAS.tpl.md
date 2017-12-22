@@ -65,7 +65,7 @@ While implementing the parsingProtocoles, the following attributes have special 
 | grepSentence | *deprecated* |
 
 
-## Extraction format:
+## Extraction format:<img src="https://img.shields.io/badge/state-draft-red.svg?style=flat-square" />
 
 | Attribute | Description |
 | ---- | ---- |
