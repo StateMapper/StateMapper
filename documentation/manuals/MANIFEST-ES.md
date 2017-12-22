@@ -8,7 +8,7 @@
 -----
 
 
-## Manifiesto
+## Manifiesto: <img src="https://img.shields.io/badge/state-draft-red.svg?style=flat-square" />
 
 El colapso inminente generalizado tiene numerosas causas, entre ellas la corrupción política y su capacidad para esconderse de la investigación periodística y judicial; consumiendo todo el presupuesto común a través los años y décadas.
 

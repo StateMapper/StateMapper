@@ -19,7 +19,7 @@
 **Index:** [Manifest](#manifest) · [Installation](#installation) · [Contribute](#contribute) · [Roadmap](#roadmap) · [License](#license) · [Disclaimer](#disclaimer) · [Contact & support](#contact--support) · **Live:** <a href="https://statemapper.net">StateMapper.net &rarr;</a>
 
 
-## Manifest: <div align="right"><img src="https://img.shields.io/badge/state-draft-red.svg?style=flat-square" /></div>
+## Manifest: <img src="https://img.shields.io/badge/state-draft-red.svg?style=flat-square" />
 
 The imminent generalized collapse has numerous causes, among them political corruption and its ability to hide from journalistic and judicial investigations; consuming all the common budget through the years and decades.
 
@@ -39,7 +39,7 @@ StateMapper was born with the aim of being a reviewing and monitoring tool for a
 Please refer to the [Installation guide](documentation/manuals/INSTALL.md#top).
 
 
-## Contribute:
+## Contribute: <img src="https://img.shields.io/badge/state-draft-red.svg?style=flat-square" />
 
 If you like this project, whatever skills you have, there surely is a way you can participate! The project's current workforce splits into the following [**four commissions**](https://github.com/StateMapper/StateMapper/projects):
 
@@ -61,7 +61,7 @@ You may also help this project by:
 - <img src="https://statemapper.net/src/addons/fontawesome_favicons/money.ico" valign="middle" /> **Donating to this project**: come to visit us at [La Ingobernable](https://ingobernable.net) (Madrid, Spain), and ask for the Kaos155 [hacker team](https://hacklab.ingobernable.net) :)
 
 
-## Roadmap:
+## Roadmap: <img src="https://img.shields.io/badge/state-draft-red.svg?style=flat-square" />
 
 - **Q1 2018:** stable live version with near 100% parsed information from ES/BOE and ES/BORME.
 - **Q2 2018:** allow persistent user customization, add a cooperation/social layer.

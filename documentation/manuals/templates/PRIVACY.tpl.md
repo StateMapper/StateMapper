@@ -2,13 +2,13 @@
 
 {IncludeInline beforeIndex}[Goals](#goals) · [VPN](#vpn) · [Encrypted mailbox](#encrypted-mailbox) · [Encrypted chat](#encrypted-chat)
 
-## Goals:
+## Goals: <img src="https://img.shields.io/badge/state-draft-red.svg?style=flat-square" />
 
-## VPN:
+## VPN: <img src="https://img.shields.io/badge/state-draft-red.svg?style=flat-square" />
 
-## Encrypted mailbox:
+## Encrypted mailbox: <img src="https://img.shields.io/badge/state-draft-red.svg?style=flat-square" />
 
-## Encrypted chat:
+## Encrypted chat: <img src="https://img.shields.io/badge/state-draft-red.svg?style=flat-square" />
 
  
 {Include footer()}
