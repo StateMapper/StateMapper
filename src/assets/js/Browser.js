@@ -26,13 +26,18 @@ jQuery(document).ready(function(){
 		sugg.input.focus();
 	
 	sugg.wrap = sugg.input.parent().find('.kaosSearchSugg');
+	
+	jQuery('.browser-big-submit-button').click(function(e){
+		searchSend(e.ctrlKey);
+	});
 		
 	sugg.input.on('keypress keyup change focus', function(e){
 		
 		if (jQuery.inArray(e.type, ['keypress', 'keyup']) >= 0){
 			switch (e.which){
 				case 13: // enter
-					searchSend();
+					if (e.type == 'keypress')
+						searchSend(e.ctrlKey);
 					return false;
 				case 27: // escape
 					sugg.input.blur();
@@ -143,7 +148,7 @@ jQuery(document).ready(function(){
 					return false;
 					
 				case 13: // enter
-					searchSend();
+					searchSend(e.ctrlKey);
 					return false;
 					
 				case 9: // tab
@@ -155,19 +160,28 @@ jQuery(document).ready(function(){
 		});
 	}
 	
-	function searchSend(){
+	function searchSend(new_tab){
+		var url = null;
 		jQuery('body').addClass('search-sending');
 		if (sugg.active){
-			window.location = sugg.active.find('a')[0].href;
+			url = sugg.active.find('a')[0].href;
 		} else {
 			closeSearch(true);
 			var v = jQuery.trim(sugg.input.val());
 			if (v != ''){
-				var url = KAOS.searchUrl.replace('%s', encodeURIComponent(v));
+				url = KAOS.searchUrl.replace('%s', encodeURIComponent(v));
+				
+				// replace or add &q=
 				url = url.replace(/(([&\?])[^&]+=)(&(.*))?$/, '$2$4');
 				url = url.replace(/[&\?]?[&\?]$/, '');
+			} else
+				sugg.input.focus();
+		}
+		if (url){
+			if (new_tab)
+				window.open(url);
+			else
 				window.location = url;
-			}
 		}
 	}
 

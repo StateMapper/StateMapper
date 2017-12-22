@@ -240,7 +240,7 @@ $searchInput = ob_get_clean();
 											?></div></div>
 											<div class="search-root-big-wrap"><?= $searchInput ?></div>
 											<div class="browser-big-submit">
-												<input type="submit" value="$tate Search" />
+												<input type="button" class="browser-big-submit-button" value="$tate Search" />
 											</div>
 											<?php
 												if (KAOS_DEBUG)
