@@ -1,5 +1,22 @@
 <?php
-
+/*
+ * StateMapper: worldwide, collaborative, public data reviewing and monitoring tool.
+ * Copyright (C) 2017  StateMapper.net <statemapper@riseup.net>
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */ 
+ 
 if (!defined('BASE_PATH'))
 	die();
 
@@ -162,18 +179,18 @@ function head($title = null){
 
     Copyright (C) <?= getCopyrightRange() ?>  StateMapper.net <statemapper@riseup.net>
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU Affero General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU Affero General Public License for more details.
+	
+	You should have received a copy of the GNU Affero General Public License
+	along with this program.  If not, see <https://www.gnu.org/licenses/>.
     -->
 
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
@@ -206,7 +223,13 @@ function head($title = null){
 		$fav = 'backward';
 		
 	?>
-	<title><?= ($title ? $title.' - ' : '').'StateMapper' ?></title>
+	<title><?php
+		if ($title)
+			echo $title.' - ';
+		echo '$tateMapper';
+		if (isHome(true))
+			echo ' - Worldwide, collaborative, public data reviewing and monitoring tool';
+	?></title>
 	<link rel="icon" href="<?= APP_URL.'/addons/fontawesome_favicons/'.$fav.'.ico' ?>" type="image/x-icon" />
 
 	<style>
@@ -434,19 +457,11 @@ function kaosGetFormatFetcher($format, $parent = null){
 
 function logo(){
 	global $kaosPage, $kaosCall;
+	if (isHome(true))
+		return;
 	?>
 	<div class="kaos-api-result-intro-name">
-		<?php
-			if (isHome(true)){
-				?>
-				<a href="#" onclick="jQuery('#kaosSearch').focus().select(); return false"><img src="<?= ASSETS_URL.'/images/logo/logo-transparent.png?v='.KAOS_ASSETS_INC ?>" /></a>
-				<?php
-			} else {
-				?>
-				<a href="<?= BASE_URL.($kaosPage == 'api' && !empty($kaosCall['call']) ? 'api' : '') ?>" title="<?= ($kaosPage == 'api' && !empty($kaosCall['call']) ? 'Go back to bulletins' : 'Go to homepage') ?>"><img src="<?= ASSETS_URL.'/images/logo/logo-transparent.png?v='.KAOS_ASSETS_INC ?>" /></a>
-				<?php
-			}
-		?>
+		<a data-tippy-placement="bottom" href="<?= BASE_URL.($kaosPage == 'api' && !empty($kaosCall['call']) ? 'api' : '') ?>" title="<?= ($kaosPage == 'api' && !empty($kaosCall['call']) ? 'Go back to bulletins' : 'Go to homepage') ?>"><img src="<?= ASSETS_URL.'/images/logo/logo-transparent.png?v='.KAOS_ASSETS_INC ?>" /></a>
 	</div>
 	<?php
 }
@@ -537,8 +552,10 @@ function footer(){
 		if ($str)
 			echo implode('', $str).'<span>|</span>';
 			
-		if (!isAdmin())
-			echo '<span><a href="'.kaosAnonymize(getRepositoryUrl('#top')).'" target="_blank">Collaborative work licensed under GNU GPLv3</a></span>';
+		if (!isAdmin()){
+			echo '<span><strong><a title="StateMapper needs many thinking minds! <br>Get involved!" target="_blank" href="'.esc_attr(kaosAnonymize(getRepositoryUrl('#contribute'))).'" class="footer-contribute"><i class="fa fa-github"></i> Contribute!</a></strong></span>';
+			echo '<span><a title="Free and OpenSource Software! <br>Contribute to the code!" target="_blank" href="'.kaosAnonymize(getRepositoryUrl('#top')).'" target="_blank">Licensed under GNU AGPLv3</a></span>';
+		}
 
 		?><span class="copyright"><span class="menu menu-right menu-top">
 			<span class="menu-button"><i class="fa fa-copyright"></i> <?= getCopyrightRange() ?> StateMapper.net</span>
@@ -710,7 +727,7 @@ function headerRight(){
 			<div class="kaos-top-actions">
 				<?php if (!empty($kaosCall['query']['date']) && in_array($kaosCall['call'], array('fetch', 'parse', 'lint', 'extract')) && kaosSchemaHasFeature($kaosCall['query']['schema'], 'fetch')){ ?>
 					<span class="menu menu-right kaos-top-date-menu">
-						<a href="#" title="Date" class="kaos-top-date kaos-top-action-active">
+						<a data-tippy-placement="bottom" href="#" title="<?= esc_attr(_('Change the date')) ?>" class="kaos-top-date kaos-top-action-active">
 							<i class="fa fa-calendar"></i>
 							<span class="kaos-query-date-wrap">
 								<span class="kaos-query-date-main"><?= date_i18n('M j', strtotime($kaosCall['query']['date'])) ?></span>
@@ -790,17 +807,25 @@ function headerRight(){
 				?>
 			</div>
 		<?php } ?>
+		<?php if (isHome(true)){ ?>
+			<div class="kaos-root-menu">
+				<ul>
+					<li><a data-tippy-placement="bottom" title="Which public data providers we integrate" href="<?= kaosGetUrl('') ?>" class="clean-links">Providers</a></li>
+					<li><a data-tippy-placement="bottom" title="Read our spiritual guidelines!" href="<?= getRepositoryUrl('#manifest') ?>" target="_blank" class="clean-links">Manifest</a></li>
+					<li><a data-tippy-placement="bottom" title="What this project is all about" href="<?= getRepositoryUrl('#top') ?>" target="_blank" class="clean-links">About</a></li>
+				</ul>
+			</div>
+		<?php } ?>
 		<div class="kaos-top-menu menu menu-right">
-			<div class="kaos-top-menu-icon menu-button" title="Main menu"><i class="fa fa-bars"></i></div>
+			<div data-tippy-placement="bottom" class="kaos-top-menu-icon menu-button" title="Main menu"><i class="fa fa-bars"></i></div>
 			<div class="kaos-top-menu-wrap menu-wrap">
 				<div class="kaos-top-menu-menu menu-menu">
 					<ul class="kaos-top-menu-inner menu-inner">
 						<li><a href="<?= BASE_URL ?>"><i class="fa fa-search"></i> Browse</a></li>
-						<li><a href="<?= BASE_URL.'api' ?>"><i class="fa fa-book"></i> Bulletins</a></li>
+						<li><a href="<?= BASE_URL.'api' ?>"><i class="fa fa-book"></i> Providers</a></li>
 						<?php if (isAdmin()){ ?>
 							<li><a href="<?= BASE_URL.'settings' ?>"><i class="fa fa-cog"></i> Settings</a></li>
 						<?php } ?>
-						<li><a target="_blank" href="<?= kaosAnonymize(getRepositoryUrl('#contact--support')) ?>"><i class="fa fa-comment-o"></i> Contact us</a></li>
 						<li><a target="_blank" href="<?= kaosAnonymize(getRepositoryUrl('#contribute')) ?>"><i class="fa fa-thumbs-o-up"></i> Contribute</a></li>
 						<li><a target="_blank" href="<?= kaosAnonymize(getRepositoryUrl('#contact--support')) ?>"><i class="fa fa-info-circle"></i> Help</a></li>
 						<li><a target="_blank" href="<?= kaosAnonymize(getRepositoryUrl('#top')) ?>"><i class="fa fa-question-circle-o"></i> About</a></li>

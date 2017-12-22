@@ -6,7 +6,7 @@
 	<img src="https://img.shields.io/badge/manuals-on%20progress-red.svg?style=flat-square" />
 	<a href="http://php.net/"><img src="https://img.shields.io/badge/language-PHP%2FMySQL-yellow.svg?style=flat-square" /></a>
 	<a href="https://www.debian.org/derivatives/"><img src="https://img.shields.io/badge/platform-Linux-lightgrey.svg?style=flat-square" /></a>
-	<a href="https://github.com/StateMapper/StateMapper/blob/master/COPYING"><img src="https://img.shields.io/badge/license-GPLv3-green.svg?style=flat-square" /></a>
+	<a href="https://github.com/StateMapper/StateMapper/blob/master/COPYING"><img src="https://img.shields.io/badge/license-AGPLv3-green.svg?style=flat-square" /></a>
 	<a href="https://github.com/StateMapper/StateMapper#contact--support"><img src="https://img.shields.io/badge/chat-XMPP-ff69b4.svg" /></a>
 </p>
 
@@ -69,7 +69,7 @@ You may also help this project by:
 
 ## License:
 
-The StateMapper software and all its documentation are licensed under the **GNU General Public License v3.0**, also included in our repository in the [COPYING](COPYING) file.
+The StateMapper software and all its documentation are licensed under the **GNU AFFERO GENERAL PUBLIC LICENSE Version 3**, also included in our repository in the [COPYING](COPYING) file.
 
 StateMapper includes the following libraries: [jQuery](http://jquery.com/) ([MIT](https://tldrlegal.com/license/mit-license)), [FontAwesome](http://fontawesome.io/icons/) ([SIL OFL 1.1 & MIT](http://fontawesome.io/license/)), [Tippy.js](https://atomiks.github.io/tippyjs/) ([MIT](https://tldrlegal.com/license/mit-license)), the [Roboto font](https://fonts.google.com/specimen/Roboto) ([Apache License v2.0](http://www.apache.org/licenses/LICENSE-2.0)) and the [Megrim font](https://fonts.google.com/specimen/Megrim) ([Open Font License](http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL_web)).
 
@@ -96,5 +96,5 @@ Please feel free to contact us through the following channels:
 
 -----
 
-*Copyright &copy; 2017 [StateMapper.net](https://statemapper.net) · Licensed under [GNU GPLv3](COPYING) · [&uarr; top](#top)* <img src="http://hits.dwyl.com/StateMapper/StateMapper.svg?style=flat-square" align="right" />
+*Copyright &copy; 2017 [StateMapper.net](https://statemapper.net) · Licensed under [GNU AGPLv3](COPYING) · [&uarr; top](#top)* <img src="http://hits.dwyl.com/StateMapper/StateMapper.svg?style=flat-square" align="right" />
 

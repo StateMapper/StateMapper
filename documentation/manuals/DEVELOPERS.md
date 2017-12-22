@@ -32,9 +32,9 @@ The processing layers can be described as follows:
 - Then the workers, if configured to, can call the extractor (extract layer) on the parsed object to convert it to *entities* (*institutions*, *companies* and *people*), *precepts* (small texts) and *statuses* (tiny pieces of information). 
 - The controller and api layers are only here to route HTTP and CLI calls to the frontend GUI, and to each processing layer separately.
 
-![Classes diagram](../classes_diagram.png)
+![Classes diagram](../diagrams/classes_diagram.png)
 
-The source file of this diagram can be found at ```documentation/classes_diagram.dia``` and edited with [Dia](http://dia-installer.de/download/linux.html): ```sudo apt-get install dia```
+The source file of this diagram can be found at ```documentation/diagrams/classes_diagram.dia``` and edited with [Dia](http://dia-installer.de/download/linux.html): ```sudo apt-get install dia```
 
 
 ## Extraction:
@@ -53,9 +53,9 @@ Please read the [Extraction section of the Schemas documentation](SCHEMAS.md#ext
 
 Here is an overview of the database tables:
 
-![Database diagram](../database_diagram.png)
+![Database diagram](../diagrams/database_diagram.png)
 
-The source file of this diagram can be found at ```documentation/database_diagram.mwb``` and edited with [MySQL Workbench](https://www.mysql.com/products/workbench/design/).
+The source file of this diagram can be found at ```documentation/diagrams/database_diagram.mwb``` and edited with [MySQL Workbench](https://www.mysql.com/products/workbench/design/).
 
 
 ## Folder structure:
@@ -73,7 +73,6 @@ The source file of this diagram can be found at ```documentation/database_diagra
 | [src/extractor/](../../src/extractor) | extract layer |
 | [src/spider/](../../src/spider) | spider (and workers) layer |
 | [src/api/](../../src/api) | api controller layer |
-| [src/browser/](../../src/browser) | frontend browser |
 | [src/templates/](../../src/templates) | page and partial template files |
 | [src/helpers/](../../src/helpers) | helper functions |
 | [src/addons/](../../src/addons) | addons likes Wikipedia suggs, Geoencoding, Website autodetection..  |
@@ -158,5 +157,5 @@ The root ```README.md``` must be edited directly from the root folder, and canno
 
 -----
 
-*[&larr; Project's homepage](https://github.com/StateMapper/StateMapper#top) · Copyright &copy; 2017 [StateMapper.net](https://statemapper.net) · Licensed under [GNU GPLv3](../../COPYING) · [&uarr; top](#top)* <img src="[![Bitbucket issues](https://img.shields.io/bitbucket/issues/atlassian/python-bitbucket.svg?style=social" align="right" /> <img src="http://hits.dwyl.com/StateMapper/StateMapper.svg?style=flat-square" align="right" />
+*[&larr; Project's homepage](https://github.com/StateMapper/StateMapper#top) · Copyright &copy; 2017 [StateMapper.net](https://statemapper.net) · Licensed under [GNU AGPLv3](../../COPYING) · [&uarr; top](#top)* <img src="[![Bitbucket issues](https://img.shields.io/bitbucket/issues/atlassian/python-bitbucket.svg?style=social" align="right" /> <img src="http://hits.dwyl.com/StateMapper/StateMapper.svg?style=flat-square" align="right" />
 

@@ -1,3 +1,20 @@
+/*
+ * StateMapper: worldwide, collaborative, public data reviewing and monitoring tool.
+ * Copyright (C) 2017  StateMapper.net <statemapper@riseup.net>
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */ 
 
 jQuery(document).ready(function(){
 	var sugg = {
@@ -12,9 +29,15 @@ jQuery(document).ready(function(){
 		
 	sugg.input.on('keypress keyup change focus', function(e){
 		
-		if (jQuery.inArray(e.type, ['keypress', 'keyup']) >= 0 && e.which == 13){ // enter
-			searchSend();
-			return false;
+		if (jQuery.inArray(e.type, ['keypress', 'keyup']) >= 0){
+			switch (e.which){
+				case 13: // enter
+					searchSend();
+					return false;
+				case 27: // escape
+					sugg.input.blur();
+					return false;
+			}
 		}
 		
 		if (!sugg.to)
@@ -85,6 +108,7 @@ jQuery(document).ready(function(){
 	}
 	
 	function openSearchIntro(){
+		// TODO: add a search tip on the homepage! (because centering doesn't allow input placeholder!)
 		sugg.wrap.hide();
 	}
 	
@@ -137,10 +161,13 @@ jQuery(document).ready(function(){
 			window.location = sugg.active.find('a')[0].href;
 		} else {
 			closeSearch(true);
-			var url = KAOS.searchUrl.replace('%s', encodeURIComponent(jQuery.trim(sugg.input.val())));
-			url = url.replace(/(([&\?])[^&]+=)(&(.*))?$/, '$2$4');
-			url = url.replace(/[&\?]?[&\?]$/, '');
-			window.location = url;
+			var v = jQuery.trim(sugg.input.val());
+			if (v != ''){
+				var url = KAOS.searchUrl.replace('%s', encodeURIComponent(v));
+				url = url.replace(/(([&\?])[^&]+=)(&(.*))?$/, '$2$4');
+				url = url.replace(/[&\?]?[&\?]$/, '');
+				window.location = url;
+			}
 		}
 	}
 

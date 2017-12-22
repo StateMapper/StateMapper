@@ -1,4 +1,22 @@
 <?php
+/*
+ * StateMapper: worldwide, collaborative, public data reviewing and monitoring tool.
+ * Copyright (C) 2017  StateMapper.net <statemapper@riseup.net>
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */ 
+ 
 
 if (!defined('BASE_PATH'))
 	die();
@@ -51,23 +69,22 @@ else if ($kaosPage == 'api')
 else if ($kaosPage == 'settings')
 	$title = 'Settings';
 
+if (!isset($title))
+	$title = 'Error';
+
 $avatar = null;	
 if ($kaosCall && !empty($kaosCall['schemaObj']) && in_array($kaosCall['schemaObj']->type, array('country', 'continent')) && $country){
 	if ($avatarUrl = kaosGetFlagUrl($country))
-		$avatar = '<a href="'.kaosGetUrl(array(
+		$avatar = '<a data-tippy-placement="bottom" title="'.esc_attr($title).'" href="'.kaosGetUrl(array(
 			'filter' => $country
 		)).'"><img class="kaos-api-result-title-bulletin-avatar" src="'.$avatarUrl.'" /></a>';
 	$country = null;
 
 } else if (!empty($kaosCall['query']['schema'])){
 	if (file_exists(SCHEMAS_PATH.'/'.$kaosCall['query']['schema'].'.png')){ 
-		$avatar = '<img class="kaos-api-result-title-bulletin-avatar" src="'.BASE_URL.'schemas/'.$kaosCall['query']['schema'].'.png" />';
+		$avatar = '<img data-tippy-placement="bottom" title="'.esc_attr($title).'" class="kaos-api-result-title-bulletin-avatar" src="'.BASE_URL.'schemas/'.$kaosCall['query']['schema'].'.png" />';
 	}
 } 
-
-if (!isset($title))
-	$title = 'Error';
-
 
 ?><!DOCTYPE html>
 	<html class="<?php
@@ -95,24 +112,24 @@ if (!isset($title))
 									<?php if ($country){ ?>
 										<div class="kaos-api-result-title-country">
 										<?php
-											if (file_exists(APP_PATH.'/assets/images/flags/'.$country.'.png')){
+											if ($cavatarUrl = kaosGetFlagUrl($country)){
 												?>
-												<img class="kaos-api-result-title-flag" src="<?= ASSETS_URL.'/images/flags/'.$country.'.png' ?>" />
+												<img data-tippy-placement="bottom" title="<?= kaosGetSchema($country)->name ?>" class="kaos-api-result-title-flag" src="<?= $cavatarUrl ?>" />
 												<?php
 											}
 											?>
-											<span><?= kaosGetSchema($country)->name ?></span>
+											<span><a data-tippy-placement="bottom" title="<?= esc_attr(kaosGetSchema($country)->type == 'continent' ? _('See continent schema') : _('See country schema')) ?>" class="clean-links" href="<?= kaosGetUrl($country, 'schema') ?>"><?= kaosGetSchema($country)->name ?></a></span>
 											<?php
 											if (!empty($kaosCall['schemaObj']) && !empty($kaosCall['schemaObj']->providerId) && ($provider = kaosGetSchema($kaosCall['schemaObj']->providerId))){
 												echo ' <i class="fa fa-angle-right"></i> ';
 												$providerName = !empty($provider->shortName) ? $provider->shortName : $provider->name;
 												
-												echo '<span title="'.esc_attr($provider->name).'">';
+												echo '<span><a data-tippy-placement="bottom" title="'.esc_attr(_('See provider schema')).'" class="clean-links" href="'.kaosGetUrl($provider->id, 'schema').'" title="'.esc_attr($provider->name).'">';
 												if (strlen($providerName) > 40)
 													echo substr($providerName, 0, 35).'...';
 												else
 													echo $providerName;
-												echo '</span>';
+												echo '</a></span>';
 											}
 										?>
 										</div>
@@ -267,3 +284,4 @@ if (!isset($title))
 		</body>
 	</html><?php 
 
+return '';

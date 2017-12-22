@@ -1,3 +1,20 @@
+/*
+ * StateMapper: worldwide, collaborative, public data reviewing and monitoring tool.
+ * Copyright (C) 2017  StateMapper.net <statemapper@riseup.net>
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */ 
 
 
 html, body {
@@ -17,7 +34,7 @@ html {
 
 body {
 	overflow: auto;
-    background: url(../images/bg.jpg) repeat top center transparent;
+    background: url(../images/bg/bg.jpg) repeat top center transparent;
 }
 
 a {
@@ -110,7 +127,7 @@ a.kaos-convert-url:hover {
     position: relative;
     z-index: 100;
     border-bottom: 1px solid #ccc;
-    background: url(../images/bg.jpg);
+    background: url(../images/bg/bg.jpg);
     box-shadow: 0px -2px 11px 3px #ddd;
 }
 .kaos-api-result-header-right {
@@ -120,12 +137,13 @@ a.kaos-convert-url:hover {
     vertical-align: top;
 }
 .kaos-api-result-intro {
-    min-height: 66px;
+    min-height: 72px;
     display: table;
-    background: rgba(0,0,0,0.04);
+    background: rgba(255,255,255,0.4);
     width: 100%;
 }
 .kaos-api-result-intro-name {
+    min-height: 48px;
     font-size: 24px;
     display: table-cell;
     font-weight: normal;
@@ -160,7 +178,7 @@ a.kaos-convert-url:hover {
 	font-family: Roboto;
 }
 
-.kaos-api-result-header-right div {
+.kaos-api-result-header-right > div {
 	white-space: nowrap;
 }
 .footer {
@@ -171,7 +189,7 @@ a.kaos-convert-url:hover {
     position: fixed;
     bottom: 10px;
     right: 28px;
-    background: #eee;
+    background: white;
     margin: 0;
     padding: 1px 10px 1px 1px;
     text-align: right;
@@ -751,8 +769,8 @@ img.kaos-api-result-title-flag {
 }
 
 .kaos-api-result-title-bulletin-avatar {
-	float: left;
-	max-width: 68px;
+    margin-top: 3px;
+	max-width: 61px;
 }
 
 .kaos-api-result-title-title {
@@ -801,6 +819,7 @@ img.kaos-api-result-title-flag {
     margin-bottom: 5px;
 }
 .kaos-browser-title-title {
+    max-width: 100%;
 	font-weight: normal;
 	font-style: normal;
 	line-height: normal;
@@ -809,8 +828,9 @@ img.kaos-api-result-title-flag {
 }
 #kaosSearch {
     font-size: 20px;
+    max-width: 100%;
     padding: 8px 32px 8px 8px;
-    width: 500px;
+    width: 470px;
     box-sizing: border-box;
 }
 #kaosSearch,
@@ -820,9 +840,36 @@ img.kaos-api-result-title-flag {
     outline: 0 !important;
     box-shadow: 3px 3px 5px -3px #ccc !important;
 }
+#kaosSearch:hover,
+#kaosSearch:focus,
+#kaosSearch:active {
+    border: 1px solid #aaa;
+    box-shadow: 3px 3px 7px -3px #ccc !important;
+}
+
+#kaosSearch::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color:    #aaa;
+}
+#kaosSearch:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+   color:    #aaa;
+   opacity:  1;
+}
+#kaosSearch::-moz-placeholder { /* Mozilla Firefox 19+ */
+   color:    #aaa;
+   opacity:  1;
+}
+#kaosSearch:-ms-input-placeholder { /* Internet Explorer 10-11 */
+   color:    #aaa;
+}
+#kaosSearch::-ms-input-placeholder { /* Microsoft Edge */
+   color:    #aaa;
+}
+#kaosSearch::placeholder { /* Most modern browsers support this now. */
+   color:    #aaa;
+}
 .kaos-search-icon {
     position: absolute;
-    top: 8px;
+    top: 9px;
     right: 10px;
     color: #aaa;
     font-size: 18px;
@@ -878,13 +925,16 @@ img.kaos-api-result-title-flag {
 }
 .kaos-top-menu-icon:hover,
 .menu-on .kaos-top-menu-icon {
-	background: #f5f5f5;
+	background: rgba(255,255,255,0.6);
 }
 .kaos-root .kaos-top-menu-icon:hover,
 .kaos-root .menu-on .kaos-top-menu-icon {
 	background: none;
 }
 
+.kaos-root .kaos-top-menu-icon {
+	border: none !important;
+}
 .menu-menu {
     position: absolute;
     background: white;
@@ -984,7 +1034,7 @@ img.kaos-api-result-title-flag {
 }
 
 .kaos-api-result-intro-name > a {
-    top: 3px;
+    top: 7px;
     text-decoration: none;
     color: inherit;
     display: inline-block;
@@ -1076,9 +1126,14 @@ img.kaos-api-result-title-flag {
     padding: 8px 12px;
     text-align: center;
 }
-input.searchsugg-results-show {
+input[type="button"],
+input[type="submit"] {
+    font-family: Roboto;
+    color: black;
     padding: 6px 8px;
     cursor: pointer;
+}
+input.searchsugg-results-show {
     min-width: 190px;
 }
 
@@ -1110,15 +1165,11 @@ input.searchsugg-results-show {
 }
 
 .browser-center-msg {
-    display: table;
-    vertical-align: middle;
-    width: 100%;
-    height: 100%;
     min-height: 200px;
     font-size: 23px;
     color: #333;
-    font-style: italic;
     line-height: 180%;
+    text-align: center;
 }
 .browser-inner {
 	display: none;
@@ -1130,11 +1181,6 @@ input.searchsugg-results-show {
 	display: block;
 }
 
-.browser-center-msg > div {
-    display: table-cell;
-    vertical-align: middle;
-    text-align: center;
-}
 .browser-center-links {
     font-size: 15px;
     color: #aaa;
@@ -1739,7 +1785,7 @@ a.clean-links:hover {
 .browser-directories {
     text-align: center;
     padding: 0;
-    margin: 10px 0 0;
+    margin: 0 0 10px;
     line-height: normal;
 
 }
@@ -1755,8 +1801,13 @@ a.clean-links:hover {
 .browser-directories a,
 .browser-directories span {
     padding: 5px 10px;
-    color: #777;
+    white-space: nowrap;
+    color: #333;
     font-size: 13px;
+    font-style: normal;
+}
+.browser-directories a:hover {
+	color: black;
 }
 
 .entity-subtype {
@@ -1863,30 +1914,6 @@ span.kaos-api-month-workers-ind > span > span {
 
 
 
-@media screen and (max-width: 900px){
-	.kaos-api-result-header-right {
-		display: inline-block;
-		width: 100%;
-		padding: 0px 10px 0;
-		border-top: 1px solid #ccc;
-		background: #fafafa;
-		text-align: left;
-		box-sizing: border-box;
-	}
-	.kaos-api-result-intro {
-		display: block;
-		width: 100%;
-	}
-	.kaos-api-result-header-right div {
-		float: none;
-		margin-left: 204px;
-		border-left: 1px solid #ddd;
-	}
-	.kaos-top-menu-icon {
-		bottom: 52px;
-	}
-}
-
 .spider-ctrl-extract-button {
     text-align: center;
     padding: 10px 0 0;
@@ -1979,11 +2006,10 @@ a.kaos-top-action-disabled {
 
 .header-filters,
 .header-filters-advanced {
-    background: #fafafa;
+    background: rgba(0,0,0,0.02);
     display: none;
     padding: 0;
     font-family: Roboto;
-    box-shadow: 0px 1px 8px 3px #fafafa;
 }
 .header-filters > ul,
 .header-filters-advanced > ul {
@@ -2159,6 +2185,71 @@ a.kaos-top-filter-ind:hover i {
     border: none;
     box-shadow: none;
 }
+
+
+.bg-diag-left {
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+100&1+0,0+100 */
+	background: -moz-linear-gradient(-45deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.95) 35%,rgba(255,255,255,0) 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(-45deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.95) 35%,rgba(255,255,255,0) 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 30%, rgba(255,255,255,0.65) 40%, rgba(255,255,255,1) 50%, rgba(255,255,255,0.95) 70%, rgba(255,255,255,0.95) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+}
+
+.bg-diag-right {
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+100&0+0,1+100 */
+	background: -moz-linear-gradient(45deg, rgba(255,255,255,0) 0%,rgba(255,255,255,0.95) 65%, rgba(255,255,255,0.2) 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(45deg, rgba(255,255,255,0) 0%,rgba(255,255,255,0.95) 65%, rgba(255,255,255,0.2) 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(45deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.95) 30%, rgba(255,255,255,1) 50%, rgba(255,255,255,0.65) 60%, rgba(255,255,255,0.85) 70%, rgba(255,255,255,0.95) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+}
+
+.bg-diag-left,
+.bg-diag-right {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+	opacity: 0.9;
+}
+.bg-diag-left {
+    left: 0;
+}
+.bg-diag-right {
+    right: 0;
+}
+
+.bg-stripes {
+	position: absolute;
+    z-index: 0;
+    bottom: 0;
+    width: 50%;
+    height: 9999px;
+	animation: slide 1600s linear infinite;
+	opacity: 0.2;
+}
+
+.bg-stripes-left {
+    background: url("../images/bg/bg-stripe-left.png") repeat top center transparent;
+    left: 0;
+}
+.bg-stripes-right {
+    background: url("../images/bg/bg-stripe-right.png") repeat top center transparent;
+    right: 0;
+}
+
+@keyframes slide{
+  0%{
+    transform: translate3d(0, 0, 0);
+  }
+  100%{
+    transform: translate3d(0, 5000px, 0);
+  }
+}
+
+#main-inner {
+    position: relative;
+    z-index: 2;
+}
+
 .kaos-root .kaos-api-result-intro-left,
 .kaos-root .kaos-api-result-intro-name {
 	display: none;
@@ -2283,27 +2374,6 @@ a.revert-color:hover {
 	vertical-align: top;
 }
 
-.root-slogan {
-    font-size: 19px;
-    font-family: monospace;
-    line-height: 30px;
-    margin: 50px 0 0;
-}
-
-.root-slogan-sub {
-    margin: 6px 0 100px;
-    line-height: normal;
-    font-size: 14px;
-}
-.root-slogan-sub a {
-    color: inherit;
-    padding: 7px 0;
-    display: inline-block;
-}
-
-.root-slogan-sub span {
-	color: transparent;
-}
 .front-warning {
     line-height: normal;
 }
@@ -2325,4 +2395,129 @@ a.revert-color:hover {
 }
 .front-warning.front-warning-success > span {
 	background: #00c700;
+}
+
+.kaos-api-result-title > img,
+.kaos-api-result-title > a {
+	display: inline-block;
+	float: left;
+}
+
+.kaos-root-menu {
+	font-family: monospace;
+	position: absolute;
+	top: 10px;
+	right: 70px;
+}
+.kaos-root-menu ul {
+	margin: 0;
+	list-style: none;
+	padding: 0;
+}
+.kaos-root-menu li {
+	float: left;
+}
+.kaos-root-menu li a {
+	display: inline-block;
+	padding: 17px 20px;
+	font-size: 14px;
+}
+.footer-contribute i {
+	font-size: 16px;
+}
+.root-slogan {
+    font-size: 19px;
+    font-family: monospace;
+    line-height: 30px;
+    margin: 50px 0 70px;
+}
+.browser-big-submit {
+    margin: 10px 0 0;
+}
+
+@media screen and (max-width: 900px){
+	.header-filters > ul, .header-filters-advanced > ul {
+		margin: 0;
+	}
+	.kaos-api-result-header-right {
+		display: block;
+		width: auto;
+		padding: 0px 10px 0;
+		border-top: 1px solid #ccc;
+		background: rgba(0,0,0,0.03);
+		text-align: left;
+		box-sizing: border-box;
+	}
+	.kaos-api-result-intro {
+		display: block;
+		width: 100%;
+	}
+	.kaos-api-result-header-right > .kaos-top-menu {
+		position: absolute;
+		top: 0;
+		right: 0;
+		height: 61px;
+	}
+	.kaos-api-result-header-right > .kaos-top-menu .kaos-top-menu-icon {
+		float: none;
+		margin: 0;
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 99;
+		padding: 17px 0 0;
+	}
+	.footer {
+		position: relative;
+		right: auto;
+		bottom: auto;
+		top: auto;
+		left: auto;
+		background: none;
+		text-align: center;
+		padding: 50px 10px 10px;
+		z-index: 2;
+	}
+	.footer > span {
+		display: block;
+	}
+	.kaos-api-result-intro-name {
+		display: block;
+	}
+	.kaos-top-actions {
+		margin: 0;
+		float: none;
+	}
+	.kaos-api-result-intro-left {
+		display: block;
+		margin: 0;
+		padding: 16px 22px;
+		background: rgba(255,255,255,0.8);
+	}
+	.kaos-top-filter-ind,
+	a.kaos-top-filter-ind {
+		display: none;
+	}
+	.kaos-api-result-intro-name > a {
+		top: 3px;
+	}
+	.kaos-root-menu {
+		top: 6px;
+    }
+}
+
+
+
+@media screen and (max-width: 450px){
+	.kaos-root-menu li a {
+		padding-left: 10px;
+		padding-right: 10px;
+    }
+}
+
+@media screen and (max-width: 370px){
+	.kaos-root-menu {
+		display: none;
+    }
 }
