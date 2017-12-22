@@ -19,7 +19,7 @@
 **Index:** [Manifest](#manifest) · [Installation](#installation) · [Contribute](#contribute) · [Roadmap](#roadmap) · [License](#license) · [Disclaimer](#disclaimer) · [Contact & support](#contact--support) · **Live:** <a href="https://statemapper.net">StateMapper.net &rarr;</a>
 
 
-## Manifest:
+## Manifest: <span align="right"><img src="https://img.shields.io/badge/state%20draft-red.svg?style=flat-square" /></span>
 
 The imminent generalized collapse has numerous causes, among them political corruption and its ability to hide from journalistic and judicial investigations; consuming all the common budget through the years and decades.
 
