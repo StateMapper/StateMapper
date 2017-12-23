@@ -89,7 +89,7 @@ While implementing the parsingProtocoles, the following attributes have special 
 Status are sorted by ```type``` and ```action``` through the ```schemas/status.json``` file, as follows:
 
 
-| Status type | Action | Meaning | Required attributes |
+| Type | Action | Meaning | Required attributes |
 | ---- | ----- | ----- | ---- |
 | capital | new | company foundation | amount: the amount of capital |
 | capital | increase | capital increase | amount: the amount of increase |

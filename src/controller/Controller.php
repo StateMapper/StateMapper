@@ -294,7 +294,7 @@ class Controller {
 					}
 				
 				$statusTable = '
-| Status type | Action | Meaning | Required attributes |
+| Type | Action | Meaning | Required attributes |
 | ---- | ----- | ----- | ---- |
 '.implode("\n", $statusTable).'
 ';
