@@ -51,7 +51,7 @@
 			own: "Reelected administrator of [related]",
 			issuing: "[target] was reelected administrator of [related]",
 			related: "[target] was reelected administrator",
-			stats: "[count] Administrators reelected",
+			stats: "[count] Administrators reelected"
 		},
 		end: {
 			icon: "user-times",
