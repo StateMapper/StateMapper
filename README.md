@@ -55,18 +55,18 @@ If you wish to get involved into one of them, please do not hesitate in [contact
 
 You may also help this project by:
 
-- <img src="https://statemapper.net/src/addons/fontawesome_favicons/language.ico" valign="middle" /> **Translating it to a new language:** it is really easy to translate StateMapper to whatever language you speak, and it can really help the project spread! Please read the [Translation guide](documentation/manuals/TRANSLATE.md#top) for more details.
+- **Translating it to a new language:** it is really easy to translate StateMapper to whatever language you speak, and it can really help the project spread! Please read the [Translation guide](documentation/manuals/TRANSLATE.md#top) for more details.
 
-- <img src="https://statemapper.net/src/addons/fontawesome_favicons/bullhorn.ico" valign="middle" /> **Sharing this project:** tell your most important contacts how this project can help us out with the world's dramatic public bribery situation. Please use the [#StateMapper](https://twitter.com/search?q=%23StateMapper) hashtag to link your publications to a same stream ;)
+- **Sharing this project:** tell your most important contacts how this project can help us out with the world's dramatic public bribery situation. Please use the [#StateMapper](https://twitter.com/search?q=%23StateMapper) hashtag to link your publications to a same stream ;)
 
-- <img src="https://statemapper.net/src/addons/fontawesome_favicons/money.ico" valign="middle" /> **Donating to this project**: come to visit us at [La Ingobernable](https://ingobernable.net) (Madrid, Spain), and ask for the Kaos155 [hacker team](https://hacklab.ingobernable.net) :)
+- **Donating to this project**: come to visit us at [La Ingobernable](https://ingobernable.net) (Madrid, Spain), and ask for the Kaos155 [hacker team](https://hacklab.ingobernable.net) :)
 
 
 ## Roadmap:<img src="https://img.shields.io/badge/state-draft-red.svg?style=flat-square" />
 
 - **Q1 2018:** stable live version with near 100% parsed information from ES/BOE and ES/BORME.
 - **Q2 2018:** allow persistent user customization, add a cooperation/social layer.
-- **Q3 2018:** implement machine learning and suspition patterns, manage Soldiers in most western countries.
+- **Q3 2018:** implement machine learning and suspition patterns, cover most western countries with Soldiers and Ambassadors.
 
 ## License:
 
