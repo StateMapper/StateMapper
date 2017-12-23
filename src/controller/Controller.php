@@ -287,8 +287,8 @@ class Controller {
 				foreach (kaosGetStatusLabels() as $type => $c)
 					foreach ((array) $c as $action => $cc){
 						$required = array();
-						if (isset($cc['required']))
-							foreach ($cc['required'] as $k => $l)
+						if (isset($cc->required))
+							foreach ($cc->required as $k => $l)
 								$required[] = $k.': '.$l;
 						$statusTable[] = '| '.$type.' | '.$action.' | '.(isset($cc->meaning) ? $cc->meaning : '').' | '.implode("<br>", $required).' |';
 					}

@@ -99,20 +99,20 @@ Status are sorted by ```type``` and ```action``` as follows:
 
 | Status type | Action | Meaning | Required attributes |
 | ---- | ----- | ----- | ---- |
-| capital | new | company foundation | |
-| capital | increase | capital increase | |
-| fund | new |  | |
-| owner | update |  | |
-| administrator | start |  | |
-| administrator | keep |  | |
-| administrator | end |  | |
-| president | new |  | |
-| counselor | new |  | |
-| object | new |  | |
-| location | new |  | |
-| name | update |  | |
-| name | end |  | |
-| absorb | new |  | |
+| capital | new | company foundation |  |
+| capital | increase | capital increase |  |
+| fund | new |  |  |
+| owner | update |  |  |
+| administrator | start | start as an administrator |  |
+| administrator | keep |  |  |
+| administrator | end |  |  |
+| president | new |  |  |
+| counselor | new |  |  |
+| object | new |  | note: the object |
+| location | new |  | note: the location string |
+| name | update | name change |  |
+| name | end | company dissolution |  |
+| absorb | new |  |  |
 
 
 
