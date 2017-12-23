@@ -86,7 +86,7 @@ While implementing the parsingProtocoles, the following attributes have special 
 | ```note``` | whatever meaningful ID or natural label |
 | ```target``` | an entity name the status is targetting |
 
-Status are sorted by ```type``` and ```action``` through the ```schemas/status.json``` file as follows:
+Status are sorted by ```type``` and ```action``` through the ```schemas/status.json``` file, as follows:
 
 
 | Status type | Action | Meaning | Required attributes |
