@@ -21,7 +21,7 @@
 			own: "Funded with [amount] through [issuing]",
 			issuing: {
 				icon: "credit-card-alt",
-				label: "[related] funded with [amount]",
+				label: "[related] funded with [amount]"
 			},
 			stats: "[count] Fundings for a total [amount]"
 		}
