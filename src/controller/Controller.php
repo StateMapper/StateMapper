@@ -289,7 +289,7 @@ class Controller {
 						$required = array();
 						if (isset($cc->required))
 							foreach ($cc->required as $k => $l)
-								$required[] = $k.': '.$l;
+								$required[] = $k.': *'.$l.'*';
 								
 						$icon = '';
 						if (!empty($cc->icon))
