@@ -70,7 +70,7 @@
 			own: "Now president of [related]",
 			issuing: "[target] was made president of [related]",
 			related: "[target] was made president",
-			stats: "[count] Now president of",
+			stats: "[count] Now president of"
 		}
 	},
 	counselor: {
