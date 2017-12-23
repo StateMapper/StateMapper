@@ -1,12 +1,14 @@
 {
 	capital: {
 		new: {
+			meaning: "company foundation",
 			icon: "plus",
 			own: "Founded with a capital of [amount]",
 			issuing: "[related] was founded with a capital of [amount]",
 			stats: "[count] Companies funded with a total capital of [amount]"
 		},
 		increase: {
+			meaning: "capital increase",
 			icon: "money",
 			own: "Capital increase by [amount]",
 			issuing: "[related] had a capital increase of [amount]",

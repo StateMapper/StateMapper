@@ -282,7 +282,18 @@ class Controller {
 				// TODO: generate .md tables from kaosGetStatusLabels() (after putting it to a JSON for pushes) with dynamic (fav?)icons thanks to http://php.net/manual/es/function.imageloadfont.php
 				
 				$count = 0;
-				$statusTable = 'bla';
+				$statusTable = array();
+				
+				foreach (kaosGetStatusLabels() as $type => $c)
+					foreach ($c as $action => $cc)
+						$statusTable[] = '| '.$type.' | '.$action.' | '.(isset($cc['meaning']) ? $cc['meaning'] : '').' | |';
+				
+				$statusTable = '
+| Status type | Action | Meaning | Required attributes |
+| ---- | ----- | ----- | ---- |
+'.implode("\n", $statusTable).'
+';
+				
 				foreach (kaosLsdir(BASE_PATH.'/documentation/manuals/templates') as $file)
 					if (preg_match('#^(.*)\.tpl\.md$#iu', $file, $fileParts)){
 						$content = file_get_contents(BASE_PATH.'/documentation/manuals/templates/'.$file);
