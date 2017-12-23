@@ -96,7 +96,24 @@ Status are sorted by ```type``` and ```action``` as follows:
 | administrator | start | start as an administrator | target: the administering entity's name |
 | ... | | | |
 
-bla
+
+| Status type | Action | Meaning | Required attributes |
+| ---- | ----- | ----- | ---- |
+| capital | new | company foundation | |
+| capital | increase | capital increase | |
+| fund | new |  | |
+| owner | update |  | |
+| administrator | start |  | |
+| administrator | keep |  | |
+| administrator | end |  | |
+| president | new |  | |
+| counselor | new |  | |
+| object | new |  | |
+| location | new |  | |
+| name | update |  | |
+| name | end |  | |
+| absorb | new |  | |
+
 
 
 -----
