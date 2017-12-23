@@ -40,6 +40,7 @@
 	},
 	administrator: {
 		start: {
+			meaning: "start as an administrator",
 			icon: "user-plus",
 			own: "Now administrating [related]",
 			issuing: "[target] was made administrator of [related]",
@@ -88,7 +89,10 @@
 			note: "Object",
 			own: "Declared its object as [note]",
 			issuing: "[related] declared its object as [note]",
-			stats: "[count] Object declarations"
+			stats: "[count] Object declarations",
+			required: {
+				note: "the object"
+			}
 		}
 	},
 	location: {
@@ -97,11 +101,15 @@
 			note: "Location",
 			own: "Declared its location as [note]",
 			issuing: "[related] declared its location as [note]",
-			stats: "[count] Location declarations"
+			stats: "[count] Location declarations",
+			required: {
+				note: "the location string"
+			}
 		}
 	},
 	name: {
 		update: {
+			meaning: "name change",
 			icon: "exchange",
 			name: "Name changes",
 			related: "Was renamed to [target]",
@@ -110,6 +118,7 @@
 			stats: "[count] Name changes"
 		},
 		end: {
+			meaning: "company dissolution",
 			icon: "times",
 			name: "Company dissolutions",
 			own: "Company was dissolved",
