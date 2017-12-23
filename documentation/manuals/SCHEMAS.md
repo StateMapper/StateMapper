@@ -96,6 +96,8 @@ Status are sorted by ```type``` and ```action``` as follows:
 | administrator | start | start as an administrator | target: the administering entity's name |
 | ... | | | |
 
+bla
+
 
 -----
 

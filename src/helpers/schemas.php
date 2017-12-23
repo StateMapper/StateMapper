@@ -241,6 +241,10 @@ function kaosAPIPrintDir($dir, $level = 0){
 	usort($ret, function($a, $b){
 		$a = kaosGetSchema($a);
 		$b = kaosGetSchema($b);
+		if (!$a)
+			return -1;
+		if (!$b)
+			return 1;
 		return (!empty($a->originalName) ? $a->originalName : $a->name) >= (!empty($b->originalName) ? $b->originalName : $b->name);
 	});
 

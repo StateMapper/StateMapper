@@ -282,6 +282,7 @@ class Controller {
 				// TODO: generate .md tables from kaosGetStatusLabels() (after putting it to a JSON for pushes) with dynamic (fav?)icons thanks to http://php.net/manual/es/function.imageloadfont.php
 				
 				$count = 0;
+				$statusTable = 'bla';
 				foreach (kaosLsdir(BASE_PATH.'/documentation/manuals/templates') as $file)
 					if (preg_match('#^(.*)\.tpl\.md$#iu', $file, $fileParts)){
 						$content = file_get_contents(BASE_PATH.'/documentation/manuals/templates/'.$file);
@@ -312,6 +313,7 @@ class Controller {
 								$content = str_replace($m[0], $part, $content);
 							}
 						}
+						$content = str_replace('{StatusTable}', $statusTable, $content);
 						if ($content != ''){
 							@unlink(BASE_PATH.'/documentation/manuals/'.$fileParts[1].'.md');
 							if (!file_put_contents(BASE_PATH.'/documentation/manuals/'.$fileParts[1].'.md', $content))
