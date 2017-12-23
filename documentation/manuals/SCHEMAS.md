@@ -88,14 +88,6 @@ While implementing the parsingProtocoles, the following attributes have special 
 
 Status are sorted by ```type``` and ```action``` as follows:
 
-| Status type | Action | Meaning | Required attributes |
-| ---- | ----- | ----- | ---- |
-| name | new | company foundation | note: the company name |
-| name | update | name change | target: the new entity's name |
-| name | end | company dissolution | | |
-| administrator | start | start as an administrator | target: the administering entity's name |
-| ... | | | |
-
 
 | Status type | Action | Meaning | Required attributes |
 | ---- | ----- | ----- | ---- |
