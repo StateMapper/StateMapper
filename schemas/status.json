@@ -23,6 +23,7 @@
 	},
 	fund: {
 		new: {
+			meaning: "company funding",
 			icon: "credit-card",
 			own: "Funded with [amount] through [issuing]",
 			issuing: {
@@ -37,6 +38,7 @@
 	},
 	owner: {
 		update: {
+			meaning: "new owner",
 			icon: "user-circle-o",
 			own: {
 				icon: "user-o",
@@ -52,7 +54,7 @@
 	},
 	administrator: {
 		start: {
-			meaning: "start as an administrator",
+			meaning: "new administrator",
 			icon: "user-plus",
 			own: "Now administrating [related]",
 			issuing: "[target] was made administrator of [related]",
@@ -63,6 +65,7 @@
 			}
 		},
 		keep: {
+			meaning: "reelected administrator",
 			icon: "user",
 			own: "Reelected administrator of [related]",
 			issuing: "[target] was reelected administrator of [related]",
@@ -73,6 +76,7 @@
 			}
 		},
 		end: {
+			meaning: "no longer administrator",
 			icon: "user-times",
 			own: {
 				icon: "user-o",
@@ -88,6 +92,7 @@
 	},
 	president: {
 		new: {
+			meaning: "new president",
 			icon: "user-plus",
 			own: "Now president of [related]",
 			issuing: "[target] was made president of [related]",
@@ -100,6 +105,7 @@
 	},
 	counselor: {
 		new: {
+			meaning: "new counselor",
 			icon: "user-plus",
 			own: "Now counselor of [related]",
 			issuing: "[target] was made counselor of [related]",
@@ -112,6 +118,7 @@
 	},
 	object: {
 		new: {
+			meaning: "new social object",
 			icon: "file-o",
 			note: "Object",
 			own: "Declared its object as [note]",
@@ -124,6 +131,7 @@
 	},
 	location: {
 		new: {
+			meaning: "new location",
 			icon: "map-marker",
 			note: "Location",
 			own: "Declared its location as [note]",
@@ -158,6 +166,7 @@
 	},
 	absorb: {
 		new: {
+			meaning: "company absorption",
 			icon: "shopping-cart",
 			related: "Absorbed [target]",
 			own: "Absorbed by [related]",

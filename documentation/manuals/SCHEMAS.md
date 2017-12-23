@@ -93,18 +93,18 @@ Status are sorted by ```type``` and ```action``` through the ```schemas/status.j
 | ---- | ----- | ----- | ---- |
 | capital | new | company foundation | amount: the amount of capital |
 | capital | increase | capital increase | amount: the amount of increase |
-| fund | new |  | amount: the funding amount |
-| owner | update |  | target: the owner's name |
-| administrator | start | start as an administrator | target: the administrator's name |
-| administrator | keep |  | target: the administrator's name |
-| administrator | end |  | target: the administrator's name |
-| president | new |  | target: the president's name |
-| counselor | new |  | target: the counselor's name |
-| object | new |  | note: the object |
-| location | new |  | note: the location string |
+| fund | new | company funding | amount: the funding amount |
+| owner | update | new owner | target: the owner's name |
+| administrator | start | new administrator | target: the administrator's name |
+| administrator | keep | reelected administrator | target: the administrator's name |
+| administrator | end | no longer administrator | target: the administrator's name |
+| president | new | new president | target: the president's name |
+| counselor | new | new counselor | target: the counselor's name |
+| object | new | new social object | note: the object |
+| location | new | new location | note: the location string |
 | name | update | name change | target: the new entity name |
 | name | end | company dissolution |  |
-| absorb | new |  | target: the absorbed company |
+| absorb | new | company absorption | target: the absorbed company |
 
 
 
