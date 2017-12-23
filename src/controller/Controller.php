@@ -290,12 +290,16 @@ class Controller {
 						if (isset($cc->required))
 							foreach ($cc->required as $k => $l)
 								$required[] = $k.': '.$l;
-						$statusTable[] = '| '.$type.' | '.$action.' | '.(isset($cc->meaning) ? $cc->meaning : '').' | '.implode("<br>", $required).' |';
+								
+						$icon = '';
+						if (!empty($cc->icon))
+							$icon = $cc->icon;
+						$statusTable[] = '| '.($icon ? '<img src="https://statemapper.net/src/addons/fontawesome_favicons/'.$icon.'.ico" valign="middle" />' : '').' | '.$type.' | '.$action.' | '.(isset($cc->meaning) ? $cc->meaning : '').' | '.implode("<br>", $required).' |';
 					}
 				
 				$statusTable = '
-| Type | Action | Meaning | Required attributes |
-| ---- | ----- | ----- | ---- |
+| | Type | Action | Meaning | Required attributes |
+| ---- | ---- | ----- | ----- | ---- |
 '.implode("\n", $statusTable).'
 ';
 				

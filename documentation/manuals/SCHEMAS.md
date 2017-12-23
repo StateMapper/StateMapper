@@ -89,22 +89,22 @@ While implementing the parsingProtocoles, the following attributes have special 
 Status are sorted by ```type``` and ```action``` through the ```schemas/status.json``` file, as follows:
 
 
-| Type | Action | Meaning | Required attributes |
-| ---- | ----- | ----- | ---- |
-| capital | new | company foundation | amount: the amount of capital |
-| capital | increase | capital increase | amount: the amount of increase |
-| fund | new | company funding | amount: the funding amount |
-| owner | update | new owner | target: the owner's name |
-| administrator | start | new administrator | target: the administrator's name |
-| administrator | keep | reelected administrator | target: the administrator's name |
-| administrator | end | no longer administrator | target: the administrator's name |
-| president | new | new president | target: the president's name |
-| counselor | new | new counselor | target: the counselor's name |
-| object | new | new social object | note: the object |
-| location | new | new location | note: the location string |
-| name | update | name change | target: the new entity name |
-| name | end | company dissolution |  |
-| absorb | new | company absorption | target: the absorbed company |
+| | Type | Action | Meaning | Required attributes |
+| ---- | ---- | ----- | ----- | ---- |
+| <img src="https://statemapper.net/src/addons/fontawesome_favicons/plus.ico" valign="middle" /> | capital | new | company foundation | amount: the amount of capital |
+| <img src="https://statemapper.net/src/addons/fontawesome_favicons/money.ico" valign="middle" /> | capital | increase | capital increase | amount: the amount of increase |
+| <img src="https://statemapper.net/src/addons/fontawesome_favicons/credit-card.ico" valign="middle" /> | fund | new | company funding | amount: the funding amount |
+| <img src="https://statemapper.net/src/addons/fontawesome_favicons/user-circle-o.ico" valign="middle" /> | owner | update | new owner | target: the owner's name |
+| <img src="https://statemapper.net/src/addons/fontawesome_favicons/user-plus.ico" valign="middle" /> | administrator | start | new administrator | target: the administrator's name |
+| <img src="https://statemapper.net/src/addons/fontawesome_favicons/user.ico" valign="middle" /> | administrator | keep | reelected administrator | target: the administrator's name |
+| <img src="https://statemapper.net/src/addons/fontawesome_favicons/user-times.ico" valign="middle" /> | administrator | end | no longer administrator | target: the administrator's name |
+| <img src="https://statemapper.net/src/addons/fontawesome_favicons/user-plus.ico" valign="middle" /> | president | new | new president | target: the president's name |
+| <img src="https://statemapper.net/src/addons/fontawesome_favicons/user-plus.ico" valign="middle" /> | counselor | new | new counselor | target: the counselor's name |
+| <img src="https://statemapper.net/src/addons/fontawesome_favicons/file-o.ico" valign="middle" /> | object | new | new social object | note: the object |
+| <img src="https://statemapper.net/src/addons/fontawesome_favicons/map-marker.ico" valign="middle" /> | location | new | new location | note: the location string |
+| <img src="https://statemapper.net/src/addons/fontawesome_favicons/exchange.ico" valign="middle" /> | name | update | name change | target: the new entity name |
+| <img src="https://statemapper.net/src/addons/fontawesome_favicons/times.ico" valign="middle" /> | name | end | company dissolution |  |
+| <img src="https://statemapper.net/src/addons/fontawesome_favicons/shopping-cart.ico" valign="middle" /> | absorb | new | company absorption | target: the absorbed company |
 
 
 
