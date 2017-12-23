@@ -5,14 +5,20 @@
 			icon: "plus",
 			own: "Founded with a capital of [amount]",
 			issuing: "[related] was founded with a capital of [amount]",
-			stats: "[count] Companies funded with a total capital of [amount]"
+			stats: "[count] Companies funded with a total capital of [amount]",
+			required: {
+				amount: "the amount of capital"
+			}
 		},
 		increase: {
 			meaning: "capital increase",
 			icon: "money",
 			own: "Capital increase by [amount]",
 			issuing: "[related] had a capital increase of [amount]",
-			stats: "[count] Capital increases for a total [amount]"
+			stats: "[count] Capital increases for a total [amount]",
+			required: {
+				amount: "the amount of increase"
+			}
 		}
 	},
 	fund: {
@@ -23,7 +29,10 @@
 				icon: "credit-card-alt",
 				label: "[related] funded with [amount]"
 			},
-			stats: "[count] Fundings for a total [amount]"
+			stats: "[count] Fundings for a total [amount]",
+			required: {
+				amount: "the funding amount"
+			}
 		}
 	},
 	owner: {
@@ -35,7 +44,10 @@
 			},
 			issuing: "[target] was made owner of [related]",
 			related: "[target] was made owner",
-			stats: "[count] Now owning"
+			stats: "[count] Now owning",
+			required: {
+				target: "the owner's name"
+			}
 		}
 	},
 	administrator: {
@@ -45,14 +57,20 @@
 			own: "Now administrating [related]",
 			issuing: "[target] was made administrator of [related]",
 			related: "[target] was made administrator",
-			stats: "[count] Now administrating"
+			stats: "[count] Now administrating",
+			required: {
+				target: "the administrator's name"
+			}
 		},
 		keep: {
 			icon: "user",
 			own: "Reelected administrator of [related]",
 			issuing: "[target] was reelected administrator of [related]",
 			related: "[target] was reelected administrator",
-			stats: "[count] Administrators reelected"
+			stats: "[count] Administrators reelected",
+			required: {
+				target: "the administrator's name"
+			}
 		},
 		end: {
 			icon: "user-times",
@@ -62,7 +80,10 @@
 			},
 			issuing: "[target] is no longer administrator of [related]",
 			related: "[target] is no longer administrator",
-			stats: "[count] Administrators ceased"
+			stats: "[count] Administrators ceased",
+			required: {
+				target: "the administrator's name"
+			}
 		}
 	},
 	president: {
@@ -71,7 +92,10 @@
 			own: "Now president of [related]",
 			issuing: "[target] was made president of [related]",
 			related: "[target] was made president",
-			stats: "[count] Now president of"
+			stats: "[count] Now president of",
+			required: {
+				target: "the president's name"
+			}
 		}
 	},
 	counselor: {
@@ -80,7 +104,10 @@
 			own: "Now counselor of [related]",
 			issuing: "[target] was made counselor of [related]",
 			related: "[target] was made counselor",
-			stats: "[count] New counselors"
+			stats: "[count] New counselors",
+			required: {
+				target: "the counselor's name"
+			}
 		}
 	},
 	object: {
@@ -115,7 +142,10 @@
 			related: "Was renamed to [target]",
 			own: "Is the new name of [related]",
 			issuing: "[related] was renamed to [target]",
-			stats: "[count] Name changes"
+			stats: "[count] Name changes",
+			required: {
+				target: "the new entity name"
+			}
 		},
 		end: {
 			meaning: "company dissolution",
@@ -132,7 +162,10 @@
 			related: "Absorbed [target]",
 			own: "Absorbed by [related]",
 			issuing: "[related] absorbed [target]",
-			stats: "[count] Company absorptions"
+			stats: "[count] Company absorptions",
+			required: {
+				target: "the absorbed company"
+			}
 		}
 	}
 }
