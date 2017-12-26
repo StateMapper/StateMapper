@@ -21,6 +21,9 @@
 if (!defined('BASE_PATH'))
 	die();
 	
+if (isHome(true))
+	return;
+	
 global $kaosCall, $kaosPage;
 if ($kaosPage == 'browser' || !empty($kaosCall['entity'])){
 	$cbs = '<i class="fa fa-square-o cb-off multisel-cb"></i><i class="fa fa-check-square-o cb-on multisel-cb"></i>';
