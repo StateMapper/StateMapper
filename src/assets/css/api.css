@@ -2259,7 +2259,7 @@ a.kaos-top-filter-ind:hover i {
 .bg-stripes {
 	position: absolute;
     z-index: 0;
-    bottom: 0;
+    top: 0;
     width: 50%;
     height: 9999px;
 	animation: slide 1600s linear infinite;
@@ -2267,11 +2267,11 @@ a.kaos-top-filter-ind:hover i {
 }
 
 .bg-stripes-left {
-    background: url("../images/bg/stripe-left.png") repeat top center transparent;
+    background: url("../images/bg/stripe-left.png") repeat 0px top transparent;
     left: 0;
 }
 .bg-stripes-right {
-    background: url("../images/bg/stripe-right.png") repeat top center transparent;
+    background: url("../images/bg/stripe-right.png") repeat 0px top transparent;
     right: 0;
 }
 
