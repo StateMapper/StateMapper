@@ -92,11 +92,13 @@ function kaosGetStatusLabels(){
 	static $cache = null;
 	if ($cache !== null)
 		return $cache;
-	if (!($schema = file_get_contents(SCHEMAS_PATH.'/status.json')))
-		return false;
 
-	if (!($cache = lintSchema($schema, $linted)))
+	if (!($schema = file_get_contents(SCHEMAS_PATH.'/status.json')))
+		kaosDie('could not read status.json');
+
+	if (!($ccache = lintSchema($schema, $linted)))
 		kaosDie('bad status.json');
 	
+	$cache = $ccache;	
 	return $cache;
 }

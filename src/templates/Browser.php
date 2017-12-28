@@ -128,6 +128,7 @@ $searchInput = ob_get_clean();
 						<div class="kaos-api-result-body-inner">
 							<div id="wrap">
 								<?php
+								
 								if ($kaosCall['currentQuery'] != '' || (hasFilter() && empty($kaosCall['entity']))){
 
 									ob_start();

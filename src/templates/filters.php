@@ -162,8 +162,8 @@ if ($kaosPage == 'browser' || !empty($kaosCall['entity'])){
 								<?php
 									foreach (kaosGetStatusLabels() as $type => $c)
 										foreach ($c as $action => $cc)
-											if (isset($cc['name']))
-												echo '<li class="'.($atype == $type && $aaction == $action ? 'menu-item-active' : '').'"><a href="'.add_url_arg('atype', $type, add_url_arg('aaction', $action)).'">'.$cc['name'].'</a></li>';
+											if (isset($cc->name))
+												echo '<li class="'.($atype == $type && $aaction == $action ? 'menu-item-active' : '').'"><a href="'.add_url_arg('atype', $type, add_url_arg('aaction', $action)).'">'.$cc->name.'</a></li>';
 								?>
 							</ul>
 						</div>

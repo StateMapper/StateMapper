@@ -16,24 +16,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
 
-jQuery(document).ready(function(){
+$(document).ready(function(){
 	var sugg = {
-		input: jQuery('#kaosSearch')
+		input: $('#kaosSearch')
 	};
 	sugg.initVal = sugg.input.val();
 	
-	if (!jQuery('body.browser-found').length && sugg.input.val() == '')
+	if (!$('body.browser-found').length && sugg.input.val() == '')
 		sugg.input.focus();
 	
 	sugg.wrap = sugg.input.parent().find('.kaosSearchSugg');
 	
-	jQuery('.browser-big-submit-button').click(function(e){
+	$('.browser-big-submit-button').click(function(e){
 		searchSend(e.ctrlKey);
 	});
 		
 	sugg.input.on('keypress keyup change focus', function(e){
 		
-		if (jQuery.inArray(e.type, ['keypress', 'keyup']) >= 0){
+		if ($.inArray(e.type, ['keypress', 'keyup']) >= 0){
 			switch (e.which){
 				case 13: // enter
 					if (e.type == 'keypress')
@@ -60,7 +60,7 @@ jQuery(document).ready(function(){
 		if (!sugg.input.is(':focus'))
 			closeSearch();
 		else {
-			var nval = jQuery.trim(sugg.input.val());
+			var nval = $.trim(sugg.input.val());
 			if (!sugg.last || sugg.last != nval || !sugg.open){
 				
 				if (nval != '')
@@ -74,19 +74,19 @@ jQuery(document).ready(function(){
 	}
 	
 	function openSearch(nval){
-		if (jQuery('body').hasClass('search-sending'))
+		if ($('body').hasClass('search-sending'))
 			return;
 			
 		sugg.wrap.outerWidth(sugg.input.outerWidth()).addClass('kaosSearchSugg-loading').show();
 		
-		jQuery('body').on('click.kaosSeachSugg', function(e){
-			if (!jQuery(e.target).closest('.kaosSearchSugg, #kaosSearch').length)
+		$('body').on('click.kaosSeachSugg', function(e){
+			if (!$(e.target).closest('.kaosSearchSugg, #kaosSearch').length)
 				closeSearch();
 		});
 		
 		(function(query){
 			kaosAjax('search', {query: query}, function(data){
-				if (jQuery('body').hasClass('search-sending'))
+				if ($('body').hasClass('search-sending'))
 					return;
 					
 				if (sugg.last == query){
@@ -104,7 +104,7 @@ jQuery(document).ready(function(){
 					else
 						more.hide();
 					
-					inner.css({'max-height': jQuery(window).height() - sugg.wrap.offset().top - more.height() - 30});
+					inner.css({'max-height': $(window).height() - sugg.wrap.offset().top - more.height() - 30});
 					
 					suggHook();
 				}
@@ -120,25 +120,25 @@ jQuery(document).ready(function(){
 	function closeSearch(keepSearchVal){
 		suggUnhook();
 		sugg.wrap.hide();
-		jQuery('body').off('click.kaosSeachSugg');
+		$('body').off('click.kaosSeachSugg');
 		
-		if (!keepSearchVal && jQuery('body.browser-found').length)
+		if (!keepSearchVal && $('body.browser-found').length)
 			sugg.input.val(sugg.initVal);
 		
 		sugg.open = false;
 	}
 	
 	sugg.wrap.on('mouseover', '.kaosSearchSugg-results-inner > div > a', function(e){
-		suggSelect(jQuery(this));
+		suggSelect($(this));
 	});
 	
 	function suggUnhook(){
-		jQuery(document).off('keypress.kaosSearch keydown.kaosSearch');
+		$(document).off('keypress.kaosSearch keydown.kaosSearch');
 	}
 	
 	function suggHook(){
 		suggUnhook();
-		jQuery(document).on('keypress.kaosSearch keydown.kaosSearch', function(e){
+		$(document).on('keypress.kaosSearch keydown.kaosSearch', function(e){
 			switch (e.which){
 				case 38: // up
 				case 40: // down
@@ -162,12 +162,12 @@ jQuery(document).ready(function(){
 	
 	function searchSend(new_tab){
 		var url = null;
-		jQuery('body').addClass('search-sending');
+		$('body').addClass('search-sending');
 		if (sugg.active){
 			url = sugg.active.find('a')[0].href;
 		} else {
 			closeSearch(true);
-			var v = jQuery.trim(sugg.input.val());
+			var v = $.trim(sugg.input.val());
 			if (v != ''){
 				url = KAOS.searchUrl.replace('%s', encodeURIComponent(v));
 				
@@ -203,9 +203,9 @@ jQuery(document).ready(function(){
 	}
 	
 	/* stats */
-	jQuery('.entity-stats').on('click', '.kaos-entity-stat', function(e){
-		var t = jQuery(this);
-		var related = jQuery(this).kaosGetRelated();
+	$('.entity-stats').on('click', '.kaos-entity-stat', function(e){
+		var t = $(this);
+		var related = $(this).kaosGetRelated();
 		var w = t.closest('.entity-stat-wrap');
 		var h = w.find('.entity-stat-children-holder');
 		if (w.hasClass('entity-stat-children-filled')){
@@ -217,7 +217,7 @@ jQuery(document).ready(function(){
 			w.addClass('entity-stat-children-loading');
 			kaosAjax('loadStatuses', {related: related}, function(data){
 				if (data.success){
-					jQuery(data.html).appendTo(h);
+					$(data.html).appendTo(h);
 					h.stop().show();
 				}
 			}, function(){
@@ -232,15 +232,15 @@ jQuery(document).ready(function(){
 	});
 	
 	/* extracts from title click */
-	jQuery('.entity-stats').on('click', '.status-title', function(e){
-		if (!jQuery(e.target).closest('a').length){
-			jQuery(this).parent().find('.kaos-folding').first().toggle();
+	$('.entity-stats').on('click', '.status-title', function(e){
+		if (!$(e.target).closest('a').length){
+			$(this).parent().find('.kaos-folding').first().toggle();
 		}
 	});
 	
 	// status actions
-	jQuery('body').on('click', '.status-action', function(e){
-		var t = jQuery(e.target).closest('a');
+	$('body').on('click', '.status-action', function(e){
+		var t = $(e.target).closest('a');
 		var related = t.kaosGetRelated();
 		var action = t.data('kaos-status-action');
 		kaosAjax('statusAction', {status_action: action, related: related}, function(data, success){
@@ -250,12 +250,12 @@ jQuery(document).ready(function(){
 	});
 });
 
-jQuery.fn.kaosGetRelated = function(){
-	var c = jQuery(this).data('kaos-related');
+$.fn.kaosGetRelated = function(){
+	var c = $(this).data('kaos-related');
 	console.log(c);
 	var ret = c ? c : {};
-	jQuery(this).parents('[data-kaos-related]').each(function(){
-		jQuery.extend(ret, jQuery(this).data('kaos-related'));
+	$(this).parents('[data-kaos-related]').each(function(){
+		$.extend(ret, $(this).data('kaos-related'));
 	});
 	return ret;
 };

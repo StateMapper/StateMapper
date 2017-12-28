@@ -17,20 +17,20 @@
  */ 
 
 
-jQuery(document).ready(function(){
+$(document).ready(function(){
 	// periodic map refresh
 
 	var refreshing = false;
-	var year = jQuery('.kaos-api-years a.kaos-year-current').data('kaos-year');
+	var year = $('.kaos-api-years a.kaos-year-current').data('kaos-year');
 		
 	if (KAOS.refreshMap)
 		setInterval(function(){
 			updateYear();
 		}, 10000);
 		
-	jQuery('#wrap').on('click', '.kaos-api-years a', function(e){
-		var a = jQuery(this).addClass('kaos-year-current');
-		jQuery('.kaos-api-years a').not(a).removeClass('kaos-year-current');
+	$('#wrap').on('click', '.kaos-api-years a', function(e){
+		var a = $(this).addClass('kaos-year-current');
+		$('.kaos-api-years a').not(a).removeClass('kaos-year-current');
 		
 		year = a.data('kaos-year');
 		
@@ -48,12 +48,12 @@ jQuery(document).ready(function(){
 		}
 		
 		if (manual)
-			jQuery('.kaos-api-fetched .kaos-api-map-table').animate({opacity: 0.4});
+			$('.kaos-api-fetched .kaos-api-map-table').animate({opacity: 0.4});
 			
-		refreshing = kaosAjax('refreshMap', {year: year, extract: jQuery('.spider-ctrl-extract-button input').is(':checked')}, function(data){
+		refreshing = kaosAjax('refreshMap', {year: year, extract: $('.spider-ctrl-extract-button input').is(':checked')}, function(data){
 			if (data && data.success){
-				var rep = jQuery(data.html);
-				jQuery('.kaos-api-fetched').replaceWith(rep);
+				var rep = $(data.html);
+				$('.kaos-api-fetched').replaceWith(rep);
 				kaosUpdate(rep);
 			}
 		}, null, function(){
@@ -63,8 +63,8 @@ jQuery(document).ready(function(){
 	
 	// Spider ctrl fields
 	
-	jQuery('#wrap').on('click', '.kaos-api-spider-button', function(e){
-		var t = jQuery(this);
+	$('#wrap').on('click', '.kaos-api-spider-button', function(e){
+		var t = $(this);
 		var turnOn = !t.filter('.kaos-spider-status-waiting, .kaos-spider-status-active').length;
 
 		kaosAjax('spiderPower', {turnOn: turnOn, schema: t.data('kaos-schema')}, function(data, success){
@@ -75,19 +75,19 @@ jQuery(document).ready(function(){
 		});
 	});
 	
-	jQuery('#wrap').on('change', '.spider-ctrl-extract-button input', function(e){
-		var t = jQuery(this);
+	$('#wrap').on('change', '.spider-ctrl-extract-button input', function(e){
+		var t = $(this);
 		var turnOn = t.is(':checked');
 
-		kaosAjax('spiderExtract', {turnOn: turnOn, schema: jQuery('.kaos-api-spider-button').data('kaos-schema')}, function(data, success){
+		kaosAjax('spiderExtract', {turnOn: turnOn, schema: $('.kaos-api-spider-button').data('kaos-schema')}, function(data, success){
 			if (success)
 				updateYear(true);
 		});
 	});
 	
 	var configCallI = 0;
-	jQuery('#wrap').on('click', '.kaos-spider-ctrl-field-editable', function(e){
-		var t = jQuery(this);
+	$('#wrap').on('click', '.kaos-spider-ctrl-field-editable', function(e){
+		var t = $(this);
 		var cprompt = t.data('kaos-prompt');
 		if (!cprompt)
 			return;
