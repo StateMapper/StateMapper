@@ -580,7 +580,7 @@ function kaosPrintStatuses($statuses, $target = null, $headerEntityId = null, $d
 				$icon = $config->icon;
 
 			if (!empty($p['target_id']) && $target['id'] == $p['target_id'])
-				$label = $config['own'];
+				$label = $config->own;
 			else if ($target['id'] == $p['related_id'])
 				$label = !empty($config->related) ? $config->related : $config->own;
 			else if ($target['id'] == $p['issuing_id'] || in_array($p['related_id'], $otherIds) || in_array($p['target_id'], $otherIds))
