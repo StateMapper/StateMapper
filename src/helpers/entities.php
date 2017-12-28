@@ -872,11 +872,11 @@ function kaosPrintEntityStatsForDate($date, $items, $count, $target, $query){
 	usort($items, function($s1, $s2){
 		$labels = kaosGetStatusLabels();
 		if ($s1['_type'] == $s2['_type']){
-			$keys = array_keys($labels[$s2['_type']]);
+			$keys = array_keys((array) $labels->{$s2['_type']});
 			$k1 = array_search($s1['_action'], $keys);
 			$k2 = array_search($s2['_action'], $keys);
 		} else {
-			$keys = array_keys($labels);
+			$keys = array_keys((array) $labels);
 			$k1 = array_search($s1['_type'], $keys);
 			$k2 = array_search($s2['_type'], $keys);
 		}
