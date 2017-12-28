@@ -22,7 +22,7 @@
 if (defined('BASE_PATH')) // only direct calls
 	die();
 	
-$tempFolder = getTempFolder();
+$tempFolder = dirname(__FILE__).'/../../tmp';
 	
 // extract icon from url (format /theicon.ico?...)
 $icon = @$_SERVER['REQUEST_URI'];

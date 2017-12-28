@@ -20,7 +20,6 @@
 if (!defined('BASE_PATH'))
 	die();
 	
-	
 function getTempFolder(){
 	return APP_PATH.'/assets/tmp'; // set to false for no caching
 }
