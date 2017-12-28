@@ -574,19 +574,19 @@ function kaosPrintStatuses($statuses, $target = null, $headerEntityId = null, $d
 
 		$labels = kaosGetStatusLabels();
 
-		if (isset($labels[$p['_type']], $labels[$p['_type']][$p['_action']])){
-			$config = $labels[$p['_type']][$p['_action']];
-			if (isset($config['icon']))
-				$icon = $config['icon'];
+		if (isset($labels->{$p['_type']}, $labels->{$p['_type']}->{$p['_action']})){
+			$config = $labels->{$p['_type']}->{$p['_action']};
+			if (isset($config->icon))
+				$icon = $config->icon;
 
 			if (!empty($p['target_id']) && $target['id'] == $p['target_id'])
 				$label = $config['own'];
 			else if ($target['id'] == $p['related_id'])
-				$label = !empty($config['related']) ? $config['related'] : $config['own'];
+				$label = !empty($config->related) ? $config->related : $config->own;
 			else if ($target['id'] == $p['issuing_id'] || in_array($p['related_id'], $otherIds) || in_array($p['target_id'], $otherIds))
-				$label = $config['issuing'];
+				$label = $config->issuing;
 			else
-				$label = $config['own'];
+				$label = $config->own;
 
 			if (is_array($label)){
 				if (isset($label['icon']))
@@ -643,10 +643,10 @@ function kaosPrintStatuses($statuses, $target = null, $headerEntityId = null, $d
 
 			$labels = kaosGetStatusLabels();
 			$noteLabel = null;
-			if (isset($labels[$p['_type']], $labels[$p['_type']][$p['_action']])){
-				$config = $labels[$p['_type']][$p['_action']];
-				if (isset($config['note']))
-					$noteLabel = $config['note'];
+			if (isset($labels->{$p['_type']}, $labels->{$p['_type']}->{$p['_action']})){
+				$config = $labels->{$p['_type']}->{$p['_action']};
+				if (isset($config->note))
+					$noteLabel = $config->note;
 			}
 
 			$inner = implode('\s+', array_map(function($e){ return preg_quote($e, '#'); }, explode(' ', $p['note'])));
@@ -821,9 +821,10 @@ function kaosPrintEntityStats($stats, $target, $query){
 
 		if (!empty($s['count']))
 			$count += $s['count'];
-		if (isset($labels[$s['_type']], $labels[$s['_type']][$s['_action']], $labels[$s['_type']][$s['_action']]['stats'])){
-			$config = $labels[$s['_type']][$s['_action']];
-			$icon = isset($config['icon']) ? $config['icon'] : null;
+			
+		if (isset($labels->{$s['_type']}, $labels->{$s['_type']}->{$s['_action']}, $labels->{$s['_type']}->{$s['_action']}->stats)){
+			$config = $labels->{$s['_type']}->{$s['_action']};
+			$icon = isset($config->icon) ? $config->icon : null;
 
 			$item = '<div class="entity-stat-wrap'.($s['count'] <= 5 ? ' entity-stat-children-filled entity-stat-children-open' : '').'"><div class="kaos-entity-stat" data-kaos-related="'.esc_json(array('type' => $s['_type'], 'action' => $s['_action'])).'">';
 
@@ -842,7 +843,7 @@ function kaosPrintEntityStats($stats, $target, $query){
 
 				$item .= '</div>';
 			} else {
-				$item .= '<div class="status-title"><i class="status-icon fa fa-'.$icon.'"></i> '.strtr($config['stats'], array(
+				$item .= '<div class="status-title"><i class="status-icon fa fa-'.$icon.'"></i> '.strtr($config->stats, array(
 					'[count]' => '<span class="status-count">'.number_format($s['count'], 0).'</span>',
 					'[amount]' => '<span class="status-amount">'.number_format($s['amount']/100, 2).' '.$s['unit'].'</span>', // could be calculated better....
 				)).' <i class="fa fa-angle-right entity-stat-children-filled-ind" title="Unfold statuses"></i><i class="fa fa-spinner fa-pulse entity-stat-children-loading-ind"></i></div></div>';
