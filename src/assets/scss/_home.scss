@@ -1,0 +1,140 @@
+/*
+ * StateMapper: worldwide, collaborative, public data reviewing and monitoring tool.
+ * Copyright (C) 2017  StateMapper.net <statemapper@riseup.net>
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */ 
+
+
+
+.kaos-root #main {
+    background: url(../images/bg/space.jpg) repeat 0 0 transparent;
+	-webkit-animation:500s scroll infinite linear;
+	-moz-animation:500s scroll infinite linear;
+	-o-animation:500s scroll infinite linear;
+	-ms-animation:500s scroll infinite linear;
+	animation:500s scroll infinite linear;
+}
+
+
+
+@-webkit-keyframes scroll{
+  100%{
+    background-position:0px 3000px;
+  }
+}
+
+@-moz-keyframes scroll{
+  100%{
+    background-position:0px 3000px;
+  }
+}
+
+@-o-keyframes scroll{
+  100%{
+    background-position:0px 3000px;
+  }
+}
+
+@-ms-keyframes scroll{
+  100%{
+    background-position:0px 3000px;
+  }
+}
+
+@keyframes scroll{
+  100%{
+    background-position:0px 3000px;
+  }
+}
+
+
+
+.kaos-root .kaos-api-result-intro,
+.kaos-root .kaos-api-result-header,
+.kaos-root .kaos-api-result-body,
+.kaos-root #main {
+    border: none;
+    box-shadow: none;
+}
+
+
+.bg-diag-left {
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+100&1+0,0+100 */
+	background: -moz-linear-gradient(-45deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.95) 35%,rgba(255,255,255,0) 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(-45deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.95) 35%,rgba(255,255,255,0) 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(135deg, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0.65) 40%, rgba(255,255,255,0.95) 50%, rgba(255,255,255,1) 52%, rgba(255,255,255,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+}
+
+.bg-diag-right {
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+100&0+0,1+100 */
+	background: -moz-linear-gradient(45deg, rgba(255,255,255,0) 0%,rgba(255,255,255,0.95) 65%, rgba(255,255,255,0.2) 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(45deg, rgba(255,255,255,0) 0%,rgba(255,255,255,0.95) 65%, rgba(255,255,255,0.2) 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(45deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 48%, rgba(255,255,255,0.95) 50%, rgba(255,255,255,0.65) 60%, rgba(255,255,255,0.65) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+}
+
+.bg-diag-left,
+.bg-diag-right {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+	opacity: 1;
+}
+.bg-diag-left {
+    left: 0;
+}
+.bg-diag-right {
+    right: 0;
+}
+
+.bg-stripes-wrap {
+	position: absolute;
+    z-index: 0;
+    top: 0;
+    bottom: 0;
+    overflow: hidden;
+    left: 0;
+    right: 0;
+    height: 100vh;
+
+	.bg-stripes {
+		position: absolute;
+		z-index: 0;
+		top: 0;
+		width: 50%;
+		height: 9999px;
+		animation: slide 1600s linear infinite;
+		opacity: 0.6;
+
+		&.bg-stripes-left {
+			background: url("../images/bg/stripe-left.png") repeat 0px top transparent;
+			left: 0;
+		}
+		&.bg-stripes-right {
+			background: url("../images/bg/stripe-right.png") repeat 0px top transparent;
+			right: 0;
+		}
+	}
+}
+
+@keyframes slide{
+  0%{
+    transform: translate3d(0, 0, 0);
+  }
+  100%{
+    transform: translate3d(0, -5000px, 0);
+  }
+}

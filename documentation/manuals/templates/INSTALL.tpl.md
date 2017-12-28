@@ -69,7 +69,7 @@ StateMapper might work just fine on any [Debian-based](https://www.debian.org/de
    sudo chgrp -R www-data /var/www/html
    sudo find /var/www/html/statemapper -type d -exec chmod g+rx {} +
    sudo find /var/www/html/statemapper -type f -exec chmod g+r {} +
-   sudo chmod -f 777 /var/www/html/statemapper/src/assets/images/tmp
+   sudo chmod -f 777 /var/www/html/statemapper/src/assets/tmp
    ```
    
 9. RECOMMENDED: Create an ```smap``` alias to access the CLI API easily from anywhere by entering:

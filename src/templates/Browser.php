@@ -87,8 +87,10 @@ $searchInput = ob_get_clean();
 			<div id="main">
 				<?php if (isHome(true)){ ?>
 					<div class="bg-diag-left"></div>
-					<div class="bg-stripes bg-stripes-left"></div>
-					<div class="bg-stripes bg-stripes-right"></div>
+					<div class="bg-stripes-wrap">
+						<div class="bg-stripes bg-stripes-left"></div>
+						<div class="bg-stripes bg-stripes-right"></div>
+					</div>
 					<div class="bg-diag-right"></div>
 				<?php } ?>
 				<div id="main-inner">

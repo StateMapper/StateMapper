@@ -35,6 +35,7 @@ require('labels.php');
 require('map.php');
 require('file.php');
 require('names.php');
+require('assets.php');
 
 // addons
 require(APP_PATH.'/addons/wikipedia.php');
@@ -166,12 +167,7 @@ function kaosLsdir($dir_path){
 
 
 function head($title = null){
-	add_js('helpers');
-
 	global $kaosCall, $kaosPage;
-	$session = array(
-		'query' => isset($kaosCall['query']) ? $kaosCall['query'] : array(),
-	);
 	?>
 	<!--
 	StateMapper: worldwide, collaborative, public data reviewing and monitoring tool.
@@ -194,25 +190,10 @@ function head($title = null){
     -->
 
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
-
-	<link rel="stylesheet" type="text/css" href="<?= ASSETS_URL ?>/lib/font-awesome-4.7.0/css/font-awesome.min.css" />
-	<link rel="stylesheet" type="text/css" href="<?= ASSETS_URL ?>/css/api.css?v=<?= KAOS_ASSETS_INC ?>" />
-
-	<script type="text/javascript" src="<?= ASSETS_URL ?>/lib/jquery-3.2.1/jquery-3.2.1.min.js"></script>
-	<script type="text/javascript" src="<?= ASSETS_URL ?>/lib/tippyjs-2.0.0-beta.2/dist/tippy.all.min.js"></script>
-
-	<script type="text/javascript">
-		var KAOS = {
-			ajaxUrl: '<?= BASE_URL ?>',
-			session: <?= json_encode($session) ?>,
-			refreshMap: <?= (!empty($_GET['stop']) ? '0' : '1') ?>,
-			searchUrl: '<?= add_url_arg('q', '%s', isHome() ? null : BASE_URL, false) ?>'
-		};
-	</script>
+	
+	<?php do_action('head'); ?>
+	
 	<?php
-	foreach (add_js() as $js)
-		echo '<script type="text/javascript" src="'.ASSETS_URL.'/js/'.$js.'.js?v='.KAOS_ASSETS_INC.'"></script>';
-
 	$fav = 'map-signs';
 	if (!empty($kaosCall['entity'])){
 		$types = getEntityTypes();
@@ -245,12 +226,6 @@ function head($title = null){
 		include(APP_PATH.'/addons/extra_head.php');
 }
 
-function add_js($js = null){
-	static $jss = array();
-	if ($js)
-		$jss[] = $js;
-	return $jss;
-}
 
 
 
