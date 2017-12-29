@@ -82,7 +82,7 @@ StateMapper might work just fine on any [Debian-based](https://www.debian.org/de
    
    *Disclaimer: all ```smap``` calls require root login because PHP requires to be executed with the same user as the Apache server to be able to read-write files correctly.*
 
-10. Open a browser, navigate to http://localhost/statemapper/ and follow the instructions.
+10. Open a browser, navigate to http://localhost/statemapper/ and follow the instructions to setup the database.
 
 11. RECOMMENDED: Edit ```config.php``` and change the constants according to your needs (follow the instructions in comments).
 
