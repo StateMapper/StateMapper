@@ -260,8 +260,10 @@ a.kaos-convert-url:hover {
 .kaos-api-result-intro-left {
     display: table-cell;
     text-align: left;
-    padding: 3px 0px 5px;
+    padding: 3px 0px 3px;
     vertical-align: middle;
+    height: 67px;
+    box-sizing: border-box;
 }
 
 .kaos-api-legend {
@@ -1035,7 +1037,7 @@ img.kaos-api-result-title-flag {
 }
 
 .kaos-api-result-intro-name > a {
-    top: 7px;
+    top: 5px;
     text-decoration: none;
     color: inherit;
     display: inline-block;
