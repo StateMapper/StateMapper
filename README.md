@@ -97,5 +97,5 @@ Please feel free to contact us through the following channels:
 
 -----
 
-*Copyright &copy; 2017 [StateMapper.net](https://statemapper.net) · Licensed under [GNU AGPLv3](LICENSE) · [&uarr; top](#top)* <img src="http://hits.dwyl.com/StateMapper/StateMapper.svg?style=flat-square" align="right" /><img src="src/assets/images/badges/love.png?v=2" align="right" />
+*Copyright &copy; 2017 [StateMapper.net](https://statemapper.net) · Licensed under [GNU AGPLv3](LICENSE) · [&uarr; top](#top)* <img src="http://hits.dwyl.com/StateMapper/StateMapper.svg?style=flat-square" align="right" /><img src="src/assets/images/badges/love.png?v=3" align="right" />
 
