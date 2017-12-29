@@ -29,7 +29,7 @@ function getTempUrl(){
 }
 
 function print_scss_tags(){
-	$scss_ids = array('font', 'main', 'home'); // scss to include
+	$scss_ids = array('reset', 'font', 'main', 'home'); // scss to include
 	
 	require(APP_PATH.'/assets/lib/scssphp/scss.inc.php');
 	

@@ -68,7 +68,7 @@ a.kaos-convert-url:hover {
 .kaos-table td {
 	padding: 4px 10px;
 	border: 1px solid #aaa;
-	border-collapse: collapse;
+    vertical-align: middle;
 }
 .kaos-table.kaos-table-bulletins td {
     padding: 0 8px;
