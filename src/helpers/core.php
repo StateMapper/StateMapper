@@ -211,7 +211,11 @@ function head($title = null){
 		if (isHome(true))
 			echo ' - Worldwide, collaborative, public data reviewing and monitoring tool';
 	?></title>
+	
 	<link rel="icon" href="<?= APP_URL.'/addons/fontawesome_favicons/'.$fav.'.ico' ?>" type="image/x-icon" />
+	
+	<meta name="viewport" content="width=device-width" />
+	
 	<?php
 	
 	// allow extra head tags (do not put addons/extra_head.php on github!!)
