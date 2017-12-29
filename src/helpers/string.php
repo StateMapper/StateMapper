@@ -335,7 +335,7 @@ function kaosPrintString($ostr){
 		$str .= '</td><td class="kaos-code-comment">';
 	$str .= '</td></tr>';
 
-	return '<table border="0" cellspacing="0" cellpadding="0" class="kaos-code-table">'.kaosConvertEntities($str).'</table>';
+	return '<table class="kaos-code-table">'.kaosConvertEntities($str).'</table>';
 }
 
 function kaosUTF8RecursiveEncode($mixed){

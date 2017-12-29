@@ -21,7 +21,6 @@ html, body {
 	line-height: normal;
 	padding: 0 !important;
 	margin: 0 !important;
-	font-family: Roboto;
     height: 100%;
 }
 html {
@@ -32,6 +31,12 @@ html {
 body {
 	overflow: auto;
 }
+
+table {
+	border-spacing: 0;
+	border-collapse: collapse;
+}
+
 #main {
 	position: relative;
 	min-height: 100vh;

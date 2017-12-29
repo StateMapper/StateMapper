@@ -47,7 +47,7 @@ ob_start();
 			<span class="kaos-schemas-filter"><span class="kaos-schemas-filter-label"><span class="fa fa-filter"></span> <?= _('Filter') ?>: </span><?= kaosGetCountrySchema($kaosCall['filter'])->originalName ?> <a href="<?= BASE_URL.'api' ?>"><i class="fa fa-times"></i></a></span>
 		<?php } ?>
 	</div>
-	<table border="0" cellpadding="0" cellspacing="0" class="kaos-table kaos-table-bulletins">
+	<table class="kaos-table kaos-table-bulletins">
 		<?php 
 		$last = null;
 		$country = null;

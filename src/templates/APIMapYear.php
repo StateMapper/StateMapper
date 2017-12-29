@@ -210,7 +210,7 @@ for ($date = strtotime($currentYear.'-01-01'); $date < $finalDate; $date = kaosA
 ?>
 <div class="kaos-api-map-table-wrap">
 	<div class="kaos-api-map-table-inner">
-		<table border="0" cellspacing="0" cellpadding="0" class="kaos-api-map-table">
+		<table class="kaos-api-map-table">
 			<tr class="kaos-api-fetched-map-block kaos-api-fetch-day-header">
 				<td class="kaos-api-fetched-year">&nbsp;</td>
 				<td class="kaos-api-fetched-header"><span>Day <i class="fa fa-long-arrow-right"></i></span></td>

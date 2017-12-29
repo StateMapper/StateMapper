@@ -27,17 +27,16 @@ function getTempFolder(){
 function getTempUrl(){
 	return APP_URL.'/assets/tmp'; // set to false for no caching
 }
-	
 
 function print_scss_tags(){
-	$scss_ids = array('main', 'home'); // scss to include
+	$scss_ids = array('font', 'main', 'home'); // scss to include
 	
 	require(APP_PATH.'/assets/lib/scssphp/scss.inc.php');
 	
-	$formatter = 'Leafo\ScssPhp\Formatter\Nested';
+	$formatter = KAOS_DEBUG ? 'Expanded' : 'Compressed';
 	
 	$scss = new \Leafo\ScssPhp\Compiler(APP_PATH.'/assets/scss');
-	$scss->setFormatter($formatter); // 'Leafo\\ScssPhp\\Formatter\\'.
+	$scss->setFormatter('Leafo\\ScssPhp\\Formatter\\'.$formatter);
 
 	$path = array();
 	foreach ($scss_ids as $scss_id)
@@ -47,11 +46,11 @@ function print_scss_tags(){
 	foreach ($path as $p)
 		$date = $date ? max(filemtime($p), $date) : filemtime($p);
 	
-	$scssName = 'kaos-'.implode('+', $scss_ids).'-'.$date.'.css';
+	$scssName = 'kaos-'.implode('+', $scss_ids).'-'.$date.'-'.strtolower($formatter).'.css';
 	$dest = getTempFolder().'/'.$scssName;
 
 	// generate css if dest missing or dest's modification time is earlier than max of scss's modification times.
-	if (!file_exists($dest) || filemtime($dest) < $date){
+	if (!file_exists($dest)){
 		$str = '';
 		foreach ($path as $p)
 			$str .= file_get_contents($p).' ';

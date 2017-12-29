@@ -212,13 +212,6 @@ function head($title = null){
 			echo ' - Worldwide, collaborative, public data reviewing and monitoring tool';
 	?></title>
 	<link rel="icon" href="<?= APP_URL.'/addons/fontawesome_favicons/'.$fav.'.ico' ?>" type="image/x-icon" />
-
-	<style>
-		@font-face {
-			font-family: 'roboto';
-			src: url('<?= ASSETS_URL ?>/font/roboto/Roboto-Light.ttf') format('truetype'); /* Chrome 4+, Firefox 3.5, Opera 10+, Safari 3—5 */
-		}
-	</style>
 	<?php
 	
 	// allow extra head tags (do not put addons/extra_head.php on github!!)
@@ -275,7 +268,7 @@ function kaosPrintTable($trs, $th = null, $echo = true, $class = 'kaos-basic-tab
 			}
 			$ntrs[] = '<tr>'.implode('', $tr).'</tr>';
 		}
-	$ret = $ntrs ? '<div><table border="0" cellspacing="0" cellpadding="0" class="'.$class.'">'.implode('', $ntrs).'</table></div>' : '';
+	$ret = $ntrs ? '<div><table class="'.$class.'">'.implode('', $ntrs).'</table></div>' : '';
 	if ($echo){
 		echo $ret;
 		return $ret != '';
