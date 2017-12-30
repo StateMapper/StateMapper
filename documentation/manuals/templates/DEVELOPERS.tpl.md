@@ -143,6 +143,6 @@ The root ```README.md``` must be edited directly from the root folder, and canno
 **Graphics:**
 
 * The main logo was made using the [Megrim font](../../src/assets/font/megrim) and the [FontAwesome](http://fontawesome.io/icons/)'s "map-signs" icon. Source files can be found in the [logo documentation folder](../logo) (```.xcf```) and opened with [GIMP](https://www.gimp.org/).
-* Favicons can be generated on-the-fly from ```https://statemapper.net/src/addons/fontawesome_favicons/[the-icon-code].ico``` with optional parameters ```?color=ffffff``` for icon color and ```?bg=000000``` for background color. Example: <img src="https://statemapper.net/src/addons/fontawesome_favicons/home.ico?bg=DEDEDE&color=D20075" />
+* Favicons can be generated on-the-fly from ```https://statemapper.net/src/addons/fontawesome_favicons/[the-icon-code].ico``` with optional parameters ```?color=ffffff``` for icon color and ```?bg=000000``` for background color. Example: <a jref?"https://statemapper.net/src/addons/fontawesome_favicons/home.ico?bg=DEDEDE&color=D20075"><img src="https://statemapper.net/src/addons/fontawesome_favicons/home.ico?bg=DEDEDE&color=D20075" /></a>
 
 {Include footer()}
