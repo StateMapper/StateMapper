@@ -77,8 +77,8 @@ The source file of this diagram can be found at ```documentation/diagrams/databa
 | [src/helpers/](../../src/helpers) | helper functions |
 | [src/addons/](../../src/addons) | addons likes Wikipedia suggs, Geoencoding, Website autodetection..  |
 | [src/languages/](../../src/languages) | translation files |
-| [src/database/](../../src/database) | database .sql files |
-| [src/assets/](../../src/assets) | web assets of the app (images, fonts, .css, .js) |
+| [src/database/](../../src/database) | database files (including .sql) |
+| [src/assets/](../../src/assets) | web assets of the app (images, fonts, .css, .js, ..) |
 
 
 ## URI structure:
@@ -119,7 +119,7 @@ The root ```README.md``` must be edited directly from the root folder, and canno
 **Debug & errors:**
 
 * the ```debug($whatever, $echo = true)``` will print whatever variable in a JSON human-readable way.
-* the ```kaosDie($string, $opts = array())``` will generate a beautiful error on the web GUI (and a nice response on the JSON API too).
+* the ```kaosDie($string, $opts = array())``` will generate a beautiful error on the web GUI (and a nice response on the JSON and CLI APIs too).
 * when logged in (from the copyright's menu), executed queries can be displayed clicking the "X queries" icon in the footer.
 
 **Shortcuts:**
@@ -152,7 +152,7 @@ The root ```README.md``` must be edited directly from the root folder, and canno
 **Graphics:**
 
 * The main logo was made using the [Megrim font](../../src/assets/font/megrim) and the [FontAwesome](http://fontawesome.io/icons/)'s "map-signs" icon. Source files can be found in the [logo documentation folder](../logo) (```.xcf```) and opened with [GIMP](https://www.gimp.org/).
-* Favicons can be generated from FontAwesome icons through [this page](https://paulferrett.com/fontawesome-favicon/) or [this one](https://gauger.io/fonticon/).
+* Favicons can be generated on-the-fly from ```https://statemapper.net/src/addons/fontawesome_favicons/[the-icon-code].ico``` (optional parameters: ?bg=000000 for background, ?color=ffffff for icon color) Example: <img src="https://statemapper.net/src/addons/fontawesome_favicons/home.ico?bg=000000&color=ffffff" />
 
 
 -----
