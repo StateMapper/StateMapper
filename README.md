@@ -4,7 +4,7 @@
 </div>
 <p align="center" id="badges">
 	<a href="#top"><img src="https://img.shields.io/badge/manuals-draft-red.svg?style=flat-square" /></a>
-	<a href="https://statemapper.net"><img src="https://img.shields.io/badge/code-prototype-red.svg?style=flat-square" /></a>
+	<a href="https://statemapper.net"><img src="https://img.shields.io/badge/code-demo-red.svg?style=flat-square" /></a>
 	<a href="http://php.net/"><img src="https://img.shields.io/badge/language-PHP%2FMySQL-yellow.svg?style=flat-square" /></a>
 	<a href="https://www.debian.org/derivatives/"><img src="https://img.shields.io/badge/platform-Linux-lightgrey.svg?style=flat-square" /></a>
 	<a href="https://github.com/StateMapper/StateMapper/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-AGPLv3-green.svg?style=flat-square" /></a>
@@ -17,7 +17,7 @@
 
 -----
 
-**Index:** [Manifest](#manifest) · [Installation](#installation) · [Contribute](#contribute) · [Roadmap](#roadmap) · [License](#license) · [Disclaimer](#disclaimer) · [Contact & support](#contact--support) · **Live:** <a href="https://statemapper.net">StateMapper.net &rarr;</a>
+**Index:** [Manifest](#manifest) · [Installation](#installation) · [Contribute](#contribute) · [Roadmap](#roadmap) · [License](#license) · [Disclaimer](#disclaimer) · [Contact & support](#contact--support) · **Demo:** <a href="https://statemapper.net">StateMapper.net &rarr;</a>
 
 
 ## Manifest:<img src="https://img.shields.io/badge/state-draft-red.svg?style=flat-square" />
