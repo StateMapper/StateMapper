@@ -58,8 +58,12 @@ if (!empty($_POST['smap_install'])){
 			$error = 'Database "'.htmlentities($args['name']).'" not found, please create it first!';
 		}
 		
-		if (!$error){
+		if (!is_file(BASE_PATH.'/config.sample.php'))
+			$error = 'Configuration file '.BASE_PATH.'/config.sample.php does not exist! Please execute "smap pull" in a terminal.';
+		
+		else if (!$error){
 			// really install
+			
 			ignore_user_abort(true);
 			$content = file_get_contents(BASE_PATH.'/config.sample.php');
 			
