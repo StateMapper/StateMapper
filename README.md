@@ -8,7 +8,7 @@
 	<a href="https://www.debian.org/derivatives/"><img src="https://img.shields.io/badge/platform-Linux-lightgrey.svg?style=flat-square" /></a>
 	<a href="https://github.com/StateMapper/StateMapper/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-AGPLv3-green.svg?style=flat-square" /></a>
 	<a href="https://github.com/StateMapper/StateMapper#contact--support"><img src="https://img.shields.io/badge/chat-XMPP-ff69b4.svg" /></a>
-	<a href="https://statemapper.net"><img src="https://img.shields.io/badge/ver-1.3a-f0f0f0.svg" /></a>
+	<a href="https://statemapper.net"><img src="https://img.shields.io/badge/version-1.3a-f9b876.svg" /></a>
 </p>
 
 <p align="center" id="badges">
