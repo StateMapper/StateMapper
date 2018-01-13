@@ -628,9 +628,9 @@ function print_statuses($statuses, $target = null, $headerEntityId = null, $defa
 			}
 
 			$label = strtr($label, array(
-				'[target]' => '<a href="'.get_entity_url($p['target_id']).'" class="status-title status-target"><i class="fa fa-'.get_entity_icon($p['target_id']).'"></i> '.get_entity_title($p['target_id']).'</a>',
-				'[related]' => '<a href="'.get_entity_url($p['related_id']).'" class="status-title status-target"><i class="fa fa-'.get_entity_icon($p['related_id']).'"></i> '.get_entity_title($p['related_id']).'</a>',
-				'[issuing]' => '<a href="'.get_entity_url($p['issuing_id']).'" class="status-title status-issuing"><i class="fa fa-'.get_entity_icon($p['issuing_id']).'"></i> '.get_entity_title($p['issuing_id']).'</a>',
+				'[target]' => '<a href="'.get_entity_url($p['target_id']).'" class="status-title-tag status-target"><i class="fa fa-'.get_entity_icon($p['target_id']).'"></i> '.get_entity_title($p['target_id']).'</a>',
+				'[related]' => '<a href="'.get_entity_url($p['related_id']).'" class="status-title-tag status-target"><i class="fa fa-'.get_entity_icon($p['related_id']).'"></i> '.get_entity_title($p['related_id']).'</a>',
+				'[issuing]' => '<a href="'.get_entity_url($p['issuing_id']).'" class="status-title-tag status-issuing"><i class="fa fa-'.get_entity_icon($p['issuing_id']).'"></i> '.get_entity_title($p['issuing_id']).'</a>',
 				'[amount]' => !empty($p['amount']) ? '<span class="status-amount">'.print_amount($p['amount']).'</span>' : 'N/D',
 				'[note]' => $note,
 			));

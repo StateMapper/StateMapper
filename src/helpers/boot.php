@@ -21,7 +21,7 @@ if (!defined('BASE_PATH'))
 	die();
 
 
-// LOAD ALL HELPERS   		<-- leave this comment as it is, the following list is parsed from PHP to be injected in manuals 
+// LOAD ALL HELPERS   		<-- leave this comment as it is, the following list is parsed from PHP to be injected in the DEVELOPERS manual 
 
 //require 'boot.php'; 		// helpers' initialization (includes all the following)
 //require 'compile.php'; 	// manuals' compilation methods (generates this manual)
@@ -60,7 +60,7 @@ require 'names.php';		// people's name helpers
 require 'assets.php';		// asset management (css, js..)
 require 'license.php';		// licensing helpers
 
-// END LOAD ALL HELPERS		<-- leave this comment as it is, the following list is parsed from PHP to be injected in manuals 
+// END LOAD ALL HELPERS		<-- leave this comment as it is, the preceeding list is parsed from PHP to be injected in the DEVELOPERS manual 
 
 
 

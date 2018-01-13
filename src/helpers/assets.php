@@ -117,7 +117,8 @@ function head_print_assets(){
 
 	$filters = !empty($smap['filters']) ? $smap['filters'] : array();
 	unset($filters['q']);
-
+	
+	// pass variables from PHP to JS
 	?>
 	<script type="text/javascript">
 		var SMAP = <?= json_encode(array(
@@ -157,7 +158,7 @@ function print_js_tags(){
 		
 	if (IS_DEBUG || is_admin()){
 		foreach ($js_ids as $js)
-			echo '<script type="text/javascript" src="'.ASSETS_URL.'/'.$js.'"></script>';
+			echo '<script type="text/javascript" async src="'.ASSETS_URL.'/'.$js.'"></script>';
 		return;
 	}
 		
