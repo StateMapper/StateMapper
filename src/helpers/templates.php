@@ -21,7 +21,7 @@ if (!defined('BASE_PATH'))
 	die();
 
 function print_template($id, $vars = array()){
-	global $smap;
+	global $smap, $smapDebug;
 	static $varStack = array();
 	array_unshift($varStack, $vars);
 	
@@ -46,7 +46,7 @@ function print_page($id, $vars = array()){
 }
 
 function return_wrap($obj, $title = null){
-	global $smap;
+	global $smap, $smapDebug;
 
 	// add stats to returned objects
 	if (is_array($obj) && isset($obj['success'])){
