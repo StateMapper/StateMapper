@@ -81,7 +81,7 @@ if (!empty($_POST['smap_install'])){
 				exec('mysql -u'.$args['user'].(!empty($args['pass']) ? ' -p'.$args['pass'] : '').' -h '.$args['host'].' '.$args['name'].' < "'.BASE_PATH.'/database/structure.sql"', $output, $return);
 				
 				if (!empty($return))
-					$error = 'An error occurred during the database structure setup.';
+					$error = 'An error occurred during the database structure setup ('.$return.'): '."\n".implode("\n", $output);
 			}
 
 			if (!$error){
