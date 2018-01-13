@@ -743,7 +743,7 @@ function print_statuses($statuses, $target = null, $headerEntityId = null, $defa
 				<div class="status-debug debug">Status #<?= $p['status_id'] ?>: <?= $p['_type'].' / '.$p['_action'] ?></div>
 			</div> -->
 			<span class="date"><?= date_i18n('M j', strtotime($date)) ?><span><?= date_i18n(', Y', strtotime($date)) ?></span></span>
-			<div class="status-body" <?= related(array('status_id' => $p['status_id'])) ?>">
+			<div class="status-body" <?= related(array('status_id' => $p['status_id'])) ?>>
 
 				<div class="status-title">
 					<?php if ($printAsTopLevel){ ?>
@@ -815,8 +815,8 @@ function print_statuses($statuses, $target = null, $headerEntityId = null, $defa
 			</div>
 			<?php
 			if (!$printAsTopLevel){ ?>
-			</div>
-			<?php
+		</div>
+		<?php
 		}
 	}
 }
@@ -845,7 +845,9 @@ function print_entity_stats($stats, $target, $query){
 			$config = $labels->{$s['_type']}->{$s['_action']};
 			$icon = isset($config->icon) ? $config->icon : null;
 
-			$item = '<div class="entity-stat-wrap'.($s['count'] <= 5 ? ' entity-stat-children-filled entity-stat-children-open' : '').'"><div class="entity-stat" data-smap-related="'.esc_json(array('type' => $s['_type'], 'action' => $s['_action'])).'">';
+			$item = '<div class="entity-stat-wrap'.($s['count'] <= 5 ? ' entity-stat-children-filled entity-stat-children-open' : '').'">';
+			
+			$item .= '<div class="entity-stat" data-smap-related="'.esc_json(array('type' => $s['_type'], 'action' => $s['_action'])).'">';
 
 			if ($s['count'] < 2){
 				$statuses = query_statuses(array('type' => $s['_type'], 'action' => $s['_action']) + ($s['rel'] == 'target' ? array('target' => true) : array('related' => true)) + $query);

@@ -70,7 +70,7 @@ function is_error($obj){
 }
 
 function print_inline_error($error){
-	echo '<div class="inline-error"><i class="fa fa-warning"></i> '.$error.'</div>';
+	echo '<span class="inline-error"><i class="fa fa-warning"></i> '.$error.'</span>';
 }
 
 // pipe PHP errors?
