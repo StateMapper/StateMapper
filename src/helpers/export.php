@@ -35,9 +35,9 @@ function export(){
 	exec($cmd, $output, $returnVar);
 	if (!empty($returnVar) || $output){
 		@unlink($dest.'.exporting.sql');
-		die_error('an error occured: '.$output[0]);
+		die_error('an error occurred: '.$output[0]);
 	}
 	if (!rename($dest.'.exporting.sql', $dest.'.sql'))
-		die_error('an error occured: '.$output[0]);
+		die_error('an error occurred: '.$output[0]);
 	echo 'done'.PHP_EOL; 
 }

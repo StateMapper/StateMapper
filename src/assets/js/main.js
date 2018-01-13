@@ -41,7 +41,7 @@ function smapAjax(action, actionData, successCb, errorCb, completeCb){
 				successCb(data, data && data.success);
 		},
 		error: function(data){
-			//alert('an error ocurred');
+			//alert('an error occurred');
 			if (errorCb)
 				errorCb(data);
 		},

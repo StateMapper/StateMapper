@@ -44,7 +44,7 @@ function die_error($str_or_error = null, $error = null){
 	define('IS_ERROR', true);	
 	if (!empty($smap) && !IS_CLI){
 		if (!is_admin())
-			$msg = 'An error occured'; // hide errors to no-admins
+			$msg = 'An error occurred'; // hide errors to no-admins
 			
 		$obj = array(
 			'success' => false,
