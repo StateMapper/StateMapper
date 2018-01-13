@@ -22,7 +22,9 @@
 if (defined('BASE_PATH')) // only direct calls, leave this!
 	die();
 	
-$tempFolder = dirname(__FILE__).'/../../assets/tmp'; // dir to us as cache (set to false for no caching)
+define('ASSETS_PATH', dirname(__FILE__).'/../../assets');
+	
+$tempFolder = ASSETS_PATH.'/tmp'; // dir to us as cache (set to false for no caching)
 $fontawesomeFolder = ASSETS_PATH.'/lib/font-awesome-4.7.0'; // the fontawesome library path
 
 

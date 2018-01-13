@@ -32,7 +32,8 @@ define('ASSETS_INC', 64);
 // define constants
 define('BASE_PATH', dirname(__FILE__));
 define('APP_PATH', BASE_PATH.'/src');
-define('ASSETS_PATH', BASE_PATH.'/src/assets');
+if (!defined('ASSETS_PATH'))
+	define('ASSETS_PATH', BASE_PATH.'/src/assets');
 
 if (file_exists(BASE_PATH.'/config.php')){
 	require BASE_PATH.'/config.php'; 
