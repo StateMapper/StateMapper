@@ -107,8 +107,6 @@ function print_scss_tags(){
 
 add_action('head', 'head_print_assets');
 function head_print_assets(){
-	add_js('main');
-
 	global $smap;
 	$session = array(
 		'query' => isset($smap['query']) ? $smap['query'] : array(),
@@ -152,6 +150,8 @@ function print_js_tags(){
 	
 	$date = null;
 	$js_ids = $libs; // include libraries first, in order
+	
+	$js_ids[] = 'js/boot.js'; // boot.js first after frameworks!!
 	foreach (add_js() as $js) // then custom javascripts
 		$js_ids[$js] = 'js/'.$js.'.js';
 		

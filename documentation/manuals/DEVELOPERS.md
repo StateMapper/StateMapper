@@ -157,15 +157,11 @@ Helpers function are files holding all sorts of useful functions for many tasks.
 
 Please refer to the [Schemas documentation](SCHEMAS.md#top).
 
-
 ## Manuals:
 
 If needed, please edit Github manuals from ```documentation/manuals/templates``` (```.tpl.md``` files) and ```documentation/manuals/parts``` (```.part.md``` files). Patterns like ```{Include[Inline] name_of_part_file}``` and ```{Include[Inline] name_of_part_file(var1[, var2, ..])}``` will be replaced by the part file ```documentation/manuals/parts/name_of_part_file.part.md```, with patterns ```{$1}```, ```{$2}```, ```{$3}``` replaced by arguments ```var1```, ```var2```, ```var3```.
 
-Before commiting your changes, compile the manuals to ```documentation/manuals``` (```.md``` files) with ```smap compile```. 
-
-The root ```README.md``` must be edited directly from the root folder, and cannot use includes yet.
-
+Before commiting your changes, compile the manuals to ```documentation/manuals``` (```.md``` files) with ```smap compile```.
 
 ## Tips & tricks:
 

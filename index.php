@@ -27,7 +27,7 @@ define('IS_CLI', !empty($argv));
 libxml_disable_entity_loader(true); // protect against XEE. See: https://www.owasp.org/index.php/XML_External_Entity_(XXE)_Prevention_Cheat_Sheet#PHP
 
 // increment to force recaching the project's CSS and JS files
-define('ASSETS_INC', 64);
+define('ASSETS_INC', 65);
 
 // define constants
 define('BASE_PATH', dirname(__FILE__));
