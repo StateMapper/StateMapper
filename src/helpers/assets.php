@@ -155,6 +155,12 @@ function print_js_tags(){
 	foreach (add_js() as $js) // then custom javascripts
 		$js_ids[$js] = 'js/'.$js.'.js';
 		
+	if (IS_DEBUG || is_admin()){
+		foreach ($js_ids as $js)
+			echo '<script type="text/javascript" src="'.ASSETS_URL.'/'.$js.'"></script>';
+		return;
+	}
+		
 	foreach ($js_ids as $js_id => $js){
 		$path = ASSETS_PATH.'/'.$js;
 		$date = $date ? max(filemtime($path), $date) : filemtime($path);
