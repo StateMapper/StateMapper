@@ -110,7 +110,7 @@ function get_langs($include_current = false){
 		$langs[] = DEFAULT_LANG;
 	$cur_lang = get_lang(true);
 	foreach (ls_dir(APP_PATH.'/languages') as $lang)
-		if ($lang != $cur_lang || $include_current)
+		if (preg_match('#^[a-z]{2}_[A-Z]{2}$#', $lang) && ($lang != $cur_lang || $include_current))
 			$langs[] = $lang;
 	return $langs;
 }
