@@ -444,16 +444,6 @@
 					]
 				},
 				
-				adjudgeSentences: {
-					selector: "/documento/texto",
-					transform: [
-						{
-							type: "grepSentence", 										// grabbing sentences that contain 'adjudge' vocabulary
-							vocabulary: "adjudge"
-						}
-					]
-				},
-
 				published: {
 					selector: "/documento/metadatos/fecha_publicacion",
 					transform: {

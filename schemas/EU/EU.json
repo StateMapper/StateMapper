@@ -3,6 +3,8 @@
 	type: "continent",
 	originalName: "Europe",
 	name: "Europe",
+	adjective: "European",
+	topLevelDomain: "eu",
 	
 	officialCurrencies: ["EUR"]														// continent currencies if any, first being the default one
 }

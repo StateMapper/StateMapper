@@ -1,7 +1,7 @@
 <?php
 /*
  * StateMapper: worldwide, collaborative, public data reviewing and monitoring tool.
- * Copyright (C) 2017  StateMapper.net <statemapper@riseup.net>
+ * Copyright (C) 2017-2018  StateMapper.net <statemapper@riseup.net>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -25,10 +25,10 @@ class BulletinFetcher {
 	
 	public $args = array();
 
-	public function fetchBulletin($query, $redirect = false, $fetchProcessedPrefix = false){
-		global $kaosCall;
-		if (empty($kaosCall['fetchOrigins'])) 
-			$kaosCall['fetchOrigins'] = array();
+	public function fetch_bulletin($query, $redirect = false, $fetchProcessedPrefix = false){
+		global $smap;
+		if (empty($smap['fetchOrigins'])) 
+			$smap['fetchOrigins'] = array();
 			
 		$query += array(
 			'schema' => null,
@@ -37,55 +37,54 @@ class BulletinFetcher {
 		);
 		
 		if (empty($query['schema']))
-			return new KaosError('missing arguments');
+			return new SMapError('missing arguments');
 			
-		if (!kaosIsValidSchemaPath($query['schema']))
-			return new KaosError('invalid schema');
+		if (!is_valid_schema_path($query['schema']))
+			return new SMapError('invalid schema');
 			
 		$dbFormat = null;
 //		if (!$redirect)
-			$dbFormat = kaosGetFormatByQuery($query);
+			$dbFormat = get_format_by_query($query);
 		
-		$fetchProtocole = $this->getFetchProtocole($query);
+		$fetchProtocole = $this->get_fetch_protocole($query);
 		if (!$fetchProtocole)
-			return new KaosError('fetchProtocole not found or malformed schema for '.$query['schema'].(!empty($query['type']) ? ' '.$query['type'] : '').' (query: '.json_encode($query, JSON_UNESCAPED_UNICODE).')');
+			return new SMapError('fetchProtocole not found or malformed schema for '.$query['schema'].(!empty($query['type']) ? ' '.$query['type'] : '').' (query: '.json_encode($query, JSON_UNESCAPED_UNICODE).')');
 			
 		if (empty($query['type']) && !empty($p->type))
 			$query['type'] = $p->type;
 
-		$protocoleConfig = $this->getFetchProtocoleConfig($fetchProtocole, $query);
-		$formatFetcher = kaosGetFormatFetcher($dbFormat ? $dbFormat : $protocoleConfig->format, $this);
+		$protocoleConfig = $this->get_protocole_config($fetchProtocole, $query);
+		$formatFetcher = get_format_fetcher($dbFormat ? $dbFormat : $protocoleConfig->format, $this);
 		
 		if (!$redirect){
 			
-			if (kaosIsError($formatFetcher))
+			if (is_error($formatFetcher))
 				return $formatFetcher;
 			
 			// try getting from caches, in order
 			$caches = explode(',', BULLETIN_CACHES_READ);
 			if (!$caches)
-				return new KaosError('no cache system');
+				return new SMapError('no cache system');
 				
 			// check from caches
 			foreach ($caches as $i => $cacheType){
-				if ($fetcherCache = kaosGetFetcherCache($cacheType, $dbFormat ? $dbFormat : $protocoleConfig, $query, $this)){
+				if ($fetcherCache = get_fetcher_cache($cacheType, $dbFormat ? $dbFormat : $protocoleConfig, $query, $this)){
 					
 					$fetchedOrigin = null;
-					$content = $fetcherCache->retrieveContent($formatFetcher, false, $fetchedOrigin, $fetchProcessedPrefix, !empty($query['noFetch']));
+					$content = $fetcherCache->retrieve_content($formatFetcher, false, $fetchedOrigin, $fetchProcessedPrefix, !empty($query['noFetch']));
 					
-					if (kaosIsError($content))
+					if (is_error($content))
 						return $content;
 					
-					if ($content !== false){ // is cached content or KaosError
-						//echo "IN CACHE ".$cacheType."<br>";
-						
+					if ($content !== false){ // is cached content or SMapError
+
 						if (!empty($query['noFetch']))
 							return true;
 						
-						$kaosCall['fetchOrigins'][$fetcherCache->getLabel().($fetchProcessedPrefix ? ' (parsed .'.$protocoleConfig->format.')' : ' (.'.$protocoleConfig->format.')')] = (isset($kaosCall['fetchOrigins'][$cacheType]) ? $kaosCall['fetchOrigins'][$cacheType] : 0) + 1;
+						$smap['fetchOrigins'][$fetcherCache->get_label().($fetchProcessedPrefix ? ' (parsed .'.$protocoleConfig->format.')' : ' (.'.$protocoleConfig->format.')')] = (isset($smap['fetchOrigins'][$cacheType]) ? $smap['fetchOrigins'][$cacheType] : 0) + 1;
 						
-						$inserted = insertBulletin(array('format' => $protocoleConfig->format) + $query); 
-						if (kaosIsError($inserted))
+						$inserted = insert_bulletin(array('format' => $protocoleConfig->format) + $query); 
+						if (is_error($inserted))
 							return $inserted;
 							
 						$content += array('format' => $protocoleConfig->format);
@@ -99,38 +98,38 @@ class BulletinFetcher {
 		if ($fetchProcessedPrefix || !empty($query['noFetch']))
 			return false;
 			
-		$inserted = insertBulletin(array('format' => is_object($protocoleConfig) ? $protocoleConfig->format : $protocoleConfig) + $query);
-		if (kaosIsError($inserted))
+		$inserted = insert_bulletin(array('format' => is_object($protocoleConfig) ? $protocoleConfig->format : $protocoleConfig) + $query);
+		if (is_error($inserted))
 			return $inserted;
 		
 		// really fetch bulletin
-		$fetcherCache = kaosGetFetcherCache('local', $protocoleConfig, $query, $this);
-		$fetched = $this->doFetchProtocole($fetchProtocole, $query, $formatFetcher, $fetcherCache, $redirect);
+		$fetcherCache = get_fetcher_cache('local', $protocoleConfig, $query, $this);
+		$fetched = $this->execute_protocole($fetchProtocole, $query, $formatFetcher, $fetcherCache, $redirect);
 		
 		if ($redirect){ 
 			if ($redirect === 'return')
 				return $fetched;
 
 			// protect, just in case
-			kaosDie('error in redirect');
+			die_error('error in redirect');
 		}
 		
-		if (kaosIsError($fetched)){
+		if (is_error($fetched)){
 			
-			if (!empty($query['id']) || kaosIsBulletinExpected($query['schema'], $query['date']))
-				setBulletinError($query, !empty($query['id']) ? 'document not found' : 'summary not found');
+			if (!empty($query['id']) || is_bulletin_expected($query['schema'], $query['date']))
+				set_bulletin_error($query, !empty($query['id']) ? 'document not found' : 'summary not found');
 			else
-				setBulletinNone($query);
+				set_bulletin_none($query);
 			return $fetched;
 		}
 			
-		$kaosCall['fetchOrigins']['origin'] = (isset($kaosCall['fetchOrigins']['origin']) ? $kaosCall['fetchOrigins']['origin'] : 0) + 1;
+		$smap['fetchOrigins']['origin'] = (isset($smap['fetchOrigins']['origin']) ? $smap['fetchOrigins']['origin'] : 0) + 1;
 		
-		if (!empty($kaosCall['sumulateFetch']))
+		if (!empty($smap['sumulateFetch']))
 			return true;
 			
-		$fetched = $fetcherCache->saveContent($fetched, $formatFetcher);
-		if (kaosIsError($fetched) || !is_array($fetched))
+		$fetched = $fetcherCache->save_content($fetched, $formatFetcher);
+		if (is_error($fetched) || !is_array($fetched))
 			return $fetched;
 
 		$fetched += array('format' => $protocoleConfig->format);
@@ -138,7 +137,7 @@ class BulletinFetcher {
 		return $fetched + $query;
 	}
 	
-	function saveProcessedContent($parsed, $filePrefix, $query){
+	function save_processed_content($parsed, $filePrefix, $query){
 		$query += array(
 			'schema' => null,
 			'protocoleId' => 'default',
@@ -146,33 +145,34 @@ class BulletinFetcher {
 		);
 		
 		if (empty($query['schema']))
-			return new KaosError('missing arguments');
+			return new SMapError('missing arguments');
 			
-		if (!kaosIsValidSchemaPath($query['schema']))
-			return new KaosError('invalid schema');
+		if (!is_valid_schema_path($query['schema']))
+			return new SMapError('invalid schema');
 		
-		$fetchProtocole = $this->getFetchProtocole($query);
+		$fetchProtocole = $this->get_fetch_protocole($query);
 		if (!$fetchProtocole)
-			return new KaosError('can\'t save processed content, fetchProtocole not found or malformed schema for '.$query['schema'].(!empty($query['type']) ? ' '.$query['type'] : '').' (query: '.json_encode($query, JSON_UNESCAPED_UNICODE).')');
+			return new SMapError('can\'t save processed content, fetchProtocole not found or malformed schema for '.$query['schema'].(!empty($query['type']) ? ' '.$query['type'] : '').' (query: '.json_encode($query, JSON_UNESCAPED_UNICODE).')');
 			
-		$protocoleConfig = $this->getFetchProtocoleConfig($fetchProtocole, $query);
+		$protocoleConfig = $this->get_protocole_config($fetchProtocole, $query);
 		
-		$formatFetcher = kaosGetFormatFetcher($protocoleConfig->format, $this);
-		if (kaosIsError($formatFetcher))
+		$formatFetcher = get_format_fetcher($protocoleConfig->format, $this);
+		if (is_error($formatFetcher))
 			return $formatFetcher;
 			
-		$fetcherCache = kaosGetFetcherCache('local', $protocoleConfig, $query, $this);
-		return $fetcherCache->saveContent($parsed, $formatFetcher, $filePrefix);
+		$fetcherCache = get_fetcher_cache('local', $protocoleConfig, $query, $this);
+		return $fetcherCache->save_content($parsed, $formatFetcher, $filePrefix);
 	}
 	
-	protected function getFetchProtocoleConfig($fetchProtocole, $query){
+	protected function get_protocole_config($fetchProtocole, $query){
 		$config = $fetchProtocole->protocole->{$query['protocoleId']};
 		if (empty($config->format) && !empty($fetchProtocole->input->format))
 			$config->format = $fetchProtocole->input->format;
 		return $config;
 	}
 	
-	protected function doFetchProtocole($fetchProtocole, $query, &$formatFetcher, &$fetcherCache, $redirect = false){
+	protected function execute_protocole($fetchProtocole, $query, &$formatFetcher, &$fetcherCache, $redirect = false){
+		global $smap;
 		
 		$content = null;
 		foreach ($fetchProtocole->protocole->{$query['protocoleId']}->steps as $step){
@@ -199,7 +199,7 @@ class BulletinFetcher {
 							$varId = preg_replace('#^([a-z0-9_]+)(:.*)?$#i', '$1', $varId);
 							
 							if (!isset($query[$varId]))
-								return new KaosError('missing injection variable '.$varId);
+								return new SMapError('missing injection variable '.$varId);
 
 							$varValue = $query[$varId];
 							if (is_array($varValue) && isset($varValue['value'])) // BUG!! shouldn't need this
@@ -214,7 +214,7 @@ class BulletinFetcher {
 										break;
 										
 									default:
-										return new KaosError('unknown variable method '.$method['fn']);
+										return new SMapError('unknown variable method '.$method['fn']);
 								}
 							
 							// replace variable in url
@@ -227,15 +227,17 @@ class BulletinFetcher {
 						if ($redirect === 'return')
 							return $url;
 							
-						if (KAOS_IS_CLI){
+						if (IS_CLI){
 							echo $url.PHP_EOL;
 							exit();
-						}
-						header('Location: '.kaosAnonymize($url));
-						exit;
+						} 
+						if ($smap['raw'])
+							return_wrap(array('success' => true, 'url' => $url));
+							
+						redirect(anonymize($url));
 					}
-					$content = $fetcherCache->fetchUrl($url, $formatFetcher);
-					if (kaosIsError($content))
+					$content = $fetcherCache->fetch_url($url, $formatFetcher);
+					if (is_error($content))
 						return $content;
 						
 					
@@ -243,18 +245,18 @@ class BulletinFetcher {
 					break;
 					
 				default:
-					return new KaosError('unknown step type '.$step->type);
+					return new SMapError('unknown step type '.$step->type);
 			}
 		}
 		
 		if ($content === null)
-			return new KaosError('no content fetched');
+			return new SMapError('no content fetched');
 			
 		return $content;
 	}
 	
-	public function guessQueryParameters($query){
-		if (!($schema = kaosGetSchema($query['schema'])))
+	public function guess_query_parameters($query){
+		if (!($schema = get_schema($query['schema'])))
 			return false;
 		
 		if (!empty($schema->guesses)){
@@ -291,11 +293,11 @@ class BulletinFetcher {
 		return $query;
 	}
 	
-	public function getFetchProtocole($query){
-		if (!($schema = kaosGetSchema($query['schema'])))
+	public function get_fetch_protocole($query){
+		if (!($schema = get_schema($query['schema'])))
 			return false;
 		
-		$query = $this->guessQueryParameters($query);
+		$query = $this->guess_query_parameters($query);
 		$else = null;
 		
 		if (!empty($schema->fetchProtocoles))
@@ -310,7 +312,7 @@ class BulletinFetcher {
 						// skip if all input parameters are not present in $query	
 						$hasAll = true;
 						foreach ($p->input->parameters as $parameterId){
-							if (empty($query[$parameterId])){
+							if (is_string($parameterId) && empty($query[$parameterId])){
 								$hasAll = false;
 								break;
 							}
@@ -334,17 +336,17 @@ class BulletinFetcher {
 		return $else;
 	}
 	
-	public function serveBulletin($bulletin, $printMode = 'download', $title = null, $query = array()){
-		if (kaosIsError($formatFetcher = kaosGetFormatFetcher($bulletin['format'], $this)))
-			kaosDie('no such bulletin');
-		return $formatFetcher->serveBulletin($bulletin, $printMode, $title, $query);
+	public function serve_bulletin($bulletin, $printMode = 'download', $title = null, $query = array()){
+		if (is_error($formatFetcher = get_format_fetcher($bulletin['format'], $this)))
+			die_error('no such bulletin');
+		return $formatFetcher->serve_bulletin($bulletin, $printMode, $title, $query);
 	}
 	
 }
 
 class BulletinFetcherFormat {
 	
-	public function detectEncoding($content){
+	public function detect_encoding($content){
 		return null;
 	}
 	
@@ -357,33 +359,32 @@ class BulletinFetcherCache {
 	public $fileUri = null;
 	private $parent = null;
 	
-	public function setConfig($protocoleConfig, $query, $parent){
+	public function set_config($protocoleConfig, $query, $parent){
 		$this->protocoleConfig = $protocoleConfig;
 		$this->query = $query;
 		$this->parent = $parent;
 		
 		// init filePath
-		$this->fileUri = $this->getContentUri();
+		$this->fileUri = $this->get_content_uri();
 	}
 	
-	public function getContentUri(){
-		$query = $this->parent->guessQueryParameters($this->query);
+	public function get_content_uri(){
+		$query = $this->parent->guess_query_parameters($this->query);
 		
-		$cachePath = '/'.$query['schema'];
-		if (!empty($query['id']))
-			$cachePath .= '/byId';
-		else if (!empty($query['date']))
-			$cachePath .= '/byDate';
-		else
-			return new KaosError('not enough query parameters');
+		$fileUri = '/'.$query['schema'];
+		if (!empty($query['date'])){
+		
+			// file formats:
+			// 2017/01/01.xml
+			// 2017/01/01/id_document.xml
+		
+			$fileUri .= '/'.str_replace('-', '/', $query['date']); 
+			if (!empty($query['id']))
+				$fileUri .= '/'.$query['id'];
 			
-		$fileUri = $cachePath.'/';
-		
-		if (!empty($query['id']))
-			$fileUri .= $query['id'];
-		else if (!empty($query['date']))
-			$fileUri .= $query['date'];
-
+		} else
+			return new SMapError('not enough query parameters');
+			
 		$fileUri .= '.'.(is_object($this->protocoleConfig) ? $this->protocoleConfig->format : $this->protocoleConfig);
 		
 		//echo 'ContentPath: '.$filePath.'<br>';
@@ -392,13 +393,13 @@ class BulletinFetcherCache {
 }
 
 
-function kaosGetFetcherCache($cacheType, $protocoleConfig, $query, $parent){
+function get_fetcher_cache($cacheType, $protocoleConfig, $query, $parent){
 	$filePath = __DIR__.'/caches/BulletinFetcher'.ucfirst($cacheType).'Cache.php';
 	if (file_exists($filePath)){
 		require_once $filePath;
 		$class = 'BulletinFetcher'.ucfirst($cacheType).'Cache';
 		$fetcherCache = new $class();
-		$fetcherCache->setConfig($protocoleConfig, $query, $parent);
+		$fetcherCache->set_config($protocoleConfig, $query, $parent);
 		return $fetcherCache;
 	} 
 	return null;

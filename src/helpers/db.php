@@ -1,7 +1,7 @@
 <?php
 /*
  * StateMapper: worldwide, collaborative, public data reviewing and monitoring tool.
- * Copyright (C) 2017  StateMapper.net <statemapper@riseup.net>
+ * Copyright (C) 2017-2018  StateMapper.net <statemapper@riseup.net>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -23,26 +23,26 @@ if (!defined('BASE_PATH'))
 	die();
 
 
-function getConnexion($closing = false){
+function get_connection($closing = false){
 	static $conn = null;
 	if ($conn == null){
 		try {
 			$conn = new mysqli(DB_HOST, DB_USER, DB_PASS);
 		} catch (Exception $e){
 			$conn = false;
-			kaosDie('db connection failed: '.$e->getMessage());
+			die_error('db connection failed: '.$e->getMessage());
 		}
 		if ($conn->connect_error){
 			$err = $conn->connect_error;
 			$conn = false;
-			kaosDie('db connection failed: '.$err);
+			die_error('db connection failed: '.$err);
 		}
 		if (!mysqli_select_db($conn, DB_NAME)){
 			$conn = false;
-			kaosDie('db '.DB_NAME.' not found');
+			die_error('db '.DB_NAME.' not found');
 		}
 
-		kaosSqlQuery($conn, 'SET sql_mode = ""');
+		execute_query($conn, 'SET sql_mode = ""');
 		
 	} else if ($conn === false)
 		return false;
@@ -56,11 +56,11 @@ function getConnexion($closing = false){
 	return $conn;
 }
 
-function connexionClose(){
-	return getConnexion(true);
+function close_connection(){
+	return get_connection(true);
 }
 
-function get($query, $injectVars = array()){
+function get_var($query, $injectVars = array()){
 	if (!preg_match('#\bLIMIT\s+[0-9]+\s*$#ius', $query))
 		$query = $query.' LIMIT 1';
 		
@@ -74,7 +74,7 @@ function get($query, $injectVars = array()){
 	return null;
 }
 
-function getCol($query, $injectVars = array()){
+function get_col($query, $injectVars = array()){
 	$ret = query($query, $injectVars);
 	if (is_array($ret) && !empty($ret)){
 		$values = array();
@@ -87,13 +87,13 @@ function getCol($query, $injectVars = array()){
 	return array();
 }
 
-function getRow($query, $injectVars = array()){
+function get_row($query, $injectVars = array()){
 	$ret = query($query, $injectVars);
 	return $ret ? array_shift($ret) : null;
 }
 
-function queryPrepare($query, $injectVars){
-	if (!($conn = getConnexion()) || kaosIsError($conn))
+function prepare($query, $injectVars){
+	if (!($conn = get_connection()) || is_error($conn))
 		return $conn;
 		
 	if (!is_array($injectVars))
@@ -108,23 +108,23 @@ function queryPrepare($query, $injectVars){
 }
 
 function esc_like($str, $dir = 'both'){
-	if (!($conn = getConnexion()) || kaosIsError($conn))
+	if (!($conn = get_connection()) || is_error($conn))
 		return $conn;
 	return "'".(in_array($dir, array('left', 'both')) ? '%' : '').mysqli_real_escape_string($conn, $str).(in_array($dir, array('right', 'both')) ? '%' : '')."'";
 }
 
 function query($query, $injectVars = array(), $returnType = null){
-	if (!($conn = getConnexion()) || kaosIsError($conn))
+	if (!($conn = get_connection()) || is_error($conn))
 		return $conn;
 		
-	$query = queryPrepare($query, $injectVars);
+	$query = prepare($query, $injectVars);
 		
-	$result = kaosSqlQuery($conn, $query);
+	$result = execute_query($conn, $query);
 	if (!$result){
 		$err = mysqli_error($conn);
 		$err = preg_replace('#\s*'.preg_quote('You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ', '#').'(.*)\s*$#ius', 'syntax error near $1', $err);
 		
-		kaosDie('MySQL query error: <b>'.$err.'</b> about query <b>'.$query.'</b>');
+		die_error('MySQL query error: <b>'.$err.'</b> about query <b>'.$query.'</b>');
 		return false;
 	}
 	
@@ -141,10 +141,10 @@ function query($query, $injectVars = array(), $returnType = null){
 }
 
 function insert($table, $vars = array()){
-	if (!($conn = getConnexion()) || kaosIsError($conn))
+	if (!($conn = get_connection()) || is_error($conn))
 		return $conn;
 		
-//		kaosJSON($vars);
+//		print_json($vars);
 	
 	$values = array();
 	foreach ($vars as $k => $v)
@@ -152,11 +152,11 @@ function insert($table, $vars = array()){
 
 	$query = 'INSERT INTO '.$table.' ( '.implode(', ', array_keys($vars)).' ) VALUES ( '.implode(', ', $values).' )';
 		
-	return kaosSqlQuery($conn, $query, true);
+	return execute_query($conn, $query, true);
 }
 
 function update($table, $data = array(), $where = array(), $notWhere = array()){
-	if (!($conn = getConnexion()) || kaosIsError($conn))
+	if (!($conn = get_connection()) || is_error($conn))
 		return $conn;
 	
 	$set = array();
@@ -170,47 +170,48 @@ function update($table, $data = array(), $where = array(), $notWhere = array()){
 		$w[] = $k.' != '.($v === null ? 'NULL' : "'".mysqli_real_escape_string($conn, $v)."'");
 
 	$query = 'UPDATE '.$table.' SET '.implode(', ', $set).' WHERE '.implode(' AND ', $w);
-	if (!kaosSqlQuery($conn, $query))
+	if (!execute_query($conn, $query))
 		return false;
 	return mysqli_affected_rows($conn);
 }
 
-function kaosSqlQuery($conn, $query, $returnInsertedId = false){
-	global $kaosCall;
-	if (empty($kaosCall['queries']))
-		$kaosCall['queries'] = array();
-	$begin = time();
+function execute_query($conn, $query, $returnInsertedId = false){
+	global $smap, $smapDebug;
+	if (empty($smapDebug['queries']))
+		$smapDebug['queries'] = array();
+	$begin = microtime(true);
 	$ret = mysqli_query($conn, $query);
 	if ($returnInsertedId)
 		$ret = $ret ? mysqli_insert_id($conn) : false;
 
 	$explain = array();
-	if (KAOS_DEBUG && (KAOS_IS_CLI || isAdmin())){
+	if (IS_DEBUG && (IS_CLI || is_admin())){
 		if ($eRet = mysqli_query($conn, 'EXPLAIN '.$query))
 			while ($eRow = mysqli_fetch_assoc($eRet))
 				$explain[] = $eRow;
 	}
 			
-	if (!KAOS_IS_CLI){
-		$kaosCall['queries'][] = array(
+	if (!IS_CLI){
+		$smapDebug['queries'][] = array(
 			'query' => $query,
 			'explain' => $explain,
-			'duration' => time() - $begin,
+			'duration' => microtime(true) - $begin,
 		);
 	
-	} else if (!empty($kaosCall['debugQueries']))
-		kaosPrintLog('[SQL] '.$query.' ('.(time() - $begin).'s)', array('color' => 'grey'));
+	} else if (!empty($smap['debugQueries']))
+		print_log('[SQL] '.$query.' ('.time_diff(microtime(true) - $begin, 0, true).')', array('color' => 'grey'));
 	
 	return $ret;
 }
 
-function lintSqlVar($var){
+function lint_sql_var($var){
 	return preg_replace_callback('#[A-Z]#u', function($m){
 		return '_'.strtolower($m[0]);
 	}, $var);
 }
 
-function convertDBEngine($newEngine){
+// Convert all tables to TokuDB engine with "?setNewEngine=TokuDB" - for development purpose only
+function convert_db_engine($newEngine){
 	if (!in_array($newEngine, array('TokuDB')))
 		die('bad engine');
 		
@@ -231,6 +232,28 @@ function convertDBEngine($newEngine){
     die('done');
 }
 
-// Convert all tables to TokuDB engine with "?setNewEngine=TokuDB"
-if (KAOS_DEBUG && !empty($_GET['setNewEngine']))
-	convertDBEngine($_GET['setNewEngine']);
+function clean_tables($all = false){
+	if (IS_INSTALL)
+		return;
+		
+	static $lastCleaned = null;
+	if ($all)
+		query('DELETE FROM locks');
+	
+	else if (!$lastCleaned || $lastCleaned < time() - 60){ // clean every minute top
+		$lastCleaned = time();
+		query('DELETE FROM locks WHERE created < %s', array(date('Y-m-d H:i:s', time() - (max(MAX_EXECUTION_TIME, 900) + 60)))); // clean after max(MAX_EXECUTION_TIME, 15min) + 1 minute
+	}
+	
+	// clear expired caches
+	if ($all)
+		query('DELETE FROM cache');
+	else
+		query('DELETE FROM cache WHERE expire < %s', date('Y-m-d H:i:s'));
+		
+	// clear api rates
+	if ($all)
+		query('DELETE FROM api_rates');
+	else
+		query('DELETE FROM api_rates WHERE date < %s', date('Y-m-d H:i:s', strtotime('-'.API_RATE_PERIOD)));
+}

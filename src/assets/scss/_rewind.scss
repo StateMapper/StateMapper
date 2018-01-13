@@ -1,0 +1,440 @@
+/*
+ * StateMapper: worldwide, collaborative, public data reviewing and monitoring tool.
+ * Copyright (C) 2017-2018  StateMapper.net <statemapper@riseup.net>
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */ 
+
+
+
+.map-fetched-ind {
+
+    display: inline-block;
+    vertical-align: middle;
+    width: 28px;
+    height: 21px;
+    margin: 0px 1px 6px 0;
+    color: white;
+    text-decoration: none;
+    text-align: center;
+    font-size: 11px;
+    padding: 4px 0 0;
+    font-weight: bold;
+    box-sizing: border-box;
+}
+.map-header-days .map-fetched-ind {
+    height: 29px;
+}
+.map-header-days .map-fetched-header,
+.map-header-days .map-fetched-ind,
+.map-header-days {
+    color: #aaa;
+    font-size: 9px;
+    font-weight: normal;
+}
+
+
+.map-header-days .map-fetched-header span,
+.map-header-days .map-fetched-ind span {
+    background: rgba(255,255,255,0.7);
+    padding: 0 3px;
+    display: inline-block;
+}
+
+.map-header-days .map-fetched-header span {
+    margin: 5px 0 0 30px;
+}
+
+
+/* APIMap state colors */
+
+.map-year-stat-bg-waiting,
+.map-fetched-ind.map-fetched-ind-waiting,
+.map-fetched-legend-state-waiting > span {
+	background: #faaf61;
+}
+.map-year-stat-bg-not_published,
+.map-year-stat-bg-none,
+.map-fetched-ind.map-fetched-ind-not_published,
+.map-fetched-legend-state-not_published > span,
+.map-fetched-ind.map-fetched-ind-none,
+.map-fetched-legend-state-none > span {
+	background: #f2f2f2;
+}
+.map-year-stat-bg-not_fetched,
+.map-fetched-ind.map-fetched-ind-not_fetched,
+.map-fetched-legend-state-not_fetched > span {
+	background: #ffde7d;
+}
+.map-year-stat-bg-fetched,
+.map-fetched-ind.map-fetched-ind-fetched,
+.map-fetched-legend-state-fetched > span {
+	background: #09d91b;
+}
+.map-year-stat-bg-error,
+.map-fetched-ind.map-fetched-ind-error,
+.map-fetched-legend-state-error > span {
+	background: red;
+}
+.map-year-stat-bg-extracting,
+.map-fetched-ind.map-fetched-ind-extracting,
+.map-fetched-legend-state-extracting > span {
+	background: #F5A3E2;
+}
+.map-year-stat-bg-extracted,
+.map-fetched-ind.map-fetched-ind-extracted,
+.map-fetched-legend-state-extracted > span {
+	background: #E003AD;
+}
+
+
+.map-year-stat-bg-ph {
+	background: #f9f9f9;
+}
+
+.map-fetched-map-block {
+	margin: 0 0 10px;
+}
+.map-fetched-map {
+	padding-top: 4px;
+}
+.map-fetched-header {
+	font-size: 14px;
+    padding: 2px 30px 0 0;
+    vertical-align: top;
+}
+
+.map-fetched-year {
+	font-weight: bold;
+	font-size: 18px;
+	padding: 0 30px 5px 9px;
+}
+
+.map-fetched-map-space {
+	height: 40px;
+}
+
+.map-fetched-map-total {
+    font-size: 10px;
+    vertical-align: top;
+    padding: 1px 0 0 20px;
+    display: inline-block;
+    width: 50px;
+    position: relative;
+}
+
+.map-table-wrap {
+    margin-top: 40px;
+    border-top: 1px dashed #ddd;
+}
+.map-table-inner {
+    position: relative;
+    top: -13px;
+}
+.map-table td {
+	text-align: left;
+}
+.map-fetched {
+    text-align: left;
+}
+
+
+
+.main-body-type-map .main-body-inner {
+    display: inline-block;
+}
+
+.map-fetched-legend-state > span {
+    display: inline-block;
+    vertical-align: top;
+    width: 16px;
+    height: 16px;
+    margin: 0 1px 0 0;
+    position: relative;
+    top: -1px;
+    padding: 0;
+    text-align: center;
+    box-sizing: border-box;
+}
+.map-fetched-legend-state > span i {
+    position: relative;
+    top: -1px;
+    font-size: 15px;
+}
+
+.spider-ctrl {
+    text-align: left;
+	margin-top: 20px;
+	line-height: 200%;
+}
+
+.spider-button {
+	margin: 0;
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+    background: #f5f5f5;
+    font-size: 16px;
+    font-weight: normal;
+    cursor: pointer;
+    border-radius: 2px;
+}
+.spider-button,
+.spider-button:active
+.spider-button:focus {
+	box-shadow: 3px 3px 5px -5px #aaa;
+	outline: 0 !important;
+}
+.spider-button:hover {
+	box-shadow: 3px 3px 6px -5px #bbb;
+}
+.spider-button.spider-status-waiting {
+	background: white;
+    color: #09d91b;
+    border-color: #09d91b;
+}
+.spider-button.spider-status-active {
+    background: #09d91b;
+    border-color: #09d91b;
+    color: white;
+}
+.spider-button.spider-status-stopping {
+	background: white;
+    color: orange;
+    border-color: orange;
+}
+.spider-button i {
+	margin-right: 4px;
+}
+.spider-ctrl input[type="text"],
+.spider-ctrl input[type="numeric"],
+.spider-ctrl input[type="date"] {
+    padding: 4px 6px;
+    margin: 2px 0;
+}
+.spider-ctrl input[type="date"] {
+    width: 140px;
+}
+.spider-ctrl input[type="numeric"] {
+    margin-right: 5px;
+    width: 40px;
+}
+
+
+.map-years {
+	display: table;
+    margin: 3px 0 30px;
+    border-top: 1px dashed #ddd;
+    padding-top: 20px;
+}
+.map-year-header {
+	display: table-cell;
+    padding-right: 25px;
+    max-width: 200px;
+}
+.map-year {
+    position: relative;
+	display: table-cell;
+    text-align: center;
+    max-width: 80px;
+}
+
+.map-year-header .map-year-inner,
+.map-year-header a.map-year-inner,
+.map-year .map-year-inner,
+.map-year a.map-year-inner {
+	color: black;
+    text-decoration: none;
+    padding: 4px 5px;
+    display: inline-block;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+.map-year a.smap-year-current {
+    background: #fcfcfc;
+    border: 1px solid #ddd;
+}
+.map-year a:hover {
+    background: #fcfcfc;
+}
+.map-year-label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 3px;
+    padding: 2px 0 0;
+    font-weight: normal;
+    height: 25px;
+    box-sizing: border-box;
+}
+.map-year .map-year-label {
+    border-bottom: 1px solid #eee;
+}
+.smap-year-current .map-year-label {
+	font-weight: bold;
+	font-size: 16px;
+	padding: 0;
+}
+.map-year-stats {
+	display: block;
+}
+
+.map-year-stats > span {
+
+    color: white;
+    font-size: 12px;
+    display: inline-block;
+    padding: 3px 0;
+    vertical-align: middle;
+    width: 100%;
+    border-collapse: collapse;
+    white-space: nowrap;
+    height: 19px;
+    box-sizing: border-box;
+}
+.map-year-stats > span.map-year-stat-bg-precepts,
+.map-year-stats > span.map-year-stat-bg-statuses,
+.map-year-stats > span.map-year-stat-bg-document,
+.map-year-stats > span.map-year-stat-bg-progress {
+	color: black;
+	background: transparent;
+}
+.map-year-stats > span.map-year-stat-bg-not_fetched,
+.map-year-stats > span.map-year-stat-bg-not_published {
+	color: black;
+}
+
+.map-year-stats-labels.map-year-stats > span {
+	color: black;
+	text-align: left;
+}
+
+
+.spider-ctrl-field {
+    padding: 0 8px;
+    display: inline-block;
+	margin: 0 0 5px 0;
+    white-space: nowrap;
+    color: #555;
+}
+.spider-ctrl-field.spider-ctrl-field-editable {
+    cursor: pointer;
+}
+.spider-ctrl-field-editable:hover .spider-ctrl-field-val {
+    color: black;
+    font-weight: bold;
+}
+.spider-ctrl-field i.fa-pencil {
+	display: none;
+}
+.spider-ctrl-field-editable i.fa-pencil {
+	display: inline;
+	color: #ccc;
+	opacity: 0;
+}
+
+.spider-ctrl-field-editable:hover i.fa-pencil {
+	color: #333;
+	opacity: 1;
+}
+
+.map-year-stats > span.map-year-stat-bg-precepts,
+.map-year-stats > span.map-year-stat-bg-document,
+.map-year-stats-labels.map-year-stats > span.map-fetched-legend-state-precepts,
+.map-year-stats-labels.map-year-stats > span.map-fetched-legend-state-document {
+	margin-top: 5px;
+}
+.map-year-stats > span.map-year-stat-bg-progress,
+.map-year-stats-labels.map-year-stats > span.map-fetched-legend-state-progress {
+    margin-bottom: 5px;
+}
+
+
+.spider-ctrl {
+    padding: 0 0 8PX;
+}
+
+.spider-ctrl-right {
+	float: right;
+	margin: 0 0 10px 40px;
+}
+
+.spider-ctrl-field > i.spider-ctrl-icon {
+    width: 18px;
+    text-align: center;
+    margin: 1px 4px 0 0;
+}
+
+
+span.map-year-workers-ind {
+    font-size: 20px;
+    text-align: center;
+    right: 0;
+    left: 0;
+    top: -40px;
+    z-index: 2;
+}
+span.map-month-workers-ind {
+    top: -3px;
+    right: 0;
+    font-size: 16px;
+}
+span.map-year-workers-ind,
+span.map-month-workers-ind {
+    position: absolute;
+    font-weight: normal;
+    color: #aaa;
+    text-align: center;
+}
+span.map-year-workers-ind > span {
+    padding: 7px 6px;
+}
+span.map-year-workers-ind > span,
+span.map-month-workers-ind > span {
+	display: inline-block;
+    background: rgba(255,255,255,0.6);
+	position: relative;
+}
+span.map-year-workers-ind > span > span {
+    top: 2px;
+    left: 26px;
+}
+
+span.map-month-workers-ind > span > span {
+    top: -1px;
+    left: 18px;
+}
+span.map-year-workers-ind > span > span,
+span.map-month-workers-ind > span > span {
+    position: absolute;
+    font-family: Roboto;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+
+
+.spider-ctrl-extract-button {
+    text-align: center;
+    padding: 10px 0 0;
+}
+
+.spider-ctrl-extract-button input[type="checkbox"] {
+    margin: 6px 0 0 0;
+    display: inline-block;
+    vertical-align: top;
+}
+
+
+.map-year-stat-space-below {
+	margin-bottom: 15px;
+}

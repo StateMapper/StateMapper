@@ -1,7 +1,7 @@
 <?php
 /*
  * StateMapper: worldwide, collaborative, public data reviewing and monitoring tool.
- * Copyright (C) 2017  StateMapper.net <statemapper@riseup.net>
+ * Copyright (C) 2017-2018  StateMapper.net <statemapper@riseup.net>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -18,14 +18,16 @@
  */ 
 
 @session_start();
+define('SMAP_VERSION', '1.3a');
+define('IS_ALPHA', true);
 
 // CLI
-define('KAOS_IS_CLI', !empty($argv));
+define('IS_CLI', !empty($argv));
 
 libxml_disable_entity_loader(true); // protect against XEE. See: https://www.owasp.org/index.php/XML_External_Entity_(XXE)_Prevention_Cheat_Sheet#PHP
 
 // increment to force recaching the project's CSS and JS files
-define('KAOS_ASSETS_INC', 20);
+define('ASSETS_INC', 64);
 
 // define constants
 define('BASE_PATH', dirname(__FILE__));
@@ -34,15 +36,16 @@ define('ASSETS_PATH', BASE_PATH.'/src/assets');
 
 if (file_exists(BASE_PATH.'/config.php')){
 	require BASE_PATH.'/config.php'; 
-	define('KAOS_IS_INSTALL', false);
+	define('IS_INSTALL', false);
 } else {
 	require BASE_PATH.'/config.sample.php'; 
-	define('KAOS_IS_INSTALL', true);
+	define('IS_INSTALL', true);
 }
-define('ALLOW_LOGIN', KAOS_DEBUG); // for the moment, only allow login on development
+define('ALLOW_LOGIN', IS_DEBUG); // for the moment, only allow login on development
+define('DEFAULT_RESULTS_COUNT', 77);
 
-if (BASE_URL == 'PUT_YOUR_BASE_URL_HERE')
-	define('REAL_BASE_URL', !empty($_POST['kaosInstall_base_url']) ? $_POST['kaosInstall_base_url'] : '.');
+if (BASE_URL == 'PUT_YOUR_BASE_URL_HERE') // tolerate links without config.php
+	define('REAL_BASE_URL', './');
 else
 	define('REAL_BASE_URL', BASE_URL);
 
@@ -58,71 +61,55 @@ define('LAST_NAME', 2);
 
 // output
 define('P_DILIMITER', "\n\n"); // paragraph delimiter
+define('SEPARATOR_AND', 1);
+define('SEPARATOR_OR', 1);
 
 // project constants
-define('KAOS_GITHUB_REPOSITORY', 'StateMapper/StateMapper');
-	
-	
-// includes
-require APP_PATH.'/helpers/core.php';
-
-// lang
-if (!empty($_GET['lang']))
-	kaosSetLocale($_GET['lang']);
-if (defined('LANG') && LANG)
-	kaosSetLocale(LANG);
-if (!defined('LANG'))
-	define('LANG', 'en_US');
-
-// includes
-require APP_PATH.'/controller/Controller.php';
-require APP_PATH.'/fetcher/BulletinFetcher.php';
-require APP_PATH.'/parser/BulletinParser.php';
-require APP_PATH.'/extractor/BulletinExtractor.php';
+define('SMAP_GITHUB_REPOSITORY', 'StateMapper/StateMapper');
 
 // init globals 
-global $kaosCall;
-$kaosCall = array(
-	'begin' => time(),
+global $smap, $smapDebug;
+$smap = array(
+	'begin' => microtime(true),
 	'cliArgs' => !empty($argv) ? array_slice($argv, 1) : null,
 	'query' => array(),
+	'filters' => array(),
+	'query' => array(),
 	'debug' => false,
+	'fetches' => 0,
+	'spiderConfig' => array(),
 );
-
-
-if ($kaosCall['cliArgs']){
-	// CLI license print
-	if (in_array('-l', $kaosCall['cliArgs'])){
-		echo file_get_contents(BASE_PATH.'/COPYING');
-		exit();
-	}
+$smapDebug = array();
 	
-	// CLI debug mode
-	if (in_array('-dd', $kaosCall['cliArgs'])){
-		$kaosCall['debug'] = true;
-		$kaosCall['debugQueries'] = true;
-		array_splice($kaosCall['cliArgs'], array_search('-dd', $kaosCall['cliArgs']), 1);
-	} else if (in_array('-d', $kaosCall['cliArgs'])){
-		$kaosCall['debug'] = true;
-		array_splice($kaosCall['cliArgs'], array_search('-d', $kaosCall['cliArgs']), 1);
-	}
-		
-	// copy -KEY=VALUE CLI params to $_GET variable
-	do {
-		$changed = false;
-		foreach ($kaosCall['cliArgs'] as $a)
-			if (preg_match('#^[-]([^=]+)=(.*)$#iu', $a, $m)){
-				$_GET[$m[1]] = $m[2];
-				array_splice($kaosCall['cliArgs'], array_search($a, $kaosCall['cliArgs']), 1);
-				$changed = true;
-				break;
-			}
-	} while ($changed);
-}
+// load all files
+include APP_PATH.'/helpers/boot.php';
 
 if (!defined('LOAD_ONLY_CONFIG') || !LOAD_ONLY_CONFIG){
-	// call the controller
-	$c = new Controller();
-	$c->exec();
+	
+	// force the use of SSL
+	if (FORCE_SSL && (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] != 'on')){
+		$ssl_url = preg_replace('#^(https?)(://.*)$#iu', 'https$2', current_url(false));
+		redirect($ssl_url);
+	}
+	
+	// upgrade check
+	if (!IS_INSTALL && !IS_CLI){
+		$v = get_option('v');
+		if (empty($v) || $v < SMAP_VERSION){
+			
+			if (empty($v) || $v < '1.2') // ask a full reinstallation if version is < 1.2
+				die('Big upgrade, full reinstall needed! Please delete your config.php and all your database tables, then reload this page to reinstall $tateMapper.');
+				
+			update_option('v', SMAP_VERSION);
+		}
+	}
+	
+	// manually convert all the database
+	// if (IS_DEBUG && is_admin() && !empty($_GET['setNewEngine']))
+	// 	convert_db_engine($_GET['setNewEngine']);
+	
+	// finally, call the controller
+	$c = new MainController();
+	$c->route(IS_INSTALL ? null : get_uri_bits());
 	exit();
 }

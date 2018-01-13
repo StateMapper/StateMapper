@@ -1,7 +1,7 @@
 <?php
 /*
  * StateMapper: worldwide, collaborative, public data reviewing and monitoring tool.
- * Copyright (C) 2017  StateMapper.net <statemapper@riseup.net>
+ * Copyright (C) 2017-2018  StateMapper.net <statemapper@riseup.net>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -22,7 +22,7 @@ if (!defined('BASE_PATH'))
 	die();
 
 
-function kaosFormatBytes($size, $precision = 0, $sep = ' '){ 
+function format_bytes($size, $precision = 0, $sep = ' '){ 
     $base = log($size, 1024);
     $suffixes = array('', 'K', 'M', 'G', 'T');   
 
@@ -30,12 +30,12 @@ function kaosFormatBytes($size, $precision = 0, $sep = ' '){
 } 
 
 
-function kaosGetDisksize($id, $convert = false){
-	$time = getOption('disksize-time_'.$id);
+function get_disk_size($id, $convert = false){
+	$time = get_option('disksize-time_'.$id);
 	
 	$val = null;
-	if (($time && $time > strtotime('-'.KAOS_DISKSPACE_CHECK_FREQUENCY)) || !($lock = lock('disksize-'.$id))){
-		$val = getOption('disksize_'.$id);
+	if (($time && $time > strtotime('-'.DISKSPACE_CHECK_FREQUENCY)) || !($lock = lock('disksize-'.$id))){
+		$val = get_option('disksize_'.$id);
 		
 	} else {
 		$output = array();
@@ -49,21 +49,21 @@ function kaosGetDisksize($id, $convert = false){
 			
 		if (empty($returnVar) && $output){
 			$size = preg_replace('#^(\S+)(.*?)$#', '$1', $output[0]);
-			updateOption('disksize_'.$id, $size);
-			updateOption('disksize-time_'.$id, time());
+			update_option('disksize_'.$id, $size);
+			update_option('disksize-time_'.$id, time());
 			
 			$val = $size;
 		}
 		unlock($lock);
 	}
 	if ($convert && $val)
-		$val = kaosStrtobytes($val);
+		$val = parse_bytes($val);
 	return $val;
 }
 
-function kaosGetDiskfreepct($asString = false){
-	$free = kaosGetDisksize('free', true);
-	$total = kaosGetDisksize('total', true);
+function get_disk_free_pct($asString = false){
+	$free = get_disk_size('free', true);
+	$total = get_disk_size('total', true);
 	if (!$total)
 		return null;
 	$pct = 100 * $free / $total;
@@ -72,20 +72,65 @@ function kaosGetDiskfreepct($asString = false){
 	return number_format($pct, 1).'%';
 }
 
-function kaosAjaxDisksize($args){
-	if (!isAdmin())
-		kaosDie();
+function smap_ajax_ajax_disk_size($args){
+	if (!is_admin())
+		die_error();
 		
 	$ret = array();
 	ignore_user_abort(true);
 	foreach ($args['sizes'] as $id)
 		if (in_array($id, array('free', 'data', 'schemas', 'total'))){
-			$ret[$id] = kaosGetDisksize($id);
+			$ret[$id] = get_disk_size($id);
 		}
 		
 	if (in_array('freepct', $args['sizes']))
-		$ret['freepct'] = kaosGetDiskfreepct(true);
+		$ret['freepct'] = get_disk_free_pct(true);
 		
 	ignore_user_abort(false);
 	return array('success' => true, 'sizes' => $ret);
+}
+
+function ls_dir($dir_path){
+	$files = array();
+	$folders = array();
+	$dir = opendir($dir_path);
+	while ($file = readdir($dir))
+		if ($file != '.' && $file != '..' && substr($file, -1) != '~'){ // avoid Unix temp files (ending in ~)
+			if (is_file(rtrim($dir_path, '/').'/'.$file))
+				$files[] = $file;
+			else
+				$folders[] = $file;
+		}
+	closedir($dir);
+	return array_merge($folders, $files);
+}
+
+
+// TODO: implement using this order by preference
+function get_format_preference(){
+	return array('xml', 'html', 'pdf');
+}
+
+function get_formats(){
+	return array('xml', 'pdf', 'json', 'txt');
+}
+
+function is_format($str){
+	return in_array($str, get_formats());
+}
+
+function parse_bytes($val) {
+    $val = trim($val);
+    $last = strtolower($val[strlen($val)-1]);
+    switch($last) {
+        // The 'G' modifier is available since PHP 5.1.0
+        case 'g':
+            $val *= 1024;
+        case 'm':
+            $val *= 1024;
+        case 'k':
+            $val *= 1024;
+    }
+
+    return $val;
 }

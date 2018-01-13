@@ -4,11 +4,11 @@
 </div>
 <p align="center" id="badges">
 	<a href="#top"><img src="https://img.shields.io/badge/manuals-draft-red.svg?style=flat-square" /></a>
-	<a href="https://statemapper.net"><img src="https://img.shields.io/badge/code-demo-red.svg?style=flat-square" /></a>
 	<a href="http://php.net/"><img src="https://img.shields.io/badge/language-PHP%2FMySQL-yellow.svg?style=flat-square" /></a>
 	<a href="https://www.debian.org/derivatives/"><img src="https://img.shields.io/badge/platform-Linux-lightgrey.svg?style=flat-square" /></a>
 	<a href="https://github.com/StateMapper/StateMapper/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-AGPLv3-green.svg?style=flat-square" /></a>
 	<a href="https://github.com/StateMapper/StateMapper#contact--support"><img src="https://img.shields.io/badge/chat-XMPP-ff69b4.svg" /></a>
+	<a href="https://statemapper.net"><img src="https://img.shields.io/badge/ver-1.3a-f0f0f0.svg" /></a>
 </p>
 
 <p align="center" id="badges">
@@ -20,7 +20,7 @@
 **Index:** [Manifest](#manifest) · [Installation](#installation) · [Contribute](#contribute) · [Roadmap](#roadmap) · [License](#license) · [Disclaimer](#disclaimer) · [Contact & support](#contact--support) · **Demo:** <a href="https://statemapper.net">StateMapper.net &rarr;</a>
 
 
-## Manifest:<img src="https://img.shields.io/badge/state-draft-red.svg?style=flat-square" />
+## Manifest:
 
 The imminent generalized collapse has numerous causes, among them political corruption and its ability to hide from journalistic and judicial investigations; consuming all the common budget through the years and decades.
 
@@ -40,7 +40,7 @@ StateMapper was born with the aim of being a reviewing and monitoring tool for a
 Please refer to the [Installation guide](documentation/manuals/INSTALL.md#top).
 
 
-## Contribute:<img src="https://img.shields.io/badge/state-draft-red.svg?style=flat-square" />
+## Contribute:
 
 If you like this project, whatever skills you have, there surely is a way you can participate! The project's current workforce splits into the following [**four commissions**](https://github.com/StateMapper/StateMapper/projects):
 
@@ -51,7 +51,7 @@ If you like this project, whatever skills you have, there surely is a way you ca
 | [<img src="https://statemapper.net/src/addons/fontawesome_favicons/fire.ico?color=0366d6" valign="middle" /> Schema **Soldiers**](https://github.com/StateMapper/StateMapper/projects/3) | to implement and maintain bulletin schemas | JSON/Regexp experts | [Soldiers guide &rarr;](documentation/manuals/SOLDIERS.md#top) |
 | [<img src="https://statemapper.net/src/addons/fontawesome_favicons/globe.ico?color=0366d6" valign="middle" /> Country **Ambassadors**](https://github.com/StateMapper/StateMapper/projects/4) | to host bulletins backup nodes, check bulletins' integrity and translate the UI | collectives of social rights | [Ambassadors' guide &rarr;](documentation/manuals/AMBASSADORS.md#top) |
 
-If you wish to get involved into one of them, please do not hesitate in [contacting us](#contact--support)! A list of active Soldiers and Ambassadors is available on the [bulletin providers' page](https://statemapper.net/api).
+If you wish to get involved into one of them, please do not hesitate in [contacting us](#contact--support)! A list of active Soldiers and Ambassadors is available on the [bulletin providers' page](https://statemapper.net/providers).
 
 You may also help this project by:
 
@@ -62,7 +62,7 @@ You may also help this project by:
 - **Donating to this project**: come to visit us at [La Ingobernable](https://ingobernable.net) (Madrid, Spain), and ask for the Kaos155 [hacker team](https://hacklab.ingobernable.net) :)
 
 
-## Roadmap:<img src="https://img.shields.io/badge/state-draft-red.svg?style=flat-square" />
+## Roadmap:
 
 - **Q1 2018:** stable live version with near 100% parsed information from ES/BOE and ES/BORME.
 - **Q2 2018:** allow persistent user customization, add a cooperation/social layer.
@@ -94,8 +94,9 @@ Please feel free to contact us through the following channels:
 
 - **Press & enrollment:** Write us at [statemapper@riseup.net](mailto:statemapper@riseup.net) or chat with us through our [Jabber/XMPP](https://jabber.at/p/clients/) public chat room at [statemapper@conference.riseup.net](statemapper@conference.riseup.net). Recommended softwares: <a href="https://gajim.org/" target="_blank">Gajim</a> for Linux & Windows, <a href="https://adium.im/" target="_blank">Adium</a> for MacO$, <a href="https://play.google.com/store/apps/details?id=eu.siacs.conversations&hl=en" target="_blank">Conversations</a> for Android (<a href="https://f-droid.org/packages/eu.siacs.conversations/" target="_blank">free on F-Droid</a>), <a href="https://itunes.apple.com/us/app/chatsecure/id464200063" target="_blank">ChatSecure</a> for iO$ (iPhone).
 
+Alternatively, you can [subscribe to our newsletter](https://lists.riseup.net/www/subscribe/statemapper) to receive our freshest news in your mailbox.
 
 -----
 
-*Copyright &copy; 2017 [StateMapper.net](https://statemapper.net) · Licensed under [GNU AGPLv3](LICENSE) · [&uarr; top](#top)* <img src="http://hits.dwyl.com/StateMapper/StateMapper.svg?style=flat-square" align="right" /><a href="https://ingobernable.net" target="_blank"><img src="documentation/badges/love.png" align="right" /></a>
+*Copyright &copy; 2017-2018 [StateMapper.net](https://statemapper.net) · Licensed under [GNU AGPLv3](LICENSE) · [&uarr; top](#top)* <a href="https://statemapper.net" target="_blank"><img src="http://hits.dwyl.com/StateMapper/StateMapper.svg?style=flat-square" align="right" /></a><a href="https://ingobernable.net" target="_blank"><img src="documentation/badges/love.png" align="right" /></a>
 

@@ -3,7 +3,9 @@
 	type: "country",
 	originalName: "Italia",															// country name in the country language
 	name: "Italy",																	// country name in English
+	adjective: "Italian",
 	continent: "EU",
+	topLevelDomain: "it",
 	
 	officialCurrencies: ["EUR"]														// national currencies, first being the default one
 }

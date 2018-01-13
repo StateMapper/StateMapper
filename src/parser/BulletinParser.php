@@ -1,7 +1,7 @@
 <?php
 /*
  * StateMapper: worldwide, collaborative, public data reviewing and monitoring tool.
- * Copyright (C) 2017  StateMapper.net <statemapper@riseup.net>
+ * Copyright (C) 2017-2018  StateMapper.net <statemapper@riseup.net>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -44,131 +44,79 @@ class BulletinParser {
 		}
 	}
 	
-	public function getBulletin($attr = null){
+	public function get_bulletin($attr = null){
 		return $attr ? (isset($this->bulletin[$attr]) ? $this->bulletin[$attr] : null) : $this->bulletin;
 	}
 	
-	public function fetchAndParseBulletin($query){
-		global $kaosCall;
+	public function fetch_and_parse($query){
+		global $smap;
 		$query += array(
 			'followLevels' => 2
 		);
 		
 		$bulletinFetcher = new BulletinFetcher();
-		
+				
 		// try from parsed cache (.parsed.json)
-		if (!empty($query['allowProcessedCache']) && KAOS_PROCESSED_FILE_CACHE){
-			$bulletin = $bulletinFetcher->fetchBulletin($query, false, '.parsed.json');
+		if (!empty($query['allowProcessedCache']) && USE_PROCESSED_FILE_CACHE){
+			$bulletin = $bulletinFetcher->fetch_bulletin($query, false, '.parsed.json');
 			
-			if (kaosIsError($bulletin))
+			if (is_error($bulletin))
 				return $bulletin;
 			if ($bulletin) // success (parsed file is in cache)
 				return $bulletin;
 		}
 		
-		$bulletin = $bulletinFetcher->fetchBulletin($query);
+		$bulletin = $bulletinFetcher->fetch_bulletin($query);
 		
-		if (!$bulletin || kaosIsError($bulletin)){
+		if (!$bulletin || is_error($bulletin)){
 			unset($bulletinFetcher);
 			
-			if (!empty($query['id']) || kaosIsBulletinExpected($query['schema'], $query['date'])){
-				setBulletinError($query, !empty($query['id']) ? 'document not found' : 'summary not found');
-				return $bulletin ? $bulletin : new KaosError('Bulletin not found', array('type' => 'notFound'));
+			if (!empty($query['id']) || is_bulletin_expected($query['schema'], $query['date'])){
+				set_bulletin_error($query, !empty($query['id']) ? 'document not found' : 'summary not found');
+				return $bulletin ? $bulletin : new SMapError('Bulletin not found', array('type' => 'notFound'));
 			}
 			
-			setBulletinNone($query);
+			set_bulletin_none($query);
 			return true;
 		}
-		//kaosJSON($query);
-		//kaosJSON($bulletin); die();
-		/*
-		if ($kaosCall['call'] == 'rewind' && 0){ // quick rewind!! (not ready, downloading too many stuff!!! :S)
-			
-			if (empty($query['noFollow'])){ // TODO: follow summaries though!!! (from $bulletin['type'] ??)
-				
-				$patterns = array();
-				foreach (kaosAPIGetSchemas(preg_replace('#^([a-z]+)(/.*)#i', '$1', $query['schema'])) as $schema){
-					$schema = kaosGetSchema($schema);
-					if (!empty($schema->idFormats))
-						$patterns = array_merge($patterns, $schema->idFormats);
-				}
-				self::$fetched = array();
-				if (preg_match_all('#\b('.implode('|', $patterns).')\.([A-Z]+)#ius', $bulletin['content'], $ids, PREG_SET_ORDER)){
-					foreach ($ids as $id){
-						if (!in_array($id[1], self::$fetched)){
-							if (0 && count(self::$fetched) > 20){
-								echo "SHOULD FETCH ".$id[1].'<br>';
-								continue;
-							}
-							
-							if (!empty($_GET['simulate']))
-								$kaosCall['sumulateFetch'] = (isset($kaosCall['sumulateFetch']) ? $kaosCall['sumulateFetch'] : 0) + 1;
-							
-							$parser = new BulletinParser();
-							$bulletin = $parser->fetchAndParseBulletin(array( // recursing on another object
-								'type' => null, // detect this
-								'id' => $id[1],
-								'url' => null,
-								'format' => null, // detect this
-								'noFollow' => true
-							) + $query);
-							unset($parser);
-							
-							if (!empty($_GET['simulate']))
-								$kaosCall['sumulateFetch']--;
-							
-							if (kaosIsError($bulletin))
-								return $bulletin;
-							else if (!$bulletin)
-								return new KaosError('no bulletin fetched');
-								
-							self::$fetched[] = $id[1];
-						}
-					}
-				}
-			}
-			
-			unset($bulletinFetcher);
-			return true;
-		}*/
 		unset($bulletinFetcher);
 		
 		// really parse
-		$parsed = $this->parseBulletin($bulletin, $query);
+		$parsed = $this->parse_bulletin($bulletin, $query);
 		
-		if (kaosIsError($parsed)){
-			setBulletinError($query, (!empty($query['id']) ? 'document cannot be parsed/followed' : 'summary cannot be parsed').': '.$parsed->msg);
+		if (is_error($parsed)){
+			set_bulletin_error($query, (!empty($query['id']) ? 'document cannot be parsed/followed' : 'summary cannot be parsed').': '.$parsed->msg);
 			return $parsed;
 		}
 		
 		if (empty($parsed)){
-			setBulletinError($query, !empty($query['id']) ? 'document cannot be parsed/followed (empty result)' : 'summary cannot be parsed (empty result)');
-			return new KaosError('nothing to parse');
+			set_bulletin_error($query, !empty($query['id']) ? 'document cannot be parsed/followed (empty result)' : 'summary cannot be parsed (empty result)');
+			return new SMapError('nothing to parse');
 		}
 
-		setBulletinFetched($bulletin, $query);
+		set_bulletin_fetched($bulletin, $query);
 		
 		// save to parsed cache
 		$bulletinFetcher = new BulletinFetcher();
 		
-		if (!KAOS_PROCESSED_FILE_CACHE)
+		if (!USE_PROCESSED_FILE_CACHE)
 			return $parsed;
 		
-		$saved = $bulletinFetcher->saveProcessedContent($parsed, '.parsed.json', $query);
+		$saved = $bulletinFetcher->save_processed_content($parsed, '.parsed.json', $query);
 		
-		return kaosIsError($saved) ? $saved : $parsed;
+		return is_error($saved) ? $saved : $parsed;
 	}
 
-	public function parseBulletin($bulletin, $query = array()){
-		$success = $this->doParseBulletin($bulletin, $query);
-		if (kaosIsError($success))
+	public function parse_bulletin($bulletin, $query = array()){
+		$success = $this->do_parse_bulletin($bulletin, $query);
+		if (is_error($success))
 			return $success;
 
 		$this->nodes['schema'] = $this->query['schema'];
 		return $this->nodes;
 	} 
 	
-	public function doParseBulletin($bulletin, $query = array()){
+	public function do_parse_bulletin($bulletin, $query = array()){
 		$this->bulletin = $bulletin;
 		$this->query = $query + $this->query + array(
 			'schema' => null,
@@ -178,41 +126,41 @@ class BulletinParser {
 		);
 		
 		if (empty($this->query['type']) || empty($query['schema']))
-			return new KaosError('not enough arguments');
+			return new SMapError('not enough arguments');
 			
-		//kaosJSON($bulletin);
+		//print_json($bulletin);
 		
 		$formatParserClass = 'BulletinParser'.ucfirst(strtolower($bulletin['format']));
 		$formatParserPath = __DIR__.'/formats/'.$formatParserClass.'.php';
 		
 		if (!file_exists($formatParserPath))
-			return new KaosError('unknown parsing format '.$bulletin['format']);
+			return new SMapError('unknown parsing format '.$bulletin['format']);
 			
 		require_once $formatParserPath;
 		$this->formatParser = new $formatParserClass($this);
 		
-		$this->rootNode = $this->formatParser->loadRootNode($bulletin['content']);
-		if (kaosIsError($this->rootNode)){
+		$this->rootNode = $this->formatParser->load_root_node($bulletin['content']);
+		if (is_error($this->rootNode)){
 			
 			// failed to load the fetched document, we may delete all bulletin files sometime later.
 			return $this->rootNode;
 		}
 		
-		$this->nodes = $this->getParsingProtocole($this->nodes, $this->query['schema'], $this->query['type']);
+		$this->nodes = $this->get_parsing_protocole($this->nodes, $this->query['schema'], $this->query['type']);
 
-		if (!kaosIsError($this->nodes))
+		if (!is_error($this->nodes))
 			$this->nodes += $this->query;
 			
 		unset($this->formatParser);
 			
-		if ($filter = kaosGetFilter()){
+		if ($filter = get_filter()){
 			$objects = array();
-			$this->nodes = $this->filterNodes($this->nodes, $filter, $objects);
+			$this->nodes = $this->filter_nodes($this->nodes, $filter, $objects);
 		}
 		return $this->nodes;
 	}
 	
-	function filterNodes($nodes, $filter, &$objects = array()){
+	function filter_nodes($nodes, $filter, &$objects = array()){
 		$new = array();
 		$assoc = empty($nodes[0]);
 		foreach ($nodes as $k => $n){
@@ -220,14 +168,14 @@ class BulletinParser {
 				continue;
 			else if (is_array($n)){
 				if (!empty($n[0]))
-					$new[$k] = $this->filterNodes($n, $filter, $objects);
+					$new[$k] = $this->filter_nodes($n, $filter, $objects);
 				else {
-					$has = $this->filterNodeHas($n, $filter);
+					$has = $this->filter_node_has($n, $filter);
 					if ($has === 1){
 						$new[$k] = $n;
 						$objects[] = $n;
 					} else if ($has)
-						$new[$k] = $this->filterNodes($n, $filter, $objects);
+						$new[$k] = $this->filter_nodes($n, $filter, $objects);
 				}
 			} else
 				$new[$k] = $n;
@@ -235,21 +183,22 @@ class BulletinParser {
 		return $assoc ? $new : array_values($new);
 	}
 	
-	function filterNodeHas($node, $filter){
+	function filter_node_has($node, $filter){
 		if (is_array($node)){
 			foreach ($node as $n)
-				if (is_array($n) && $this->filterNodeHas($n, $filter))
+				if (is_array($n) && $this->filter_node_has($n, $filter))
 					return true;
-			return $this->filterNodeIs($node, $filter) ? 1 : false;
+			return $this->filter_node_is($node, $filter) ? 1 : false;
 		}
 		return false;
 	}
 
-	function filterNodeIs($node, $filter){
+	function filter_node_is($node, $filter){
 		return empty($node[0]) && !empty($node['title']) && preg_match('#.*'.preg_quote($filter, '#').'.*#ius', $node['title']);
 	}
 	
-	/*function getPrecepts($nodes = null, $precepts = array()){
+	/*
+	function get_precepts($nodes = null, $precepts = array()){
 		foreach (($nodes ? $nodes : $this->nodes) as $n){
 			if (is_array($n) || is_object($n)){
 				$n = (object) $n;
@@ -259,10 +208,11 @@ class BulletinParser {
 			} 
 		}
 		return $precepts;
-	}*/
+	}
+	*/
 	
-	public function getParsingProtocole($nodes, $bulletinSchema, $objectType){
-		if (!($schema = kaosGetSchema($bulletinSchema))){
+	public function get_parsing_protocole($nodes, $bulletinSchema, $objectType){
+		if (!($schema = get_schema($bulletinSchema))){
 			if (!$this->lastBulletinSchema)
 				return 'cannot get BulletinSchema for '.$bulletinSchema;
 			$schema = $this->lastBulletinSchema;
@@ -287,23 +237,23 @@ class BulletinParser {
 		}
 				
 		if (!$protocole)
-			return new KaosError('no such object '.$bulletinSchema.' '.$objectType.' (format: '.(!empty($this->bulletin['format']) ? $this->bulletin['format'] : 'not specified').')'.(1 ? '<br><br>'.$this->bulletin['content'].'<br><br>' : ''));
+			return new SMapError('no such object '.$bulletinSchema.' '.$objectType.' (format: '.(!empty($this->bulletin['format']) ? $this->bulletin['format'] : 'not specified').')'.(1 ? '<br><br>'.$this->bulletin['content'].'<br><br>' : ''));
 
-		$nodes = $this->initObject($protocole->protocole, $this->rootNode, $this->rootNode, true);
+		$nodes = $this->init_object($protocole->protocole, $this->rootNode, $this->rootNode, true);
 		$nodes['type'] = !empty($protocole->type) ? $protocole->type : $protocole->id;
 		$nodes['protocole'] = $protocole->id;
 		if (!empty($this->query['id']))
 			$nodes['id'] = $this->query['id'];
 		
 		if (!empty($protocole->protocole->children)){
-			$success = $this->buildObject($nodes, $protocole->protocole->children);
-			if (kaosIsError($success))
+			$success = $this->build_object($nodes, $protocole->protocole->children);
+			if (is_error($success))
 				return $success;
 		}
 		return $nodes;
 	}
 	
-	private function buildObject(&$nodes, $protocoleChildren, $rootNode = null){
+	private function build_object(&$nodes, $protocoleChildren, $rootNode = null){
 		$i = 0;
 		
 		if (!empty($protocoleChildren))
@@ -312,15 +262,15 @@ class BulletinParser {
 //				if (in_array($childId, array('follow', 'type', 'schema')))
 	//				continue;
 						
-				$selection = $this->formatParser->getValueBySelector($childConfig, $childConfig, $rootNode, $this->rootNode, false, $this);
+				$selection = $this->formatParser->get_value_by_selector($childConfig, $childConfig, $rootNode, $this->rootNode, false, $this);
 				
 				//$selection = $this->formatParser->select($childConfig, $rootNode, $this->rootNode);
 				
 				if (is_array($selection) || is_object($selection)){
 					foreach ($selection as $node){
 						
-						$obj = $this->buildChild($nodes, $node, $childConfig, $rootNode);
-						if (kaosIsError($obj)) // error handling
+						$obj = $this->build_child($nodes, $node, $childConfig, $rootNode);
+						if (is_error($obj)) // error handling
 							return $obj;
 							
 						if (!isset($nodes[$childId])) 
@@ -329,14 +279,14 @@ class BulletinParser {
 					}
 				}
 				
-				if (KAOS_DEV_REDUCE_ENTITIES && $i >= KAOS_DEV_REDUCE_ENTITIES)
+				if (DEV_REDUCE_ENTITIES && $i >= DEV_REDUCE_ENTITIES)
 					break;
 				$i++;
 			}
 		return true;
 	}
 	
-	private function initObject($childConfig, $node, $rootNode = null, $isRoot = false){
+	private function init_object($childConfig, $node, $rootNode = null, $isRoot = false){
 		$obj = array();
 			
 		$is_attr = false;
@@ -346,7 +296,7 @@ class BulletinParser {
 			if (in_array($key, array('schema', 'type')) || is_bool($config)) // passthrough keywords
 				$obj[$key] = $config;
 			else if (!in_array($key, array('selector', 'children', 'childrenWhere', 'regexp', 'transform', 'inject', 'else'))){ // not a reserved keyword
-				$obj[$key] = $this->getChildValue($childConfig, $config, $node, $rootNode);
+				$obj[$key] = $this->get_child_value($childConfig, $config, $node, $rootNode);
 				
 				// if returning array
 				if (is_array($obj[$key])){
@@ -382,8 +332,8 @@ class BulletinParser {
 		return $obj;
 	}
 
-	private function buildChild($nodes, $node, $childConfig, $rootNode = null){
-		$obj = $this->initObject($childConfig, $node, $rootNode);
+	private function build_child($nodes, $node, $childConfig, $rootNode = null){
+		$obj = $this->init_object($childConfig, $node, $rootNode);
 				
 		if (!empty($childConfig->children)){
 			
@@ -418,8 +368,8 @@ class BulletinParser {
 				//}
 			}
 			if ($build){
-				$success = $this->buildObject($obj, $childConfig->children, $node);
-				if (kaosIsError($success))
+				$success = $this->build_object($obj, $childConfig->children, $node);
+				if (is_error($success))
 					return $success;
 			}
 		}
@@ -442,13 +392,13 @@ class BulletinParser {
 			);
 			
 			if (empty($_GET['onlyFollowId']) || $query['id'] == $_GET['onlyFollowId']){
-				
+				// start a new subfetcher
 				$bulletinFetcher = new BulletinFetcher();
 				
 				if (!empty($obj['date']))
 					$query['date'] = $obj['date'];
 				
-				//kaosJSON($query);
+				//print_json($query);
 				
 				if (!empty($obj['followUrl'])){
 					foreach ($obj['followUrl'] as $format => $url){
@@ -461,17 +411,17 @@ class BulletinParser {
 					}
 				} 
 
-				$bulletin = $bulletinFetcher->fetchBulletin($query);
+				$bulletin = $bulletinFetcher->fetch_bulletin($query);
 
-				if (kaosIsError($bulletin))
-					return new KaosError('cannot fetch following '.$obj['schema'].' '.$obj['type'].' '.$obj['id'].': '.$bulletin->msg); 
+				if (is_error($bulletin))
+					return new SMapError('cannot fetch following '.$obj['schema'].' '.$obj['type'].' '.$obj['id'].': '.$bulletin->msg); 
 
 				$subParser = new BulletinParser($this);
-				$followed = $subParser->doParseBulletin($bulletin, array(
+				$followed = $subParser->do_parse_bulletin($bulletin, array(
 					'schema' => $obj['schema'],
 					'type' => $obj['type']
 				));
-				if (kaosIsError($followed))
+				if (is_error($followed))
 					return $followed;
 				
 				$obj['followed'] = array();
@@ -491,21 +441,21 @@ class BulletinParser {
 		return $obj;
 	}
 	
-	private function getChildElse($childConfig, $selector, $node, $rootNode = null){
+	private function get_child_else($childConfig, $selector, $node, $rootNode = null){
 		if (is_object($selector) && !empty($selector->else)){
-			return $this->getChildValue($childConfig, $selector->else, $node, $rootNode);
+			return $this->get_child_value($childConfig, $selector->else, $node, $rootNode);
 		}
 		return null;		
 	}
 	
-	private function getChildValue($childConfig, $selector, $node, $rootNode = null){
+	private function get_child_value($childConfig, $selector, $node, $rootNode = null){
 		
 		// is an object but has no selector, attribute is an object (recursion)
-		if (is_object($selector) && !$this->formatParser->isSelector($selector)){
+		if (is_object($selector) && !$this->formatParser->is_selector($selector)){
 
 			$obj = array();
 			foreach ($selector as $key => $selector){
-				$obj[$key] = $this->getChildValue($selector, $selector, $node, $rootNode);
+				$obj[$key] = $this->get_child_value($selector, $selector, $node, $rootNode);
 				
 				// TODO: factorize (this is repeated earlier)
 				if (!empty($obj[$key]['merge'])){
@@ -530,19 +480,19 @@ class BulletinParser {
 		
 		$oselector = $selector;
 		if (is_string($selector))
-			$selector = $this->applyPatternVars($selector, $childConfig);
+			$selector = $this->inject_pattern_variables($selector, $childConfig);
 		
-		$value = $this->formatParser->getValueBySelector($selector, $childConfig, $node, $rootNode, true);
+		$value = $this->formatParser->get_value_by_selector($selector, $childConfig, $node, $rootNode, true);
 
 		if (is_object($value))
-			$value = strip_tags($this->formatParser->getNodeContent($value));
+			$value = strip_tags($this->formatParser->get_node_content($value));
 //		else if (is_array($value))
 //s			$value = array_shift($value); // get first value in array
 		else if (!is_array($value))
 			$value = (string) $value;
 
 		if ($value === null)
-			return $this->getChildElse($childConfig, $oselector, $node, $rootNode);
+			return $this->get_child_else($childConfig, $oselector, $node, $rootNode);
 		
 		//echo 'VALUE: '.print_r($value, true).'<br>';
 		if (is_string($value)){
@@ -556,7 +506,7 @@ class BulletinParser {
 		}
 		
 		if (empty($value))
-			return $this->getChildElse($childConfig, $oselector, $node, $rootNode);
+			return $this->get_child_else($childConfig, $oselector, $node, $rootNode);
 			
 		// apply transformations	
 	
@@ -567,23 +517,23 @@ class BulletinParser {
 
 		if (!empty($args['transform'])){
 			foreach (is_array($args['transform']) ? $args['transform'] : array($args['transform']) as $tr){
-				$value = $this->applyTransform($tr, $value, $childConfig);
+				$value = $this->apply_transformations($tr, $value, $childConfig);
 				if ($value === null || (isset($value['value']) && $value['value'] === null))
 					break;
 			}
 		}
 		if ($value === null || (isset($value['value']) && $value['value'] === null))
-			return $this->getChildElse($childConfig, $oselector, $node, $rootNode);
+			return $this->get_child_else($childConfig, $oselector, $node, $rootNode);
 			
 		if (count($value) < 2 && isset($value['value']))
 			$value = $value['value'];
 		return $value;
 	}
 	
-	private function queueGroup(&$groups, &$group, $queue, $options){
+	private function queue_group(&$groups, &$group, $queue, $options){
 		if ($group){
 			if (!empty($group['group']))
-				$group['group'] = implode(', ', kaosGroupLabelLint($options, $group['group']));
+				$group['group'] = implode(', ', lint_group_label($options, $group['group']));
 
 			if (empty($group['amountType']) && $groups && !empty($groups[count($groups)-1]['amountType']))
 				$group['amountType'] = $groups[count($groups)-1]['amountType'];
@@ -634,7 +584,7 @@ class BulletinParser {
 		$group = array();
 	}
 		
-	function applyTransform($tr, $value, $childConfig){
+	function apply_transformations($tr, $value, $childConfig){
 		$oval = $value['value'];
 		switch ($tr->type){
 			
@@ -642,16 +592,16 @@ class BulletinParser {
 			case 'parseNumber':
 			//echo '<br><br><strong>'.$value['value'].'</strong><br>';
 
-				// check "orte neto: 6.39" at http://localhost/boe/application/api/es/boe/2017-01-05/parse
+				// check "orte neto: 6.39" at http://localhost/boe/application/api/es/boe/2017-2018-01-05/parse
 
 				$debug = false;//stripos($value['value'], '854.057,00 euros') !== false;
-				$countrySchema = kaosGetCountrySchema($this->query['schema']);
+				$countrySchema = get_country_schema($this->query['schema']);
 				
 				if (!empty($tr->stripBeforeMatch))
 					foreach ($tr->stripBeforeMatch as $m)
 						$value['value'] = preg_replace($m, '', $value['value']);
 				
-				$wrapGroups = cutByGroups($tr, $value['value']);
+				$wrapGroups = split_by_groups($tr, $value['value']);
 				$groups = array();
 
 				// DEBUG: 
@@ -665,7 +615,7 @@ class BulletinParser {
 					if (!empty($tr->groups) && ($cgroups = preg_split('#('.implode('|', $tr->groups).')#ius', $ccvalue['value'], -1, PREG_SPLIT_DELIM_CAPTURE)) && count($cgroups) > 1){
 						
 						//echo $value['value'].'<br><br>';
-						//kaosJSON($cgroups);
+						//print_json($cgroups);
 						
 						$group = array();
 						//$groups = 
@@ -687,7 +637,7 @@ class BulletinParser {
 							if ($sep){
 								if ($debug) echo 'GOT SEP<br>';
 								
-								$this->queueGroup($groups, $group, true, $tr);//(!empty($group['group']) || !empty($group['amountType'])) && !empty($group['value']));
+								$this->queue_group($groups, $group, true, $tr);//(!empty($group['group']) || !empty($group['amountType'])) && !empty($group['value']));
 								
 
 								$group['group'] = $cgroups[$i];
@@ -697,9 +647,9 @@ class BulletinParser {
 								
 								if (!empty($tr->amountTypeDelimiters))
 									foreach ($tr->amountTypeDelimiters as $lim => $type)
-										if (preg_match('#^\s*('.kaosEscapePatterns($lim).')[;:\s]*(.*)$#ius', $cgroups[$i], $m2)){
+										if (preg_match('#^\s*('.escape_patterns($lim).')[;:\s]*(.*)$#ius', $cgroups[$i], $m2)){
 											
-											$this->queueGroup($groups, $group, (!empty($group['group']) || !empty($group['amountType'])) && isset($group['value']), $tr);
+											$this->queue_group($groups, $group, (!empty($group['group']) || !empty($group['amountType'])) && isset($group['value']), $tr);
 												
 											$group = array();
 											
@@ -713,10 +663,10 @@ class BulletinParser {
 									
 									$cgroups[$i] = preg_replace('#^([\(\):;\.,\s]+)(.*?)([\):;\.,\s]+)$#ius', '$2', $cgroups[$i]);
 									
-									if (empty($group['value']) && preg_match('#^\s*('.kaosGetPatternNumber($tr->type == 'parseMonetary').').*#ius', trim($cgroups[$i]), $m)){
+									if (empty($group['value']) && preg_match('#^\s*('.get_amount_pattern($tr->type == 'parseMonetary').').*#ius', trim($cgroups[$i]), $m)){
 										
 										if (!empty($group['value'])){
-											$this->queueGroup($groups, $group, true, $tr);
+											$this->queue_group($groups, $group, true, $tr);
 											$group = array();
 										}
 										
@@ -729,7 +679,7 @@ class BulletinParser {
 										$cgroups[$i] = str_replace($m[1], '', $cgroups[$i]);
 									}
 									
-									else if (empty($group['entities']) && ($entities = kaosGetEntities(array(
+									else if (empty($group['entities']) && ($entities = parse_entities(array(
 										'starting' => true,
 										'strict' => true,
 										
@@ -755,13 +705,13 @@ class BulletinParser {
 								}
 							}
 						}
-						$this->queueGroup($groups, $group, (!empty($group['group']) || !empty($group['amountType'])) && !empty($group['value']), $tr);
+						$this->queue_group($groups, $group, (!empty($group['group']) || !empty($group['amountType'])) && !empty($group['value']), $tr);
 							
 					} else {
 						
 						//$group = !empty(['group']) ? $ccvalue['group'] : '';
 						//$groups[$group] = $ccvalue;
-						$this->queueGroup($groups, $ccvalue, true, $tr);
+						$this->queue_group($groups, $ccvalue, true, $tr);
 					}
 				}
 				
@@ -775,7 +725,7 @@ class BulletinParser {
 					} else {
 						
 						foreach ($countrySchema->vocabulary->dateFormats as $format){
-							$formatDetect = kaosDateRegexpConvert($format);
+							$formatDetect = convert_date_regexp($format);
 							$val['value'] = preg_replace('#'.$formatDetect.'#ius', '', $val['value']);
 						}
 						
@@ -788,7 +738,7 @@ class BulletinParser {
 										
 							if (!empty($tr->amountTypeDelimiters))
 								foreach ($tr->amountTypeDelimiters as $lim => $type)
-									if (preg_match('#^\s*('.kaosEscapePatterns($lim).')[;:\s]*(.*)$#ius', $val['value'], $m2)){
+									if (preg_match('#^\s*('.escape_patterns($lim).')[;:\s]*(.*)$#ius', $val['value'], $m2)){
 										
 										$value['amountType'] = $type;
 										$val['value'] = preg_replace('#[;:\.\s,]*$#', '', trim($m2[2]));
@@ -797,7 +747,7 @@ class BulletinParser {
 										break;
 									}
 							
-							if (preg_match('#^\s*'.kaosGetPatternNumber($tr->type == 'parseMonetary').'#ius', trim($val['value']), $m)){
+							if (preg_match('#^\s*'.get_amount_pattern($tr->type == 'parseMonetary').'#ius', trim($val['value']), $m)){
 
 								$original = trim($m[0]);
 
@@ -852,7 +802,7 @@ class BulletinParser {
 							echo 'OUTPUT AS: <br>';
 						else
 							echo 'NORMAL GROUP: <br>';
-						kaosJSON($value);
+						print_json($value);
 						echo '-----------------------------------<br>';
 						echo $oval.'<br><br>';
 					}
@@ -919,10 +869,10 @@ class BulletinParser {
 					
 					if (0 && ($debug || $errors)){
 						if ($errors)
-							kaosJSON($errors);
+							print_json($errors);
 						else 
 							echo 'ALL CHECKS OK!<br>';
-						kaosJSON($ret);
+						print_json($ret);
 						die();
 					}
 					
@@ -955,13 +905,13 @@ class BulletinParser {
 				$value['value'] = preg_replace('#([\n]+)#', '', $value['value']);
 				//echo "PARSE: ".$value['value'].'<br>';
 				
-				$countrySchema = kaosGetCountrySchema($this->query['schema']);
+				$countrySchema = get_country_schema($this->query['schema']);
 				if (empty($tr->dateFormat))
 					$tr->dateFormat = 'auto';
 					
 				if (
 					!empty($countrySchema) 
-					&& !kaosIsError($countrySchema) 
+					&& !is_error($countrySchema) 
 					&& !empty($countrySchema->vocabulary)){
 					
 					// convert litteral number to integer
@@ -984,14 +934,14 @@ class BulletinParser {
 				if ($tr->type == 'parseDateDebug')
 					return $value;
 				
-				$countrySchema = kaosGetCountrySchema($this->query['schema']);
+				$countrySchema = get_country_schema($this->query['schema']);
 				
 				/* for testing only */
 				/*
 				$tr->dateFormat = 'auto';
 				$tr->type = 'parseDatetime';
 				foreach (array(
-					"A las 10:00 horas del 15 de mayo de 2017",
+					"A las 10:00 horas del 15 de mayo de 2017-2018",
 					"8 de abril",
 					"8 de abril a las 8.20",
 					"8 de abril 8:20 horas",
@@ -1008,7 +958,7 @@ class BulletinParser {
 						//echo "TESTING ".$format.'<br>';
 						
 						// translate date format to regexp
-						$formatDetect = kaosDateRegexpConvert($format);
+						$formatDetect = convert_date_regexp($format);
 						
 						if (preg_match('#'.$formatDetect.'#ius', $value['value'], $m)){
 							//echo $format.' detected => '.$m[0].'<br>';
@@ -1099,7 +1049,7 @@ class BulletinParser {
 				break;
 
 			case 'lint': // array compatible
-				$value['value'] = kaosLint($value['value']);
+				$value['value'] = lint($value['value']);
 				if (is_string($value['value']))
 					$value['value'] = trim($value['value']);
 				break;
@@ -1112,7 +1062,7 @@ class BulletinParser {
 				
 			case 'splitBy':
 				$regexp = $tr->regexp;
-				$regexp = $this->applyPatternVars($regexp, $childConfig);
+				$regexp = $this->inject_pattern_variables($regexp, $childConfig);
 
 				if (!empty($tr->includeSeparator))
 					$m = preg_split($regexp, $value['value'], -1, PREG_SPLIT_DELIM_CAPTURE);
@@ -1143,7 +1093,7 @@ class BulletinParser {
 				break;
 				
 			case 'convertLegalEntityType':
-				$countrySchema = kaosGetCountrySchema($this->query['schema']);
+				$countrySchema = get_country_schema($this->query['schema']);
 				
 				if (!empty($countrySchema->vocabulary) && !empty($countrySchema->vocabulary->legalEntity) && !empty($countrySchema->vocabulary->legalEntityTypes)){
 					$val = preg_replace('#([\[\]\(\)])#', '', $value['value']);
@@ -1162,17 +1112,17 @@ class BulletinParser {
 				if ($debug)
 					echo 'grep transformation: '.$value['value'].'<br><br>';
 				
-				$value['value'] = kaosGetEntities($tr, $value['value'], $this->query['schema'], array(), false, $debug);
+				$value['value'] = parse_entities($tr, $value['value'], $this->query['schema'], array(), false, $debug);
 				
 				if ($debug)
-					kaosJSON($value['value']);
+					print_json($value['value']);
 					
 				if (empty($value['value']))
 					return null;
 				break;
 
 			case 'grepNationalIds':
-				$countrySchema = kaosGetCountrySchema($this->query['schema']);
+				$countrySchema = get_country_schema($this->query['schema']);
 				
 				if (!empty($countrySchema->vocabulary) && !empty($countrySchema->vocabulary->legalIdNumbers)){
 					$patterns = array();
@@ -1185,7 +1135,7 @@ class BulletinParser {
 
 			case 'regexpMatch':
 				if (!empty($tr->regexp)){
-					$regexp = $this->applyPatternVars($tr->regexp, $childConfig);
+					$regexp = $this->inject_pattern_variables($tr->regexp, $childConfig);
 					
 					$oval = $value['value'];
 					$value['value'] = array();
@@ -1196,7 +1146,7 @@ class BulletinParser {
 						
 							$this->varReplaceNode = (array) $matches; // passed from previous regexpAttr (*)
 								
-							$value['value'][] = trim(preg_replace_callback('#(\$([0-9]+))#', array(&$this, 'varReplaceCallback'), $tr->match));
+							$value['value'][] = trim(preg_replace_callback('#(\$([0-9]+))#', array(&$this, 'var_replace_callback'), $tr->match));
 						
 						} 
 					}
@@ -1211,76 +1161,28 @@ class BulletinParser {
 				//	$value = $value['value'];
 				break;
 				
-			case 'grepSentence':
-				$nCur = array();
-				$isAssoc = is_array($value['value']) && $value['value'] && array_key_exists(0, $cur);
-				foreach ($isAssoc ? $value['value'] : array($value['value']) as $cCur){
-					$countrySchema = kaosGetCountrySchema($this->query['schema']);
-					
-					if (
-						!empty($tr->vocabulary) 
-						&& !empty($countrySchema) 
-						&& !kaosIsError($countrySchema) 
-						&& !empty($countrySchema->vocabulary) 
-						&& !empty($countrySchema->vocabulary->legalTaxonomies) 
-						&& !empty($countrySchema->vocabulary->legalTaxonomies->{$tr->vocabulary})){
-						
-						foreach ($countrySchema->vocabulary->legalTaxonomies->{$tr->vocabulary} as $pattern => $patConfig){
-							$pattern = str_replace(' ', '\s+', $pattern);
-							$pattern = '#\s*([^\.]*)('.$pattern.')(.*?)$#is';
-							if (preg_match_all($pattern, $cCur, $m, PREG_SET_ORDER))
-								foreach ($m as $cm)
-									$nCur[] = $cm[1].$cm[2].$cm[count($cm)-1];
-						}
-					}
-				}
-				$value['value'] = $isAssoc ? $nCur : ($nCur ? $nCur[0] : null);
-				if (empty($value['value']))
-					return null;
-				break;
-				
 			default:
 				throw new Exception('transform not found');
 		}
 		return $value;
 	}
 	
-	function varReplaceCallback($matches){
+	function var_replace_callback($matches){
 		$i = intval($matches[2]);
 		return isset($this->varReplaceNode[$i]) ? $this->varReplaceNode[$i] : '';
 	}
 	
-	protected function applyPatternVars($selector, $childConfig){
-		$selector = str_replace('{legalEntityPattern}', kaosGetLegalEntityPattern($this->query['schema']), $selector);
+	protected function inject_pattern_variables($selector, $childConfig){
+		$selector = str_replace('{legalEntityPattern}', get_entity_pattern($this->query['schema']), $selector);
 		if (!empty($childConfig->inject))
 			foreach ($childConfig->inject as $name => $val)
 				$selector = str_replace('{'.$name.'}', $val, $selector);
 		return $selector;
 	}
 	
-	public function getLegalEntityPattern(){
-		return kaosGetLegalEntityPattern($this->query['schema']);
+	public function get_entity_pattern(){
+		return get_entity_pattern($this->query['schema']);
 	}
 	
 	
-}
-
-function kaosGetNonEmpty($values, $from, $index){
-	$c = 0;
-	for ($i=$from; $i<count($values); $i++)
-		if (!empty($values[$i])){
-			if ($c == $index)
-				return $values[$i];
-			$c++;
-		}
-	return null;
-}
-
-
-function kaosGetFilter(){
-	if (!empty($_GET['filter']))
-		return $_GET['filter'];
-	if (!empty($_GET['precept']))
-		return get('SELECT title FROM precepts WHERE id = %s', $_GET['precept']);
-	return null;
 }

@@ -1,7 +1,7 @@
 <?php
 /*
  * StateMapper: worldwide, collaborative, public data reviewing and monitoring tool.
- * Copyright (C) 2017  StateMapper.net <statemapper@riseup.net>
+ * Copyright (C) 2017-2018  StateMapper.net <statemapper@riseup.net>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -18,7 +18,7 @@
  */ 
  
 
-global $kaosCall;
+global $smap;
 
 if (!defined('BASE_PATH'))
 	die();
@@ -41,12 +41,12 @@ if (!defined('BASE_PATH'))
 $maxAttempts = 3;
 $maxFixed = 3;
 
-$query = $kaosCall['query'];
-$config = !KAOS_SPIDER_ID ? $kaosCall['spiderConfig'] : getSpiderConfig(KAOS_SPIDER_ID);
+$query = $smap['query'];
+$config = !KAOS_SPIDER_ID ? $smap['spiderConfig'] : get_spider_config(KAOS_SPIDER_ID);
 
 /*
 echo 'spider config: '.PHP_EOL;
-print_r($kaosCall['query']);
+print_r($smap['query']);
 print_r($config);
 echo PHP_EOL.PHP_EOL;
 */
@@ -54,10 +54,10 @@ echo PHP_EOL.PHP_EOL;
 $workers = $config['workersCount'];
 
 
-if (empty($kaosCall['query']['date']))
-	$kaosCall['query']['date'] = $query['date'] = $config['dateBack'];
+if (empty($smap['query']['date']))
+	$smap['query']['date'] = $query['date'] = $config['dateBack'];
 
-kaosPrintLog('spider starting with '.$workers.' workers back until '.$config['dateBack'].' (CPU rate: '.$config['cpuRate'].'%)', array('color' => 'lgreen', 'spider_id' => KAOS_SPIDER_ID));
+print_log('spider starting with '.$workers.' workers back until '.$config['dateBack'].' (CPU rate: '.$config['cpuRate'].'%)', array('color' => 'lgreen', 'spider_id' => KAOS_SPIDER_ID));
 
 $pids = array();
 $lastCPUCheck = $last_recheck = $goal = null;
@@ -70,7 +70,7 @@ while (true){
 	// reload spider params every 15 seconds
 	if (KAOS_SPIDER_ID && $lastConfigReload < strtotime('-15 seconds')){
 		$lastConfigReload = time();
-		$config = getSpiderConfig(KAOS_SPIDER_ID);
+		$config = get_spider_config(KAOS_SPIDER_ID);
 	}
 	
 	// recheck from yesterday every 3 months, to fix errors during the spide
@@ -104,10 +104,10 @@ while (true){
 	
 	$workers = max(min($workers, $config['workersCount']), 1);
 	
-	if (KAOS_IS_CLI)
-		kaosPrintLog('workers goal: '.$workers.'/'.$config['workersCount'], array('spider_id' => KAOS_SPIDER_ID));
+	if (IS_CLI)
+		print_log('workers goal: '.$workers.'/'.$config['workersCount'], array('spider_id' => KAOS_SPIDER_ID));
 		
-	cleanLocks();
+	clean_tables();
 	
 	$countPids = array_filter($pids, function($x){ 
 		return !empty($x); 
@@ -131,26 +131,33 @@ while (true){
 		// calculate the next worker date
 		while (true){
 
-			$bulletinStatus = getBulletinStatus($query['schema'], $query['date']);
+			$bulletinStatus = get_bulletin_status($query['schema'], $query['date']);
 			$stop = true;
 
 			// case fetching
-			if (!($lock = lock('rewind-'.$query['schema'].'-'.$query['date'])))
+			if (!($lock = lock('rewind-'.$query['schema'].'-'.$query['date']))){
 				$stop = false;
-							
+				if (IS_CLI)
+					print_log('skipping '.$query['date'].' due to lock', array('color' => 'lblue', 'spider_id' => KAOS_SPIDER_ID));
+			
 			// case too many retries
-			else if ($bulletinStatus == 'error'){
+			} else if ($bulletinStatus == 'error'){
 				
-				if (getBulletinAttempts($query['schema'], $query['date']) >= $maxAttempts){
+				if (get_bulletin_attempts($query['schema'], $query['date']) >= $maxAttempts){
 					
-					if (getBulletinFixes($query['schema'], $query['date']) >= $maxFixed)
+					if (get_bulletin_fixes($query['schema'], $query['date']) >= $maxFixed){
 						$stop = false;
+						if (IS_CLI)
+							print_log('skipping '.$query['date'].' due to max repairs', array('color' => 'lblue', 'spider_id' => KAOS_SPIDER_ID));
 					
-					else {
+					} else {
 						// fix
-						kaosFixBulletin($query['schema'], $query['date']);
+						if (IS_CLI)
+							print_log('repairing '.$query['date'], array('color' => 'lblue', 'spider_id' => KAOS_SPIDER_ID));
+						repair_bulletin($query['schema'], $query['date']);
 					}
-				}
+				
+				} 
 			
 			// case extracted
 			} else if (in_array($bulletinStatus, array('none', 'extracting', 'extracted')))
@@ -169,7 +176,8 @@ while (true){
 			// go to previous day
 			$query['date'] = date('Y-m-d', strtotime('-1 day', strtotime($query['date'])));
 		}
-		$kaosCall['query']['date'] = $query['date'];
+
+		$smap['query']['date'] = $query['date'];
 		
 		// stop at dateBack
 		if ($config['dateBack'] && $query['date'] < $config['dateBack']){
@@ -187,7 +195,7 @@ while (true){
 				'started' => date('Y-m-d H:i:s'),
 			));
 			
-		connexionClose(); // leave this just before forking!
+		close_connection(); // leave this just before forking!
 		$pid = pcntl_fork(); 
 		
 		if (!$pid){ 
@@ -195,8 +203,8 @@ while (true){
 			
 			unset($workers);
 			
-			kaosPrintLog('worker '.($i+1).' started', array('color' => 'lgreen', 'worker_id' => $i));
-			define('KAOS_WORKER_ID', $i);
+			print_log('worker '.($i+1).' started', array('color' => 'lgreen', 'worker_id' => $i));
+			define('WORKER_ID', $i);
 			
 			if (KAOS_SPIDER_ID)
 				update('workers', array('status' => 'active'), array(
@@ -207,28 +215,32 @@ while (true){
 			
 			$bulletinParser = new BulletinParser();
 			
-			kaosPrintLog('starting fetch for '.$query['schema'].'/'.$query['date'].(!empty($query['id']) ? '/'.$query['id'] : '').($config['extract'] ? ' (extracting)' : ' (not extracting)'));
-			$ret = $bulletinParser->fetchAndParseBulletin($query);
+			print_log('starting fetch for '.$query['schema'].'/'.$query['date'].(!empty($query['id']) ? '/'.$query['id'] : '').($config['extract'] ? ' (extracting)' : ' (not extracting)'));
+			$ret = $bulletinParser->fetch_and_parse($query);
 			
-			if (!$ret || kaosIsError($ret))
-				kaosPrintLog('could not fetch '.$query['schema'].'/'.$query['date'].(!empty($query['id']) ? '/'.$query['id'] : '').($ret ? ': '.$ret->msg : ''), array('color' => 'red'));
+			if (!$ret || is_error($ret))
+				print_log('could not fetch '.$query['schema'].'/'.$query['date'].(!empty($query['id']) ? '/'.$query['id'] : '').($ret ? ': '.$ret->msg : ''), array('color' => 'red'));
 			
-			else 
-				kaosPrintLog('ended fetch for '.$query['schema'].'/'.$query['date'].(!empty($query['id']) ? '/'.$query['id'] : ''), array('color' => 'lgreen'));
+			else {
+				print_log('ended fetch for '.$query['schema'].'/'.$query['date'].(!empty($query['id']) ? '/'.$query['id'] : ''), array('color' => 'lgreen'));
 				
-			if ($config['extract']){	
-				kaosPrintLog('starting to extract');
-	
-				$extracter = new BulletinExtractor($ret);
-				$ret = $extracter->extract($query, true);
+				if ($ret === true)
+					print_log('skipping extraction, bulletin not found not expected');
 				
-				if (!$ret || kaosIsError($ret))
-					kaosPrintLog('could not extract '.$query['schema'].'/'.$query['date'].(!empty($query['id']) ? '/'.$query['id'] : '').($ret ? ': '.$ret->msg : ''), array('color' => 'red'));
-				
-				else 
-					kaosPrintLog('ended extraction of '.$query['schema'].'/'.$query['date'].(!empty($query['id']) ? '/'.$query['id'] : ''), array('color' => 'lgreen'));
-			}
+				else if ($config['extract']){ // extract if no bulletin expected
+					print_log('starting to extract');
 		
+					$extracter = new BulletinExtractor($ret);
+					$ret = $extracter->extract($query, true);
+					
+					if ($ret === false || is_error($ret))
+						print_log('could not extract '.$query['schema'].'/'.$query['date'].(!empty($query['id']) ? '/'.$query['id'] : '').($ret ? ': '.$ret->msg : ''), array('color' => 'red'));
+					
+					else 
+						print_log('ended extraction of '.$query['schema'].'/'.$query['date'].(!empty($query['id']) ? '/'.$query['id'] : ''), array('color' => 'lgreen'));
+				}
+			}
+			
 			//$args['done'] = date('Y-m-d H:i:s');
 			
 			if (KAOS_SPIDER_ID)
@@ -259,9 +271,9 @@ while (true){
 	}
 	
 	if (KAOS_SPIDER_ID){
-		$status = getSpiderStatus(KAOS_SPIDER_ID);
+		$status = get_spider_status(KAOS_SPIDER_ID);
 		if (!in_array($status, array('active'))){
-			kaosPrintLog('spider status is now '.$status);
+			print_log('spider status is now '.$status);
 			break;
 		}
 	}
@@ -271,7 +283,7 @@ while (true){
 	});
 	
 	if (count($countPids) >= $workers || $overload){
-		kaosSpiderWorkerWait($pids, $workers);
+		worker_wait($pids, $workers);
 		if ($goal && count($countPids) > $goal){
 			$goal = null;
 			sleep(20);
@@ -281,10 +293,10 @@ while (true){
 	if ($config['dateBack'] && $query['date'] < $config['dateBack'])
 		break;
 }
-kaosSpiderWorkerWait($pids, null, true);
+worker_wait($pids, null, true);
 
-if (KAOS_SPIDER_ID && !in_array(getSpiderStatus(KAOS_SPIDER_ID), array('waiting')))
+if (KAOS_SPIDER_ID && !in_array(get_spider_status(KAOS_SPIDER_ID), array('waiting')))
 	update('spiders', array('status' => 'stopped'), array('id' => KAOS_SPIDER_ID));
 
-kaosPrintLog('spider '.$query['schema'].' ('.(KAOS_SPIDER_ID ? '#'.KAOS_SPIDER_ID : 'manual').') ended on '.$query['date'], array('color' => 'lgreen', 'spider_id' => KAOS_SPIDER_ID));
+print_log('spider '.$query['schema'].' ('.(KAOS_SPIDER_ID ? '#'.KAOS_SPIDER_ID : 'manual').') ended on '.$query['date'], array('color' => 'lgreen', 'spider_id' => KAOS_SPIDER_ID));
 exit(0);

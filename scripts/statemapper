@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # StateMapper: worldwide, collaborative, public data reviewing and monitoring tool.
-# Copyright (C) 2017  StateMapper.net <statemapper@riseup.net>
+# Copyright (C) 2017-2018  StateMapper.net <statemapper@riseup.net>
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -19,7 +19,7 @@
 
 # MAIN STATEMAPPER BASH SCRIPT
 
-# nice levels for this script (the higher, the less priority)
+# nice levels for this script (the higher, the less priority). do not touch this if you don't know what it is about.
 IONICE=3
 NICE=19
 
@@ -55,12 +55,15 @@ SMAP_TTY_ORIGIN=`stty -g`
 export SMAP_TTY_ORIGIN
 trap stop INT TSTP
 stty -echo -icanon time 2 || exit $?
+
 function stop {
 	echo "User interruption, plan unexpected results!"
 	stty $SMAP_TTY_ORIGIN
 	exit 1
 }
-function end {
+
+# always end this call with this function to avoid keystroke zombi capturing
+function end { 
 	stty $SMAP_TTY_ORIGIN
 	if [ "$1" = "" ]
 	then
@@ -90,6 +93,41 @@ fi
 if [ "$CMD" = "pull" ]
 then
 	cd "$BASE_DIR/.." && git pull
+	end
+fi
+
+# replace a string in all PHP files
+if [ "$CMD" = "replace" ]
+then
+	cd "$BASE_DIR/.."
+	
+	# prepare replace regexp
+	REP1=$2
+	export REP1
+	
+	REP2=$3
+	export REP2
+	
+	#REP1=$(echo $REP1 | sed -e 's/[\(]/\\\\(/g' | sed -e 's/[\)]/\\\\)/g')
+	#REP2=$(echo $REP2 | sed -e 's/[\(]/\\\\(/g' | sed -e 's/[\)]/\\\\)/g')
+	
+	REP1=$(echo $REP1 | sed -e 's/ /[[:space:]]/g')
+	REP2=$(echo $REP2 | sed -e 's/ /[[:space:]]/g')
+	
+	REP1=$(echo $REP1 | sed -e 's/\\/\\\\/g' | sed -e 's/\//\\\//g' | sed -e 's/&/\\\&/g')
+	REP2=$(echo $REP2 | sed -e 's/\\/\\\\/g' | sed -e 's/\//\\\//g' | sed -e 's/&/\\\&/g')
+	
+	REP=$(echo "s/$REP1/$REP2/g")
+	#echo 'will sed '$REP' through all PHP files' # for debug purpose
+	
+	# really replace in all files except libraries, languages, tmp, images and fonts
+	find src \( -path src/assets/lib -o -path src/languages -o -path src/assets/tmp -o -path src/assets/images -o -path src/assets/font \) -prune -type f -o -print | grep -sv "\(.\*/\)\?\.git/.\*" | grep -s "\..\+$" | grep -vis "\.\(ttf\|svg\|gif\|png\|jpe?g\|pdf\|xml\|mo\|po\)$" | xargs perl -pi -e $REP
+	
+	sed -i -- $REP index.php
+	sed -i -- $REP config.sample.php
+	sed -i -- $REP config.php
+	
+	echo 'replaced "'$2'" by "'$3'" in all PHP files (including libraries :/)'
 	end
 fi
 

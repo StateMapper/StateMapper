@@ -1,7 +1,7 @@
 <?php
 /*
  * StateMapper: worldwide, collaborative, public data reviewing and monitoring tool.
- * Copyright (C) 2017  StateMapper.net <statemapper@riseup.net>
+ * Copyright (C) 2017-2018  StateMapper.net <statemapper@riseup.net>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -21,12 +21,12 @@
 if (!defined('BASE_PATH'))
 	die();
 
-function kaosAjaxSpiderConfig($args){
+function smap_ajax_spider_config($args){
 	
-	if (!isAdmin())
-		kaosDie();
+	if (!is_admin())
+		die_error();
 		
-	$opts = array_keys(kaosGetDefaultSpiderConfig(false));
+	$opts = array_keys(get_default_spider_config(false));
 	
 	if (!@$args['session']['query']['schema'])
 		return 'missing schema';
@@ -47,17 +47,17 @@ function kaosAjaxSpiderConfig($args){
 		'bulletin_schema' => $args['session']['query']['schema'],
 	);
 	
-	$update[lintSqlVar($args['configVar'])] = $args['configVal'];
-	if (upsertSpider($update) === false)
+	$update[lint_sql_var($args['configVar'])] = $args['configVal'];
+	if (upsert_spider($update) === false)
 		return 'upsert failed';
 		
 	return array('success' => true, 'val' => $args['configVal']);
 }
 
-function kaosAjaxSpiderExtract($args){
+function smap_ajax_spider_extract($args){
 	
-	if (!isAdmin())
-		kaosDie();
+	if (!is_admin())
+		die_error();
 		
 	if (empty($args['schema']))
 		return 'missing schema';
@@ -67,29 +67,29 @@ function kaosAjaxSpiderExtract($args){
 	return array('success' => true);
 }
 
-function kaosAjaxSpiderPower($args){
+function smap_ajax_spider_power($args){
 	
-	if (!isAdmin())
-		kaosDie();
+	if (!is_admin())
+		die_error();
 		
 	if (empty($args['schema']))
 		return 'missing schema';
 		
 	$on = !empty($args['turnOn']) && $args['turnOn'] !== 'false';
 	
-	if ($lock = waitForLock('spider-'.$args['schema'])){
-		$status = getSpiderStatus($args['schema']);
+	if ($lock = wait_for_lock('spider-'.$args['schema'])){
+		$status = get_spider_status($args['schema']);
 		
 		if ($on)
 			$nstatus = in_array($status, array('waiting', 'active')) ? null : 'waiting';
 		else {
 			
-			$count = get('SELECT COUNT(w.pid) FROM spiders AS s LEFT JOIN workers AS w ON s.id = w.spider_id WHERE s.bulletin_schema = %s AND w.status = "active"', $args['schema']);
+			$count = get_var('SELECT COUNT(w.pid) FROM spiders AS s LEFT JOIN workers AS w ON s.id = w.spider_id WHERE s.bulletin_schema = %s AND w.status = "active"', $args['schema']);
 			
 			$nstatus = in_array($status, array('stopping', 'stopped')) ? null : ($count ? 'stopping' : 'stopped');
 		}
 		
-		if ($nstatus && upsertSpider(array(
+		if ($nstatus && upsert_spider(array(
 			'bulletin_schema' => $args['schema'],
 			'status' => $nstatus,
 		), true) === false){
@@ -97,22 +97,22 @@ function kaosAjaxSpiderPower($args){
 			return 'spider upsert failed';
 		}
 		unlock($lock);
-		return array('success' => true, 'button' => kaosSpiderPowerButton($args['schema']));
+		return array('success' => true, 'button' => get_spider_button($args['schema']));
 	}
 	return 'can\'t get spider lock';
 }
 
-function upsertSpider($args, $noLock = false){
-	$status = getSpiderStatus($args['bulletin_schema'], false);
+function upsert_spider($args, $noLock = false){
+	$status = get_spider_status($args['bulletin_schema'], false);
 	if (!$status){
 		if (!$noLock){
-			$lock = waitForLock('spider-'.$args['bulletin_schema'], 1);
+			$lock = wait_for_lock('spider-'.$args['bulletin_schema'], 1);
 			if ($lock === false)
 				return false; // can't get spider lock
 		}
 		$args += array(
 			'status' => 'stopped',
-		) + kaosGetDefaultSpiderConfig(true);
+		) + get_default_spider_config(true);
 		
 		$ret = insert('spiders', $args);
 		
@@ -128,55 +128,55 @@ function upsertSpider($args, $noLock = false){
 	return $ret;
 }
 
-function kaosGetDefaultSpiderConfig($sqlFormat = true){
+function get_default_spider_config($sqlFormat = true){
 	$ret = array(
 		'status' => 'waiting',
 		'dateBack' => date('Y-m-d', strtotime('-1 day')),
-		'workersCount' => KAOS_SPIDE_WORKER_COUNT,
-		'cpuRate' => KAOS_SPIDE_CPU_MAX,
+		'workersCount' => SPIDER_WORKERS_COUNT,
+		'cpuRate' => SPIDER_MAX_CPU,
 		'extract' => false,
 	);
 	if ($sqlFormat){
 		$rret = array();
 		foreach ($ret as $k => $v)
-			$rret[lintSqlVar($k)] = $v;
+			$rret[lint_sql_var($k)] = $v;
 		return $rret;
 	}
 	return $ret;
 }
 
 
-function getSpiderConfig($schema){
-	$dbconfig = getRow('SELECT status, date_back, workers_count, cpu_rate, extract FROM spiders WHERE '.(is_numeric($schema) ? 'id = %s' : 'bulletin_schema = %s'), $schema);
-	$default = kaosGetDefaultSpiderConfig(false);
+function get_spider_config($schema){
+	$dbconfig = get_row('SELECT status, date_back, workers_count, cpu_rate, extract FROM spiders WHERE '.(is_numeric($schema) ? 'id = %s' : 'bulletin_schema = %s'), $schema);
+	$default = get_default_spider_config(false);
 	$config = array();
 	foreach (array_keys($default) as $k){
-		$dbk = lintSqlVar($k);
+		$dbk = lint_sql_var($k);
 		$config[$k] = isset($dbconfig[$dbk]) ? $dbconfig[$dbk] : $default[$k];
 	}
 	return $config;
 }
 
 
-function kaosSpiderPowerButton($schema){
-	$status = getSpiderStatus($schema);
+function get_spider_button($schema){
+	$status = get_spider_status($schema);
 	$labels = array(
 		'waiting' => 'Spider starting..',
 		'active' => 'Spider running',
 		'stopping' => 'Spider stopping..',
 		'stopped' => 'Spider stopped',
 	);
-	return '<button class="kaos-api-spider-button kaos-spider-status-'.$status.'" data-kaos-schema="'.$schema.'"><i class="fa fa-'.(in_array($status, array('active', 'waiting', 'stopping')) ? 'pause' : 'power-off').'"></i> '.$labels[$status].'</button>';
+	return '<button class="spider-button spider-status-'.$status.'" data-schema="'.$schema.'"><i class="fa fa-'.(in_array($status, array('active', 'waiting', 'stopping')) ? 'pause' : 'power-off').'"></i> '.$labels[$status].'</button>';
 }
 
-function getSpiderStatus($schema, $default = 'stopped'){
-	$status = get('SELECT status FROM spiders WHERE '.(is_numeric($schema) ? 'id = %s' : 'bulletin_schema = %s'), $schema);
+function get_spider_status($schema, $default = 'stopped'){
+	$status = get_var('SELECT status FROM spiders WHERE '.(is_numeric($schema) ? 'id = %s' : 'bulletin_schema = %s'), $schema);
 	if (!$status)
 		return $default;
 	return $status;
 }
 
-function kaosSpiderWorkerWait(&$pids, $stopAtWorkers = null, $all = false){
+function worker_wait(&$pids, $stopAtWorkers = null, $all = false){
 	$begin = time();
 	
 	while (($pid = pcntl_waitpid(0, $status)) != -1){ 
@@ -184,7 +184,7 @@ function kaosSpiderWorkerWait(&$pids, $stopAtWorkers = null, $all = false){
 		query('DELETE FROM workers WHERE pid = %s', $pid);
 		
 		$i = array_search($pid, $pids);
-		kaosPrintLog('worker '.($i+1).' freed', array('color' => 'lgreen', 'worker_id' => $i));
+		print_log('worker '.($i+1).' freed', array('color' => 'lgreen', 'worker_id' => $i));
 		$pids[$i] = null;
 		//array_splice($pids, array_search($pid, $pids), 1);
 		
@@ -206,14 +206,14 @@ function kaosSpiderWorkerWait(&$pids, $stopAtWorkers = null, $all = false){
 
 
 
-function kaosWorkersStats(&$count = 0, $schema = null, &$countPerYear = array()){
-	global $kaosCall;
+function get_workers_stats(&$count = 0, $schema = null, &$countPerYear = array()){
+	global $smap;
 	if (!$schema)
-		$schema = $kaosCall['query']['schema'];
+		$schema = $smap['query']['schema'];
 	
 	$minTime = $maxTime = $minDate = $maxDate = null;
 	foreach (query('SELECT w.pid, w.date, w.started FROM spiders AS s LEFT JOIN workers AS w ON s.id = w.spider_id WHERE s.bulletin_schema = %s AND w.status = "active"', $schema) as $w){
-		if (!isActivePid($w['pid']))
+		if (!is_active_pid($w['pid']))
 			continue;
 		
 		$count++;
@@ -231,23 +231,23 @@ function kaosWorkersStats(&$count = 0, $schema = null, &$countPerYear = array())
 	$core_nums = trim(shell_exec("grep -P '^physical id' /proc/cpuinfo|wc -l"));
 	$cpu = sys_getloadavg(); // may be replaced by http://php.net/manual/es/function.sys-getloadavg.php#118673 
 	
-	$config = getSpiderConfig($schema);
+	$config = get_spider_config($schema);
 	
-	$editable = isAdmin() ? 'kaos-spider-ctrl-field-editable' : '';
+	$editable = is_admin() ? 'spider-ctrl-field-editable' : '';
 	
-	$html = '<div><span class="kaos-spider-ctrl-field '.$editable.'" data-kaos-prompt="'.esc_attr('How many workers do you want to use as a maximum?').'" data-kaos-ctrl-var="workersCount" data-kaos-ctrl-val="'.$config['workersCount'].'"><i class="fa fa-bug kaos-spider-ctrl-icon"></i> Workers: '.$count.' / <span class="kaos-spider-ctrl-field-val">'.$config['workersCount'].'</span> '.($count ? '(older '.humanTimeDiff(time() + $maxTime).') ' : '').'<i class="fa fa-pencil"></i></span></div>';
+	$html = '<div><span class="spider-ctrl-field '.$editable.'" data-smap-prompt="'.esc_attr('How many workers do you want to use as a maximum?').'" data-smap-ctrl-var="workersCount" data-smap-ctrl-val="'.$config['workersCount'].'"><i class="fa fa-bug spider-ctrl-icon"></i> Workers: '.$count.' / <span class="spider-ctrl-field-val">'.$config['workersCount'].'</span> '.($count ? '(older '.time_diff(time() + $maxTime).') ' : '').'<i class="fa fa-pencil"></i></span></div>';
 	
-	$html .= '<div><span class="kaos-spider-ctrl-field '.$editable.'" data-kaos-prompt="'.esc_attr('How much CPU proportion do you want to use as a maximum?').' (%)" data-kaos-ctrl-var="cpuRate" data-kaos-ctrl-val="'.$config['cpuRate'].'"><i class="fa fa-microchip kaos-spider-ctrl-icon"></i> CPU '.$core_nums.'x: '.number_format($cpu[0]).'% (max <span class="kaos-spider-ctrl-field-val">'.$config['cpuRate'].'</span>%) <i class="fa fa-pencil"></i></span></div>';
+	$html .= '<div><span class="spider-ctrl-field '.$editable.'" data-smap-prompt="'.esc_attr('How much CPU proportion do you want to use as a maximum?').' (%)" data-smap-ctrl-var="cpuRate" data-smap-ctrl-val="'.$config['cpuRate'].'"><i class="fa fa-microchip spider-ctrl-icon"></i> CPU '.$core_nums.'x: '.number_format($cpu[0]).'% (max <span class="spider-ctrl-field-val">'.$config['cpuRate'].'</span>%) <i class="fa fa-pencil"></i></span></div>';
 	
-	$html .= '<div><span class="kaos-spider-ctrl-field '.$editable.'" data-kaos-prompt="'.esc_attr('Back until which date do you want to fetch bulletin from?').' (YYYY or YYYY-MM-DD, '.esc_attr('inclusive').')" data-kaos-ctrl-var="dateBack" data-kaos-ctrl-val="'.$config['dateBack'].'"><i class="fa fa-step-backward kaos-spider-ctrl-icon"></i> Back until: <span class="kaos-spider-ctrl-field-val">'.$config['dateBack'].'</span> '.($count ? '(fetching '.ucfirst(date_i18n('M j, Y', strtotime($maxDate))).' <i class="fa fa-long-arrow-right"></i> '.ucfirst(date_i18n('M j, Y', strtotime($minDate))).') ' : '').'<i class="fa fa-pencil"></i></span></div>';
+	$html .= '<div><span class="spider-ctrl-field '.$editable.'" data-smap-prompt="'.esc_attr('Back until which date do you want to fetch bulletin from?').' (YYYY or YYYY-MM-DD, '.esc_attr('inclusive').')" data-smap-ctrl-var="dateBack" data-smap-ctrl-val="'.$config['dateBack'].'"><i class="fa fa-step-backward spider-ctrl-icon"></i> Back until: <span class="spider-ctrl-field-val">'.$config['dateBack'].'</span> '.($count ? '(fetching '.ucfirst(date_i18n('M j, Y', strtotime($maxDate))).' <i class="fa fa-long-arrow-right"></i> '.ucfirst(date_i18n('M j, Y', strtotime($minDate))).') ' : '').'<i class="fa fa-pencil"></i></span></div>';
 	
-	$docs = get('SELECT COUNT(bb.id) FROM bulletins AS b LEFT JOIN bulletin_uses_bulletin AS bb ON b.id = bb.bulletin_in LEFT JOIN bulletins AS b2 ON bb.bulletin_id = b2.id WHERE b.bulletin_schema = %s AND b.date IS NOT NULL', $schema);
+	$docs = get_var('SELECT COUNT(*) FROM bulletins WHERE bulletin_schema = %s AND external_id IS NULL', $schema);
 	
-	$docsLast = get('SELECT COUNT(id) FROM bulletins WHERE bulletin_schema = %s AND created > %s', array($schema, date('Y-m-d H:i:s', strtotime('-5 minute'))));
+	$docsLast = get_var('SELECT COUNT(*) FROM bulletins WHERE bulletin_schema = %s AND external_id IS NULL AND created > %s', array($schema, date('Y-m-d H:i:s', strtotime('-5 minute'))));
 	
-	$docsLast += get('SELECT COUNT(b.id) FROM bulletins AS b WHERE b.bulletin_schema = %s AND b.date IS NOT NULL AND b.created > %s', array($schema, date('Y-m-d H:i:s', strtotime('-1 hour'))));
+	$docsLast += get_var('SELECT COUNT(*) FROM bulletins WHERE bulletin_schema = %s AND external_id IS NULL AND created > %s', array($schema, date('Y-m-d H:i:s', strtotime('-1 hour'))));
 	
-	$html .= '<div><span class="kaos-spider-ctrl-field"><i class="fa fa-file-text-o kaos-spider-ctrl-icon"></i> Documents: '.number_format($docs, 0).($docsLast ? ' ('.number_format($docsLast / 5, 0).' per minute)' : '').'</span></div>';
+	$html .= '<div><span class="spider-ctrl-field"><i class="fa fa-file-text-o spider-ctrl-icon"></i> Documents: '.number_format($docs, 0).($docsLast ? ' ('.number_format($docsLast / 5, 0).' per minute)' : '').'</span></div>';
 	
 	
 	$stats = query('
@@ -257,19 +257,17 @@ function kaosWorkersStats(&$count = 0, $schema = null, &$countPerYear = array())
 		FROM precepts AS p 
 		LEFT JOIN statuses AS s ON p.id = s.precept_id 
 		LEFT JOIN bulletins AS b ON p.bulletin_id = b.id 
-		LEFT JOIN bulletin_uses_bulletin AS bb ON p.bulletin_id = bb.bulletin_id 
-		LEFT JOIN bulletins AS b_in ON bb.bulletin_in = b_in.id 
 		LEFT JOIN amounts AS a ON s.amount = a.id
 		
-		WHERE s.type IS NOT NULL AND s.action IS NOT NULL AND (b.bulletin_schema = %s OR b_in.bulletin_schema = %s)
+		WHERE b.bulletin_schema = %s
 		GROUP BY s.type, s.action
 		ORDER BY s.type = "name" ASC, s.type, s.action
-	', array($schema, $schema));
+	', array($schema));
 	
 	/* bulletin's status stats..
 	 * 
 	$html .= '<div style="font-size: 70%">';
-	$labels = kaosGetStatusLabels();
+	$labels = get_status_labels();
 	foreach ($stats as $s){
 		$c = @$labels[$s['_type']][$s['_action']];
 		$icon = 'question-circle';
@@ -286,7 +284,7 @@ function kaosWorkersStats(&$count = 0, $schema = null, &$countPerYear = array())
 					$icon = $c['stats']['icon'];
 			}
 		}
-		$html .= '<span class="kaos-spider-ctrl-field"><i class="fa fa-'.$icon.' kaos-spider-ctrl-icon"></i> '.strtr($label, array(
+		$html .= '<span class="spider-ctrl-field"><i class="fa fa-'.$icon.' spider-ctrl-icon"></i> '.strtr($label, array(
 			'[count]' => number_format($s['count']),
 			'[amount]' => number_format($s['amount']).' '.$s['unit'],
 		)).'</span>';
@@ -296,6 +294,6 @@ function kaosWorkersStats(&$count = 0, $schema = null, &$countPerYear = array())
 	return $html;
 }
 
-function isActivePid($pid){
+function is_active_pid($pid){
 	return is_numeric($pid) && file_exists('/proc/'.$pid);
 }

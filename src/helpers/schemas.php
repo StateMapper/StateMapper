@@ -1,7 +1,7 @@
 <?php
 /*
  * StateMapper: worldwide, collaborative, public data reviewing and monitoring tool.
- * Copyright (C) 2017  StateMapper.net <statemapper@riseup.net>
+ * Copyright (C) 2017-2018  StateMapper.net <statemapper@riseup.net>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -23,31 +23,32 @@ if (!defined('BASE_PATH'))
 
 
 
-function kaosIsValidSchemaPath($type){
+function is_valid_schema_path($type){
 	return !!preg_match('#^([A-Z0-9_]+)(/[A-Z0-9_]+)*$#', $type);
 }
 
-function kaosGetProviderSchema($type, $fill = false, $keepVocabulary = false){
-	$schema = is_object($type) ? $type : kaosGetSchema($type);
+function get_provider_schema($type, $fill = false, $keepVocabulary = false){
+	$schema = is_object($type) ? $type : get_schema($type);
 	if ($fill){
 		if (!empty($schema->country)){
-			$schema->country = kaosGetSchema($schema->country);
+			$schema->country = get_schema($schema->country);
 			unset($schema->country->vocabulary);
 		}
 	}
 	return $schema;
 }
 
-function kaosGetSchema($type, $raw = false){
+function get_schema($type, $raw = false){
 	static $cache = array();
-
+	$type = strtoupper($type);
+	
 	if (isset($cache[$type]) && !$raw)
 		return $cache[$type];
 
 	if (strpos($type, '/') === false) // correct country "ES" => "ES/ES"
 		$type = $type.'/'.$type;
 
-	if (!kaosIsValidSchemaPath($type))
+	if (!is_valid_schema_path($type))
 		return false;
 
 	$schemaUrl = SCHEMAS_PATH.'/'.$type.'.json';
@@ -60,8 +61,8 @@ function kaosGetSchema($type, $raw = false){
 	if ($raw)
 		return $schema;
 	
-	if (!($obj = lintSchema($schema, $linted))){
-		echo '<div style="color: red"><i class="fa fa-warning"></i> Malformed '.$type.' schema: </div>'.kaosJSON($linted, false);
+	if (!($obj = parse_schema($schema, $linted))){
+		echo '<div style="color: red"><i class="fa fa-warning"></i> Malformed '.$type.' schema: </div>'.print_json($linted, false);
 		die();
 	}
 
@@ -69,80 +70,51 @@ function kaosGetSchema($type, $raw = false){
 	return $obj;
 }
 
-function lintSchema($schema, &$linted = null){
-	$linted = kaosStripComments($schema);
+function parse_schema($schema, &$linted = null){
+	$linted = strip_comments($schema, 'json');
 	$linted = preg_replace('/^(\s*)(\w+)(\s*:\s*(".*?"|.))/sm', '$1"$2"$3', $linted); // correct keys between quotes
 	$linted = str_replace('\\', '\\\\', $linted); // correct backslash bug
 
 	return @json_decode($linted);
 }
 	
-function kaosGetRemoteSchema($schema){
+function get_remote_schema($schema){
 	if (!GITHUB_SYNC)
 		return null;
 		
-	$remoteSchema = file_get_contents('https://raw.githubusercontent.com/'.KAOS_GITHUB_REPOSITORY.'/master/schemas/'.$schema.(strpos($schema, '/') === false ? '/'.$schema : '').'.json');
-	if (!empty($remoteSchema) && ($remoteSchema = lintSchema($remoteSchema)))
+	$remoteSchema = file_get_contents('https://raw.githubusercontent.com/'.SMAP_GITHUB_REPOSITORY.'/master/schemas/'.$schema.(strpos($schema, '/') === false ? '/'.$schema : '').'.json');
+	if (!empty($remoteSchema) && ($remoteSchema = parse_schema($remoteSchema)))
 		return $remoteSchema;
 	return null;
 }
 
-function kaosGetCountrySchema($schema){
+function get_country_schema($schema){
 	if (is_object($schema))
 		$schema = $schema->id;
-	$schemaParts = explode('/', $schema);
+	$schemaParts = explode('/', strtoupper($schema));
 	$code = array_shift($schemaParts);
-	return kaosGetSchema($code.'/'.$code);
+	return get_schema($code.'/'.$code);
 }
 
+function is_country($str){
+	return !!get_country_schema($str);
+}
 
-function kaosGetSchemaTitle($schema, $query = array()){
+function get_schema_title($schema, $query = array(), $short = false){
+	
+	if ($short && !empty($schema->shortName))
+		return $schema->shortName;
+		
 	$title = $schema->name;
-
 	if (!empty($schema->shortName))
 		$title .= ' ('.$schema->shortName.')';
-		/*
-	$noProvider = false;
-	if (!empty($schema->provider))
-		$title .= ' <br>by "'.$schema->provider->name.'"';
-	else if (!empty($schema->providerId) && ($pSchema = kaosGetSchema($schema->providerId)))
-		$title .= ' <br>by "'.$pSchema->name.'"';
-	else
-		$noProvider = true;
-	if (!$noProvider && !empty($schema->official))
-		$title .= ' (official)';
-
-	$str = array();
-
-	$country = $region = null;
-	if (!empty($schema->region))
-		$region = $schema->region;
-	if (!empty($schema->country))
-		$country = $schema->country;
-	else if (!empty($schema->providerId) && ($pSchema = kaosGetSchema($schema->providerId))){
-		$country = $pSchema->country;
-		if (!empty($pSchema->region))
-			$region = $pSchema->region;
-	}
-	if (!empty($schema->provider) && !empty($schema->provider->region))
-		$region = $schema->provider->region;
-
-	if ($country && ($countrySchema = kaosGetCountrySchema($country))){
-		if (!empty($region))
-			$str[] = $region.' region';
-		$str[] = $countrySchema->name;
-	}
-
-	if ($str)
-		$title .= ', '.implode(', ', $str);
-	*/
 	return $title;
 }
 
-function kaosSchemaHasFeature($schema, $feature){
+function schema_has_feature($schema, $feature){
 	static $cache = array();
 	if (!isset($cache[$schema])){
-		$s = kaosGetSchema($schema);
+		$s = get_schema($schema);
 		$features = array();
 		if (!empty($s->fetchProtocoles)){
 			$features[] = 'fetch';
@@ -157,33 +129,33 @@ function kaosSchemaHasFeature($schema, $feature){
 	return in_array($feature, $cache[$schema]);
 }
 
-function kaosAPIGetSchemas($filter = null){
+function get_schemas($filter = null){
 
-	$files = kaosAPIPrintDir(SCHEMAS_PATH.($filter ? '/'.$filter : ''));
+	$files = ls_dir_schemas(SCHEMAS_PATH.($filter ? '/'.strtoupper($filter) : ''));
 	if ($filter)
-		array_unshift($files, $filter);
+		array_unshift($files, strtoupper($filter));
 
 	$sorted = array();
 	$dims = array('continent', 'country', 'institution', 'bulletin');
 	if ($filter){
-		$s = kaosGetSchema($filter);
+		$s = get_schema($filter);
 		if ($s->type != 'continent')
 			array_shift($dims);
 	}
 
-	kaosAddSchemas($sorted, $files, $dims);
+	queue_schemas($sorted, $files, $dims);
 
 	if ($filter && $s->type == 'continent'){
 		// add continent countries
 		$countries = array();
-		foreach (kaosAPIPrintDir(SCHEMAS_PATH) as $f){
-			if (($c = kaosGetSchema($f)) && $c->type == 'country' && $c->continent == $s->id)
+		foreach (ls_dir_schemas(SCHEMAS_PATH) as $f){
+			if (($c = get_schema($f)) && $c->type == 'country' && $c->continent == $s->id)
 				$countries[] = $f;
 		}
 		if ($countries){
 			usort($countries, function($a, $b){
-				$a = kaosGetSchema($a);
-				$b = kaosGetSchema($b);
+				$a = get_schema($a);
+				$b = get_schema($b);
 				return (!empty($a->originalName) ? $a->originalName : $a->name) >= (!empty($b->originalName) ? $b->originalName : $b->name);
 			});
 			$sorted = array_merge($sorted, $countries);
@@ -192,26 +164,26 @@ function kaosAPIGetSchemas($filter = null){
 	return $sorted;
 }
 
-function kaosAddSchemas(&$sorted, $files, $types, $parent = null){
+function queue_schemas(&$sorted, $files, $types, $parent = null){
 	$type = array_shift($types);
 	foreach ($files as $f){
-		if (($schema = kaosGetSchema($f)) && $schema->type == $type){
+		if (($schema = get_schema($f)) && $schema->type == $type){
 			switch ($type){
 				case 'continent':
 					$sorted[] = $f;
-					kaosAddSchemas($sorted, $files, array_slice($types, 1), $schema);
-					kaosAddSchemas($sorted, $files, $types, $schema);
+					queue_schemas($sorted, $files, array_slice($types, 1), $schema);
+					queue_schemas($sorted, $files, $types, $schema);
 					break;
 				case 'country':
 					if (!$parent || $schema->continent == $parent->id){
 						$sorted[] = $f;
-						kaosAddSchemas($sorted, $files, $types, $schema);
+						queue_schemas($sorted, $files, $types, $schema);
 					}
 					break;
 				case 'institution':
 					if ((empty($schema->country) && $schema->continent == $parent->id) || $schema->country == $parent->id){
 						$sorted[] = $f;
-						kaosAddSchemas($sorted, $files, $types, $schema);
+						queue_schemas($sorted, $files, $types, $schema);
 					}
 					break;
 				case 'bulletin':
@@ -223,10 +195,10 @@ function kaosAddSchemas(&$sorted, $files, $types, $parent = null){
 	}
 }
 
-function kaosAPIPrintDir($dir, $level = 0){
+function ls_dir_schemas($dir, $level = 0){
 	$ret = array();
-	foreach (kaosLsdir($dir) as $file){
 
+	foreach (ls_dir($dir) as $file){
 		$isDir = is_dir($dir.'/'.$file);
 		if (!$isDir && !preg_match('#^(.*)(\.json)$#', $file))
 			continue;
@@ -239,8 +211,8 @@ function kaosAPIPrintDir($dir, $level = 0){
 	}
 
 	usort($ret, function($a, $b){
-		$a = kaosGetSchema($a);
-		$b = kaosGetSchema($b);
+		$a = get_schema($a);
+		$b = get_schema($b);
 		if (!$a)
 			return -1;
 		if (!$b)
@@ -252,10 +224,16 @@ function kaosAPIPrintDir($dir, $level = 0){
 	foreach ($ret as $file){
 		$fret[] = $file;
 		if (is_dir($dir.'/'.$file))
-			foreach (kaosAPIPrintDir($dir.'/'.$file, $level+1) as $f)
+			foreach (ls_dir_schemas($dir.'/'.$file, $level+1) as $f)
 				$fret[] = $f;
 	}
 	return $fret;
 }
 
 
+function get_country_from_schema($schema){
+	if (is_object($schema))
+		$schema = $schema->id;
+	return preg_match('#^([a-z]{2,3})(/.*)?$#iu', $schema, $m) ? $m[1] : null;
+}
+	

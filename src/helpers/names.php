@@ -1,7 +1,7 @@
 <?php
 /*
  * StateMapper: worldwide, collaborative, public data reviewing and monitoring tool.
- * Copyright (C) 2017  StateMapper.net <statemapper@riseup.net>
+ * Copyright (C) 2017-2018  StateMapper.net <statemapper@riseup.net>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -22,9 +22,9 @@ if (!defined('BASE_PATH'))
 	die();
 
 //if (!empty($_GET['reload_names'])) 
-//	loadNames(); 
+//	install_load_names(); 
 	
-function loadNames($conn = null, $args = array()){ // provide $conn if installing only
+function install_load_names($conn = null, $args = array()){ // provide $conn if installing only
 	
 	// empty the names table
 	if ($conn)
@@ -57,7 +57,7 @@ function loadNames($conn = null, $args = array()){ // provide $conn if installin
 					
 					if (!$name){
 						if ($last != '')
-							loadName($last, $type, $conn);
+							insert_name($last, $type, $conn);
 						break;
 					}
 					$name = $last.$name;
@@ -70,7 +70,7 @@ function loadNames($conn = null, $args = array()){ // provide $conn if installin
 							if ($i == $count-1)
 								$last = $name;
 							else if (trim($name) != '')
-								loadName($name, $type, $conn);
+								insert_name($name, $type, $conn);
 							$i++;
 						}
 					}
@@ -82,7 +82,7 @@ function loadNames($conn = null, $args = array()){ // provide $conn if installin
 	return true;
 }
 
-function loadName($name, $type, $conn = null){
+function insert_name($name, $type, $conn = null){
 	$cname = mb_strtolower(remove_accents(preg_replace('#\s+#', ' ', trim($name))));
 	if ($conn)
 		mysqli_query($conn, "INSERT INTO names (type, name) VALUES ('".mysqli_real_escape_string($conn, $type)."', '".mysqli_real_escape_string($conn, $cname)."')");
@@ -93,12 +93,12 @@ function loadName($name, $type, $conn = null){
 		));
 }
 
-function kaosIsName($str, $type = null, $soft = false){
+function is_name($str, $type = null, $soft = false){
 	$clean = mb_strtolower(remove_accents(preg_replace('#\s+#', ' ', trim($str))));
 	if (empty($clean))
 		return false;
 		
-	$types = getCol('SELECT DISTINCT type FROM names WHERE name = %s', $clean);
+	$types = get_col('SELECT DISTINCT type FROM names WHERE name = %s', $clean);
 	if (!$types)
 		return false;
 	
@@ -107,59 +107,7 @@ function kaosIsName($str, $type = null, $soft = false){
 	return $types;
 }
 
-
-
-function kaosLintPerson2($a){
-	if (!empty($a['first_name']) || (!empty($a['type']) && $a['type'] != 'person'))
-		return $a;
-
-	// lint name
-	$a['name'] = preg_replace('#\s+#', ' ', preg_replace('#[^\s\pL-]#ius', '', $a['name']));
-		
-	$names = explode(' ', $a['name']);
-	for ($level = 0; $level < 2; $level++){
-		$a['name'] = array();
-		$a['first_name'] = array();
-		$types = array();
-		$i = 0;
-		foreach ($names as $n){
-			
-			if (!$a['name'] || !$a['first_name']){ // follow after both are started
-				
-				// queue all as name after 3 first names and no names
-				if (count($a['first_name']) >= 3 || ($i == count($names) - 1 && !$a['name']))
-					$queueAs = 'name';
-					
-				// queue as first name if detected as such and not the last one and no first name
-				else if (kaosIsName($n, FIRST_NAME, $level > 0) || ($i == count($names) - 1 && !$a['first_name']))
-					$queueAs = 'first_name';
-					
-				else if (kaosIsName($n, LAST_NAME))
-					$queueAs = 'name';
-					
-				else
-					$queueAs = 'first_name';
-			}
-			
-			$a[$queueAs][] = $n;
-			$i++;
-		}
-		if ($a['first_name'])
-			break;
-	}
-	$a['name'] = implode(' ', $a['name']);
-	$a['first_name'] = $a['first_name'] ? implode(' ', $a['first_name']) : null;
-	
-	if (empty($a['name'])){
-		$a['name'] = $a['first_name'];
-		$a['first_name'] = null;
-	}
-	
-	return $a;
-}
-
-
-function kaosLintPerson($a){
+function sanitize_person($a){
 	if (!empty($a['first_name']) || (!empty($a['type']) && $a['type'] != 'person'))
 		return $a;
 
@@ -181,7 +129,7 @@ function kaosLintPerson($a){
 			foreach ($dir == 'ltr' ? $names : array_reverse($names) as $n){
 				if ($level > 1 && !$nameI)
 					$scores[$dir]++;
-				else if (kaosIsName($n, FIRST_NAME, $level > 0))
+				else if (is_name($n, FIRST_NAME, $level > 0))
 					$scores[$dir]++;
 				else
 					break;
@@ -191,14 +139,14 @@ function kaosLintPerson($a){
 			
 		$min = $level > 1 ? 1 : 0;
 		if ($scores['rtl'] > $min && $scores['rtl'] > $scores['ltr']){
-			while ($scores['rtl'] < 3 && $scores['rtl'] < count($names) - 1 && kaosIsName($names[$scores['rtl']], FIRST_NAME, $scores['rtl'] < 3))
+			while ($scores['rtl'] < 3 && $scores['rtl'] < count($names) - 1 && is_name($names[$scores['rtl']], FIRST_NAME, $scores['rtl'] < 3))
 				$scores['rtl']++;
 			$a['first_name'] = array_slice($names, count($names) - $scores['rtl']);
 			$a['name'] = array_slice($names, 0, count($names) - $scores['rtl']);
 			break;
 		
 		} else if ($scores['ltr'] > $min || $scores['ltr'] > $scores['rtl'] || ($level > 1 && $scores['ltr'] > 1)){
-			while ($scores['ltr'] < 3 && $scores['ltr'] < count($names) - 1 && kaosIsName($names[$scores['ltr']], FIRST_NAME, $scores['ltr'] < 3))
+			while ($scores['ltr'] < 3 && $scores['ltr'] < count($names) - 1 && is_name($names[$scores['ltr']], FIRST_NAME, $scores['ltr'] < 3))
 				$scores['ltr']++;
 			$a['first_name'] = array_slice($names, 0, $scores['ltr']);
 			$a['name'] = array_slice($names, $scores['ltr']);
@@ -219,8 +167,7 @@ function kaosLintPerson($a){
 	return $a;
 }
 
-
-function lintName($name){
+function sanitize_name($name){
 	$name = preg_replace('#\s+#u', ' ', $name);
 	if (mb_strtoupper($name) == $name || mb_strtolower($name) == $name){
 		

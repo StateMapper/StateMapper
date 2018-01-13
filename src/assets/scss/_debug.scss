@@ -1,0 +1,102 @@
+/*
+ * StateMapper: worldwide, collaborative, public data reviewing and monitoring tool.
+ * Copyright (C) 2017-2018  StateMapper.net <statemapper@riseup.net>
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */ 
+
+
+.debug-queries {
+	display: none;
+	background: rgba(0,0,0,0.75);
+	color: white;
+	padding: 5px 5px 44px;
+	text-align: left;
+	position: fixed;
+	bottom: 40px;
+	right: 0;
+	left: 0;
+	z-index: 96;
+	font-family: monospace;
+	overflow: auto;
+	max-height: 60%;
+	
+	a {
+		color: inherit;
+		text-decoration: none;
+		
+		&:hover {	
+			text-decoration: underline;
+		}
+	}
+	
+	.query-key-icon {
+		margin-right: 5px;
+	}
+
+	.debug-queries-prefix {
+		white-space: nowrap;
+	}
+	.debug-queries-val,
+	.debug-queries-prefix {
+		padding-bottom: 8px;
+		padding-right: 5px;
+		vertical-align: top;
+	}
+
+	.debug-queries-title {
+		padding: 16px 2px 8px;
+		font-weight: bold;
+		font-size: 16px;
+	}
+
+	.debug-queries-slow td {
+		color: red;
+	}
+}
+
+.footer-queries-icons {
+    background: #333;
+    padding: 3px;
+    border-radius: 3px;
+    
+    & > span {
+		margin: 0 2px;
+	}
+}
+.query-key-icon {
+	text-align: left;
+}
+.query-key-icon span {
+	margin-left: 3px;
+    vertical-align: top;
+}
+.query-key-status-optimized {
+	color: $green_on_dark;
+}
+.query-key-status-not-optimized {
+	color: $red_on_dark;
+}
+.query-key-status-optimizable {
+	color: #ffb835;
+}
+.query-key-status-best-optimized {
+	color: #f5f553;
+}
+
+.query-key-td {
+	padding-right: 10px;
+	white-space: nowrap;
+	vertical-align: top;
+}

@@ -1,7 +1,7 @@
 <?php
 /*
  * StateMapper: worldwide, collaborative, public data reviewing and monitoring tool.
- * Copyright (C) 2017  StateMapper.net <statemapper@riseup.net>
+ * Copyright (C) 2017-2018  StateMapper.net <statemapper@riseup.net>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -23,7 +23,7 @@ if (!defined('BASE_PATH'))
 	die();
 
 
-function kaosConvertCurrency($value, $currency, $destCurrency = 'USD'){
+function convert_currency($value, $currency, $destCurrency = 'USD'){
 	$ret = array(
 		'value' => $value,
 		'unit' => strtoupper($currency)
@@ -34,7 +34,7 @@ function kaosConvertCurrency($value, $currency, $destCurrency = 'USD'){
 		do {
 			
 			$config = null;
-			foreach (kaosGetCurrencies() as $cCurrency => $cConfig)
+			foreach (get_currencies() as $cCurrency => $cConfig)
 				if (in_array($ret['unit'], $cConfig['labels'])){
 					$config = $cConfig;
 					if (!isset($ret['originalUnit'])){
@@ -64,47 +64,42 @@ function kaosConvertCurrency($value, $currency, $destCurrency = 'USD'){
 	return $value;
 }
 
-function kaosGetCurrencies(){
+function get_currencies(){
 	return array(
 
 		'EUR' => array(
 			'singular' => 'Euro',
 			'plural' => 'Euros',
 			'labels' => array('EUROS', 'EURO', 'EUR', 'E', '€'),
-			'rate' => array('USD' => 1.16)
+			'rate' => array('USD' => 1.16),
 		),
 		
 		'ESP' => array(
 			'singular' => 'Peseta',
 			'plural' => 'Pesetas',
 			'labels' => array('PESETAS', 'PESETA', 'PTS', 'PTAS', 'PTA', '€'),
-			'rate' => array('EUR' => 166.386)
+			'rate' => array('EUR' => 166.386),
 		),
 		
 		'USD' => array(
 			'singular' => 'US Dollar',
 			'plural' => 'US Dollars',
 			'labels' => array('US DOLLARS', 'US DOLLAR', 'DOLLARS', 'DOLLAR', 'USD', 'US$', '$'),
-			'rate' => array(
-				'EUR' => 1/1.16,
-			),
+			'rate' => array('EUR' => 1/1.16),
 		),
 
 	);
 }
 
-
-
-	 
-function kaosConvertAmount($amount, $schema){
+function convert_amount($amount, $schema){
 /*
 	if ($amount['type'] == 'currency'){
 		print_r($amount);
 	}
 */
 	if (!isset($amount['amount']) || !isset($amount['unit'])){
-		if (KAOS_IS_CLI)
-			kaosPrintLog('bad formed amount given: '.print_r($amount, true), array('color' => 'red')); // TODO: should log this somewhere visible
+		if (IS_CLI)
+			print_log('bad formed amount given: '.print_r($amount, true), array('color' => 'red')); // TODO: should log this somewhere visible
 		return null;
 	}
 		
@@ -118,7 +113,7 @@ function kaosConvertAmount($amount, $schema){
 	);
 	switch ($amount['type']){
 		case 'currency':
-			$ret = kaosConvertCurrency($v * 100, $amount['unit']) + $ret;
+			$ret = convert_currency($v * 100, $amount['unit']) + $ret;
 			break;
 	}
 /*
@@ -130,11 +125,17 @@ function kaosConvertAmount($amount, $schema){
 	return $ret;
 }
 
-
 // money amount pattern
-function kaosGetPatternNumber($currency = true){
+function get_amount_pattern($currency = true){
 	$labels = array();
-	foreach (kaosGetCurrencies() as $c)
+	foreach (get_currencies() as $c)
 		$labels = array_merge($labels, $c['labels']);
 	return '((?:[0-9\s]{1,3})(?:[,\.\s]?[0-9\s]{3})*(?:[\.,][0-9\s]+)?)'.($currency ? '(\s*(?:'.implode('|', $labels).'))?' : '');
+}
+
+function format_number_nice($count){
+	if ($count < 1000)
+		return number_format($count, 0);
+	$count = $count/1000;
+	return number_format(floor($count), 0).'.'.round(($count - floor($count)) * 10).'k';
 }

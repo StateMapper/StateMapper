@@ -1,7 +1,7 @@
 <?php
 /*
  * StateMapper: worldwide, collaborative, public data reviewing and monitoring tool.
- * Copyright (C) 2017  StateMapper.net <statemapper@riseup.net>
+ * Copyright (C) 2017-2018  StateMapper.net <statemapper@riseup.net>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -227,24 +227,7 @@ function remove_accents( $string ) {
 	return strtr($string, $chars);
 }
 
-function kaosStrtobytes($val) {
-    $val = trim($val);
-    $last = strtolower($val[strlen($val)-1]);
-    switch($last) {
-        // The 'G' modifier is available since PHP 5.1.0
-        case 'g':
-            $val *= 1024;
-        case 'm':
-            $val *= 1024;
-        case 'k':
-            $val *= 1024;
-    }
-
-    return $val;
-}
-
-
-function kaosArrayToStr($str){
+function array_to_str($str){ 
 	if (is_string($str))
 		return $str;
 	$text = array();
@@ -257,20 +240,19 @@ function kaosArrayToStr($str){
 	return implode("\n\n", $text);
 }
 
-
-function kaosPrintString($ostr){
-	global $kaosCall;
+function convert_code($ostr){
+	global $smap;
 	$commentHas = $commentOpen = false;
 	
-	if (KAOS_IS_CLI)
+	if (IS_CLI)
 		return $ostr;
 	
-	if (empty($kaosCall) || empty($kaosCall['call']) || $kaosCall['call'] != 'lint'){
+	if (empty($smap) || empty($smap['call']) || $smap['call'] != 'lint'){
 		
 		// print code and comment in two different columns
 		
 		if (strlen($ostr) > 40000) // max lenght to make it beautiful, better for memory
-			return '<div class="kaos-code-no-comment">'.kaosEscapeString($ostr).'</div>';
+			return '<div class="code-no-comment">'.esc_string($ostr).'</div>';
 
 		$quotesOpen = array();
 		$commentReallyOpen = false;
@@ -278,8 +260,8 @@ function kaosPrintString($ostr){
 		$strBits = preg_split("#(//|\"|'|\n)#", $ostr, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_DELIM_CAPTURE);
 		
 		$str = '';
-		$str .= '<tr class="kaos-table-whitespace"><td class="kaos-code-code"></td><td class="kaos-code-comment"></td></tr>';
-		$str .= '<tr><td class="kaos-code-code">';
+		$str .= '<tr class="table-whitespace"><td class="code-code"></td><td class="code-comment"></td></tr>';
+		$str .= '<tr><td class="code-code">';
 		
 		foreach ($strBits as $cstr){
 			switch ($cstr){
@@ -287,7 +269,7 @@ function kaosPrintString($ostr){
 					if (!$quotesOpen && !$commentOpen){
 						$commentOpen = true;
 						$commentHas = true;
-						$str .= '</td><td class="kaos-code-comment">';
+						$str .= '</td><td class="code-comment">';
 					} else
 						$str .= $cstr;
 					break;
@@ -300,7 +282,7 @@ function kaosPrintString($ostr){
 						else
 							$quotesOpen[$cstr] = true;
 					}
-					$str .= kaosEscapeString($cstr);
+					$str .= esc_string($cstr);
 					break;
 				break;
 				
@@ -309,7 +291,7 @@ function kaosPrintString($ostr){
 						$commentReallyOpen = $commentOpen = false;
 						$str .= '</span>';
 					} else
-						$str .= '</td><td class="kaos-code-comment">';
+						$str .= '</td><td class="code-comment">';
 					$str .= '</td></tr><tr><td>';
 					break;
 					
@@ -317,43 +299,39 @@ function kaosPrintString($ostr){
 					if ($commentOpen && !$commentReallyOpen && trim($cstr) != ''){
 						$isTitle = preg_match('#^(\s+?)(\#{2}\s*)(.*)$#', $cstr);
 						
-						$str .= ($isTitle ? '' : '<span class="kaos-code-comment-open">//</span>').'<span class="kaos-code-comment-body">';
+						$str .= ($isTitle ? '' : '<span class="code-comment-open">//</span>').'<span class="code-comment-body">';
 						$commentReallyOpen = true;
-						$str .= preg_replace('#^(\s+?)(\#{2}\s*)(.*)$#', '$1<span class="kaos-code-comment-title">$3</span>', kaosEscapeString($cstr));
+						$str .= preg_replace('#^(\s+?)(\#{2}\s*)(.*)$#', '$1<span class="code-comment-title">$3</span>', esc_string($cstr));
 					} else
-						$str .= kaosEscapeString($cstr);
+						$str .= esc_string($cstr);
 			}
 		}
 	}
 	if (!$commentHas) // if no comment was found, return with no column
-		return '<div class="kaos-code-no-comment">'.kaosEscapeString($ostr).'</div>';
+		return '<div class="code-no-comment">'.esc_string($ostr).'</div>';
 		
 	if ($commentOpen){
 		$commentOpen = false;
 		$str .= '</span>';
 	} else
-		$str .= '</td><td class="kaos-code-comment">';
+		$str .= '</td><td class="code-comment">';
 	$str .= '</td></tr>';
 
-	return '<table class="kaos-code-table">'.kaosConvertEntities($str).'</table>';
+	return '<table class="code-table">'.convert_entities($str).'</table>';
 }
 
-function kaosUTF8RecursiveEncode($mixed){
-	if (is_array($mixed)){
-		foreach ($mixed as $key => $value)
-			$mixed[$key] = kaosUTF8RecursiveEncode($value);
-	} else if (is_string($mixed))
-		return kaosConvertEncoding($mixed);
-	return $mixed;
-}
-
-function kaosJSON($json, $echo = true){
+function print_json($json, $echo = true){
 	if (!is_string($json))
-		$json = json_encode(kaosUTF8RecursiveEncode($json), JSON_UNESCAPED_UNICODE);
+		$json = json_encode(utf8_recursive_encode($json), JSON_UNESCAPED_UNICODE);
 		
-	else if (KAOS_IS_CLI)
+	else if (IS_CLI){
+		if ($echo){
+			echo $json;
+			return '';
+		}
 		return $json;
-		
+	}
+	
     $tc = 0;        //tab count
     $r = '';        //result
     $q = false;     //quotes
@@ -388,7 +366,7 @@ function kaosJSON($json, $echo = true){
         }
     }
 
-    $ret = kaosPrintString($r);
+    $ret = convert_code($r);
     
     if ($echo){
 		echo $ret;
@@ -402,14 +380,14 @@ if (!function_exists('debug')){
 		if (defined('IS_AJAX') && IS_AJAX)
 			return print_r($json, !$echo);
 		else
-			return kaosJSON($json, $echo);
+			return print_json($json, $echo);
 	}
 }
 
-function kaosLint($str){
+function lint($str){
 	if (is_array($str)){ // recursion
 		foreach ($str as &$v)
-			$v = kaosLint($v);
+			$v = lint($v);
 		unset($v);
 		return $str;
 	}
@@ -420,12 +398,8 @@ function kaosLint($str){
 	return $str;
 }
 
-
-
-
-
 // turn pattern matches into non-filling matches -> (?:
-function kaosEscapePatterns($pat){
+function escape_patterns($pat){
 	return 
 		preg_replace('#((?<!\\\\)\(\?:\?!)#', '(?!', 
 			preg_replace('#((?<!\\\\)\(\?:\?:)#', '(?:', 
@@ -434,90 +408,39 @@ function kaosEscapePatterns($pat){
 		);
 }
 
-
-
-function dateFormatToStrftime($dateFormat, $time) { 
-    $caracs = array( 
-        // Day - no strf eq : S 
-        'd' => '%d', 'D' => '%a', 'j' => '%e', 'l' => '%A', 'N' => '%u', 'w' => '%w', 'z' => '%j', 
-        // Week - no date eq : %U, %W 
-        'W' => '%V',  
-        // Month - no strf eq : n, t 
-        'F' => '%B', 'm' => '%m', 'M' => '%b', 
-        // Year - no strf eq : L; no date eq : %C, %g 
-        'o' => '%G', 'Y' => '%Y', 'y' => '%y', 
-        // Time - no strf eq : B, G, u; no date eq : %r, %R, %T, %X 
-        'a' => '%P', 'A' => '%p', 'g' => '%l', 'h' => '%I', 'H' => '%H', 'i' => '%M', 's' => '%S', 
-        // Timezone - no strf eq : e, I, P, Z 
-        'O' => '%z', 'T' => '%Z', 
-        // Full Date / Time - no strf eq : c, r; no date eq : %c, %D, %F, %x  
-        'U' => '%s',
-        
-        'S' => date('S', $time),
-    ); 
-    
-    // TODO: use regexp to avoid \o\f
-    $regs = array();
-    foreach ($caracs as $c => $rep)
-		$regs['#((?<!\\\\|%)'.$c.')#'] = $rep;
-	
-	$dateFormat = preg_replace(array_keys($regs), array_values($regs), $dateFormat);
-	$dateFormat = str_replace('\\', '', $dateFormat);
-	
-    return $dateFormat;//strtr((string)$dateFormat, $caracs); 
-} 
-
-
-function kaosCutString($v){
-	if (strlen($v) > 100)
-		$v = '<span class="kaos-folded" onclick="jQuery(this).find(\'.kaos-folding, .kaos-folded-ind\').toggle();">'.substr($v, 0, 90).'<span class="kaos-folding" style="display: none">'.substr($v, 90).'</span><span class="kaos-folded-ind">...</span></span>';
+function make_foldable($v, $max_char = 100){
+	if (strlen($v) > $max_char)
+		$v = '<span class="folded" onclick="jQuery(this).find(\'.folding, .folded-ind\').toggle();">'.substr($v, 0, $max_char - 8).'<span class="folding" style="display: none">'.substr($v, $max_char - 8).'</span><span class="folded-ind">...</span></span>';
 	return $v;
 }
 
-function kaosEscapeString($str){
-	if (KAOS_IS_CLI)
+function esc_string($str){
+	if (IS_CLI)
 		return $str;
 		
 	$str = str_replace('\/', '/', str_replace("\\r\\n", "\\\\r\\\\n", str_replace("\t", '<span style="width: 50px; display: inline-block;"></span>', nl2br(htmlentities($str)))));
 	
-	$str = preg_replace("#(\\\\n\s*)+#iusm", '<span class="kaos-escaped-carr"><i class="fa fa-paragraph"></i><i class="fa fa-paragraph"></i></span>', $str);//'."\\n".'
-	$str = preg_replace("#(\\\\n\s*)#iusm", '<span class="kaos-escaped-carr"><i class="fa fa-paragraph"></i></span>', $str);//'."\\n".'
+	$str = preg_replace("#(\\\\n\s*)+#iusm", '<span class="escaped-carr"><i class="fa fa-paragraph"></i><i class="fa fa-paragraph"></i></span>', $str);//'."\\n".'
+	$str = preg_replace("#(\\\\n\s*)#iusm", '<span class="escaped-carr"><i class="fa fa-paragraph"></i></span>', $str);//'."\\n".'
 	
 	foreach (array(
 //		'\bfollow\s*:\s*true\b' => 'follow', // could be enabled... but not impressive enough :/
 //		'\bselector\s*:\s*.*' => 'selector',
 	) as $pattern => $class)
-		$str = preg_replace('#^(.*)('.$pattern.')(.*)$#i', '$1<span class="kaos-code-entity-'.$class.'">$2</span>$3', $str);
+		$str = preg_replace('#^(.*)('.$pattern.')(.*)$#i', '$1<span class="code-entity-'.$class.'">$2</span>$3', $str);
 		
 	//$str = preg_replace('~(?:(https?)://([^\s\'"<]+)|(www\.[^\s\'"<]+?\.[^\s\'"<]+))(?<![\.,:])~i', '<a href="$0" target="_blank" title="$0">$0</a>', $str);
 	
-	$str = kaosConvertEntities($str);
+	$str = convert_entities($str);
 
 	return $str;
 }
-
-
-function kaosStripComments($code){
-	$code = preg_replace('#^(.*?)(//[^"\n]*)$#m', '$1', $code); // strip comments
-	$code = preg_replace('#(/\*[^\n]*\*/)#sm', '', $code); // strip comments
-	return $code;
-}
-
-
-function kaosConvertEncoding($str, $encoding = null){
-	if (!function_exists('mb_detect_encoding') || !function_exists('iconv'))
-		return $str;
-	//echo "CONVERTING ENCODING ".$encoding."<br>";
-	$str = @iconv($encoding ? $encoding : mb_detect_encoding($str, mb_detect_order(), true), "UTF-8", $str);
-	return $str;
-}
-
-
 
 function esc_json($array){
 	return esc_attr(json_encode($array));
 }
 
+// escape for inline attribute printing
 function esc_attr($string, $charset = 'UTF-8', $double_encode = false ) {
     if ( 0 === strlen( $string ) )
         return '';
@@ -531,32 +454,30 @@ function esc_attr($string, $charset = 'UTF-8', $double_encode = false ) {
     return $string;
 }
 
-
-
-
-function cleanKeywords($str){
+function sanitize_keywords($str){
 	return strtolower(remove_accents(trim(preg_replace('#\s+#', ' ', $str))));
 }
-
 
 function sanitize_title($str, $length = null){
 	$str = preg_replace('#([-]+)#', '-', preg_replace('#([^a-z0-9])#', '-', str_replace('.', '', strtolower(remove_accents($str)))));
 	if (strlen($str) > $length)
-		$str = rtrim(substr($str, $length), '-');
+		$str = substr($str, $length);
+	$str = rtrim($str, '-');
+	$str = ltrim($str, '-');
 	return $str;
 }
 
 function p($obj, $echo = true){
-	kaosJSON($obj, $echo);
+	print_json($obj, $echo);
 }
 
-function kaosReplace($replace, $text){
+function smap_replace($replace, $text){
 	foreach ($replace as $pat => $rep)
 		$text = preg_replace($pat, $rep, $text);
 	return $text;
 }
 
-function kaosDateRegexpConvert($format){
+function convert_date_regexp($format){
 	return preg_replace(array(
 		'#[\.\*\?\(\)\[\]\{\}]#ius',
 		'#((?<!\\\\)[jG])#us',
@@ -577,3 +498,96 @@ function kaosDateRegexpConvert($format){
 		'\\\\s+'
 	), $format);
 }
+
+function is_alphanum($str){
+	return preg_match('#^([a-z0-9_]+)$#i', $str);
+}
+
+function plural($arr, $sep = SEPARATOR_AND){
+	$last = array_pop($arr);
+	if (!$arr)
+		return $last;
+	if ($sep == SEPARATOR_AND)
+		$sep = _('and');
+	else if ($sep == SEPARATOR_OR)
+		$sep = _('or');
+	return implode(', ', $arr).' '.$sep.' '.$last;
+}
+	
+function print_inner($obj){
+	global $smap;
+
+	$wrapped = false;
+	if (empty($smap['call']) || !in_array($smap['call'], array('fetch', 'lint', 'schema'))){
+		$wrapped = true;
+		?>
+		<div id="wrap">
+		<?php
+	}
+
+	if (!empty($smap['isIframe']) || !empty($smap['outputNoFilter']))
+		echo is_array($obj) || is_object($obj) ? print_json($obj) : (is_string($obj) ? $obj : $obj);
+
+	else {
+		if (!empty($smap['apiResultPreview']))
+			$smap['apiResultPreview']->preview($obj['result'], $smap['query']);
+
+		if (!empty($smap['collapseAPIReturn']))
+			echo '<div><a href="#" onclick="jQuery(this).parent().find(\'.unfolding\').toggle(); return false">Unfold API return <i class="fa fa-caret-down"></i></a><div class="unfolding" style="display:none">';
+		if (is_string($obj))
+			echo convert_code($obj);
+		else
+			print_json($obj);
+
+		if (!empty($smap['collapseAPIReturn']))
+			echo '</div></div>';
+
+	}
+	if ($wrapped){
+		?>
+		</div>
+		<?php
+	}
+}
+
+function trailingslashit($str){
+	return rtrim($str, '/').'/';
+}
+
+function untrailingslashit($str){
+	return rtrim($str, '/');
+}
+
+function strip_comments($code, $content_type = null){
+	switch ($content_type){
+		case 'js':
+		case 'php':
+		case 'json':
+			$code = preg_replace('#^(.*?)(//[^"\n]*)$#m', '$1', $code); // strip comments
+			//$code = preg_replace('#^(.*)//.*$#ium', '$1', $code);
+			
+		case 'css':
+			//$code = preg_replace('#(/\*[^\n]*\*/)#sm', '', $code); // strip comments
+			//if ($content_type != 'json')
+				$code = preg_replace('#/\*.*?\*/#ius', '', $code);
+			break;
+	}
+	return trim_any($code);
+}
+
+function trim_any($code){
+	return preg_replace('#^\s*(.*?)\s*$#ius', '$1', $code);
+}
+
+
+function get_nth_non_empty($values, $from, $index){
+	$c = 0;
+	for ($i=$from; $i<count($values); $i++)
+		if (!empty($values[$i])){
+			if ($c == $index)
+				return $values[$i];
+			$c++;
+		}
+	return null;
+}
+

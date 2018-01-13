@@ -1,7 +1,7 @@
 <?php
 /*
  * StateMapper: worldwide, collaborative, public data reviewing and monitoring tool.
- * Copyright (C) 2017  StateMapper.net <statemapper@riseup.net>
+ * Copyright (C) 2017-2018  StateMapper.net <statemapper@riseup.net>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -31,18 +31,18 @@ class BulletinParserPdf {
 	}
 	
 	// init 
-	public function loadRootNode($content){
+	public function load_root_node($content){
 		return $content;
 	}
 	
-	public function isSelector($selector){
+	public function is_selector($selector){
 		return property_exists($selector, 'regexpAttr') 
 			|| property_exists($selector, 'match') 
 			|| (property_exists($selector, 'regexp') && !preg_match('#^(\$[0-9]+)$#', $selector->regexp) && $selector->regexp != ".");
 	}
 		
-	public function getValueBySelector($selector, $childConfig, $node, $rootNode, $isChild = false, $parent = null){
-		if (is_object($selector) && $this->isSelector($selector)){// && (!empty($selector->regexpAttr) || empty($selector->match))){
+	public function get_value_by_selector($selector, $childConfig, $node, $rootNode, $isChild = false, $parent = null){
+		if (is_object($selector) && $this->is_selector($selector)){// && (!empty($selector->regexpAttr) || empty($selector->match))){
 			//echo 'FIRST SELECTOR: '.print_r($selector->regexp, true).'<br>';
 
 			if (!empty($selector->regexpAttr)){
@@ -63,7 +63,7 @@ class BulletinParserPdf {
 				
 				$selector = $selector->regexp;
 				if ($parent)
-					$selector = str_replace('{legalEntityPattern}', $this->parent->getLegalEntityPattern(), $selector);
+					$selector = str_replace('{legalEntityPattern}', $this->parent->get_entity_pattern(), $selector);
 				
 				if (!($blocks = preg_split($selector, $rootNode, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY)))
 					return null;
@@ -121,16 +121,16 @@ class BulletinParserPdf {
 		
 		// convert to preg_replace
 		$this->varReplaceNode = (array) $node; // passed from previous regexpAttr (*)
-		$ret = preg_replace_callback('#(\$([0-9]+))#', array(&$this, 'varReplaceCallback'), $selector);
+		$ret = preg_replace_callback('#(\$([0-9]+))#', array(&$this, 'inject_variables'), $selector);
 		return trim($ret);
 	}
 	
-	function varReplaceCallback($matches){
+	function inject_variables($matches){
 		$i = intval($matches[2]) - 1;
 		return isset($this->varReplaceNode[$i]) ? $this->varReplaceNode[$i] : '';
 	}
 	
-	public function getNodeContent($node){
+	public function get_node_content($node){
 		if (!is_string($node)){
 			var_dump($node);
 			die('ERROR IN PDF PARSER');

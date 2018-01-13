@@ -89,9 +89,9 @@ While implementing the parsingProtocoles, the following attributes have special 
 Status are sorted by ```type``` and ```action``` through the ```schemas/status.json``` file, as follows:
 
 
-| | Type | Action | Meaning | Required attributes |
-| ---- | ---- | ----- | ----- | ---- |
-| <img src="http://localhost/statemapper/application/src/addons/fontawesome_favicons/plus.ico" valign="middle" /> | ```capital``` | ```new``` | company foundation | amount: the amount of capital |
+	| | Type | Action | Meaning | Required attributes |
+	| ---- | ---- | ----- | ----- | ---- |
+	| <img src="http://localhost/statemapper/application/src/addons/fontawesome_favicons/plus.ico" valign="middle" /> | ```capital``` | ```new``` | company foundation | amount: the amount of capital |
 | <img src="http://localhost/statemapper/application/src/addons/fontawesome_favicons/money.ico" valign="middle" /> | ```capital``` | ```increase``` | capital increase | amount: the amount of increase |
 | <img src="http://localhost/statemapper/application/src/addons/fontawesome_favicons/credit-card.ico" valign="middle" /> | ```fund``` | ```new``` | company funding | amount: the funding amount |
 | <img src="http://localhost/statemapper/application/src/addons/fontawesome_favicons/user-circle-o.ico" valign="middle" /> | ```owner``` | ```update``` | new owner | target: the owner's name |
@@ -105,10 +105,10 @@ Status are sorted by ```type``` and ```action``` through the ```schemas/status.j
 | <img src="http://localhost/statemapper/application/src/addons/fontawesome_favicons/exchange.ico" valign="middle" /> | ```name``` | ```update``` | name change | target: the new entity name |
 | <img src="http://localhost/statemapper/application/src/addons/fontawesome_favicons/times.ico" valign="middle" /> | ```name``` | ```end``` | company dissolution |  |
 | <img src="http://localhost/statemapper/application/src/addons/fontawesome_favicons/shopping-cart.ico" valign="middle" /> | ```absorb``` | ```new``` | company absorption | target: the absorbed company |
-
+	
 
 
 -----
 
-*[&larr; Project's homepage](https://github.com/StateMapper/StateMapper#top) · Copyright &copy; 2017 [StateMapper.net](https://statemapper.net) · Licensed under [GNU AGPLv3](../../LICENSE) · [&uarr; top](#top)* <img src="[![Bitbucket issues](https://img.shields.io/bitbucket/issues/atlassian/python-bitbucket.svg?style=social" align="right" /> <img src="http://hits.dwyl.com/StateMapper/StateMapper.svg?style=flat-square" align="right" />
+*[&larr; Project's homepage](https://github.com/StateMapper/StateMapper#top) · Copyright &copy; 2017-2018 [StateMapper.net](https://statemapper.net) · Licensed under [GNU AGPLv3](../../LICENSE) · [&uarr; top](#top)* <img src="[![Bitbucket issues](https://img.shields.io/bitbucket/issues/atlassian/python-bitbucket.svg?style=social" align="right" /> <a href="https://statemapper.net" target="_blank"><img src="http://hits.dwyl.com/StateMapper/StateMapper.svg?style=flat-square" align="right" /></a>
 

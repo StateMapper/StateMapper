@@ -1,7 +1,7 @@
 <?php
 /*
  * StateMapper: worldwide, collaborative, public data reviewing and monitoring tool.
- * Copyright (C) 2017  StateMapper.net <statemapper@riseup.net>
+ * Copyright (C) 2017-2018  StateMapper.net <statemapper@riseup.net>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -23,24 +23,24 @@ if (!defined('BASE_PATH'))
 
 class BulletinFetcherLocalCache extends BulletinFetcherCache {
 
-	public function getLabel(){
+	public function get_label(){
 		return 'local cache';
 	}
 		
-	public function getContentUri(){
-		return DATA_PATH.parent::getContentUri();
+	public function get_content_uri(){
+		return DATA_PATH.parent::get_content_uri();
 	}
 	
-	public function fetchUrl($url, &$formatFetcher){
-//		echo 'fetchUrl: '.$url.' to '.$this->filePath.'<br>';
+	public function fetch_url($url, &$formatFetcher){
+//		echo 'fetch_url: '.$url.' to '.$this->filePath.'<br>';
 		
-		$fileDir = $this->initFileDir($this->fileUri);
+		$fileDir = $this->init_file_dir($this->fileUri);
 		
-		if (kaosIsError($fileDir))
+		if (is_error($fileDir))
 			return $fileDir;
 			
-		if (!kaosFetch($url, array(), true, $this->fileUri))
-			return new KaosError('cannot fetch url '.$url);
+		if (!fetch($url, array(), true, $this->fileUri))
+			return new SMapError('cannot fetch url '.$url);
 		
 		return array(
 			'format' => $this->protocoleConfig->format,
@@ -50,29 +50,29 @@ class BulletinFetcherLocalCache extends BulletinFetcherCache {
 		);
 	}
 	
-	public function initFileDir($filePath){
+	public function init_file_dir($filePath){
 		//echo "INIT DIR ".$filePath.'<br>';
 		$fileDir = dirname($filePath);
 		if (!file_exists($fileDir)){
 			if (!is_writable(DATA_PATH))
-				return new KaosError('folder '.DATA_PATH.' not writtable');
+				return new SMapError('folder '.DATA_PATH.' not writtable');
 			if (!mkdir($fileDir, 0777, true))
-				return new KaosError('folder '.$fileDir.' cannot be created');
+				return new SMapError('folder '.$fileDir.' cannot be created');
 		}
 		return $fileDir;
 	}
 	
-	public function saveContent($fetched, &$formatFetcher, $processedFilePrefix = false){
-//		echo 'saveContent<br>';
+	public function save_content($fetched, &$formatFetcher, $processedFilePrefix = false){
+//		echo 'save_content<br>';
 		
 		if ($processedFilePrefix !== false){ 
 			// really save this, the others are directly saved to disk via curl
 
 			if (empty($processedFilePrefix))
-				kaosDie('bad $processedFilePrefix');
+				die_error('bad $processedFilePrefix');
 			
-			$fileDir = $this->initFileDir($this->fileUri);
-			if (kaosIsError($fileDir))
+			$fileDir = $this->init_file_dir($this->fileUri);
+			if (is_error($fileDir))
 				return $fileDir;
 				
 			//echo "WRITTING CACHE TO ".$this->fileUri.$processedFilePrefix.'<br>';
@@ -80,13 +80,13 @@ class BulletinFetcherLocalCache extends BulletinFetcherCache {
 			if (is_object($fetched) || is_array($fetched)){
 				$output = @json_encode($fetched, JSON_UNESCAPED_UNICODE);
 				if (empty($output)){
-					$output = @json_encode(kaosUTF8RecursiveEncode($fetched), JSON_UNESCAPED_UNICODE);
+					$output = @json_encode(utf8_recursive_encode($fetched), JSON_UNESCAPED_UNICODE);
 					if (empty($output))
-						return new KaosError('error saving content to local cache: '.json_last_error_msg());
+						return new SMapError('error saving content to local cache: '.json_last_error_msg());
 				}
 			
 			} else if (empty($output))
-				return new KaosError('error saving content: empty content');
+				return new SMapError('error saving content: empty content');
 			
 			else
 				$output = $fetched;
@@ -96,8 +96,8 @@ class BulletinFetcherLocalCache extends BulletinFetcherCache {
 				
 				if (file_put_contents($this->fileUri.$processedFilePrefix, $output)){
 					
-					if (KAOS_IS_CLI)
-						kaosPrintLog('saved parsed file to '.$this->fileUri.$processedFilePrefix);
+					if (IS_CLI)
+						print_log('saved parsed file to '.$this->fileUri.$processedFilePrefix);
 						
 					return true;
 				
@@ -105,30 +105,30 @@ class BulletinFetcherLocalCache extends BulletinFetcherCache {
 					usleep(500000 * max($i, 2)); // wait half a second between first and second write attempt, then 1s
 			}
 				
-			return new KaosError('could not save processed content to '.$this->fileUri.$processedFilePrefix.' (tries 5 times)');
+			return new SMapError('could not save processed content to '.$this->fileUri.$processedFilePrefix.' (tries 5 times)');
 		}
 		
-		$success = $formatFetcher->fetchFileDone($this->fileUri, $processedFilePrefix);
-		if (kaosIsError($success)){
+		$success = $formatFetcher->fetch_is_done($this->fileUri, $processedFilePrefix);
+		if (is_error($success)){
 			
 			// clean if error
 			@unlink($this->fileUri);
 			return $success;
 		}
 		
-		$content = $this->retrieveContent($formatFetcher, true);
+		$content = $this->retrieve_content($formatFetcher, true);
 		if (!$content)
-			return new KaosError('bad content after fetched: '.$this->fileUri);
+			return new SMapError('bad content after fetched: '.$this->fileUri);
 		return $content;
 	}
 	
-	public function retrieveContent(&$formatFetcher, $justCreated = false, &$fetchedOrigin = null, $processedFilePrefix = null, $onlyTestIfExists = false){
-		$filePath = $formatFetcher->getContentFilePath($this->fileUri, $processedFilePrefix);
+	public function retrieve_content(&$formatFetcher, $justCreated = false, &$fetchedOrigin = null, $processedFilePrefix = null, $onlyTestIfExists = false){
+		$filePath = $formatFetcher->get_content_path($this->fileUri, $processedFilePrefix);
 
 		if (!file_exists($filePath)){
 			//echo "NOT FOUND: ".$filePath."<br>";
-			if (KAOS_IS_CLI)
-				kaosPrintLog('not found in cache: '.$filePath, array('color' => 'grey'));
+			if (IS_CLI)
+				print_log('not found in cache: '.strip_root($filePath), array('color' => 'grey'));
 			return false;
 		}
 		//echo "FOUND: ".$filePath."<br>";
@@ -136,8 +136,8 @@ class BulletinFetcherLocalCache extends BulletinFetcherCache {
 		if ($onlyTestIfExists)
 			return true;
 		
-		if (KAOS_IS_CLI)
-			kaosPrintLog('found in cache: '.$filePath, array('color' => 'grey'));
+		if (IS_CLI)
+			print_log('found in cache: '.strip_root($filePath), array('color' => 'grey'));
 		
 		$content = file_get_contents($filePath);
 		
@@ -145,24 +145,24 @@ class BulletinFetcherLocalCache extends BulletinFetcherCache {
 			@unlink($this->fileUri);
 			@unlink($filePath);
 			
-			if (KAOS_IS_CLI)
-				kaosPrintLog('delete empty file from local disk: '.$filePath, array('color' => 'red'));
+			if (IS_CLI)
+				print_log('deleted empty file from local disk: '.strip_root($filePath), array('color' => 'red'));
 			
-//			return new KaosError('fetched empty file at '.$filePath);
+//			return new SMapError('fetched empty file at '.$filePath);
 			return false;
 		}
 			
 		if (!$content)
-			return new KaosError('cannot read file '.$filePath.' from local disk');
+			return new SMapError('cannot read file '.strip_root($filePath).' from local disk');
 			
 		if ($processedFilePrefix)
 			return json_decode($content, true);
 
 		$content = str_replace('●', "\n", $content); 
 		
-		$encoding = $formatFetcher->detectEncoding($content);
+		$encoding = $formatFetcher->detect_encoding($content);
 		
-		//$content = kaosConvertEncoding($content, $encoding);
+		//$content = convert_encoding($content, $encoding);
 		
 //		$enc = 'ISO-8859-1'; /// mb_detect_encoding($content, mb_detect_order(), true)
 		//$content = iconv($enc, "UTF-8", $content);

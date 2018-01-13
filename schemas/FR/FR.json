@@ -3,7 +3,9 @@
 	type: "country",
 	originalName: "France",
 	name: "France",
+	adjective: "French",
 	continent: "EU",
+	topLevelDomain: "fr",
 	
 	officialCurrencies: ["EUR"],													// national currencies, first being the default one
 	

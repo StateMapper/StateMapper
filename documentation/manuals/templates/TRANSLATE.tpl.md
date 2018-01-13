@@ -35,7 +35,7 @@
 
 *All commands below must be entered from your StateMapper's local folder.*
 
-1. To start PoEdit, enter: ```poedit src/languages/xx_YY/LC_MESSAGES/kaos.po```
+1. To start PoEdit, enter: ```poedit src/languages/xx_YY/LC_MESSAGES/smap.po```
 
 2. If you just created this language file, click ```Catalog > Properties...```, correct the ```Language``` field and click ```OK```.
 

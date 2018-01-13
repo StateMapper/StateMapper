@@ -1,7 +1,7 @@
 <?php
 /*
  * StateMapper: worldwide, collaborative, public data reviewing and monitoring tool.
- * Copyright (C) 2017  StateMapper.net <statemapper@riseup.net>
+ * Copyright (C) 2017-2018  StateMapper.net <statemapper@riseup.net>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -27,25 +27,25 @@ if (!defined('BASE_PATH'))
 
 class BulletinFetcherIpfsCache extends BulletinFetcherCache {
 	
-	public function getLabel(){
+	public function get_label(){
 		return 'IPFS';
 	}
 	
-	// TODO: saveContent to uploadTo!
+	// TODO: save_content to uploadTo!
 
-	public function retrieveContent(&$formatFetcher, $justCreated = false, &$fetchedOrigin = null, $fetchProcessedPrefix = null, $onlyTestIfExists = false){
-		global $kaosConfig;
-		$filePath = $formatFetcher->getContentFilePath($this->fileUri, $fetchProcessedPrefix);
+	public function retrieve_content(&$formatFetcher, $justCreated = false, &$fetchedOrigin = null, $fetchProcessedPrefix = null, $onlyTestIfExists = false){
+		global $smapConfig;
+		$filePath = $formatFetcher->get_content_path($this->fileUri, $fetchProcessedPrefix);
 		$fetched = false;
 		
 		if ($onlyTestIfExists)
 			return false;
 			
-		if (!empty($kaosConfig['IPFS']) && !empty($kaosConfig['IPFS']['fetchFrom'])){
-			foreach ($kaosConfig['IPFS']['fetchFrom'] as $nodeHash => $nodeName){
+		if (!empty($smapConfig['IPFS']) && !empty($smapConfig['IPFS']['fetchFrom'])){
+			foreach ($smapConfig['IPFS']['fetchFrom'] as $nodeHash => $nodeName){
 			
 				// call IPFS API
-				if (kaosFetch(IPFS_API_URL.'/api/v0/cat?arg='.$nodeHash.$filePath, array(), true, DATA_PATH.$filePath, array(
+				if (fetch(IPFS_API_URL.'/api/v0/cat?arg='.$nodeHash.$filePath, array(), true, DATA_PATH.$filePath, array(
 					'allowTor' => false, 
 					'countAsFetch' => false
 				))){
@@ -65,14 +65,14 @@ class BulletinFetcherIpfsCache extends BulletinFetcherCache {
 			@unlink($this->fileUri);
 			@unlink($filePath);
 			
-			if (KAOS_IS_CLI)
-				kaosPrintLog('delete empty file from ipfs: '.$filePath, array('color' => 'red'));
+			if (IS_CLI)
+				print_log('deleted empty file from ipfs: '.$filePath, array('color' => 'red'));
 			
-//			return new KaosError('fetched empty file at '.$filePath);
+//			return new SMapError('fetched empty file at '.$filePath);
 			return false;
 		}		
 		if (!$content)
-			return new KaosError('cannot read file '.DATA_PATH.$filePath.' after IPFS fetch');
+			return new SMapError('could not read file '.DATA_PATH.$filePath.' after IPFS fetch');
 			
 		return array(
 			'format' => $this->protocoleConfig->format,

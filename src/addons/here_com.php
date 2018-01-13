@@ -1,7 +1,7 @@
 <?php
 /*
  * StateMapper: worldwide, collaborative, public data reviewing and monitoring tool.
- * Copyright (C) 2017  StateMapper.net <statemapper@riseup.net>
+ * Copyright (C) 2017-2018  StateMapper.net <statemapper@riseup.net>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -21,42 +21,42 @@
 if (!defined('BASE_PATH'))
 	die();
 
-add_filter('location_lint', 'kaosHereComLintLocation');
-function kaosHereComLintLocation($locationObj, $location, $country){
+add_filter('location_lint', 'herecom_location_lint');
+function herecom_location_lint($locationObj, $location, $country){
 	if ($location){
-		$locationObj = kaosHereComConvertLocation($location, $country, true);
+		$locationObj = herecom_convert_location($location, $country, true);
 		if ($locationObj)
-			kaosSaveLocation($locationObj);
+			insert_location($locationObj);
 	}
 	return $locationObj;
 }
 
 
-function kaosHereComConvertLocation($locationStr, $country, $tryId = false){
+function herecom_convert_location($locationStr, $country, $tryId = false){
 	if (!defined('HERE_COM_APP_ID') || !HERE_COM_APP_ID
 		|| !defined('HERE_COM_APP_SECRET') || !HERE_COM_APP_SECRET)
 		return null;
 		
 	if (!is_object($country))
-		$country = kaosGetCountrySchema($country);
+		$country = get_country_schema($country);
 	
 	$force = false;
-	if (!isAdmin() || empty($_GET['geoloc'])){
+	if (!is_admin() || empty($_GET['geoloc'])){
 	
 		if ($tryId && is_numeric($locationStr)){
-			if ($loc = getRow('SELECT * FROM locations WHERE country = %s AND id = %s', array($country->id, $locationStr)))
+			if ($loc = get_row('SELECT * FROM locations WHERE country = %s AND id = %s', array($country->id, $locationStr)))
 				return $loc;
 			return null;
 		}
 		
-		if ($loc = getRow('SELECT * FROM locations WHERE country = %s AND original = %s', array($country->id, $locationStr)))
+		if ($loc = get_row('SELECT * FROM locations WHERE country = %s AND original = %s', array($country->id, $locationStr)))
 			return $loc;
 
 	// debug (force geolocation again) while admin with ?geoloc=1
 	} else {
 		$force = true;
 		if ($tryId && is_numeric($locationStr)){
-			$locationStr = get('SELECT original FROM locations WHERE country = %s AND id = %s', array($country->id, $locationStr));
+			$locationStr = get_var('SELECT original FROM locations WHERE country = %s AND id = %s', array($country->id, $locationStr));
 		}
 	}
 	
@@ -65,7 +65,7 @@ function kaosHereComConvertLocation($locationStr, $country, $tryId = false){
 		
 	$coordinates = @$country->vocabulary->stateLevels->country->coordinates;
 	if (empty($coordinates))
-		kaosDie('here.com addon: geolocation not possible, no coordinates specified in schema '.$country->ID.' (at ->vocabulary->stateLevels->country->coordinates)');
+		die_error('here.com addon: geolocation not possible, no coordinates specified in schema '.$country->ID.' (at ->vocabulary->stateLevels->country->coordinates)');
 		
 	$url = 'https://geocoder.cit.api.here.com/6.2/geocode.json';
 
@@ -81,19 +81,19 @@ function kaosHereComConvertLocation($locationStr, $country, $tryId = false){
 		'allowTor' => false, 
 		'countAsFetch' => false,
 		'noUserAgent' => true,
-		'accept' => 'application/json',
+		'type' => 'json',
 	);
-	$resp = kaosFetch($url, $args, true, false, $opts);
+	$resp = fetch($url, $args, true, false, $opts);
 	
-	//kaosJSON($args);
-	//kaosJSON($resp);
+	//print_json($args);
+	//print_json($resp);
 	
-	if (isAdmin() && !empty($_GET['show_geoloc']))
+	if (is_admin() && !empty($_GET['show_geoloc']))
 		echo 'geolocating '.$locationStr.'<br>';
 
 	$json = @json_decode($resp);
 	if (!$json || empty($json->Response->View) || empty($json->Response->View[0]->Result)){
-		if (isAdmin() && !empty($_GET['debug'])){
+		if (is_admin() && !empty($_GET['debug'])){
 			echo 'error geocoding: ';
 			debug($resp);
 		}
@@ -104,7 +104,7 @@ function kaosHereComConvertLocation($locationStr, $country, $tryId = false){
 	$relevance = $json->Relevance;
 	$a = $json->Location->Address;
 	
-	//kaosJSON($a);
+	//print_json($a);
 	
 	$country = $country->id;
 	if (!empty($a->Country)){
@@ -122,14 +122,14 @@ function kaosHereComConvertLocation($locationStr, $country, $tryId = false){
 	}
 	
 	// recheck
-	if (!$force && ($loc = getRow('SELECT * FROM locations WHERE country = %s AND original = %s', array($country, $locationStr))))
+	if (!$force && ($loc = get_row('SELECT * FROM locations WHERE country = %s AND original = %s', array($country, $locationStr))))
 		return $loc;
 	
 	$data = array();
 	foreach ($a->AdditionalData as $d)
 		$data[$d->key] = $d->value;
 	
-	//kaosJSON($a);
+	//print_json($a);
 
 	return array(
 		'label' => $a->Label,
@@ -147,35 +147,3 @@ function kaosHereComConvertLocation($locationStr, $country, $tryId = false){
 	);
 }
 
-function kaosSaveLocation(&$loc){
-	if (empty($loc['id'])){
-		
-		// save state
-		if ($loc['state'] && !is_numeric($loc['state'])){
-			if ($id = get('SELECT id FROM location_states WHERE country = %s AND name = %s', array($loc['country'], $loc['state'])))
-				$loc['state'] = $id;
-			else 
-				$loc['state'] = insert('location_states', array('name' => $loc['state'], 'country' => $loc['country']));
-		}
-		
-		// save county
-		if ($loc['county'] && !is_numeric($loc['county'])){
-			if ($id = get('SELECT id FROM location_counties WHERE country = %s AND state_id = %s AND name = %s', array($loc['country'], $loc['state'], $loc['county'])))
-				$loc['county'] = $id;
-			else 
-				$loc['county'] = insert('location_counties', array('name' => $loc['county'], 'state_id' => $loc['state'], 'country' => $loc['country']));
-		}
-		
-		// save city
-		if ($loc['city'] && !is_numeric($loc['city'])){
-			if ($id = get('SELECT id FROM location_cities WHERE country = %s AND state_id = %s AND county_id = %s AND name = %s', array($loc['country'], $loc['state'], $loc['county'], $loc['city'])))
-				$loc['city'] = $id;
-			else 
-				$loc['city'] = insert('location_cities', array('name' => $loc['city'], 'county_id' => $loc['county'], 'state_id' => $loc['state'], 'country' => $loc['country']));
-		}
-		
-		$loc['id'] = insert('locations', $loc);
-	}
-	return $loc['id'];
-}
-	

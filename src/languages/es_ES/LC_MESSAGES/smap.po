@@ -1,0 +1,795 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: $tateMapper\n"
+"POT-Creation-Date: 2018-01-13 13:08+0100\n"
+"PO-Revision-Date: 2018-01-13 13:10+0100\n"
+"Last-Translator: \n"
+"Language-Team: Ingoberlab <statemapper@riseup.net>\n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.7.1\n"
+"X-Poedit-Basepath: ../../..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: _;__:1,2c;__\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: assets/lib\n"
+"X-Poedit-SearchPathExcluded-1: assets/font\n"
+
+#: helpers/entities.php:1552
+#, php-format
+msgid "%s results out of %s"
+msgstr "%s resultados de %s"
+
+#: helpers/entities.php:1554
+#, php-format
+msgid "%s results"
+msgstr "%s resultados"
+
+#: helpers/labels.php:88 helpers/labels.php:100
+#: templates/parts/header_right.php:177
+msgid "Browse"
+msgstr "Explorar"
+
+#: helpers/labels.php:89
+msgid "Browse extracted public data"
+msgstr "Explorar los datos públicos extraidos"
+
+#: helpers/labels.php:94 helpers/labels.php:95
+msgid "Schema"
+msgstr "Esquema"
+
+#: helpers/labels.php:96
+msgid "See the definition schema"
+msgstr "Ver el esquema de definición"
+
+#: helpers/labels.php:100
+msgid "Fetch"
+msgstr "Recoger"
+
+#: helpers/labels.php:101
+msgid "Bulletin browser"
+msgstr "Explorador de boletines"
+
+#: helpers/labels.php:102
+msgid "Browse the bulletins"
+msgstr "Explorar los boletines"
+
+#: helpers/labels.php:106
+msgid "Fullscreen"
+msgstr "Pantalla completa"
+
+#: helpers/labels.php:107
+msgid "Only show the bulletin file"
+msgstr "Enseñar sólo el fichero del boletín"
+
+#: helpers/labels.php:111
+msgid "Download"
+msgstr "Descargar"
+
+#: helpers/labels.php:112
+msgid "Download this bulletin"
+msgstr "Descargar este boletín"
+
+#: helpers/labels.php:116
+msgid "Lint"
+msgstr "Limpiar"
+
+#: helpers/labels.php:117
+msgid "Linted bulletin"
+msgstr "Boletín limpiado"
+
+#: helpers/labels.php:118
+msgid "Browse the bulletins in linted version"
+msgstr "Explorar los boletines en version limpiada"
+
+#: helpers/labels.php:122
+msgid "Redirect"
+msgstr "Redirigir"
+
+#: helpers/labels.php:123
+msgid "Go to the original bulletin's URL"
+msgstr "Ir a la URL original del boletín"
+
+#: helpers/labels.php:128
+msgid "Parse"
+msgstr "Parsear"
+
+#: helpers/labels.php:129
+msgid "Parsed bulletin"
+msgstr ""
+
+#: helpers/labels.php:130
+msgid "See the parsed objects"
+msgstr ""
+
+#: helpers/labels.php:135
+msgid "Extract"
+msgstr "Extraer"
+
+#: helpers/labels.php:136
+msgid "Extracted status"
+msgstr ""
+
+#: helpers/labels.php:137
+msgid "See extracted status"
+msgstr ""
+
+#: helpers/labels.php:141
+msgid "Rewind"
+msgstr ""
+
+#: helpers/labels.php:141
+msgid "Map"
+msgstr "Mapa"
+
+#: helpers/labels.php:142
+msgid "Rewind map"
+msgstr ""
+
+#: helpers/labels.php:142
+msgid "Bulletins map"
+msgstr "Mapa de boletines"
+
+#: helpers/labels.php:143
+msgid "Browse all bulletins through a map"
+msgstr ""
+
+#: helpers/labels.php:148
+msgid "Soldiers"
+msgstr "Soldadxs"
+
+#: helpers/labels.php:149
+msgid "Schema Soldiers"
+msgstr "Soldadxs de Esquemas"
+
+#: helpers/labels.php:150
+msgid "See who's maintaining this schema"
+msgstr ""
+
+#: helpers/labels.php:155
+msgid "Ambassadors"
+msgstr "Embajadorxs"
+
+#: helpers/labels.php:156
+msgid "Ambass."
+msgstr "Embaj."
+
+#: helpers/labels.php:157
+msgid "Country Ambassadors"
+msgstr "Embajadorxs de Paises"
+
+#: helpers/labels.php:158
+msgid "See who's in charge of this area"
+msgstr ""
+
+#: helpers/labels.php:162
+msgid "Providers"
+msgstr "Proveedores"
+
+#: helpers/labels.php:163
+msgctxt "short title"
+msgid "Providers"
+msgstr "Proveed."
+
+#: helpers/labels.php:164
+msgid "Public data providers"
+msgstr "Proveedores de datos públicos"
+
+#: helpers/labels.php:165
+msgid "See all public data providers we use"
+msgstr ""
+
+#: helpers/labels.php:174
+msgid "institutions"
+msgstr "instituciones"
+
+#: helpers/labels.php:175
+msgid "institution"
+msgstr "institución"
+
+#: helpers/labels.php:180
+msgid "companies"
+msgstr "empresas"
+
+#: helpers/labels.php:181
+msgid "company"
+msgstr "empresa"
+
+#: helpers/labels.php:186
+msgid "people"
+msgstr "personas"
+
+#: helpers/labels.php:187
+msgid "person"
+msgstr "persona"
+
+#: helpers/map.php:125
+msgid "l jS \\o\\f F Y"
+msgstr "l j \\d\\e F \\d\\e Y"
+
+#: helpers/seo.php:121
+#, php-format
+msgid "Search results for \"%s\""
+msgstr "Resultados de búsqueda para \"%s\""
+
+#: helpers/seo.php:124
+msgid "Search results"
+msgstr "Resultados de búsqueda"
+
+#: helpers/seo.php:142
+#, php-format
+msgid "All entities in %s"
+msgstr "Todas las entidades en %s"
+
+#: helpers/seo.php:163
+msgid "Worldwide, collaborative, public data reviewing and monitoring tool"
+msgstr ""
+"Herramienta colaborativa global de revisión y monitorización de datos "
+"públicos"
+
+#: helpers/string.php:511
+msgid "and"
+msgstr "y"
+
+#: helpers/string.php:513
+msgid "or"
+msgstr "o"
+
+#: languages/statuses.php:31
+msgid "company foundation"
+msgstr ""
+
+#: languages/statuses.php:32
+msgid "[related] was founded with a capital of [amount]"
+msgstr ""
+
+#: languages/statuses.php:33
+msgid "Founded with a capital of [amount]"
+msgstr ""
+
+#: languages/statuses.php:34
+msgid "[count] Companies funded with a total capital of [amount]"
+msgstr ""
+
+#: languages/statuses.php:35
+msgid "the amount of capital"
+msgstr ""
+
+#: languages/statuses.php:36
+msgid "capital increase"
+msgstr ""
+
+#: languages/statuses.php:37
+msgid "[related] had a capital increase of [amount]"
+msgstr ""
+
+#: languages/statuses.php:38
+msgid "Capital increase by [amount]"
+msgstr ""
+
+#: languages/statuses.php:39
+msgid "[count] Capital increases for a total [amount]"
+msgstr ""
+
+#: languages/statuses.php:40
+msgid "the amount of increase"
+msgstr ""
+
+#: languages/statuses.php:41
+msgid "company funding"
+msgstr ""
+
+#: languages/statuses.php:42
+msgid "[related] funded with [amount]"
+msgstr ""
+
+#: languages/statuses.php:43
+msgid "Funded with [amount] through [issuing]"
+msgstr ""
+
+#: languages/statuses.php:44
+msgid "[count] Fundings for a total [amount]"
+msgstr ""
+
+#: languages/statuses.php:45
+msgid "the funding amount"
+msgstr ""
+
+#: languages/statuses.php:46
+msgid "new owner"
+msgstr ""
+
+#: languages/statuses.php:47
+msgid "[target] was made owner"
+msgstr ""
+
+#: languages/statuses.php:48
+msgid "[target] was made owner of [related]"
+msgstr ""
+
+#: languages/statuses.php:49
+msgid "Now owning [related]"
+msgstr ""
+
+#: languages/statuses.php:50
+msgid "[count] Now owning"
+msgstr ""
+
+#: languages/statuses.php:51
+msgid "the owner's name"
+msgstr ""
+
+#: languages/statuses.php:52
+msgid "new administrator"
+msgstr ""
+
+#: languages/statuses.php:53
+msgid "[target] was made administrator"
+msgstr ""
+
+#: languages/statuses.php:54
+msgid "[target] was made administrator of [related]"
+msgstr ""
+
+#: languages/statuses.php:55
+msgid "Now administrating [related]"
+msgstr ""
+
+#: languages/statuses.php:56
+msgid "[count] Now administrating"
+msgstr ""
+
+#: languages/statuses.php:57 languages/statuses.php:63
+#: languages/statuses.php:69
+msgid "the administrator's name"
+msgstr ""
+
+#: languages/statuses.php:58
+msgid "reelected administrator"
+msgstr ""
+
+#: languages/statuses.php:59
+msgid "[target] was reelected administrator"
+msgstr ""
+
+#: languages/statuses.php:60
+msgid "[target] was reelected administrator of [related]"
+msgstr ""
+
+#: languages/statuses.php:61
+msgid "Reelected administrator of [related]"
+msgstr ""
+
+#: languages/statuses.php:62
+msgid "[count] Administrators reelected"
+msgstr ""
+
+#: languages/statuses.php:64
+msgid "no longer administrator"
+msgstr ""
+
+#: languages/statuses.php:65
+msgid "[target] is no longer administrator"
+msgstr ""
+
+#: languages/statuses.php:66
+msgid "[target] is no longer administrator of [related]"
+msgstr ""
+
+#: languages/statuses.php:67
+msgid "No longer administrator of [related]"
+msgstr ""
+
+#: languages/statuses.php:68
+msgid "[count] Administrators ceased"
+msgstr ""
+
+#: languages/statuses.php:70
+msgid "new president"
+msgstr ""
+
+#: languages/statuses.php:71
+msgid "[target] was made president"
+msgstr ""
+
+#: languages/statuses.php:72
+msgid "[target] was made president of [related]"
+msgstr ""
+
+#: languages/statuses.php:73
+msgid "Now president of [related]"
+msgstr ""
+
+#: languages/statuses.php:74
+msgid "[count] Now president of"
+msgstr ""
+
+#: languages/statuses.php:75
+msgid "the president's name"
+msgstr ""
+
+#: languages/statuses.php:76
+msgid "new counselor"
+msgstr ""
+
+#: languages/statuses.php:77
+msgid "[target] was made counselor"
+msgstr ""
+
+#: languages/statuses.php:78
+msgid "[target] was made counselor of [related]"
+msgstr ""
+
+#: languages/statuses.php:79
+msgid "Now counselor of [related]"
+msgstr ""
+
+#: languages/statuses.php:80
+msgid "[count] New counselors"
+msgstr ""
+
+#: languages/statuses.php:81
+msgid "the counselor's name"
+msgstr ""
+
+#: languages/statuses.php:82
+msgid "new social object"
+msgstr ""
+
+#: languages/statuses.php:83
+msgid "[related] declared its object as [note]"
+msgstr ""
+
+#: languages/statuses.php:84
+msgid "Declared its object as [note]"
+msgstr ""
+
+#: languages/statuses.php:85
+msgid "[count] Object declarations"
+msgstr ""
+
+#: languages/statuses.php:86
+msgid "the object"
+msgstr ""
+
+#: languages/statuses.php:87 templates/parts/results.php:55
+msgid "Object"
+msgstr "Objeto"
+
+#: languages/statuses.php:88
+msgid "new location"
+msgstr ""
+
+#: languages/statuses.php:89
+msgid "[related] declared its location as [note]"
+msgstr ""
+
+#: languages/statuses.php:90
+msgid "Declared its location as [note]"
+msgstr ""
+
+#: languages/statuses.php:91
+msgid "[count] Location declarations"
+msgstr ""
+
+#: languages/statuses.php:92
+msgid "the location string"
+msgstr ""
+
+#: languages/statuses.php:93
+msgid "Location"
+msgstr ""
+
+#: languages/statuses.php:94
+msgid "name change"
+msgstr ""
+
+#: languages/statuses.php:95
+msgid "Was renamed to [target]"
+msgstr ""
+
+#: languages/statuses.php:96
+msgid "[related] was renamed to [target]"
+msgstr ""
+
+#: languages/statuses.php:97
+msgid "Is the new name of [related]"
+msgstr ""
+
+#: languages/statuses.php:98
+msgid "[count] Name changes"
+msgstr ""
+
+#: languages/statuses.php:99
+msgid "the new entity name"
+msgstr ""
+
+#: languages/statuses.php:100
+msgid "company dissolution"
+msgstr ""
+
+#: languages/statuses.php:101
+msgid "[related] was dissolved"
+msgstr ""
+
+#: languages/statuses.php:102
+msgid "Company was dissolved"
+msgstr ""
+
+#: languages/statuses.php:103
+msgid "[count] Company dissolutions"
+msgstr ""
+
+#: languages/statuses.php:104
+msgid "company absorption"
+msgstr ""
+
+#: languages/statuses.php:105
+msgid "Absorbed [target]"
+msgstr ""
+
+#: languages/statuses.php:106
+msgid "[related] absorbed [target]"
+msgstr ""
+
+#: languages/statuses.php:107
+msgid "Absorbed by [related]"
+msgstr ""
+
+#: languages/statuses.php:108
+msgid "[count] Company absorptions"
+msgstr ""
+
+#: languages/statuses.php:109
+msgid "the absorbed company"
+msgstr ""
+
+#: templates/browser.php:29
+msgid "Lookup for a company, a person.."
+msgstr "Buscar una empresa, una persona.."
+
+#: templates/browser.php:46
+msgid "Loading"
+msgstr "Cargando"
+
+#: templates/browser.php:85
+msgid "Add a filter"
+msgstr "Añadir un filtro"
+
+#: templates/browser.php:85 templates/browser.php:87
+msgid "Filters"
+msgstr "Filtros"
+
+#: templates/browser.php:87
+msgid "Remove all filters"
+msgstr "Borrar los filtros"
+
+#: templates/browser.php:135
+#, php-format
+msgid "No %s to show."
+msgstr "Ningún %s que enseñar."
+
+#: templates/browser.php:137
+#, php-format
+msgid "No %s found for \"%s\"."
+msgstr "Ningún %s encontrado para \"%s\"."
+
+#: templates/browser.php:140
+msgid "Check your query or try removing some filters..."
+msgstr "Comprueba tu búsqueda o prueba quitar algunos filtros..."
+
+#: templates/browser.php:154
+msgid "Start investigating.."
+msgstr "Empezar a investigar.."
+
+#: templates/browser.php:160
+msgid "The installation was completed successfully!"
+msgstr "¡La instalación se completó con éxito!"
+
+#: templates/browser.php:167
+#, php-format
+msgid "%s %s retrieved so far"
+msgstr "%s %s recogidas hasta ahora"
+
+#: templates/browser.php:173
+msgid "$tate Search"
+msgstr "$state Buscar"
+
+#: templates/browser.php:175
+msgid "Worldwide, collaborative, public data reviewing and monitoring tool."
+msgstr ""
+"Herramienta colaborativa global de revisión y monitorización de datos "
+"públicos."
+
+#: templates/browser.php:178
+msgid "Debug mode enabled"
+msgstr ""
+
+#: templates/entity.php:149
+#, php-format
+msgid "See all %s %s"
+msgstr "Ver todas las %s %s"
+
+#: templates/page.php:104
+msgid "See continent schema"
+msgstr ""
+
+#: templates/page.php:104
+msgid "See country schema"
+msgstr ""
+
+#: templates/page.php:110
+msgid "See provider schema"
+msgstr ""
+
+#: templates/parts/autocomplete_footer.php:25
+#, php-format
+msgid "Show all %s results"
+msgstr "Enseñar todos los resultados %s"
+
+#: templates/parts/footer.php:34
+msgid "$tateMapper needs many thinking minds! <br>Get involved!"
+msgstr ""
+
+#: templates/parts/footer.php:34 templates/parts/header_right.php:182
+msgid "Contribute"
+msgstr "Contribuir"
+
+#: templates/parts/footer.php:35
+msgid "Free and OpenSource Software! <br>Contribute to the code!"
+msgstr ""
+
+#: templates/parts/footer.php:35
+#, php-format
+msgid "Licensed under %s"
+msgstr "Licenciado bajo %s"
+
+#: templates/parts/footer.php:38
+#, php-format
+msgid "$tateMapper is version %s. Click to see the full source code!"
+msgstr ""
+
+#: templates/parts/footer.php:42
+msgid "Advanced menu"
+msgstr "Menu avanzado"
+
+#: templates/parts/footer.php:47
+msgid "Login"
+msgstr "Login"
+
+#: templates/parts/footer.php:55
+msgid "Human JSON"
+msgstr "JSON humano"
+
+#: templates/parts/footer.php:56
+msgid "Raw JSON"
+msgstr "JSON bruto"
+
+#: templates/parts/footer.php:61
+msgid "Raw document"
+msgstr "Documento bruto"
+
+#: templates/parts/footer.php:67 templates/parts/header_right.php:184
+msgid "About"
+msgstr ""
+
+#: templates/parts/footer.php:70 templates/parts/header_right.php:187
+msgid "Logout"
+msgstr ""
+
+#: templates/parts/footer_console.php:75
+#, php-format
+msgid "%s query"
+msgid_plural "%s queries"
+msgstr[0] "%s consulta"
+msgstr[1] "%s consultas"
+
+#: templates/parts/header_logo.php:44
+msgid "Go to homepage"
+msgstr "Ir a la página de inicio"
+
+#: templates/parts/header_logo.php:46
+#, php-format
+msgid "Go back to %s providers"
+msgstr "Ir a los proveedores %s"
+
+#: templates/parts/header_logo.php:48
+msgid "Go back to the providers list"
+msgstr "Ir a la lista de proveedores"
+
+#: templates/parts/header_right.php:44
+msgid "Browse bulletins by date"
+msgstr ""
+
+#: templates/parts/header_right.php:164
+msgid "Read our spiritual guidelines!"
+msgstr ""
+
+#: templates/parts/header_right.php:164
+msgid "Manifest"
+msgstr "Manifiesto"
+
+#: templates/parts/header_right.php:165
+msgid "Which public data providers we integrate"
+msgstr ""
+
+#: templates/parts/header_right.php:166
+msgid "Build your app on top of our stack!"
+msgstr ""
+
+#: templates/parts/header_right.php:166
+msgid "API"
+msgstr ""
+
+#: templates/parts/header_right.php:173
+msgid "Main menu"
+msgstr "Menu principal"
+
+#: templates/parts/header_right.php:180
+msgid "Settings"
+msgstr "Ajustes"
+
+#: templates/parts/header_right.php:183
+msgid "Help"
+msgstr "Ayuda"
+
+#: templates/parts/results.php:50
+msgid "Founded"
+msgstr "Fundada"
+
+#~ msgctxt "title"
+#~ msgid "Providers"
+#~ msgstr "Proveedores"
+
+#~ msgid "Licensed under GNU AGPLv3"
+#~ msgstr "Bajo licencia GNU AGPLv3"
+
+#~ msgid "Filter"
+#~ msgstr "Filtro"
+
+#~ msgid "Results for \"%s\""
+#~ msgstr "Resultados para \"%s\""
+
+#~ msgid "%s results for query \"%s\""
+#~ msgstr "%s resultados para la búsqueda \"%s\""
+
+#~ msgid "%s results out of %s for query \"%s\""
+#~ msgstr "%s resultados de %s para la búsqueda \"%s\""
+
+#~ msgid "%s %s out of %s that may be buggy"
+#~ msgstr "%s %s de %s que podrían ser buggy"
+
+#~ msgid "%s %s that may be buggy"
+#~ msgstr "%s %s que podrían ser buggy"
+
+#~ msgid "%s %s out of %s"
+#~ msgstr "%s %s de %s"
+
+#~ msgid "%s %s"
+#~ msgstr "%s %s"
+
+#~ msgid "No results found for \"%s\"."
+#~ msgstr "Ningún resultado para \"%s\"."
+
+#~ msgid "Unravel the past, empower the future."
+#~ msgstr "Destapa el pasado, enpodera el futuro"
+
+#~ msgid "Discover"
+#~ msgstr "Descubrir"
+
+#~ msgid "Legend"
+#~ msgstr "Leyenda"
+
+#~ msgid "Start Spider"
+#~ msgstr "Empezar araña"
+
+#~ msgid "Schemas"
+#~ msgstr "Esquemas"
+
+#~ msgid "Date"
+#~ msgstr "Fecha"
+
+#~ msgid "bla"
+#~ msgstr "xxx"

@@ -1,7 +1,7 @@
 <?php
 /*
  * StateMapper: worldwide, collaborative, public data reviewing and monitoring tool.
- * Copyright (C) 2017  StateMapper.net <statemapper@riseup.net>
+ * Copyright (C) 2017-2018  StateMapper.net <statemapper@riseup.net>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -29,11 +29,11 @@ class BulletinParserXml {
 	}
 	
 	// init 
-	public function loadRootNode($content){
+	public function load_root_node($content){
 		try {
 			return new SimpleXMLElement($content);
 		} catch (Exception $e){
-			return new KaosError('XML Exception: '.$e->getMessage());//.print_r($e, true));
+			return new SMapError('XML Exception: '.$e->getMessage());//.print_r($e, true));
 		}
 	}
 	/*
@@ -43,16 +43,16 @@ class BulletinParserXml {
 		if (substr($childConfigSelector, 0, 2) == './'){
 			if (!$node)
 				return 'bad selector '.$childConfigSelector;
-			return $this->getNodeChild($node, substr($childConfigSelector, 2));
+			return $this->get_node_child($node, substr($childConfigSelector, 2));
 		} else
-			return $this->getNode($rootNode, $childConfigSelector);
+			return $this->get_node($rootNode, $childConfigSelector);
 	}
 */
-	public function isSelector($selector){
+	public function is_selector($selector){
 		return property_exists($selector, 'selector');
 	}
 	
-	public function getValueBySelector($selector, $childConfig, $node, $rootNode, $isChild = false){
+	public function get_value_by_selector($selector, $childConfig, $node, $rootNode, $isChild = false){
 		$oselector = $selector;
 		
 		if (is_object($selector))
@@ -60,13 +60,13 @@ class BulletinParserXml {
 
 		if ($selector == '.')
 			//return print_r($node, true);//
-			return $this->getNodeContent($node);
+			return $this->get_node_content($node);
 
 		if ($selector[0] == '/'){// || $selector[0] == '('){
 			if (!$rootNode)
 				return null;
 			
-			$ret = $this->getNode($rootNode, $selector);
+			$ret = $this->get_node($rootNode, $selector);
 			return $isChild && is_array($ret) ? array_shift($ret) : $ret;
 		}
 		
@@ -74,11 +74,11 @@ class BulletinParserXml {
 			if (!$node)
 				return null;
 				
-			return (string) $this->getAttribute($node, substr($selector, 1));
+			return (string) $this->get_attribute($node, substr($selector, 1));
 		}
 
 		if (substr($selector, 0, 2) == './')
-			return $this->getNodeChild($node, substr($selector, 2));
+			return $this->get_node_child($node, substr($selector, 2));
 		
 		if (is_string($childConfig))
 			return $childConfig;
@@ -87,13 +87,13 @@ class BulletinParserXml {
 	}
 
 	// "@" selector (attribute)
-	public function getAttribute($node, $selector){
+	public function get_attribute($node, $selector){
 		$attr = $node->attributes();
 		return (string) $attr[$selector];
 	}
 	
 	// "/" selector (xpath style selector)
-	public function getNode($rootNode, $selector){
+	public function get_node($rootNode, $selector){
 		$selector = explode('@', $selector);
 		$fsel = preg_replace('#^(.*?)/?$#', '$1', $selector[0]);
 		
@@ -118,15 +118,15 @@ class BulletinParserXml {
 	}
 	
 	// "./" selector (get child node)
-	public function getNodeChild($node, $selector){
+	public function get_node_child($node, $selector){
 		return $node->{$selector};
 	}
 	
 	// "." selector (get text value)
-	public function getNodeContent($node){
+	public function get_node_content($node){
 		$value = $node->asXML();
 		
-//		$value = kaosConvertEncoding($value);
+//		$value = convert_encoding($value);
 		
 		// html escaping
 		$cleanValue = '';

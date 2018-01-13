@@ -1,7 +1,7 @@
 <?php
 /*
  * StateMapper: worldwide, collaborative, public data reviewing and monitoring tool.
- * Copyright (C) 2017  StateMapper.net <statemapper@riseup.net>
+ * Copyright (C) 2017-2018  StateMapper.net <statemapper@riseup.net>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -23,8 +23,8 @@ if (!defined('BASE_PATH'))
 
 
 
-add_action('entity_stats_after', 'kaosEntityRelatives');
-function kaosEntityRelatives($entity){
+add_action('entity_stats_after', 'relatives_entity_suggs');
+function relatives_entity_suggs($entity){
 	
 	if ($entity['type'] != 'person')
 		return;
@@ -55,14 +55,14 @@ function kaosEntityRelatives($entity){
 
 						$i = 0;
 						foreach ($relatives as $e){
-							$title = kaosGetEntityTitle($e);
+							$title = get_entity_title($e);
 							foreach (explode(' ', $entity['name']) as $name)
 								$title = preg_replace('#'.preg_quote($name, '#').'#ius', '<strong>'.mb_strtoupper($name).'</strong>', $title);
-							echo '<li><a href="'.kaosGetEntityUrl($e).'">'.$title.'</a>';
+							echo '<li><a href="'.get_entity_url($e).'">'.$title.'</a>';
 							
 							$common = array();
-							foreach (kaosGetEntitiesCommonCompanies($entity, $e) as $c)
-								$common[] = '<a href="'.kaosGetEntityUrl($c).'">'.kaosGetEntityTitle($c).'</a>';
+							foreach (get_entities_commons($entity, $e) as $c)
+								$common[] = '<a href="'.get_entity_url($c).'">'.get_entity_title($c).'</a>';
 							if ($common)
 								echo '<div class="entity-relatives-common"><i class="fa fa-angle-right"></i> '.count($common).' linking companies: '.implode(', ', $common).'</div>';
 							
@@ -78,7 +78,7 @@ function kaosEntityRelatives($entity){
 }
 
 
-function kaosGetEntitiesCommonCompanies($e1, $e2){
+function get_entities_commons($e1, $e2){
 	return query('
 		SELECT c.id, c.type, c.subtype, c.name, c.slug, c.country
 		FROM entities AS e1

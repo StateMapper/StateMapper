@@ -1,7 +1,7 @@
 <?php
 /*
  * StateMapper: worldwide, collaborative, public data reviewing and monitoring tool.
- * Copyright (C) 2017  StateMapper.net <statemapper@riseup.net>
+ * Copyright (C) 2017-2018  StateMapper.net <statemapper@riseup.net>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -19,10 +19,17 @@
  
 
 
-if (defined('BASE_PATH')) // only direct calls
+if (defined('BASE_PATH')) // only direct calls, leave this!
 	die();
 	
-$tempFolder = dirname(__FILE__).'/../../assets/tmp';
+$tempFolder = dirname(__FILE__).'/../../assets/tmp'; // dir to us as cache (set to false for no caching)
+$fontawesomeFolder = ASSETS_PATH.'/lib/font-awesome-4.7.0'; // the fontawesome library path
+
+
+
+
+// DO NOT EDIT BELOW
+
 	
 // extract icon from url (format /theicon.ico?...)
 $icon = @$_SERVER['REQUEST_URI'];
@@ -47,8 +54,6 @@ if (!$tempFolder || !file_exists($icoPath)){
 	define('LOAD_ONLY_CONFIG', true);
 	require('../../../index.php'); 
 
-	$fontawesomeFolder = ASSETS_PATH.'/lib/font-awesome-4.7.0';
-		
 	$conv = file_get_contents($fontawesomeFolder.'/less/variables.less');
 
 	if (!preg_match('#^@fa-var-'.preg_quote($icon, '#').'\s*:\s*["\'](.+)["\'];.*$#ium', $conv, $m))

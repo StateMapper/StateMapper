@@ -1,7 +1,7 @@
 <?php
 /*
  * StateMapper: worldwide, collaborative, public data reviewing and monitoring tool.
- * Copyright (C) 2017  StateMapper.net <statemapper@riseup.net>
+ * Copyright (C) 2017-2018  StateMapper.net <statemapper@riseup.net>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -31,29 +31,29 @@ class BulletinFetcherXml extends BulletinFetcherFormat {
 		}
 	}
 	
-	function getFormatLabel(){
+	function get_format_label(){
 		return 'XML document';
 	}
 	
-	public function detectEncoding($content){
+	public function detect_encoding($content){
 		return preg_match('#^\s*<\?xml[^>]*encoding="([^"]+)"#i', $content, $m) ? $m[1] : null;
 	}
 	
-	public function getContentFilePath($filePath, $processedFilePrefix){
+	public function get_content_path($filePath, $processedFilePrefix){
 		return $filePath.($processedFilePrefix ? $processedFilePrefix : '');
 	}
 	
-	public function fetchFileDone($filePath){
+	public function fetch_is_done($filePath){
 		if (preg_match('#^.{0,200}(<error)#is', file_get_contents($filePath)))
-			return new KaosError('XML error returned for '.$filePath, array('type' => 'badFile'));
+			return new SMapError('XML error returned for '.strip_root($filePath), array('type' => 'badFile'));
 			
 		return true;
 	}
 	
-	public function serveBulletin($bulletin, $printMode = 'download', $title = null, $query = array()){
+	public function serve_bulletin($bulletin, $printMode = 'download', $title = null, $query = array()){
 		if (empty($bulletin['filePath']))
-			kaosDie('no filePath to serve');
+			die_error('no filePath to serve');
 		
-		serveFile($bulletin['filePath'], 'application/xml', $printMode == 'download', $title);
+		serve_file($bulletin['filePath'], 'application/xml', $printMode == 'download', $title);
 	}	
 }	

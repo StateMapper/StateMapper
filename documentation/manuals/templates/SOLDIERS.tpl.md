@@ -4,7 +4,7 @@
    
 {Include privacyAlert}
 
-A list of active Soldiers is available on the [bulletin providers' page](https://statemapper.net/api).
+A list of active Soldiers is available on the [bulletin providers' page](https://statemapper.net/providers).
 
 
 ## Introduction:

@@ -1,6 +1,6 @@
 {Include header(DEVELOPERS GUIDE)}
 
-{IncludeInline beforeIndex}[Workflow](#workflow) · [Extraction](#extraction) · [Folder structure](#folder-structure) · [URI structure](#uri-structure) · [Schemas](#schemas) · [Manuals](#manuals) · [Tips & tricks](#tips--tricks)
+{IncludeInline beforeIndex}[Workflow](#workflow) · [Extraction](#extraction) · [Folder structure](#folder-structure) · [URI structure](#uri-structure) · [Helper functions](#helper-functions) · [Schemas](#schemas) · [Manuals](#manuals) · [Tips & tricks](#tips--tricks)
 
 {Include privacyAlert}
 
@@ -11,15 +11,15 @@ The processing layers can be described as follows:
 
 | | Layer name | Responsability |
 | -------- | ---- | --- |
-| <img src="https://statemapper.net/src/addons/fontawesome_favicons/terminal.ico" valign="middle" /> | daemon | start and stop bulletin spiders |
-| <img src="https://statemapper.net/src/addons/fontawesome_favicons/bug.ico" valign="middle" /> | spider | trigger workers to fetch, parse and extract bulletins |
-| <img src="https://statemapper.net/src/addons/fontawesome_favicons/cloud-download.ico" valign="middle" /> | fetch | download bulletins from bulletin providers |
-| <img src="https://statemapper.net/src/addons/fontawesome_favicons/tree.ico" valign="middle" /> | parse | parse bulletins and trigger subsequent fetches (follows) |
-| <img src="https://statemapper.net/src/addons/fontawesome_favicons/magic.ico" valign="middle" /> | extract | extract precepts and status from parsed objects |
-| <img src="https://statemapper.net/src/addons/fontawesome_favicons/usb.ico" valign="middle" /> | controller + api | route calls and prepare data for the templates |
+| <img src="{IncludeIcon terminal}" valign="middle" /> | daemon | start and stop bulletin spiders |
+| <img src="{IncludeIcon bug}" valign="middle" /> | spider | trigger workers to fetch, parse and extract bulletins |
+| <img src="{IncludeIcon cloud-download}" valign="middle" /> | fetch | download bulletins from bulletin providers |
+| <img src="{IncludeIcon tree}" valign="middle" /> | parse | parse bulletins and trigger subsequent fetches (follows) |
+| <img src="{IncludeIcon magic}" valign="middle" /> | extract | extract precepts and status from parsed objects |
+| <img src="{IncludeIcon usb}" valign="middle" /> | controller + api | route calls and prepare data for the templates |
 
-- The daemon throws spiders (one per type of bulletin), which throw workers (one per day and type of bulletin). 
-- Workers call the parser (parse layer), which call the fetcher (fetch layer) every time it needs (once for the daily summary, and often many times more for sub-documents).
+- The daemon throws spiders (one per type of bulletin), which in their turn throw workers (one per day and type of bulletin). 
+- Workers call the parser (parsing layer), which calls the fetcher (fetch layer) every time it needs (once for the daily summary, and often many times more for sub-documents).
 - Then the workers, if configured to, can call the extractor (extract layer) on the parsed object to convert it to *entities* (*institutions*, *companies* and *people*), *precepts* (small texts) and *statuses* (tiny pieces of information). 
 - The controller and api layers are only here to route HTTP and CLI calls to the frontend GUI, and to each processing layer separately.
 
@@ -34,11 +34,14 @@ The extraction layer is where data is finally saved to the database in the form 
 
 | Table | Content |
 | ---- | ----- |
-| precepts | original text to extract information from |
-| statuses | single, small information about one or several entities |
-| entities | legal actors; currently of three types: <img src="https://statemapper.net/src/addons/fontawesome_favicons/user-circle-o.ico" valign="middle" /> *person*, <img src="https://statemapper.net/src/addons/fontawesome_favicons/industry.ico" valign="middle" /> *company* and <img src="https://statemapper.net/src/addons/fontawesome_favicons/university.ico" valign="middle" /> *institution* |
+| precepts | original texts (articles) to extract information (statuses) from |
+| statuses | single, small, dated informations about one or several entities |
+| entities | legal actors; currently of three types: <img src="{IncludeIcon user-circle-o}" valign="middle" /> *person*, <img src="{IncludeIcon industry}" valign="middle" /> *company* and <img src="{IncludeIcon university}" valign="middle" /> *institution* |
 | amounts | amounts related with the status, with units and USD values |
-| locations | locations related with the status |
+| locations | status-related locations, holding the full address |
+| location_states | the world's states |
+| location_counties | the world's counties/provinces/regions |
+| location_cities | the world's cities |
 
 Please read the [Extraction section of the Schemas documentation](SCHEMAS.md#extraction-format) for more details about the extraction format.
 
@@ -53,7 +56,7 @@ The source file of this diagram can be found at ```documentation/diagrams/databa
 
 | Folder | Description |
 | ------- | ------ |
-| [schemas/](../../schemas) | bulletin definitions (schemas) |
+| [schemas/](../../schemas) | bulletin definitions (schemas) per country/continent |
 | [bulletins/](../../bulletins) | where bulletins are stored after download |
 | [scripts/](../../scripts) | bash scripts (```smap``` command) |
 | [documentation/](../../documentation) | documentation files (graphic material, diagrams, manuals..) |
@@ -62,8 +65,8 @@ The source file of this diagram can be found at ```documentation/diagrams/databa
 | [src/fetcher/](../../src/fetcher) | fetch layer |
 | [src/parser/](../../src/parser) | parse layer |
 | [src/extractor/](../../src/extractor) | extract layer |
+| [src/daemon/](../../src/daemon) | daemon script |
 | [src/spider/](../../src/spider) | spider (and workers) layer |
-| [src/api/](../../src/api) | api controller layer |
 | [src/templates/](../../src/templates) | page and partial template files |
 | [src/helpers/](../../src/helpers) | helper functions |
 | [src/addons/](../../src/addons) | addons likes Wikipedia suggs, Geoencoding, Website autodetection..  |
@@ -77,17 +80,31 @@ The source file of this diagram can be found at ```documentation/diagrams/databa
 | URI pattern  | Page description |
 | ------------- | ------------- |
 | [/](https://statemapper.net/) | site root |
-| [/?etype=institution](https://statemapper.net/?etype=institution) | list of all extracted institutions |
-| [/?etype=company](https://statemapper.net/?etype=company) | list of all extracted companies |
-| [/?etype=person](https://statemapper.net/?etype=person) | list of all extracted people |
+| [/institutions](https://statemapper.net/institutions) | list of all extracted institutions |
+| [/companies](https://statemapper.net/companies) | list of all extracted companies |
+| [/people](https://statemapper.net/people) | list of all extracted people |
+| [xx/institutions](https://statemapper.net/es/institutions) | list of all extracted institutions from xx |
+| [xx/companies](https://statemapper.net/es/companies) | list of all extracted companies from xx |
+| [xx/people](https://statemapper.net/es/people) | list of all extracted people from xx |
 | | |
-| /xx/institution/itsname | the sheet of an institution from country xx |
-| /xx/company/mycompany	| the sheet of a company from country xx |
+| /xx/institution/entityslug | the sheet of an institution from country xx |
+| /xx/company/entityslug | the sheet of a company from country xx |
 | /xx/person/john-doe | the sheet of a person from country xx |
 | | |
-| [/api](https://statemapper.net/api) | list of countries, bulletin providers and schemas |
-| [/api/xx](https://statemapper.net/api/es) | list of bulletin providers and schemas for country xx (example: /api/es) |
+| [/providers](https://statemapper.net/providers) | list of countries, bulletin providers and schemas |
+| [/xx/providers](https://statemapper.net/es/providers) | list of bulletin providers and schemas for country xx (example: [/es/providers](https://statemapper.net/es/providers)) |
+| | |
+| [/es/bulletin/YYYY-MM](https://statemapper.net/providers) | list of countries, bulletin providers and schemas |
+| [/xx/providers](https://statemapper.net/es/providers) | list of bulletin providers and schemas for country xx (example: [/es/providers](https://statemapper.net/es/providers)) |
+| | |
+| [/api/CALL.json](https://statemapper.net/api/providers.json) | JSON API endpoints start with ```api/``` and end up in ```.json``` |
 
+
+## Helper functions:
+
+Helpers function are files holding all sorts of useful functions for many tasks. All the following helpers are located in ```src/helpers/THE_HELPER.php```:
+
+{HelpersTable}
 
 ## Schemas:
 
@@ -110,13 +127,14 @@ The root ```README.md``` must be edited directly from the root folder, and canno
 **Debug & errors:**
 
 * the ```debug($whatever, $echo = true)``` will print whatever variable in a JSON human-readable way.
-* the ```kaosDie($string, $opts = array())``` will generate a beautiful error on the web GUI (and a nice response on the JSON and CLI APIs too).
+* the ```die_error($string, $opts = array())``` will generate a beautiful error on the web GUI (and a nice response on the JSON and CLI APIs too).
 * when logged in (from the copyright's menu), executed queries can be displayed clicking the "X queries" icon in the footer.
 
 **Shortcuts:**
 
 * ```smap push``` and ```smap push -m "some comment"``` will compile manuals and push all local changes (not only to manuals) to the repository.
 * ```smap pull``` will update the local files with the repository's.
+* ```smap replace STRING_A STRING_B``` will replace all STRING_A by STRING_B in all PHP files. Use with caution!
 
 **Disk space:**
 
@@ -138,11 +156,11 @@ The root ```README.md``` must be edited directly from the root folder, and canno
 **Special URL parameters:**
 
 * In general, you may use "?stop=1" to stop auto-refreshing (the rewind map, for example), and be able to edit the DOM/CSS more easily.
-* In general, you may use "?human=1" to format a raw JSON output for humans.
+* In general, you may use "?human=1" to format a JSON API output for humans.
 
 **Graphics:**
 
 * The main logo was made using the [Megrim font](../../src/assets/font/megrim) and the [FontAwesome](http://fontawesome.io/icons/)'s "map-signs" icon. Source files can be found in the [logo documentation folder](../logo) (```.xcf```) and opened with [GIMP](https://www.gimp.org/).
-* Favicons can be generated on-the-fly from ```https://statemapper.net/src/addons/fontawesome_favicons/[the-icon-code].ico``` with optional parameters ```?color=ffffff``` for icon color and ```?bg=000000``` for background color. Example: <a href="https://statemapper.net/src/addons/fontawesome_favicons/home.ico?bg=DEDEDE&color=D20075"><img src="https://statemapper.net/src/addons/fontawesome_favicons/home.ico?bg=DEDEDE&color=D20075" /></a>
+* Favicons can be generated on-the-fly from ```{IncludeIconRoot}[the-icon-code].ico``` with optional parameters ```?color=ffffff``` for icon color and ```?bg=000000``` for background color. Example: <a href="{IncludeIcon home}?bg=DEDEDE&color=D20075"><img src="{IncludeIcon home}?bg=DEDEDE&color=D20075" /></a>
 
 {Include footer()}

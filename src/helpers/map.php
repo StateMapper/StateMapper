@@ -1,7 +1,7 @@
 <?php
 /*
  * StateMapper: worldwide, collaborative, public data reviewing and monitoring tool.
- * Copyright (C) 2017  StateMapper.net <statemapper@riseup.net>
+ * Copyright (C) 2017-2018  StateMapper.net <statemapper@riseup.net>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -22,36 +22,35 @@ if (!defined('BASE_PATH'))
 	die();
 
 
-
-function kaosGetYearStats($schema, $year){
+function get_map_year_stats($schema, $year){
 	$stats = array();
 	$lastDay = min(date('Y-m-d', strtotime('+1 day', strtotime($year.'-12-31'))), date('Y-m-d', strtotime('+1 day', time())));
 
 	// TODO: this may be all precalculated.. if too slow
 	
 	/*
-	foreach (getCol('SELECT DISTINCT status FROM bulletins') as $status){
+	foreach (get_col('SELECT DISTINCT status FROM bulletins') as $status){
 		$optionId = 'yearstat-'.$schema.'-'.$year.'-'.$status;
-		if (!($count = getOption($optionId))){
+		if (!($count = get_option($optionId))){
 			
-			updateOption($optionId, $count);
+			update_option($optionId, $count);
 		}
 		TO CONTINUE..
 	*/
 	
 	// count every bulletin statuses
-	$res = query('SELECT status, COUNT(id) AS count FROM bulletins WHERE bulletin_schema = %s AND date >= %s AND date < %s GROUP BY status', array($schema, $year.'-01-01', $lastDay)); 
+	$res = query('SELECT status, COUNT(id) AS count FROM bulletins WHERE bulletin_schema = %s AND date >= %s AND date < %s AND external_id IS NULL GROUP BY status', array($schema, $year.'-01-01', $lastDay)); 
 	foreach ($res as $r)
 		$stats[$r['status']] = $r['count'];
 	
 	// count documents + sub-documents amount
-	$stats['document'] = get('SELECT COUNT(u.bulletin_id) AS count FROM bulletins AS b LEFT JOIN bulletin_uses_bulletin AS u ON b.id = u.bulletin_in WHERE b.bulletin_schema = %s AND b.date >= %s AND b.date < %s AND b.external_id IS NULL', array($schema, $year.'-01-01', $lastDay)) + get('SELECT COUNT(b.id) AS count FROM bulletins AS b WHERE b.bulletin_schema = %s AND b.date >= %s AND b.date < %s AND b.external_id IS NULL', array($schema, $year.'-01-01', $lastDay)); 
+	$stats['document'] = get_var('SELECT COUNT(*) AS count FROM bulletins WHERE bulletin_schema = %s AND date >= %s AND date < %s', array($schema, $year.'-01-01', $lastDay)); 
 
 	// count precepts
-	$stats['precepts'] = get('SELECT COUNT(p.id) FROM bulletins AS b LEFT JOIN bulletin_uses_bulletin AS u ON b.id = u.bulletin_in LEFT JOIN bulletins AS b2 ON u.bulletin_id = b2.id LEFT JOIN precepts AS p ON b2.id = p.bulletin_id WHERE b.bulletin_schema = %s AND b.date >= %s AND b.date < %s', array($schema, $year.'-01-01', $lastDay)); 
+	$stats['precepts'] = get_var('SELECT COUNT(p.id) FROM bulletins AS b LEFT JOIN precepts AS p ON b.id = p.bulletin_id WHERE b.bulletin_schema = %s AND b.date >= %s AND b.date < %s', array($schema, $year.'-01-01', $lastDay)); 
 	
 	// count statuses
-	$stats['statuses'] = get('SELECT COUNT(s.id) FROM bulletins AS b LEFT JOIN bulletin_uses_bulletin AS u ON b.id = u.bulletin_in LEFT JOIN bulletins AS b2 ON u.bulletin_id = b2.id LEFT JOIN precepts AS p ON b2.id = p.bulletin_id LEFT JOIN statuses AS s ON p.id = s.precept_id WHERE b.bulletin_schema = %s AND b.date >= %s AND b.date < %s', array($schema, $year.'-01-01', $lastDay)); 
+	$stats['statuses'] = get_var('SELECT COUNT(s.id) FROM bulletins AS b LEFT JOIN precepts AS p ON b.id = p.bulletin_id LEFT JOIN statuses AS s ON p.id = s.precept_id WHERE b.bulletin_schema = %s AND b.date >= %s AND b.date < %s', array($schema, $year.'-01-01', $lastDay)); 
 	
 	$stats += array(
 		'not_fetched' => 0,
@@ -70,7 +69,7 @@ function kaosGetYearStats($schema, $year){
 		$statuses[$s['date']] = $s['status'];
 		
 	for ($date = $year.'-01-01'; $date < $lastDay; $date = date('Y-m-d', strtotime('+1 day', strtotime($date)))){
-		$shouldHaveBulletin = kaosIsBulletinExpected($schema, $date);
+		$shouldHaveBulletin = is_bulletin_expected($schema, $date);
 			
 		// check if bulletin has been fetched
 		$bulletinStatus = isset($statuses[$date]) ? $statuses[$date] : null;
@@ -85,10 +84,10 @@ function kaosGetYearStats($schema, $year){
 	return $stats;
 }
 
-function kaosGetMapSquare($date, &$bulletinStatus, &$monthHas, &$monthTotal, $dbstats, $mode = 'fetch'){
-	global $kaosCall;
+function get_map_square($date, &$bulletinStatus, &$monthHas, &$monthTotal, $dbstats, $mode = 'fetch'){
+	global $smap;
 	
-	$shouldHaveBulletin = kaosIsBulletinExpected($kaosCall['schemaObj'], $date);
+	$shouldHaveBulletin = is_bulletin_expected($smap['schemaObj'], $date);
 	
 	$cdbstats = null;
 	$cdbstats = isset($dbstats[$date]) ? $dbstats[$date] : null;
@@ -120,10 +119,10 @@ function kaosGetMapSquare($date, &$bulletinStatus, &$monthHas, &$monthTotal, $db
 	if ($date > date('Y-m-d')) // future
 		$bulletinStatus = 'not_published';
 
-	return '<a href="'.kaosGetBulletinUrl(array(
-		'schema' => $kaosCall['query']['schema'], 
+	return '<a href="'.url(array(
+		'schema' => $smap['query']['schema'], 
 		'date' => $date
-	), false).'" title="'.date_i18n(_('l jS \o\f F Y'), strtotime($date)).'<br><b>Status: '.strtoupper(str_replace('_', ' ', $bulletinStatus)).'</b>'.($bulletin && $bulletin['last_error'] ? '<br><br><b>LAST ERROR:</b> '.$bulletin['last_error'] : '').'" class="kaos-api-fetched-ind kaos-api-fetched-ind-'.$bulletinStatus.'">'.$squareInner.'</a>';
+	), 'fetch').'" title="'.date_i18n(_('l jS \o\f F Y'), strtotime($date)).'<br><b>Status: '.strtoupper(str_replace('_', ' ', $bulletinStatus)).'</b>'.($bulletin && $bulletin['last_error'] ? '<br><br><b>LAST ERROR:</b> '.$bulletin['last_error'] : '').'" class="map-fetched-ind map-fetched-ind-'.$bulletinStatus.'">'.$squareInner.'</a>';
 	
 	// TODO: could/should convert status to a human sentence (NOT_PUBLISHED => Not expected)
 }

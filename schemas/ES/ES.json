@@ -3,7 +3,9 @@
 	type: "country",
 	originalName: "España",															// country name in the country language
 	name: "Spain",																	// country name in English
+	adjective: "Spanish",
 	continent: "EU",
+	topLevelDomain: "es",															// www top level domain (TLD) for the country/continent
 	
 	officialCurrencies: ["EUR"],													// national currencies, first being the default one
 	
@@ -245,20 +247,6 @@
 			}
 		},
 		
-		legalTaxonomies: {															// interesting sentence patterns to detect
-			adjudge: {																// pattern lot ID
-				"adjudicado por": {													// the sentence pattern to detect (spaces are replaced by \s+)
-					transfer: "rtl"													// order of transfer (of power, money..): ltf (left-to-right) or rtl (right-to-left)
-				},
-				"adjudicado a": {
-					transfer: "ltr"
-				},
-				"adjudic\S+": {
-					transfer: "ltr"
-				}
-			}
-		},
-		
 		stateLevels: {
 			country: {
 				name: "país",
@@ -288,7 +276,7 @@
 					}
 				}
 			},
-			province: {
+			state: {
 				name: "provincia",
 				plural: "provincias",
 				parentType: "country",
@@ -299,9 +287,35 @@
 							"$1": "province"
 						}
 					}
-				]
+				],
+				institutions: {
+					deputation: {
+						name: "diputación",
+						plural: "diputaciones",
+						patterns: [
+							{
+								regexp: "$1\s+de\s+(\b[^\.;:]+\b)",
+								matches: {
+									"$1": "state"
+								}
+							}
+						]
+					},
+					subdelegation: {
+						name: "subdelegación",
+						plural: "subdelegaciones",
+						patterns: [
+							{
+								regexp: "$1\s+(?:del\s+gobierno\s+)?(?:de|en)\s+(\b[^\.;:]+\b)",
+								matches: {
+									"$1": "state"
+								}
+							}
+						]
+					}
+				}
 			},
-			community: {
+			county: {
 				name: "comunidad",
 				plural: "comunidades",
 				parentType: "province",
@@ -312,7 +326,21 @@
 							"$1": "community"
 						}
 					}
-				]
+				],
+				institutions: {
+					council: {
+						name: ["consejería"],
+						plural: ["consejerías"],
+						patterns: [
+							{
+								regexp: "$1\s+de\s+([^\.;:]+)",
+								matches: {
+									"$1": "county"
+								}
+							}
+						]
+					}
+				}
 			},
 			city: {
 				name: "ciudad",
@@ -328,11 +356,11 @@
 				],
 				institutions: {
 					cityhall: {
-						name: "ayuntamiento",
-						plural: "ayuntamientos",
+						name: ["ayuntamiento", "ajuntament"],
+						plural: ["ayuntamientos", "ajuntament"],
 						patterns: [
 							{
-								regexp: "ayuntamiento\s+de\s+([^\.;:]+)",
+								regexp: "$1\s+de\s+([^\.;:]+)",
 								matches: {
 									"$1": "city"
 								}

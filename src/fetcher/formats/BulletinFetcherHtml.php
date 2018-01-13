@@ -1,7 +1,7 @@
 <?php
 /*
  * StateMapper: worldwide, collaborative, public data reviewing and monitoring tool.
- * Copyright (C) 2017  StateMapper.net <statemapper@riseup.net>
+ * Copyright (C) 2017-2018  StateMapper.net <statemapper@riseup.net>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -31,20 +31,20 @@ class BulletinFetcherHtml extends BulletinFetcherFormat {
 		}
 	}
 	
-	public function getContentFilePath($filePath, $processedFilePrefix = null){
+	public function get_content_path($filePath, $processedFilePrefix = null){
 		return $filePath;
 	}
 	
-	public function fetchFileDone($filePath, $fetchProcessedPrefix){
+	public function fetch_is_done($filePath, $fetchProcessedPrefix){
 		return true;
 	}
 	
-	public function serveBulletin($bulletin, $printMode = 'download', $title = null, $query = array()){
+	public function serve_bulletin($bulletin, $printMode = 'download', $title = null, $query = array()){
 		if (empty($bulletin['filePath']))
-			kaosDie('no filePath to serve');
+			die_error('no filePath to serve');
 			
 		if ($printMode == 'download')
-			serveFile($bulletin['filePath'], 'text/html', $printMode == 'download', $title);
+			serve_file($bulletin['filePath'], 'text/html', $printMode == 'download', $title);
 		
 		$content = preg_replace('#^.*<body[^>]*>(.*)</body>.*$#ius', '$1', $bulletin['content']); // keep only body content
 		
@@ -59,12 +59,12 @@ class BulletinFetcherHtml extends BulletinFetcherFormat {
 			// extract URLs from HTML tags
 			$content = preg_replace('/<([^>]*(https?:\/\/[^>\s"\']+)[^>]*)>/', "\n".'$2'."\n\n", $content);
 			
-			$baseUrl = $this->parent->fetchBulletin($query, 'return');
+			$baseUrl = $this->parent->fetch_bulletin($query, 'return');
 			$baseUrl = parse_url($baseUrl);
 			$this->args['baseUrl'] = $baseUrl['scheme'].'://'.$baseUrl['host'];
 			$this->args['baseUri'] = rtrim($baseUrl['path'], '/');
 			
-			$content = preg_replace_callback('/<([^>]*href=(["\'])((?!#)[^>"\']+)\2[^>]*)>/', array(&$this, 'replaceUrls'), $content);
+			$content = preg_replace_callback('/<([^>]*href=(["\'])((?!#)[^>"\']+)\2[^>]*)>/', array(&$this, 'replace_urls'), $content);
 			
 			// remove all HTML tags (leaving inner content)
 			$content = preg_replace('/<([^>]*)>/', '', $content); 
@@ -75,7 +75,7 @@ class BulletinFetcherHtml extends BulletinFetcherFormat {
 		return $content;
 	}
 	
-	function replaceUrls($m){
+	function replace_urls($m){
 		$url = $m[3];
 		if (!preg_match('#^https?://.*#iu', $url)){
 			if ($url[0] == '/')

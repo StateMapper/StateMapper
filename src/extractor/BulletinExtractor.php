@@ -1,7 +1,7 @@
 <?php
 /*
  * StateMapper: worldwide, collaborative, public data reviewing and monitoring tool.
- * Copyright (C) 2017  StateMapper.net <statemapper@riseup.net>
+ * Copyright (C) 2017-2018  StateMapper.net <statemapper@riseup.net>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -27,197 +27,199 @@ class BulletinExtractor {
 	}
 	
 	public function extract($query, $save = false){
-		$schemaObj = kaosGetSchema($this->parsed['schema']);
+		$schemaObj = get_schema($this->parsed['schema']);
 		$ret = array();
 		
-		if (!empty($schemaObj->extractProtocoles)){
+		if (empty($schemaObj->extractProtocoles))
+			return new SMapError('extractProtocoles not found for '.$this->parsed['schema']);
 			
-			if ($save)
-				update('bulletins', array(
-					'status' => 'extracting'
-				), array(
-					'bulletin_schema' => $query['schema'],
-					'date' => $query['date'],
-				));
+		if ($save)
+			update('bulletins', array(
+				'status' => 'extracting'
+			), array(
+				'bulletin_schema' => $query['schema'],
+				'date' => $query['date'],
+				'external_id' => null,
+			));
+		
+		foreach ($schemaObj->extractProtocoles as $extractId => $p){
+			$extractQuery = $query;
 			
-			foreach ($schemaObj->extractProtocoles as $extractId => $p){
-				$extractQuery = $query;
+			$cur = $this->parsed;
+			$pathMode = null;
+			foreach (preg_split('#(//?|@)#', $p->selector, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY) as $bit){
 				
-				$cur = $this->parsed;
-				$pathMode = null;
-				foreach (preg_split('#(//?|@)#', $p->selector, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY) as $bit){
+				
+				if ($bit == '//' || $bit == '/' || $bit == '@'){
+					$pathMode = $bit;
+					continue;
+				}
+				
+				$attrBits = preg_split('#([\[\]])#', $bit, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+				$attrBit = array_shift($attrBits);
+				
+				switch ($pathMode){
+					case '//':	
+						$cur = get_object_path($attrBit, $cur, $extractQuery);
+						break;
+					case '/':
+					case '@':
+						if (is_array($cur) && array_key_exists(0, $cur)){
+							$cret = array();
+							foreach ($cur as $v)
+								if (isset($v[$attrBit])){
+									$ccur = $v[$attrBit];
+									$cret[] = $ccur;
+								}
+									
+							$cur = $cret;
+						} else
+							$cur = isset($cur[$attrBit]) ? $cur[$attrBit] : null;
+						break;
+				}
+
+				if ($cur === null)
+					break;
 					
+				if (is_array($cur) && $cur && !isset($cur[0])){ // is assoc array
+					$extractQuery = merge_extract_objects($extractQuery, $cur);
+				}
 					
-					if ($bit == '//' || $bit == '/' || $bit == '@'){
-						$pathMode = $bit;
+				// filtering
+				$prepend = null;
+				
+				while ($attrBit = array_shift($attrBits)){
+						
+					// impair quotes, prepend to next (this is to allow [title='#[0-9]+#'] without breaking)
+					$quoteChange = substr_count($attrBit, "'") % 2 == 1;
+					if ($quoteChange){
+						if ($prepend){
+							$attrBit = $prepend.$attrBit;
+							$prepend = null; // end prepending
+						} else
+							$prepend = ''; // init prepending
+					}
+					if ($prepend !== null){ 
+						$prepend = ($prepend ? $prepend.$attrBit : $attrBit);
 						continue;
 					}
 					
-					$attrBits = preg_split('#([\[\]])#', $bit, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
-					$attrBit = array_shift($attrBits);
-					
-					switch ($pathMode){
-						case '//':	
-							$cur = kaosGetObjPath($attrBit, $cur, $extractQuery);
-							break;
-						case '/':
-						case '@':
-							if (is_array($cur) && array_key_exists(0, $cur)){
-								$cret = array();
-								foreach ($cur as $v)
-									if (isset($v[$attrBit])){
-										$ccur = $v[$attrBit];
-										$cret[] = $ccur;
-									}
-										
-								$cur = $cret;
-							} else
-								$cur = isset($cur[$attrBit]) ? $cur[$attrBit] : null;
-							break;
-					}
+					if ($attrBit != '[' && $attrBit != ']'){
+						
+						// nth node selector
+						if (is_numeric($attrBit))
+							$cur = is_array($cur) && array_key_exists(intval($attrBit), $cur) ? $cur[intval($attrBit)] : null;
+						else {
+							// we may split better, with preg_split and avoiding OR's between quotes
+							$cAttrBits = explode(' OR ', $attrBit);
 
-					if ($cur === null)
-						break;
-						
-					if (is_array($cur) && $cur && !isset($cur[0])){ // is assoc array
-						$extractQuery = kaosMergeExtractQuery($extractQuery, $cur);
-					}
-						
-					// filtering
-					$prepend = null;
-					
-					while ($attrBit = array_shift($attrBits)){
+							foreach ($cAttrBits as $cAttrBitsI => $cAttrBit){
 							
-						// impair quotes, prepend to next (this is to allow [title='#[0-9]+#'] without breaking)
-						$quoteChange = substr_count($attrBit, "'") % 2 == 1;
-						if ($quoteChange){
-							if ($prepend){
-								$attrBit = $prepend.$attrBit;
-								$prepend = null; // end prepending
-							} else
-								$prepend = ''; // init prepending
-						}
-						if ($prepend !== null){ 
-							$prepend = ($prepend ? $prepend.$attrBit : $attrBit);
-							continue;
-						}
-						
-						if ($attrBit != '[' && $attrBit != ']'){
-							
-							// nth node selector
-							if (is_numeric($attrBit))
-								$cur = is_array($cur) && array_key_exists(intval($attrBit), $cur) ? $cur[intval($attrBit)] : null;
-							else {
-								// we may split better, with preg_split and avoiding OR's between quotes
-								$cAttrBits = explode(' OR ', $attrBit);
-
-								foreach ($cAttrBits as $cAttrBitsI => $cAttrBit){
+								// attribute matching
 								
-									// attribute matching
-									
-									$nCur = array();
-									if ($cur !== null && preg_match('#^\s*([a-z]+)\s*((=|<=|<|>|>=|!=|<>)\s*[\']?(.*?)[\']?)?\s*$#i', $cAttrBit, $m)){
-											
-										$isAssoc = is_array($cur) && array_key_exists(0, $cur);
-										foreach ($isAssoc ? $cur : array($cur) as $cCur){
-											
-											if (empty($m[3])){
-												if (!empty($cCur[$m[1]]))
-													$nCur[] = $cCur;
-											} else 
-												switch ($m[3]){
-													case '=':
-														if (isset($cCur[$m[1]]) && $cCur[$m[1]] !== null && preg_match($m[4], $cCur[$m[1]]))
-															$nCur[] = $cCur;
-														break;
-													case '<>':
-													case '!=':
-														if (!isset($cCur[$m[1]]) || $cCur[$m[1]] === null || !preg_match($m[4], $cCur[$m[1]]))
-															$nCur[] = $cCur;
-														break;
-													case '>':
-														if (isset($cCur[$m[1]]) && $cCur[$m[1]] !== null && $cCur[$m[1]] > floatval($m[4]))
-															$nCur[] = $cCur;
-														break;
-													case '>=':
-														if (isset($cCur[$m[1]]) && $cCur[$m[1]] !== null && $cCur[$m[1]] >= floatval($m[4]))
-															$nCur[] = $cCur;
-														break;
-													case '<':
-														if (isset($cCur[$m[1]]) && $cCur[$m[1]] !== null && $cCur[$m[1]] < floatval($m[4]))
-															$nCur[] = $cCur;
-														break;
-													case '<=':
-														if (isset($cCur[$m[1]]) && $cCur[$m[1]] !== null && $cCur[$m[1]] <= floatval($m[4]))
-															$nCur[] = $cCur;
-														break;
-												}
-												
-										}
-									}
-									
-									// attribute matching
-									else if ($cur !== null && preg_match('#^([a-z]+)!=(.*?)$#i', $cAttrBit, $m)){
-											
-										$nCur = array();
-										$isAssoc = is_array($cur) && array_key_exists(0, $cur);
-										foreach ($isAssoc ? $cur : array($cur) as $cCur)
-											if (isset($cCur[$m[1]]) && $cCur[$m[1]] !== null && $cCur[$m[1]] != $m[2])
-												$nCur[] = $cCur;
-									} else
-										continue;
+								$nCur = array();
+								if ($cur !== null && preg_match('#^\s*([a-z]+)\s*((=|<=|<|>|>=|!=|<>)\s*[\']?(.*?)[\']?)?\s*$#i', $cAttrBit, $m)){
 										
-									if ($nCur || $cAttrBitsI == count($cAttrBits) - 1){
-										$cur = $nCur;
-										if (!$isAssoc)
-											$cur = $cur ? $cur[0] : null;
-										break;
+									$isAssoc = is_array($cur) && array_key_exists(0, $cur);
+									foreach ($isAssoc ? $cur : array($cur) as $cCur){
+										
+										if (empty($m[3])){
+											if (!empty($cCur[$m[1]]))
+												$nCur[] = $cCur;
+										} else 
+											switch ($m[3]){
+												case '=':
+													if (isset($cCur[$m[1]]) && $cCur[$m[1]] !== null && preg_match($m[4], $cCur[$m[1]]))
+														$nCur[] = $cCur;
+													break;
+												case '<>':
+												case '!=':
+													if (!isset($cCur[$m[1]]) || $cCur[$m[1]] === null || !preg_match($m[4], $cCur[$m[1]]))
+														$nCur[] = $cCur;
+													break;
+												case '>':
+													if (isset($cCur[$m[1]]) && $cCur[$m[1]] !== null && $cCur[$m[1]] > floatval($m[4]))
+														$nCur[] = $cCur;
+													break;
+												case '>=':
+													if (isset($cCur[$m[1]]) && $cCur[$m[1]] !== null && $cCur[$m[1]] >= floatval($m[4]))
+														$nCur[] = $cCur;
+													break;
+												case '<':
+													if (isset($cCur[$m[1]]) && $cCur[$m[1]] !== null && $cCur[$m[1]] < floatval($m[4]))
+														$nCur[] = $cCur;
+													break;
+												case '<=':
+													if (isset($cCur[$m[1]]) && $cCur[$m[1]] !== null && $cCur[$m[1]] <= floatval($m[4]))
+														$nCur[] = $cCur;
+													break;
+											}
+											
 									}
 								}
-							}
 								
-							if ($cur === null)
-								break;
+								// attribute matching
+								else if ($cur !== null && preg_match('#^([a-z]+)!=(.*?)$#i', $cAttrBit, $m)){
+										
+									$nCur = array();
+									$isAssoc = is_array($cur) && array_key_exists(0, $cur);
+									foreach ($isAssoc ? $cur : array($cur) as $cCur)
+										if (isset($cCur[$m[1]]) && $cCur[$m[1]] !== null && $cCur[$m[1]] != $m[2])
+											$nCur[] = $cCur;
+								} else
+									continue;
+									
+								if ($nCur || $cAttrBitsI == count($cAttrBits) - 1){
+									$cur = $nCur;
+									if (!$isAssoc)
+										$cur = $cur ? $cur[0] : null;
+									break;
+								}
+							}
 						}
+							
+						if ($cur === null)
+							break;
 					}
-				}	
-				
-				// extract parts only, if specified
-				if (!empty($p->parts)){
-					$isAssoc = is_array($cur) && array_key_exists(0, $cur);
-					$nCurs = array();
-					foreach ($isAssoc ? $cur : array($cur) as $cCur){
-						$nCur = array();
-						foreach ($p->parts as $part)
-							$nCur[$part] = isset($cCur[$part]) ? $cCur[$part] : null;
-						kaosMergeExtractQuery($extractQuery, $cCur);
-						$nCurs[] = $nCur;
-					}
-					$cur = $isAssoc ? $nCurs : ($nCurs ? $nCurs[0] : null);
 				}
-				
-				$ret[$extractId] = $cur;
+			}	
+			
+			// extract parts only, if specified
+			if (!empty($p->parts)){
+				$isAssoc = is_array($cur) && array_key_exists(0, $cur);
+				$nCurs = array();
+				foreach ($isAssoc ? $cur : array($cur) as $cCur){
+					$nCur = array();
+					foreach ($p->parts as $part)
+						$nCur[$part] = isset($cCur[$part]) ? $cCur[$part] : null;
+					merge_extract_objects($extractQuery, $cCur);
+					$nCurs[] = $nCur;
+				}
+				$cur = $isAssoc ? $nCurs : ($nCurs ? $nCurs[0] : null);
 			}
 			
-			if ($save){
-				$this->saveExtract($ret, $query);
-			
-				update('bulletins', array(
-					'status' => 'extracted'
-				), array(
-					'bulletin_schema' => $query['schema'],
-					'date' => $query['date'],
-				));
-			}
+			$ret[$extractId] = $cur;
+		}
+		
+		if ($save){
+			$this->save_extract($ret, $query);
+		
+			update('bulletins', array(
+				'status' => 'extracted'
+			), array(
+				'bulletin_schema' => $query['schema'],
+				'date' => $query['date'],
+				'external_id' => null,
+			));
 		}
 		return $ret;
 	}
 	
 	function preview($obj, $query){
-		global $kaosCall;
-		$schemaObj = kaosGetSchema($query['schema']);
+		global $smap;
+		$schemaObj = get_schema($query['schema']);
 		
-		$this->saveExtract($obj, $query);
+		$this->save_extract($obj, $query);
 		
 		foreach ($obj as $extractId => $items){
 			$trs = array();
@@ -234,7 +236,7 @@ class BulletinExtractor {
 							continue;
 							
 						$key = isset($config->var) ? $config->var : $part;
-						$nCur[$part] = isset($cur[$key]) ? (is_string($cur[$key]) ? kaosCutString($cur[$key]) : $cur[$key]) : null;
+						$nCur[$part] = isset($cur[$key]) ? (is_string($cur[$key]) ? make_foldable($cur[$key]) : $cur[$key]) : null;
 						
 						// filter output columns
 						if (!empty($nCur[$part]) && !empty($config->columns)){
@@ -258,7 +260,7 @@ class BulletinExtractor {
 								switch ($tr->type){
 									
 									case 'formatCurrency':
-										$currency = kaosGetCountrySchema($schemaObj->id)->officialCurrencies[0];
+										$currency = get_country_schema($schemaObj->id)->officialCurrencies[0];
 										if (is_array($nCur[$part])){
 											$nCur[$part] = isset($nCur[$part]['amount']) ? $nCur[$part]['amount'] : array_shift($nCur[$part]);
 											if (isset($nCur[$part]['unit']))
@@ -283,7 +285,7 @@ class BulletinExtractor {
 												'date' => !empty($nCur['date']) ? $nCur['date'] : (!empty($cur['date']) ? $cur['date'] : (isset($query['date']) ? $query['date'] : null)),
 											);
 											
-											$val = '<a target="_blank" href="'.kaosGetBulletinUrl($args).'">'.$val.'</a>';
+											$val = '<a target="_blank" href="'.url($args).'">'.$val.'</a>';
 										}
 										
 										$nCur[$part] = $val;
@@ -333,7 +335,7 @@ class BulletinExtractor {
 								}
 					}
 					//echo 'nCur: ';
-					//kaosJSON($nCur);
+					//print_json($nCur);
 					$trs[] = $nCur;
 				}
 			}
@@ -344,11 +346,11 @@ class BulletinExtractor {
 					if ($part[0] != '_')
 						$th[] = is_object($config) && !empty($config->title) ? $config->title : $part;
 
-				echo '<div class="kaos-extract-preview-table">';
-				kaosPrintTable($trs, $th);
+				echo '<div class="extract-preview-table">';
+				print_table($trs, $th);
 				echo '</div>';
 				
-				$kaosCall['collapseAPIReturn'] = true;
+				$smap['collapseAPIReturn'] = true;
 			}
 				
 				/*
@@ -359,9 +361,9 @@ class BulletinExtractor {
 		}
 	}
 
-	function saveExtract($obj, $query){
-		$schemaObj = kaosGetSchema($query['schema']);
-		$countrySchema = kaosGetCountrySchema($schemaObj);
+	function save_extract($obj, $query){
+		$schemaObj = get_schema($query['schema']);
+		$countrySchema = get_country_schema($schemaObj);
 		
 		if (!empty($_GET['filter']))
 			return;
@@ -371,16 +373,16 @@ class BulletinExtractor {
 		// clean extracted precepts and statuses from same bulletin and date
 
 		if (!empty($_GET['precept']) && is_numeric($_GET['precept'])){
-			query('DELETE s FROM bulletins AS b LEFT JOIN bulletin_uses_bulletin AS bb ON b.id = bb.bulletin_in LEFT JOIN bulletins AS b_id ON bb.bulletin_id = b_id.id LEFT JOIN precepts AS p ON b_id.id = p.bulletin_id LEFT JOIN statuses AS s ON p.id = s.precept_id WHERE b.bulletin_schema = %s AND b.date = %s AND p.id = %s', array($query['schema'], $query['date'], $_GET['precept']));
-			query('DELETE p FROM bulletins AS b LEFT JOIN bulletin_uses_bulletin AS bb ON b.id = bb.bulletin_in LEFT JOIN bulletins AS b_id ON bb.bulletin_id = b_id.id LEFT JOIN precepts AS p ON b_id.id = p.bulletin_id WHERE b.bulletin_schema = %s AND b.date = %s AND p.id = %s', array($query['schema'], $query['date'], $_GET['precept']));
+			query('DELETE s FROM bulletins AS b LEFT JOIN precepts AS p ON b.id = p.bulletin_id LEFT JOIN statuses AS s ON p.id = s.precept_id WHERE b.bulletin_schema = %s AND b.date = %s AND p.id = %s', array($query['schema'], $query['date'], $_GET['precept']));
+			query('DELETE p FROM bulletins AS b LEFT JOIN precepts AS p ON b.id = p.bulletin_id WHERE b.bulletin_schema = %s AND b.date = %s AND p.id = %s', array($query['schema'], $query['date'], $_GET['precept']));
 		
 		} else {
-			query('DELETE s FROM bulletins AS b LEFT JOIN bulletin_uses_bulletin AS bb ON b.id = bb.bulletin_in LEFT JOIN bulletins AS b_id ON bb.bulletin_id = b_id.id LEFT JOIN precepts AS p ON b_id.id = p.bulletin_id LEFT JOIN statuses AS s ON p.id = s.precept_id WHERE b.bulletin_schema = %s AND b.date = %s', array($query['schema'], $query['date']));
-			query('DELETE p FROM bulletins AS b LEFT JOIN bulletin_uses_bulletin AS bb ON b.id = bb.bulletin_in LEFT JOIN bulletins AS b_id ON bb.bulletin_id = b_id.id LEFT JOIN precepts AS p ON b_id.id = p.bulletin_id WHERE b.bulletin_schema = %s AND b.date = %s', array($query['schema'], $query['date']));
+			query('DELETE s FROM bulletins AS b LEFT JOIN precepts AS p ON b.id = p.bulletin_id LEFT JOIN statuses AS s ON p.id = s.precept_id WHERE b.bulletin_schema = %s AND b.date = %s', array($query['schema'], $query['date']));
+			query('DELETE p FROM bulletins AS b LEFT JOIN precepts AS p ON b.id = p.bulletin_id WHERE b.bulletin_schema = %s AND b.date = %s', array($query['schema'], $query['date']));
 
 		}
 		
-		//echo 'saving with query: '.kaosJSON($query, false).'<br>';
+		//echo 'saving with query: '.print_json($query, false).'<br>';
 		
 		// IMPROVE: hook into the parser instead? (and build the table from "_type" attribute)
 		foreach ($obj as $extractId => $items){
@@ -388,7 +390,7 @@ class BulletinExtractor {
 			foreach ($items as $cur){
 				// will stop if aborted
 				
-				if (KAOS_DEV_REDUCE_ENTITIES && $curI >= KAOS_DEV_REDUCE_ENTITIES)
+				if (DEV_REDUCE_ENTITIES && $curI >= DEV_REDUCE_ENTITIES)
 					break;
 
 				$curI++;
@@ -398,23 +400,23 @@ class BulletinExtractor {
 				if (empty($cur['schema']))
 					$cur['schema'] = $schemaObj->id;
 				
-				kaosMergeExtractQuery($query, $cur);
+				merge_extract_objects($query, $cur);
 
 				//echo (!empty($cur['id']) ? 'id '.$cur['id'] : 'no id').' / ';
 				//echo (!empty($cur['date']) ? 'date '.$cur['date'] : 'no date').' / ';
 
 				if (!empty($cur['id']))	
-					$bulletin_id = get('SELECT id FROM bulletins WHERE bulletin_schema = %s AND external_id = %s', array($cur['schema'], $cur['id']));
+					$bulletin_id = get_var('SELECT id FROM bulletins WHERE bulletin_schema = %s AND external_id = %s', array($cur['schema'], $cur['id']));
 				else if (!empty($cur['date']))
-					$bulletin_id = get('SELECT id FROM bulletins WHERE bulletin_schema = %s AND date = %s', array($cur['schema'], $cur['date']));
+					$bulletin_id = get_var('SELECT id FROM bulletins WHERE bulletin_schema = %s AND date = %s', array($cur['schema'], $cur['date']));
 				else {
-					echo 'missing bulletin_id or bulletin_date in extractor: '.kaosJSON($cur, false).'<br>';
+					echo 'missing bulletin_id or bulletin_date in extractor: '.print_json($cur, false).'<br>';
 					continue;
 				}
 					
 				
 				if (!$bulletin_id){
-					echo 'missing bulletin_id in extractor: '.kaosJSON($cur, false).'<br>';
+					echo 'missing bulletin_id in extractor: '.print_json($cur, false).'<br>';
 					continue;
 				}
 				//echo 'inserting for bulletin_id '.$bulletin_id.'<br>';
@@ -448,7 +450,7 @@ class BulletinExtractor {
 					
 				if (empty($nCur['related'])){ // empty($nCur['amount']) || 
 					//echo "NO RELATED";
-					//kaosJSON($nCur);
+					//print_json($nCur);
 					//echo '<br>';
 					continue;
 				}
@@ -460,16 +462,16 @@ class BulletinExtractor {
 				}
 				*/
 				
-				if (!($country = kaosGetCountrySchema($schemaObj->id)->id))
+				if (!($country = get_country_schema($schemaObj->id)->id))
 					die('bad country in extractor');
 					
 				$issuingE = !empty($nCur['issuing']) ? $nCur['issuing'] : array(array(
-					'name' => kaosGetSchema($schemaObj->providerId)->name,
+					'name' => get_schema($schemaObj->providerId)->name,
 					'type' => 'institution'
 				));
 				if (empty($issuingE)){
 					echo "NO ISSUING";
-					kaosJSON($nCur);
+					print_json($nCur);
 					echo '<br>';
 					continue;
 				}
@@ -485,12 +487,12 @@ class BulletinExtractor {
 //						continue;
 						
 					echo 'bad issuing entity: <br>';
-					kaosJSON($issuingE);
-					kaosJSON($cur);
+					print_json($issuingE);
+					print_json($cur);
 					die();
 				}
 				
-				$issuing = insertGetEntity(array(
+				$issuing = insertget_entity(array(
 					'name' => $issuingE['name'],
 					'type' => $issuingE['type'],
 					'country' => $country,
@@ -503,10 +505,10 @@ class BulletinExtractor {
 				$p = array(
 					'bulletin_id' => $bulletin_id,
 					'issuing_id' => $issuing,
-					'title' => !empty($nCur['title']) ? kaosArrayToStr($nCur['title']) : null,
-					'text' => kaosArrayToStr($nCur['text']),
+					'title' => !empty($nCur['title']) ? array_to_str($nCur['title']) : null,
+					'text' => array_to_str($nCur['text']),
 				);
-				$pid = insertGetPrecept($p);
+				$pid = insertget_precept($p);
 				
 				if (!$pid)
 					die('cant insert precept: '.print_r($p, true));
@@ -524,7 +526,7 @@ class BulletinExtractor {
 							'subtype' => $related['subtype'],
 							'country' => $country,
 						);
-						$related_id = insertGetEntity($e);
+						$related_id = insertget_entity($e);
 
 						if (!$related_id)
 							die('cant insert related: '.print_r($related, true));
@@ -544,7 +546,7 @@ class BulletinExtractor {
 								'subtype' => isset($target['subtype']) ? $target['subtype'] : null,
 								'country' => $country,
 							);
-							$ctarget = insertGetEntity($e);
+							$ctarget = insertget_entity($e);
 
 							if (!$ctarget)
 								die('cant insert target entity: '.print_r($e, true).' #1');
@@ -559,7 +561,7 @@ class BulletinExtractor {
 					foreach ($updates as $u){
 						/*
 						if (!empty($u['_type']) && $u['_type'] != 'absorb'){
-							kaosJSON($u);
+							print_json($u);
 							die();
 						}*/
 						
@@ -574,9 +576,9 @@ class BulletinExtractor {
 								/* TODO: geoloc on the fly or in a different spider? (anyway, go through filter 'location_lint')
 								 * 
 								 * if ($u['_type'] == 'location'){
-									$loc = kaosHereComConvertLocation($u['note'], $countrySchema);
+									$loc = herecom_convert_location($u['note'], $countrySchema);
 									if ($loc)
-										$u['note'] = kaosSaveLocation($loc);
+										$u['note'] = insert_location($loc);
 								}*/
 								break;
 						}
@@ -623,7 +625,7 @@ class BulletinExtractor {
 								if (is_array($a) && count($a) == 1 && isset($a['value']))
 									$a = $a['value'];
 								
-								if ($a && ($amount = kaosConvertAmount($a, $schemaObj->id)))
+								if ($a && ($amount = convert_amount($a, $schemaObj->id)))
 									$amountIds[] = insert('amounts', $amount);
 							}
 
@@ -641,7 +643,7 @@ class BulletinExtractor {
 										'subtype' => $target['subtype'],
 										'country' => $country,
 									);
-									$ctarget = insertGetEntity($e);
+									$ctarget = insertget_entity($e);
 
 									if (!$ctarget)
 										die('cant insert target entity: '.print_r($e, true).' #4');
@@ -656,7 +658,7 @@ class BulletinExtractor {
 							
 							
 							//echo 'targets: ';
-							//kaosJSON($ctargets);
+							//print_json($ctargets);
 							
 							foreach ($ctargets as $target){
 
@@ -668,8 +670,8 @@ class BulletinExtractor {
 										'action' => !empty($u['_action']) ? $u['_action'] : (!empty($nCur['_action']) ? $nCur['_action'] : 'new'),
 										'amount' => $amountId,
 										'related_id' => $related['id'],
-										'contract_type_id' => !empty($u['type']) ? addGetOption('contractType', $u['type']) : null,
-										'sector_id' => !empty($u['sector']) ? addGetOption('sector', $u['sector']) : null,
+										'contract_type_id' => !empty($u['type']) ? addget_option('contractType', $u['type']) : null,
+										'sector_id' => !empty($u['sector']) ? addget_option('sector', $u['sector']) : null,
 										'note' => !empty($u['note']) ? $u['note'] : null,
 									);
 									
@@ -680,7 +682,7 @@ class BulletinExtractor {
 										foreach (is_array($u['service']) ? $u['service'] : array($u['service']) as $service)
 											insert('status_has_service', array(
 												'status_id' => $sid,
-												'service_id' => addGetOption('service', $service)
+												'service_id' => addget_option('service', $service)
 											));
 								}
 							}
@@ -693,13 +695,13 @@ class BulletinExtractor {
 	}	
 }
 
-function insertGetEntity($e){
+function insertget_entity($e){
 	if (empty($e['name']) || empty($e['type']) || empty($e['country']))
 		return false;
 		
 	// TODO: add lock wait to not get duplicated entities
 		
-	$e['name'] = lintName($e['name']);
+	$e['name'] = sanitize_name($e['name']);
 	
 	// session cache
 	static $cache = array();
@@ -708,19 +710,19 @@ function insertGetEntity($e){
 	if (isset($cache[$key]))
 		return $cache[$key];
 		
-	$e = kaosLintPerson($e);
+	$e = sanitize_person($e);
 	
 	if (!empty($e['first_name']))
-		$e['first_name'] = lintName($e['first_name']);
+		$e['first_name'] = sanitize_name($e['first_name']);
 		
-	$subtype = !empty($e['subtype']) ? queryPrepare(' AND subtype = %s', $e['subtype']) : '';
-	$first_name = !empty($e['first_name']) ? queryPrepare(' AND first_name = %s', $e['first_name']) : ' AND first_name IS NULL';
+	$subtype = !empty($e['subtype']) ? prepare(' AND subtype = %s', $e['subtype']) : '';
+	$first_name = !empty($e['first_name']) ? prepare(' AND first_name = %s', $e['first_name']) : ' AND first_name IS NULL';
 	
-	$q = queryPrepare('SELECT id FROM entities WHERE country = %s AND type = %s', array($e['country'], $e['type']));
-	$qname = queryPrepare(' AND name = %s', $e['name']);
+	$q = prepare('SELECT id FROM entities WHERE country = %s AND type = %s', array($e['country'], $e['type']));
+	$qname = prepare(' AND name = %s', $e['name']);
 	
 	//echo 'QUERY: '.$q.$subtype.$qname.$first_name.'<br>';
-	$eid = get($q.$subtype.$qname.$first_name);
+	$eid = get_var($q.$subtype.$qname.$first_name);
 
 	$name = $e['name'].(!empty($e['first_name']) ? ' '.$e['first_name'] : '');
 	
@@ -728,27 +730,26 @@ function insertGetEntity($e){
 	
 		$eid = insert('entities', $e + array(
 			'fetched' => date('Y-m-d H:i:s'),
-			'keywords' => cleanKeywords($name),
-			'slug' => kaosGetSlug('entities', 'slug', $name, 200),
+			'keywords' => sanitize_keywords($name),
+			'slug' => generate_slug('entities', 'slug', $name, 200),
 		));
 		
-		if (KAOS_IS_CLI)
-			kaosPrintLog('inserted entity '.$name, array('color' => 'grey'));
+		if (IS_CLI)
+			print_log('inserted '.$e['type'].' "'.$name.'"', array('color' => 'grey'));
 	
-	} else if (KAOS_IS_CLI)
-		kaosPrintLog('found entity '.$name, array('color' => 'grey'));
+	} else if (IS_CLI)
+		print_log('found '.$e['type'].' '.$name, array('color' => 'grey'));
 	
 	// store to cache
 	$cache[$key] = $eid;
 	return $eid;
 }
 
-
-function kaosGetObjPath($bit, $cur, &$extractQuery){
+function get_object_path($bit, $cur, &$extractQuery){
 	//if (isset($cur['id']))
 	//	echo 'getobjpath id: '.$cur['id'].'<br>';
 		
-	$extractQuery = kaosMergeExtractQuery($extractQuery, $cur);
+	$extractQuery = merge_extract_objects($extractQuery, $cur);
 	
 	$ret = array();
 	if (is_object($cur))
@@ -762,11 +763,11 @@ function kaosGetObjPath($bit, $cur, &$extractQuery){
 	}
 	if (is_object($cur) || is_array($cur))
 		foreach ($cur as $v){
-			$ret = array_merge($ret, kaosGetObjPath($bit, $v, $extractQuery));
+			$ret = array_merge($ret, get_object_path($bit, $v, $extractQuery));
 		}
 
 	foreach ($ret as &$r)
-		$extractQuery = kaosMergeExtractQuery($extractQuery, $r);
+		$extractQuery = merge_extract_objects($extractQuery, $r);
 	unset($r);
 		
 
@@ -793,7 +794,7 @@ function kaosGetObjPath($bit, $cur, &$extractQuery){
 
 
 	
-function kaosMergeExtractQuery($extractQuery, &$ccur){
+function merge_extract_objects($extractQuery, &$ccur){
 	if (is_array($ccur)){
 	
 	//	if (isset($ccur['id']))
