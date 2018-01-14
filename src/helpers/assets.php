@@ -58,7 +58,7 @@ function print_scss_tags(){
 		$date = $date ? max(filemtime($p), $date) : filemtime($p);
 	}
 	
-	$scssName = 'smap-'.(IS_DEBUG ? implode('+', array_keys($path)).'-'.$formatter : 'all').'-'.$date.'-'.ASSETS_INC.'.css';
+	$scssName = 'smap-'.implode('+', array_keys($path)).'-'.$formatter.'-'.$date.'-'.ASSETS_INC.'.css';
 	$dest = get_tmp_folder().'/'.$scssName;
 
 	// generate css if dest missing or dest's modification time is earlier than max of scss's modification times.
@@ -167,7 +167,7 @@ function print_js_tags(){
 		$date = $date ? max(filemtime($path), $date) : filemtime($path);
 	}
 	
-	$jsName = 'smap-'.(IS_DEBUG ? implode('+', array_keys($js_ids)) : 'all').'-'.$date.'-'.ASSETS_INC.'.js';
+	$jsName = 'smap-'.implode('+', array_keys($js_ids)).'-'.$date.'-'.ASSETS_INC.'.js';
 	$dest = get_tmp_folder().'/'.$jsName;
 
 	// generate css if dest missing or dest's modification time is earlier than max of scss's modification times.
