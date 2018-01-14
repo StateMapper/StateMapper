@@ -38,10 +38,8 @@ StateMapper might work just fine on any [Debian-based](https://www.debian.org/de
 
 4. Enable Apache's mod_rewrite: *(replace ```www-data``` and ```/var/www/html``` if convenient)*
    ```bash
-   sudo a2enmod rewrite		# enable mod_rewrite
-   sudo a2enmod cache		# enable mod_cache
-   sudo a2enmod headers		# enable mod_headers
-   sudo service apache2 restart 	# restart Apache
+   sudo a2enmod rewrite cache headers expires   # enable Apache modules
+   sudo service apache2 restart 				# restart Apache
    ```
    
    If mod_rewrite is still not working, try editing ```/etc/apache2/apache2.conf``` to set ```AllowOverride``` to ```All``` inside of ```<Directory /var/www/>```. Then restart Apache again.

@@ -141,6 +141,7 @@ Helpers function are files holding all sorts of useful functions for many tasks.
 | fetch | remote URL fetching |
 | urls | URL/permalinks helpers |
 | seo | search engine optimization (SEO) |
+| images | images optimization (still under development, not called yet) |
 | time | time/duration/date functions |
 | db | database and query handler |
 | bulletins | bulletin helpers |
