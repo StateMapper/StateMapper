@@ -158,7 +158,7 @@ function print_js_tags(){
 		
 	if (IS_DEBUG || is_admin()){
 		foreach ($js_ids as $js)
-			echo '<script type="text/javascript" async src="'.ASSETS_URL.'/'.$js.'"></script>';
+			echo '<script type="text/javascript" src="'.ASSETS_URL.'/'.$js.'"></script>';
 		return;
 	}
 		
@@ -203,5 +203,5 @@ function print_js_tags(){
 '.$str);
 	} 
 	
-	echo '<script type="text/javascript" src="'.get_tmp_url().'/'.$jsName.'"></script>';
+	echo '<script type="text/javascript" async src="'.get_tmp_url().'/'.$jsName.'"></script>';
 }

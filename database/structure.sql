@@ -71,7 +71,7 @@ CREATE TABLE `bulletins` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `cache`
+-- Table structure for table `caches`
 --
 
 /*!40101 SET @saved_cs_client     = @@character_set_client */;

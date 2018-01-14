@@ -57,6 +57,7 @@ function get_map_year_stats($schema, $year){
 		'not_published' => 0,
 		'error' => 0,
 		'fetched' => (!empty($stats['fetched']) ? $stats['fetched'] : 0) + (!empty($stats['extracting']) ? $stats['extracting'] : 0) + (!empty($stats['extracted']) ? $stats['extracted'] : 0),
+		'extracted' => 0,
 	);
 	
 	/*static $acc = 0;
