@@ -435,7 +435,7 @@ function query_statuses($query){
 		'id' => null, // entity ID
 		'ids' => array(),
 		'date' => null,
-		'include_other_names' => false,
+		'include_other_names' => true,
 		'target' => null,
 		'related' => null,
 		'issuing' => null,
