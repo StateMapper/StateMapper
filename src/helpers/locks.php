@@ -45,3 +45,16 @@ function unlock($key){
 	if (!empty($key))
 		query('DELETE FROM locks WHERE target = %s', array($key));
 }
+
+add_action('clean_tables', 'clean_locks');
+function clean_locks($all){
+	static $lastCleaned = null;
+	
+	if ($all)
+		query('DELETE FROM locks');
+	
+	else if (!$lastCleaned || $lastCleaned < time() - 60){ // clean every minute top
+		$lastCleaned = time();
+		query('DELETE FROM locks WHERE created < %s', array(date('Y-m-d H:i:s', time() - (max(MAX_EXECUTION_TIME, 900) + 60)))); // clean after max(MAX_EXECUTION_TIME, 15min) + 1 minute
+	}
+}

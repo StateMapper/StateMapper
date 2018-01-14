@@ -96,12 +96,11 @@ class BulletinParser {
 
 		set_bulletin_fetched($bulletin, $query);
 		
-		// save to parsed cache
-		$bulletinFetcher = new BulletinFetcher();
-		
 		if (!USE_PROCESSED_FILE_CACHE)
 			return $parsed;
 		
+		// save to parsed cache
+		$bulletinFetcher = new BulletinFetcher();
 		$saved = $bulletinFetcher->save_processed_content($parsed, '.parsed.json', $query);
 		
 		return is_error($saved) ? $saved : $parsed;

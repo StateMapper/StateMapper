@@ -207,7 +207,9 @@ while (true){
 			define('WORKER_ID', $i);
 			
 			if (KAOS_SPIDER_ID)
-				update('workers', array('status' => 'active'), array(
+				update('workers', array(
+					'status' => 'active',
+				), array(
 					'spider_id' => KAOS_SPIDER_ID, 
 					'type' => 'fetcher',
 					'date' => $query['date'],

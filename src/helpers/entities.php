@@ -497,7 +497,7 @@ function query_statuses($query){
 			LEFT JOIN entities AS e ON p.issuing_id = e.id
 			'.$join.'
 
-			WHERE s.target_id IN ( '.implode(', ', $query['ids']).' )'.$where.'
+			WHERE s.target_id IN ( '.implode(', ', $query['ids']).' ) '.$where.'
 			GROUP BY s.id
 			ORDER BY '.$order.'
 			LIMIT '.$limit.'
@@ -738,6 +738,10 @@ function print_statuses($statuses, $target = null, $headerEntityId = null, $defa
 		if (!$printAsTopLevel){
 		?>
 		<div class="status-inline">
+			<?php } else { ?>
+				
+				<div class="entity-stat" data-smap-related="<?= esc_json(array('type' => $p['_type'], 'action' => $p['_action'])) ?>">
+				
 			<?php } ?>
 			<!-- <div class="status-header-inline">
 				<div class="status-debug debug">Status #<?= $p['status_id'] ?>: <?= $p['_type'].' / '.$p['_action'] ?></div>
@@ -813,11 +817,8 @@ function print_statuses($statuses, $target = null, $headerEntityId = null, $defa
 					</div>
 				</div>
 			</div>
-			<?php
-			if (!$printAsTopLevel){ ?>
 		</div>
 		<?php
-		}
 	}
 }
 
@@ -846,24 +847,38 @@ function print_entity_stats($stats, $target, $query){
 
 			$item = '<div class="entity-stat-wrap'.($s['count'] <= 5 ? ' entity-stat-children-filled entity-stat-children-open' : '').'">';
 			
-			$item .= '<div class="entity-stat" data-smap-related="'.esc_json(array('type' => $s['_type'], 'action' => $s['_action'])).'">';
-
+			$statuses = array();
+			$cquery = array(
+				'type' => $s['_type'], 
+				'action' => $s['_action'],
+				'date' => $s['date'],
+			
+			) + ($s['rel'] == 'target' ? array(
+				'target' => true
+			
+			) : array(
+				'related' => true
+			
+			)) + $query;
+					
 			if ($s['count'] < 2){
-				$statuses = query_statuses(array('type' => $s['_type'], 'action' => $s['_action']) + ($s['rel'] == 'target' ? array('target' => true) : array('related' => true)) + $query);
+				$statuses = query_statuses($cquery);
+
 				if (empty($statuses))
 					print_inline_error('no status returned ( < 2)');
 				if (count($statuses) >= 2)
 					print_inline_error('bad status count');
 			}
-
+			
 			if ($s['count'] < 2 && $statuses){
 				ob_start();
 				print_statuses($statuses, $target, $query['id'], array('date' => $date), true);
 				$item .= ob_get_clean();
-
-				$item .= '</div>'; // close the entity-stat div
 				
 			} else {
+				
+				$item .= '<div class="entity-stat" data-smap-related="'.esc_json(array('type' => $s['_type'], 'action' => $s['_action'])).'">';
+			
 				$item .= '<div class="status-title"><i class="status-icon fa fa-'.$icon.'"></i> '.strtr($config->stats, array(
 					'[count]' => '<span class="status-count">'.number_format($s['count'], 0).'</span>',
 					'[amount]' => '<span class="status-amount">'.number_format($s['amount']/100, 2).' '.$s['unit'].'</span>', // could be calculated better....
@@ -872,9 +887,11 @@ function print_entity_stats($stats, $target, $query){
 				$item .= '</div>'; // close the entity-stat div
 
 				if ($s['count'] <= 5){
-					$statuses = query_statuses(array('type' => $s['_type'], 'action' => $s['_action']) + ($s['rel'] == 'target' ? array('target' => true) : array('related' => true)) + $query);
+					$statuses = query_statuses($cquery);
+					
 					if (empty($statuses))
 						print_inline_error('no status returned ( <= 5)');
+						
 					ob_start();
 					print_statuses($statuses, $target, $query['id'], array('date' => $date));
 					$item .= '<div class="entity-stat-children-holder"><div class="entity-stat-children">'.ob_get_clean().'</div></div>';

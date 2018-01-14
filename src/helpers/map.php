@@ -103,14 +103,14 @@ function get_map_square($date, &$bulletinStatus, &$monthHas, &$monthTotal, $dbst
 		$monthTotal++;
 		
 	if ($bulletinStatus == 'none')
-		$squareInner = '0';
+		$squareInner = 0;
 	else if ($bulletin){
 		
 		if (in_array($bulletinStatus, array('extracting', 'extracted')))
-			$squareInner = $bulletinCount = $cdbstats ? $cdbstats['precepts'] : 0;
+			$squareInner = $bulletinCount = $cdbstats ? format_number_nice($cdbstats['precepts'], false) : 0;
 		
 		else
-			$squareInner = $bulletinCount = $cdbstats ? $cdbstats['count'] : 0;
+			$squareInner = $bulletinCount = $cdbstats ? format_number_nice($cdbstats['count'], false) : 0;
 		
 	} else if ($has)
 		$squareInner = $mode == 'fetch' ? 1 : '';
@@ -119,11 +119,22 @@ function get_map_square($date, &$bulletinStatus, &$monthHas, &$monthTotal, $dbst
 		
 	if ($date > date('Y-m-d')) // future
 		$bulletinStatus = 'not_published';
+	
+	// build tooltip	
+	$title = date_i18n(_('l jS \o\f F Y'), strtotime($date)).'<br>';
+	$title .= '<b>'.strtoupper(str_replace('_', ' ', $bulletinStatus)).'</b>';
+	
+	if (!empty($cdbstats['precepts']))
+		$title .= '<br><br>Precepts count: '.number_format($cdbstats['precepts']);
+	
+	// show errors in tooltip
+	if ($bulletin && $bulletin['last_error'])
+		$title .= '<br><br><b>LAST ERROR:</b> '.$bulletin['last_error'];
 
 	return '<a href="'.url(array(
 		'schema' => $smap['query']['schema'], 
 		'date' => $date
-	), 'fetch').'" title="'.date_i18n(_('l jS \o\f F Y'), strtotime($date)).'<br><b>Status: '.strtoupper(str_replace('_', ' ', $bulletinStatus)).'</b>'.($bulletin && $bulletin['last_error'] ? '<br><br><b>LAST ERROR:</b> '.$bulletin['last_error'] : '').'" class="map-fetched-ind map-fetched-ind-'.$bulletinStatus.'">'.$squareInner.'</a>';
+	), 'fetch').'" title="'.esc_attr($title).'" class="map-fetched-ind map-fetched-ind-'.$bulletinStatus.'">'.$squareInner.'</a>';
 	
 	// TODO: could/should convert status to a human sentence (NOT_PUBLISHED => Not expected)
 }

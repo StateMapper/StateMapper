@@ -22,11 +22,14 @@ if (!defined('BASE_PATH'))
 	die();
 
 
-function format_bytes($size, $precision = 0, $sep = ' '){ 
-    $base = log($size, 1024);
+function format_bytes($size, $precision = 0, $sep = ' ', $base_num = 1024, $remove_decimal_if_big = true){ 
+    $base = log($size, $base_num);
     $suffixes = array('', 'K', 'M', 'G', 'T');   
-
-    return round(pow(1024, $base - floor($base)), $precision) . $sep . $suffixes[floor($base)];
+    
+    $integer = pow($base_num, $base - floor($base));
+    if ($remove_decimal_if_big && $integer >= 100)
+		$precision = 0;
+    return number_format($integer, $precision) . $sep . $suffixes[floor($base)];
 } 
 
 

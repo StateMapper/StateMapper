@@ -38,7 +38,6 @@ function insert_bulletin($query){
 	if (empty($query['format']))
 		return new SMapError('missing format in insert_bulletin');
 		
-		
 	if (!($id = get_bulletin_id($query)))
 		$id = insert('bulletins', array(
 			'bulletin_schema' => $query['schema'],
@@ -65,6 +64,26 @@ function set_bulletin_parsed($bulletin, $query){
 		return query('UPDATE bulletins SET status = "parsed", parsed = %s, format = %s WHERE bulletin_schema = %s AND date = %s AND external_id = %s AND parsed IS NULL', array(date('Y-m-d H:i:s'), $bulletin['format'], $query['schema'], $query['date'], $query['id']));
 	else
 		return query('UPDATE bulletins SET status = "parsed", parsed = %s, format = %s WHERE bulletin_schema = %s AND date = %s AND external_id IS NULL AND parsed IS NULL', array(date('Y-m-d H:i:s'), $bulletin['format'], $query['schema'], $query['date']));
+}
+
+function set_bulletin_extracting($query){
+	update('bulletins', array(
+		'status' => 'extracting'
+	), array(
+		'bulletin_schema' => $query['schema'],
+		'date' => $query['date'],
+		'external_id' => null,
+	));
+}
+
+function set_bulletin_extracted($query){
+	update('bulletins', array(
+		'status' => 'extracted'
+	), array(
+		'bulletin_schema' => $query['schema'],
+		'date' => $query['date'],
+		'external_id' => null,
+	));
 }
 
 function set_bulletin_none($query){
@@ -146,7 +165,8 @@ function repair_bulletin($schema, $date){
 		if (IS_CLI)
 			print_log('document '.$filePath.' deleted from local disk', array('color' => 'red'));
 	}
-
+	
+	// keep track of how many fixes this bulletin had
 	query('UPDATE bulletins SET fixes = fixes + 1 WHERE bulletin_schema = %s AND date = %s LIMIT 1', array($schema, $date));
 }
 

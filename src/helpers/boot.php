@@ -49,6 +49,7 @@ require 'currency.php';		// currencies handling
 require 'fetch.php';		// remote URL fetching
 require 'urls.php';			// URL/permalinks helpers
 require 'seo.php';			// search engine optimization (SEO)
+//require 'images.php';		// images optimization (still under development, not called yet)
 require 'time.php';			// time/duration/date functions
 require 'db.php';			// database and query handler
 require 'bulletins.php';	// bulletin helpers

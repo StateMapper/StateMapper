@@ -133,9 +133,10 @@ function get_amount_pattern($currency = true){
 	return '((?:[0-9\s]{1,3})(?:[,\.\s]?[0-9\s]{3})*(?:[\.,][0-9\s]+)?)'.($currency ? '(\s*(?:'.implode('|', $labels).'))?' : '');
 }
 
-function format_number_nice($count){
+function format_number_nice($count, $decimals = true){
 	if ($count < 1000)
 		return number_format($count, 0);
+	return format_bytes($count, 1, '', 1000);
 	$count = $count/1000;
-	return number_format(floor($count), 0).'.'.round(($count - floor($count)) * 10).'k';
+	return number_format(floor($count), 0).($decimals && $count < 100 ? '.'.floor(($count - floor($count)) * 10) : '').'k';
 }

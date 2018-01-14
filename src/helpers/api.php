@@ -56,3 +56,13 @@ function is_rate_limited(){
 function is_api(){
 	return defined('IS_API') && IS_API;
 }
+
+add_action('clean_tables', 'clean_api_rates');
+function clean_api_rates($all){
+		
+	// clear api rates
+	if ($all)
+		query('DELETE FROM api_rates');
+	else
+		query('DELETE FROM api_rates WHERE date < %s', date('Y-m-d H:i:s', strtotime('-'.API_RATE_PERIOD)));
+}

@@ -169,7 +169,10 @@ function update($table, $data = array(), $where = array(), $notWhere = array()){
 	foreach ($notWhere as $k => $v)
 		$w[] = $k.' != '.($v === null ? 'NULL' : "'".mysqli_real_escape_string($conn, $v)."'");
 
-	$query = 'UPDATE '.$table.' SET '.implode(', ', $set).' WHERE '.implode(' AND ', $w);
+	$query = 'UPDATE '.$table.' SET '.implode(', ', $set);
+	if ($w)
+		$query .= ' WHERE '.implode(' AND ', $w);
+		
 	if (!execute_query($conn, $query))
 		return false;
 	return mysqli_affected_rows($conn);
@@ -236,24 +239,5 @@ function clean_tables($all = false){
 	if (IS_INSTALL)
 		return;
 		
-	static $lastCleaned = null;
-	if ($all)
-		query('DELETE FROM locks');
-	
-	else if (!$lastCleaned || $lastCleaned < time() - 60){ // clean every minute top
-		$lastCleaned = time();
-		query('DELETE FROM locks WHERE created < %s', array(date('Y-m-d H:i:s', time() - (max(MAX_EXECUTION_TIME, 900) + 60)))); // clean after max(MAX_EXECUTION_TIME, 15min) + 1 minute
-	}
-	
-	// clear expired caches
-	if ($all)
-		query('DELETE FROM caches');
-	else
-		query('DELETE FROM caches WHERE expire < %s', date('Y-m-d H:i:s'));
-		
-	// clear api rates
-	if ($all)
-		query('DELETE FROM api_rates');
-	else
-		query('DELETE FROM api_rates WHERE date < %s', date('Y-m-d H:i:s', strtotime('-'.API_RATE_PERIOD)));
+	do_action('clean_tables', $all);
 }

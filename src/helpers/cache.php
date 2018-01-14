@@ -35,3 +35,13 @@ function set_cache($key, $value, $cache_duration = '1 day'){
 		'expire' => date('Y-m-d H:i:s', is_numeric($cache_duration) ? time() + $cache_duration : strtotime('+'.$cache_duration, time())),
 	));
 }
+
+add_action('clean_tables', 'clean_caches');
+function clean_caches($all){
+
+	// clear expired caches
+	if ($all)
+		query('DELETE FROM caches');
+	else
+		query('DELETE FROM caches WHERE expire < %s', date('Y-m-d H:i:s'));
+}

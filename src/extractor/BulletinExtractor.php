@@ -34,13 +34,7 @@ class BulletinExtractor {
 			return new SMapError('extractProtocoles not found for '.$this->parsed['schema']);
 			
 		if ($save)
-			update('bulletins', array(
-				'status' => 'extracting'
-			), array(
-				'bulletin_schema' => $query['schema'],
-				'date' => $query['date'],
-				'external_id' => null,
-			));
+			set_bulletin_extracting($query);
 		
 		foreach ($schemaObj->extractProtocoles as $extractId => $p){
 			$extractQuery = $query;
@@ -201,17 +195,9 @@ class BulletinExtractor {
 			$ret[$extractId] = $cur;
 		}
 		
-		if ($save){
+		if ($save)
 			$this->save_extract($ret, $query);
-		
-			update('bulletins', array(
-				'status' => 'extracted'
-			), array(
-				'bulletin_schema' => $query['schema'],
-				'date' => $query['date'],
-				'external_id' => null,
-			));
-		}
+			
 		return $ret;
 	}
 	
@@ -365,14 +351,15 @@ class BulletinExtractor {
 		$schemaObj = get_schema($query['schema']);
 		$countrySchema = get_country_schema($schemaObj);
 		
-		if (!empty($_GET['filter']))
+		if (!IS_CLI && !empty($_GET['filter']))
 			return;
 		
 		ignore_user_abort(true);
 		
 		// clean extracted precepts and statuses from same bulletin and date
 
-		if (!empty($_GET['precept']) && is_numeric($_GET['precept'])){
+		if (!IS_CLI && is_admin() && (!empty($_GET['precept']) && is_numeric($_GET['precept']))){
+			// reparsing one precept.. (experimental)
 			query('DELETE s FROM bulletins AS b LEFT JOIN precepts AS p ON b.id = p.bulletin_id LEFT JOIN statuses AS s ON p.id = s.precept_id WHERE b.bulletin_schema = %s AND b.date = %s AND p.id = %s', array($query['schema'], $query['date'], $_GET['precept']));
 			query('DELETE p FROM bulletins AS b LEFT JOIN precepts AS p ON b.id = p.bulletin_id WHERE b.bulletin_schema = %s AND b.date = %s AND p.id = %s', array($query['schema'], $query['date'], $_GET['precept']));
 		
@@ -691,6 +678,8 @@ class BulletinExtractor {
 				}
 			}
 		}
+
+		set_bulletin_extracted($query);
 		ignore_user_abort(false);
 	}	
 }

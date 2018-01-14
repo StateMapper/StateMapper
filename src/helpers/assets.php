@@ -152,7 +152,7 @@ function print_js_tags(){
 	$date = null;
 	$js_ids = $libs; // include libraries first, in order
 	
-	$js_ids[] = 'js/boot.js'; // boot.js first after frameworks!!
+	$js_ids['boot'] = 'js/boot.js'; // boot.js first after frameworks!!
 	foreach (add_js() as $js) // then custom javascripts
 		$js_ids[$js] = 'js/'.$js.'.js';
 		
