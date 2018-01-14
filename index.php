@@ -73,6 +73,7 @@ global $smap, $smapDebug;
 $smap = array(
 	'begin' => microtime(true),
 	'cliArgs' => !empty($argv) ? array_slice($argv, 1) : null,
+	'page' => null,
 	'query' => array(),
 	'filters' => array(),
 	'query' => array(),

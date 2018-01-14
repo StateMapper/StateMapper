@@ -53,3 +53,6 @@ function is_rate_limited(){
 	return defined('IS_API') && IS_API && API_RATE_LIMIT && IS_CLI && ($ip = get_visitor_ip()) && !is_admin() && (!IS_DEBUG || !empty($_GET['force_rate_limited'])) ? $ip : false;
 }
 
+function is_api(){
+	return defined('IS_API') && IS_API;
+}

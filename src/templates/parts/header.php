@@ -28,14 +28,26 @@ $modes = get_modes();
 $types = get_entity_types();
 if (!empty($smap['entity'])){
 	$fav = $types[$smap['entity']['type']]['icon'];
-} else if ($smap['page'] == 'providers')
-	$fav = $modes['providers']['icon'];
-else if ($smap['page'] == 'ambassadors')
-	$fav = $modes['ambassadors']['icon'];
-else if (in_array($smap['page'], array('bulletin', 'bulletins')))
-	$fav = $modes[$smap['call']]['icon'];
-else if (!empty($smap['filters']['etype']) && isset($types[$smap['filters']['etype']]))
-	$fav = $types[$smap['filters']['etype']]['icon'];
+} else 
+	switch (!empty($smap['page']) ? $smap['page'] : 'browser'){
+		
+		case 'providers':
+			$fav = $modes['providers']['icon'];
+			break;
+
+		case 'ambassadors':
+			$fav = $modes['ambassadors']['icon'];
+			break;
+			
+		case 'bulletin':
+		case 'bulletins':
+			$fav = $modes[$smap['call']]['icon'];
+			break;
+			
+		default:
+			if (!empty($smap['filters']['etype']) && isset($types[$smap['filters']['etype']]))
+				$fav = $types[$smap['filters']['etype']]['icon'];
+	}
 
 
 ?><!DOCTYPE html>

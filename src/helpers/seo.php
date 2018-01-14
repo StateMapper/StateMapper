@@ -149,7 +149,7 @@ function get_page_title($seoTitle = false){
 		if ($title != '')
 			$title .= ' - ';
 		$title .= '$tateMapper';
-		if (IS_API && $smap['page'] != 'api')
+		if (is_api() && $smap['page'] != 'api')
 			$title .= ' API';
 		if (is_home(true) || $smap['page'] == 'api')
 			$title .= ' - '.get_slogan(true);

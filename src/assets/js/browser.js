@@ -202,7 +202,7 @@ $(document).ready(function(){
 		sugg.active = li.addClass('sugg-active-active');
 	}
 	
-	/* stats */
+	/* toggle entry stats (statuses) */
 	$('.entity-stats').on('click', '.entity-stat', function(e){
 		var t = $(this);
 		var related = $(this).smapGetRelated();

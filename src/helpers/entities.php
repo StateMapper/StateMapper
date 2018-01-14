@@ -821,7 +821,6 @@ function print_statuses($statuses, $target = null, $headerEntityId = null, $defa
 	}
 }
 
-
 function print_entity_stats($stats, $target, $query){
 	$labels = get_status_labels();
 	$date = null;
@@ -862,12 +861,15 @@ function print_entity_stats($stats, $target, $query){
 				print_statuses($statuses, $target, $query['id'], array('date' => $date), true);
 				$item .= ob_get_clean();
 
-				$item .= '</div>';
+				$item .= '</div>'; // close the entity-stat div
+				
 			} else {
 				$item .= '<div class="status-title"><i class="status-icon fa fa-'.$icon.'"></i> '.strtr($config->stats, array(
 					'[count]' => '<span class="status-count">'.number_format($s['count'], 0).'</span>',
 					'[amount]' => '<span class="status-amount">'.number_format($s['amount']/100, 2).' '.$s['unit'].'</span>', // could be calculated better....
-				)).' <i class="fa fa-angle-right entity-stat-children-filled-ind" title="Unfold statuses"></i><i class="fa fa-spinner fa-pulse entity-stat-children-loading-ind"></i></div></div>';
+				)).' <i class="fa fa-angle-right entity-stat-children-filled-ind" title="Unfold statuses"></i><i class="fa fa-spinner fa-pulse entity-stat-children-loading-ind"></i></div>';
+				
+				$item .= '</div>'; // close the entity-stat div
 
 				if ($s['count'] <= 5){
 					$statuses = query_statuses(array('type' => $s['_type'], 'action' => $s['_action']) + ($s['rel'] == 'target' ? array('target' => true) : array('related' => true)) + $query);
@@ -880,7 +882,8 @@ function print_entity_stats($stats, $target, $query){
 					$item .= '<div class="entity-stat-children-holder"></div>';
 			}
 
-			$item .= '</div>';
+			$item .= '</div>'; // close entity-stat-wrap div
+			
 			$items[] = $s + array('html' => $item);
 		} else
 			echo 'missing label for '.print_json($s, false).'<br>';
