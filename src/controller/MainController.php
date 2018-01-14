@@ -84,7 +84,7 @@ class MainController {
 				);
 				
 				if ($count >= API_RATE_LIMIT)
-					die_error('API rate exceeded: '.$count.' on '.API_RATE_LIMIT.' within '.API_RATE_PERIOD);
+					die_error('API rate-limit exceeded: '.$count.' on '.API_RATE_LIMIT.' within '.API_RATE_PERIOD);
 				
 				// insert this call
 				insert('api_rates', array(

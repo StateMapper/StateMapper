@@ -24,12 +24,12 @@ if (!defined('BASE_PATH'))
 
 
 function get_cache($key){
-	$cache = get_var('SELECT cache_value FROM cache WHERE cache_key = %s AND expire > %s ORDER BY id DESC', array($key, date('Y-m-d H:i:s')));
+	$cache = get_var('SELECT cache_value FROM caches WHERE cache_key = %s AND expire > %s ORDER BY id DESC', array($key, date('Y-m-d H:i:s')));
 	return $cache ? unserialize($cache) : null;
 }
 
 function set_cache($key, $value, $cache_duration = '1 day'){
-	return insert('cache', array(
+	return insert('caches', array(
 		'cache_value' => serialize($value),
 		'cache_key' => $key,
 		'expire' => date('Y-m-d H:i:s', is_numeric($cache_duration) ? time() + $cache_duration : strtotime('+'.$cache_duration, time())),

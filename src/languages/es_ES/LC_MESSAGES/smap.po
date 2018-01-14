@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: $tateMapper\n"
 "POT-Creation-Date: 2018-01-13 13:08+0100\n"
-"PO-Revision-Date: 2018-01-13 13:10+0100\n"
+"PO-Revision-Date: 2018-01-14 16:08+0100\n"
 "Last-Translator: \n"
 "Language-Team: Ingoberlab <statemapper@riseup.net>\n"
 "Language: es_ES\n"
@@ -595,7 +595,7 @@ msgstr "%s %s recogidas hasta ahora"
 
 #: templates/browser.php:173
 msgid "$tate Search"
-msgstr "$state Buscar"
+msgstr "$tate Buscar"
 
 #: templates/browser.php:175
 msgid "Worldwide, collaborative, public data reviewing and monitoring tool."

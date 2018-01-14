@@ -247,9 +247,9 @@ function clean_tables($all = false){
 	
 	// clear expired caches
 	if ($all)
-		query('DELETE FROM cache');
+		query('DELETE FROM caches');
 	else
-		query('DELETE FROM cache WHERE expire < %s', date('Y-m-d H:i:s'));
+		query('DELETE FROM caches WHERE expire < %s', date('Y-m-d H:i:s'));
 		
 	// clear api rates
 	if ($all)
