@@ -28,10 +28,7 @@ libxml_disable_entity_loader(true); // protect against XEE. See: https://www.owa
 
 // increment to force recaching the project's CSS and JS files
 define('ASSETS_INC', 69);
-
-// backward compatibility
-if (!defined('ALLOW_LOGIN'))
-	define('ALLOW_LOGIN', false);
+define('DEFAULT_RESULTS_COUNT', 77);
 
 // define constants
 define('BASE_PATH', dirname(__FILE__));
@@ -46,8 +43,11 @@ if (file_exists(BASE_PATH.'/config.php')){
 	require BASE_PATH.'/config.sample.php'; 
 	define('IS_INSTALL', true);
 }
-define('DEFAULT_RESULTS_COUNT', 77);
 
+// backward compatibility
+if (!defined('ALLOW_LOGIN'))
+	define('ALLOW_LOGIN', false);
+	
 if (BASE_URL == 'PUT_YOUR_BASE_URL_HERE') // tolerate links without config.php
 	define('REAL_BASE_URL', './');
 else
