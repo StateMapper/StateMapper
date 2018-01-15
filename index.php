@@ -29,6 +29,10 @@ libxml_disable_entity_loader(true); // protect against XEE. See: https://www.owa
 // increment to force recaching the project's CSS and JS files
 define('ASSETS_INC', 69);
 
+// backward compatibility
+if (!defined('ALLOW_LOGIN'))
+	define('ALLOW_LOGIN', false);
+
 // define constants
 define('BASE_PATH', dirname(__FILE__));
 define('APP_PATH', BASE_PATH.'/src');
