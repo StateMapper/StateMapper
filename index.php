@@ -42,7 +42,6 @@ if (file_exists(BASE_PATH.'/config.php')){
 	require BASE_PATH.'/config.sample.php'; 
 	define('IS_INSTALL', true);
 }
-define('ALLOW_LOGIN', IS_DEBUG); // for the moment, only allow login on development
 define('DEFAULT_RESULTS_COUNT', 77);
 
 if (BASE_URL == 'PUT_YOUR_BASE_URL_HERE') // tolerate links without config.php
@@ -89,7 +88,7 @@ include APP_PATH.'/helpers/boot.php';
 if (!defined('LOAD_ONLY_CONFIG') || !LOAD_ONLY_CONFIG){
 	
 	// force the use of SSL
-	if (FORCE_SSL && (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] != 'on')){
+	if (!IS_CLI && (FORCE_SSL && (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] != 'on'))){
 		$ssl_url = preg_replace('#^(https?)(://.*)$#iu', 'https$2', current_url(false));
 		redirect($ssl_url);
 	}

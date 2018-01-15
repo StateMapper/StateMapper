@@ -38,6 +38,7 @@ define('DB_PASS', 'PUT_YOUR_DATABASE_PASS_HERE');
 
 // dev/debug
 define('IS_DEBUG', true); // set to false when in production!
+define('ALLOW_LOGIN', IS_DEBUG); // for the moment, only allow login on development
 define('DEV_REDUCE_ENTITIES', false); // set to 5 to reduce dev time, set to false in production or real rewind mode!!
 define('SMAP_FRONTPAGE_MESSAGE', false); // a static message to show on the homepage
 
