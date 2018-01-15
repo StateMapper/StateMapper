@@ -27,6 +27,7 @@ NICE=19
 
 
 
+# @todo: add rotating log files into /logs
 
 # find out what the Apache user is (to later execute PHP with it)
 APACHE_USER=$(ps -ef | egrep '(httpd|apache2|apache)' 2> /dev/null | grep -v `whoami` 2> /dev/null | grep -v root 2> /dev/null | head -n1 | awk '{print $1}' 2> /dev/null)

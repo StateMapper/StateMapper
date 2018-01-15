@@ -188,7 +188,7 @@ function execute_query($conn, $query, $returnInsertedId = false){
 		$ret = $ret ? mysqli_insert_id($conn) : false;
 
 	$explain = array();
-	if (IS_DEBUG && (IS_CLI || is_admin())){
+	if (!IS_CLI && is_dev()){
 		if ($eRet = mysqli_query($conn, 'EXPLAIN '.$query))
 			while ($eRow = mysqli_fetch_assoc($eRet))
 				$explain[] = $eRow;

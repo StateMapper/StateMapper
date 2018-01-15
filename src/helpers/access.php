@@ -26,6 +26,10 @@ function is_admin(){
 	return IS_CLI || !empty($_SESSION['smap_authed']);
 }
 
+function is_dev(){
+	return is_admin();
+}
+
 function get_visitor_ip(){
 	if (IS_CLI)
 		return 'localhost';
