@@ -230,10 +230,13 @@ function convert_db_engine($newEngine){
 			query('ALTER TABLE '.$t['TABLE_NAME'].' ENGINE="'.$newEngine.'"');
 		} else 
 			echo 'Leaving table "'.$t['TABLE_NAME'].'" with engine '.$t['ENGINE'].'<br>';
-			
+		
+		query('ALTER SCHEMA '.DB_NAME.' DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_general_ci');
+		query('ALTER TABLE '.$t['TABLE_NAME'].' CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci');
     }
     die('done');
 }
+// convert_db_engine('TokuDB');
 
 function clean_tables($all = false){
 	if (IS_INSTALL)

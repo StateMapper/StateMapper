@@ -1,3 +1,8 @@
+-- MySQL dump 10.15  Distrib 10.0.31-MariaDB, for debian-linux-gnu (x86_64)
+--
+-- Host: localhost    Database: statemapper
+-- ------------------------------------------------------
+-- Server version	10.0.31-MariaDB-0ubuntu0.16.04.2
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -26,7 +31,7 @@ CREATE TABLE `amounts` (
   KEY `originalValue` (`originalValue`),
   KEY `value` (`value`),
   KEY `unit` (`unit`)
-) ENGINE=TokuDB AUTO_INCREMENT=48277 DEFAULT CHARSET=latin1 `compression`='tokudb_zlib';
+) ENGINE=TokuDB DEFAULT CHARSET=utf8mb4 `compression`='tokudb_zlib';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +46,7 @@ CREATE TABLE `api_rates` (
   `date` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `ip_and_date` (`ip`(20),`date`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=TokuDB DEFAULT CHARSET=utf8mb4 `compression`='tokudb_zlib';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -67,7 +72,7 @@ CREATE TABLE `bulletins` (
   PRIMARY KEY (`id`),
   KEY `date` (`bulletin_schema`,`date`,`external_id`) USING BTREE,
   KEY `created` (`bulletin_schema`,`created`) USING BTREE
-) ENGINE=TokuDB AUTO_INCREMENT=521256 DEFAULT CHARSET=latin1 `compression`='tokudb_zlib';
+) ENGINE=TokuDB DEFAULT CHARSET=utf8mb4 `compression`='tokudb_zlib';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -79,12 +84,12 @@ CREATE TABLE `bulletins` (
 CREATE TABLE `caches` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `cache_key` varchar(400) NOT NULL,
-  `cache_value` text NOT NULL,
+  `cache_value` mediumtext NOT NULL,
   `expire` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id` (`id`,`expire`),
   KEY `expire` (`expire`)
-) ENGINE=InnoDB AUTO_INCREMENT=634 DEFAULT CHARSET=utf8mb4;
+) ENGINE=TokuDB DEFAULT CHARSET=utf8mb4 `compression`='tokudb_zlib';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -114,7 +119,7 @@ CREATE TABLE `entities` (
   KEY `country_and_subtype` (`country`,`subtype`) USING HASH,
   KEY `type_and_subtype` (`type`,`subtype`) USING HASH,
   KEY `country` (`country`) USING HASH
-) ENGINE=TokuDB AUTO_INCREMENT=138926 DEFAULT CHARSET=latin1 `compression`='tokudb_zlib';
+) ENGINE=TokuDB DEFAULT CHARSET=utf8mb4 `compression`='tokudb_zlib';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -134,7 +139,7 @@ CREATE TABLE `location_cities` (
   UNIQUE KEY `country_id` (`country`,`name`(20)),
   KEY `state_id` (`state_id`),
   KEY `county_id` (`county_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
+) ENGINE=TokuDB DEFAULT CHARSET=utf8mb4 `compression`='tokudb_zlib';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -152,7 +157,7 @@ CREATE TABLE `location_counties` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `country_id` (`country`,`name`(20)),
   KEY `state_id` (`state_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
+) ENGINE=TokuDB DEFAULT CHARSET=utf8mb4 `compression`='tokudb_zlib';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -168,7 +173,7 @@ CREATE TABLE `location_states` (
   `country` varchar(4) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `country_id` (`country`,`name`(20))
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+) ENGINE=TokuDB DEFAULT CHARSET=utf8mb4 `compression`='tokudb_zlib';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -192,7 +197,7 @@ CREATE TABLE `locations` (
   `relevance` smallint(6) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `country_and_label` (`country`,`label`(20))
-) ENGINE=TokuDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1 `compression`='tokudb_zlib';
+) ENGINE=TokuDB DEFAULT CHARSET=utf8mb4 `compression`='tokudb_zlib';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -208,7 +213,7 @@ CREATE TABLE `locks` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `target` (`target`),
   KEY `created` (`created`)
-) ENGINE=TokuDB AUTO_INCREMENT=415 DEFAULT CHARSET=latin1 `compression`='tokudb_zlib';
+) ENGINE=TokuDB DEFAULT CHARSET=utf8mb4 `compression`='tokudb_zlib';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -224,7 +229,7 @@ CREATE TABLE `names` (
   PRIMARY KEY (`id`),
   KEY `name` (`name`),
   KEY `type` (`type`)
-) ENGINE=TokuDB AUTO_INCREMENT=343198 DEFAULT CHARSET=latin1 `compression`='tokudb_zlib';
+) ENGINE=TokuDB DEFAULT CHARSET=utf8mb4 `compression`='tokudb_zlib';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -238,7 +243,7 @@ CREATE TABLE `options` (
   `name` varchar(100) NOT NULL,
   `value` longtext NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=TokuDB AUTO_INCREMENT=76089 DEFAULT CHARSET=latin1 `compression`='tokudb_zlib';
+) ENGINE=TokuDB DEFAULT CHARSET=utf8mb4 `compression`='tokudb_zlib';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -256,7 +261,7 @@ CREATE TABLE `precepts` (
   PRIMARY KEY (`id`),
   KEY `issuing_id` (`issuing_id`),
   KEY `bulletin_id` (`bulletin_id`)
-) ENGINE=TokuDB AUTO_INCREMENT=112863 DEFAULT CHARSET=latin1 `compression`='tokudb_zlib';
+) ENGINE=TokuDB DEFAULT CHARSET=utf8mb4 `compression`='tokudb_zlib';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -277,7 +282,7 @@ CREATE TABLE `spiders` (
   PRIMARY KEY (`id`),
   KEY `bulletin_schema` (`bulletin_schema`),
   KEY `status` (`status`)
-) ENGINE=TokuDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1 `compression`='tokudb_zlib';
+) ENGINE=TokuDB DEFAULT CHARSET=utf8mb4 `compression`='tokudb_zlib';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -293,7 +298,7 @@ CREATE TABLE `status_has_service` (
   PRIMARY KEY (`id`),
   KEY `status_id` (`status_id`),
   KEY `service_id` (`service_id`)
-) ENGINE=TokuDB AUTO_INCREMENT=30057 DEFAULT CHARSET=latin1 `compression`='tokudb_zlib';
+) ENGINE=TokuDB DEFAULT CHARSET=utf8mb4 `compression`='tokudb_zlib';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -314,13 +319,13 @@ CREATE TABLE `statuses` (
   `related_id` bigint(20) DEFAULT NULL,
   `contract_type_id` bigint(6) DEFAULT NULL,
   `sector_id` bigint(6) DEFAULT NULL,
-  `note` text,
+  `note` mediumtext,
   PRIMARY KEY (`id`),
   KEY `related_query` (`related_id`,`type`,`action`) USING HASH,
   KEY `target_query` (`target_id`,`type`,`action`) USING HASH,
   KEY `precept_id` (`precept_id`) USING HASH,
   KEY `target_id` (`target_id`) USING HASH
-) ENGINE=TokuDB AUTO_INCREMENT=148038 DEFAULT CHARSET=latin1 `compression`='tokudb_zlib';
+) ENGINE=TokuDB DEFAULT CHARSET=utf8mb4 `compression`='tokudb_zlib';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -339,7 +344,7 @@ CREATE TABLE `workers` (
   `started` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `status` (`status`)
-) ENGINE=TokuDB AUTO_INCREMENT=57 DEFAULT CHARSET=latin1 `compression`='tokudb_zlib';
+) ENGINE=TokuDB DEFAULT CHARSET=utf8mb4 `compression`='tokudb_zlib';
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -351,3 +356,4 @@ CREATE TABLE `workers` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
+-- Dump completed on 2018-01-15 17:28:30
