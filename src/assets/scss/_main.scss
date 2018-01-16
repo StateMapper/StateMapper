@@ -1900,30 +1900,8 @@ body.api .main-header-inner {
 }
 
 @media screen and (max-width: 450px){
-/*    .main-body {	
+	.main-body {	
 		padding-top: 50px;
-	}*/
-	.bg-diag-left, .bg-diag-right {
-		top: -600px;
-	}
-	.menu-right.menu-on .menu-wrap {
-		margin: 0;
-		min-height: 100vh;
-		right: 0;
-		left: 0;
-		background: white;
-		background: rgba(0,0,0,0.3);
-	}
-	.menu-inner li a {
-		padding: 14px 12px
-	}
-	.menu-right .menu-menu {
-		right: 10px;
-		left: 10px;
-	}
-	.header-right > .header-menu.menu-on {
-		left: 0;
-		right: 0;
 	}
 }
 

@@ -30,8 +30,9 @@ StateMapper might work just fine on any [Debian-based](https://www.debian.org/de
 
 1. Install dependencies: *(if MySQL is installed, it will be replaced by MariaDB)*
    ```bash
-   sudo apt-get install php7.0 apache2 libapache2-mod-php php-mysql mariadb-plugin-tokudb php-mcrypt curl php-curl php-mbstring php-xml php-gd poppler-utils git
+   sudo apt-get install php apache2 libapache2-mod-php php-mysql mariadb-plugin-tokudb php-mcrypt curl php-curl php-mbstring php-xml php-gd poppler-utils git
    ```
+   
 2. Install TokuDB following [these instructions](https://mariadb.com/kb/en/library/enabling-tokudb/). 
 
 3. Secure your database entering ```mysql_secure_installation```.

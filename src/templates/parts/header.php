@@ -104,10 +104,16 @@ if (!empty($smap['entity'])){
 			<?php 
 			// home backgrounds
 			if (is_home(true)){ ?>
-				<div class="bg-diag-left"></div>
+				<div class="bg-diag-left">
+					<div class="bg-triangle"></div>
+					<div class="bg-triangle-bg"></div>
+				</div>
 				<div class="bg-stripes-wrap">
 					<div class="bg-stripes bg-stripes-left"></div>
 					<div class="bg-stripes bg-stripes-right"></div>
 				</div>
-				<div class="bg-diag-right"></div>
+				<div class="bg-diag-right">
+					<div class="bg-triangle"></div>
+					<div class="bg-triangle-bg"></div>
+				</div>
 			<?php } ?>
