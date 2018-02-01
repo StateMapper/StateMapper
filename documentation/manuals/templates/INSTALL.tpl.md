@@ -93,7 +93,8 @@ StateMapper might work just fine on any [Debian-based](https://www.debian.org/de
 If you want the spiders to be able to start, it is required to start the daemon with ```smap daemon start```. Here are the available daemon commands:
 
 ```bash
-smap daemon [start] 		# start the daemon in the background
+smap 			 		# show the full CLI help
+smap daemon start 		# start the daemon in the background
 smap daemon restart 		# restart the daemon
 smap daemon status 		# print the daemon's status
 smap daemon -d 			# start it in debug mode (do not daemonize, print information)

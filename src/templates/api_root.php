@@ -133,7 +133,7 @@ print_header('browser');
 			return convert_lang_for_url($e);
 		}, get_langs(true)), SEPARATOR_OR) ?>.<br><br>
 		
-		Please also see the <a href="<?= anonymize(get_repository_url('blob/master/documentation/manuals/INSTALL.md#cli-commands')) ?>" target="_blank">CLI API</a>.
+		Please also see the <a href="<?= anonymize(get_repository_url('blob/master/documentation/manuals/INSTALL.md#daemon-commands')) ?>" target="_blank">CLI API</a>.
 	</div>
 </div>
 <?php
