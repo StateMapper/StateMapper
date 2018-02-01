@@ -97,7 +97,7 @@ exit(); // this file only serves for translation purpose
 			$icon = '';
 			if (!empty($cc->icon))
 				$icon = $cc->icon;
-			$statusTable[] = '| '.($icon ? '<img src="'.APP_URL.'/addons/fontawesome_favicons/'.$icon.'.ico" valign="middle" />' : '').' | ```'.$type.'``` | ```'.$action.'``` | '.(isset($cc->meaning) ? $cc->meaning : '').' | '.implode("<br>", $required).' |';
+			$statusTable[] = '| '.($icon ? '<img src="'.APP_URL.'/addons/fontawesome_favicons/'.$icon.'.ico" valign="middle" />' : '').' | ```'.$type.'``` | ```'.$action.'``` | '.(isset($cc->meaning) ? $cc->meaning : '').' | '.implode("<br>", $required).' | ';
 		}
 
 	$statusTable = '

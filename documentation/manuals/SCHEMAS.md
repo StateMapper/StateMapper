@@ -91,20 +91,20 @@ Status are sorted by ```type``` and ```action``` through the ```schemas/status.j
 
 	| | Type | Action | Meaning | Required attributes |
 	| ---- | ---- | ----- | ----- | ---- |
-	| <img src="http://localhost/statemapper/application/src/addons/fontawesome_favicons/birthday-cake.ico" valign="middle" /> | ```capital``` | ```new``` | company foundation | amount: the amount of capital |
-| <img src="http://localhost/statemapper/application/src/addons/fontawesome_favicons/money.ico" valign="middle" /> | ```capital``` | ```increase``` | capital increase | amount: the amount of increase |
-| <img src="http://localhost/statemapper/application/src/addons/fontawesome_favicons/credit-card.ico" valign="middle" /> | ```fund``` | ```increase``` | company funding | amount: the funding amount |
-| <img src="http://localhost/statemapper/application/src/addons/fontawesome_favicons/user-circle-o.ico" valign="middle" /> | ```owner``` | ```update``` | new owner | target: the owner's name |
-| <img src="http://localhost/statemapper/application/src/addons/fontawesome_favicons/user-plus.ico" valign="middle" /> | ```administrator``` | ```start``` | new administrator | target: the administrator's name |
-| <img src="http://localhost/statemapper/application/src/addons/fontawesome_favicons/user.ico" valign="middle" /> | ```administrator``` | ```keep``` | reelected administrator | target: the administrator's name |
-| <img src="http://localhost/statemapper/application/src/addons/fontawesome_favicons/user-times.ico" valign="middle" /> | ```administrator``` | ```end``` | no longer administrator | target: the administrator's name |
-| <img src="http://localhost/statemapper/application/src/addons/fontawesome_favicons/user-plus.ico" valign="middle" /> | ```president``` | ```start``` | new president | target: the president's name |
-| <img src="http://localhost/statemapper/application/src/addons/fontawesome_favicons/user-plus.ico" valign="middle" /> | ```counselor``` | ```start``` | new counselor | target: the counselor's name |
-| <img src="http://localhost/statemapper/application/src/addons/fontawesome_favicons/file-o.ico" valign="middle" /> | ```object``` | ```update``` | new social purpose | note: the social purpose |
-| <img src="http://localhost/statemapper/application/src/addons/fontawesome_favicons/map-marker.ico" valign="middle" /> | ```location``` | ```update``` | new location | note: the location string |
-| <img src="http://localhost/statemapper/application/src/addons/fontawesome_favicons/exchange.ico" valign="middle" /> | ```name``` | ```update``` | name change | target: the new entity name |
-| <img src="http://localhost/statemapper/application/src/addons/fontawesome_favicons/times.ico" valign="middle" /> | ```name``` | ```end``` | company dissolution |  |
-| <img src="http://localhost/statemapper/application/src/addons/fontawesome_favicons/shopping-cart.ico" valign="middle" /> | ```absorb``` | ```new``` | company absorption | target: the absorbed company |
+	| <img src="http://localhost/statemapper/application/src/addons/fontawesome_favicons/birthday-cake.ico" valign="middle" /> | ```capital``` | ```new``` | company foundation | amount: the amount of capital | 
+| <img src="http://localhost/statemapper/application/src/addons/fontawesome_favicons/money.ico" valign="middle" /> | ```capital``` | ```increase``` | capital increase | amount: the amount of increase | 
+| <img src="http://localhost/statemapper/application/src/addons/fontawesome_favicons/credit-card.ico" valign="middle" /> | ```fund``` | ```increase``` | company funding | amount: the funding amount | 
+| <img src="http://localhost/statemapper/application/src/addons/fontawesome_favicons/user-circle-o.ico" valign="middle" /> | ```owner``` | ```update``` | new owner | target: the owner's name | 
+| <img src="http://localhost/statemapper/application/src/addons/fontawesome_favicons/user-plus.ico" valign="middle" /> | ```administrator``` | ```start``` | new administrator | target: the administrator's name | 
+| <img src="http://localhost/statemapper/application/src/addons/fontawesome_favicons/user.ico" valign="middle" /> | ```administrator``` | ```keep``` | reelected administrator | target: the administrator's name | 
+| <img src="http://localhost/statemapper/application/src/addons/fontawesome_favicons/user-times.ico" valign="middle" /> | ```administrator``` | ```end``` | no longer administrator | target: the administrator's name | 
+| <img src="http://localhost/statemapper/application/src/addons/fontawesome_favicons/user-plus.ico" valign="middle" /> | ```president``` | ```start``` | new president | target: the president's name | 
+| <img src="http://localhost/statemapper/application/src/addons/fontawesome_favicons/user-plus.ico" valign="middle" /> | ```counselor``` | ```start``` | new counselor | target: the counselor's name | 
+| <img src="http://localhost/statemapper/application/src/addons/fontawesome_favicons/file-o.ico" valign="middle" /> | ```object``` | ```update``` | new social purpose | note: the social purpose | 
+| <img src="http://localhost/statemapper/application/src/addons/fontawesome_favicons/map-marker.ico" valign="middle" /> | ```location``` | ```update``` | new location | note: the location string | 
+| <img src="http://localhost/statemapper/application/src/addons/fontawesome_favicons/exchange.ico" valign="middle" /> | ```name``` | ```update``` | name change | target: the new entity name | 
+| <img src="http://localhost/statemapper/application/src/addons/fontawesome_favicons/times.ico" valign="middle" /> | ```name``` | ```end``` | company dissolution |  | 
+| <img src="http://localhost/statemapper/application/src/addons/fontawesome_favicons/shopping-cart.ico" valign="middle" /> | ```absorb``` | ```new``` | company absorption | target: the absorbed company | 
 	
 
 
