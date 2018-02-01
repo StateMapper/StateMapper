@@ -56,10 +56,11 @@ The source file of this diagram can be found at ```documentation/diagrams/databa
 
 | Folder | Description |
 | ------- | ------ |
-| [schemas/](../../schemas) | bulletin definitions (schemas) per country/continent |
 | [bulletins/](../../bulletins) | where bulletins are stored after download |
-| [scripts/](../../scripts) | bash scripts (```smap``` command) |
+| [database/](../../src/database) | database files (including .sql) |
 | [documentation/](../../documentation) | documentation files (graphic material, diagrams, manuals..) |
+| [schemas/](../../schemas) | bulletin definitions (schemas) per country/continent |
+| [scripts/](../../scripts) | bash scripts (```smap``` command) |
 | [src/](../../src) | core files of the app |
 | [src/controller/](../../src/controller) | controller layer |
 | [src/fetcher/](../../src/fetcher) | fetch layer |
@@ -71,7 +72,6 @@ The source file of this diagram can be found at ```documentation/diagrams/databa
 | [src/helpers/](../../src/helpers) | helper functions |
 | [src/addons/](../../src/addons) | addons likes Wikipedia suggs, Geoencoding, Website autodetection..  |
 | [src/languages/](../../src/languages) | translation files |
-| [src/database/](../../src/database) | database files (including .sql) |
 | [src/assets/](../../src/assets) | web assets of the app (images, fonts, .css, .js, ..) |
 
 
@@ -92,9 +92,6 @@ The source file of this diagram can be found at ```documentation/diagrams/databa
 | /xx/person/john-doe | the sheet of a person from country xx |
 | | |
 | [/providers](https://statemapper.net/providers) | list of countries, bulletin providers and schemas |
-| [/xx/providers](https://statemapper.net/es/providers) | list of bulletin providers and schemas for country xx (example: [/es/providers](https://statemapper.net/es/providers)) |
-| | |
-| [/es/bulletin/YYYY-MM](https://statemapper.net/providers) | list of countries, bulletin providers and schemas |
 | [/xx/providers](https://statemapper.net/es/providers) | list of bulletin providers and schemas for country xx (example: [/es/providers](https://statemapper.net/es/providers)) |
 | | |
 | [/api/CALL.json](https://statemapper.net/api/providers.json) | JSON API endpoints start with ```api/``` and end up in ```.json``` |

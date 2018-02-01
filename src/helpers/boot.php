@@ -67,6 +67,9 @@ require 'names.php';		// people's name helpers
 require 'assets.php';		// asset management (css, js..)
 require 'license.php';		// licensing helpers
 require 'lists.php';		// entity lists management
+// require 'daemon.php'; 	// daemon control functions (only via CLI)
+// require 'admin.php'; 	// admin utility functions (only via CLI)
+// require 'tests.php'; 	// testing functions (only via CLI)
 
 // END LOAD ALL HELPERS		<-- leave this comment as it is, the preceeding list is parsed from PHP to be injected in the DEVELOPERS manual 
 
