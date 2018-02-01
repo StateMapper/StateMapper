@@ -453,8 +453,11 @@ class BulletinExtractor {
 				if (!($country = get_country_schema($schemaObj->id)->id))
 					die('bad country in extractor');
 					
+				$issuingE = !empty($nCur['issuing']) ? $nCur['issuing'] : array(array(
+					'name' => get_schema($schemaObj->providerId)->name,
+					'type' => 'institution'
+				));
 				if (empty($issuingE)){
-					die();
 					echo "NO ISSUING";
 					print_json($nCur);
 					echo '<br>';
