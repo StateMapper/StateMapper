@@ -16,7 +16,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
- 
+
+namespace StateMapper; 
 	
 if (!defined('BASE_PATH'))
 	die();
@@ -81,8 +82,12 @@ function get_bulletin_statuses(){
 }
 
 function get_modes(){
-	$dev = is_admin();
-	return array(
+	static $modes = null;
+	if ($modes !== null)
+		return $modes;
+		
+	$dev = is_dev();
+	$modes = array(
 		'browse' => array(
 			'icon' => 'search',
 			'title' => _('Browse'),
@@ -97,6 +102,7 @@ function get_modes(){
 		),
 		'fetch' => array(
 			'icon' => $dev ? 'cloud-download' : 'book',
+			'api_icon' => 'cloud-download',
 			'title' => $dev ? _('Fetch') : _('Browse'),
 			'headerTitle' => _('Bulletin browser'),
 			'headerTip' => _('Browse the bulletins'),
@@ -104,7 +110,7 @@ function get_modes(){
 		'fullscreen' => array(
 			'icon' => 'arrows-alt',
 			'title' => _('Fullscreen'),
-			'buttonTip' => _('Only show the bulletin file'),
+			'buttonTip' => _('Show the raw bulletin file'),
 		),
 		'download' => array(
 			'icon' => 'download',
@@ -120,7 +126,7 @@ function get_modes(){
 		'redirect' => array(
 			'icon' => 'external-link-square',
 			'title' => _('Redirect'),
-			'buttonTip' => _('Go to the original bulletin\'s URL'),
+			'buttonTip' => _('Go to the bulletin\'s original URL'),
 		),
 		'parse' => array(
 			'show' => $dev,
@@ -164,7 +170,31 @@ function get_modes(){
 			'headerTitle' => _('Public data providers'),
 			'headerTip' => _('See all public data providers we use'),
 		),
+		'lists' => array(
+			'icon' => 'thumb-tack', // star?
+			'show' => is_logged(),
+			'title' => __('My lists'),
+			'shortTitle' => __('My lists', 'short title'),
+			'headerTitle' => _('Lists'),
+			'headerTip' => _('See my lists of entities'),
+		),
+		'api' => array(
+			'icon' => 'plug',
+			'title' => __('API'),
+		),
+		'raw' => array(
+			'icon' => 'plug',
+			'title' => __('Raw JSON'),
+			'buttonTip' => __('See the raw JSON version of this call'),
+		),
+		'document' => array(
+			'icon' => 'file-o',
+		),
+		'search' => array(
+			'icon' => 'search',
+		),
 	);
+	return $modes;
 }
 
 function get_entity_types(){

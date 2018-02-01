@@ -16,7 +16,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
- 
+
+namespace StateMapper; 
 
 class BulletinExtractor {
 	
@@ -336,7 +337,7 @@ class BulletinExtractor {
 				print_table($trs, $th);
 				echo '</div>';
 				
-				$smap['collapseAPIReturn'] = true;
+				$smap['collapse_api_return'] = true;
 			}
 				
 				/*
@@ -452,11 +453,8 @@ class BulletinExtractor {
 				if (!($country = get_country_schema($schemaObj->id)->id))
 					die('bad country in extractor');
 					
-				$issuingE = !empty($nCur['issuing']) ? $nCur['issuing'] : array(array(
-					'name' => get_schema($schemaObj->providerId)->name,
-					'type' => 'institution'
-				));
 				if (empty($issuingE)){
+					die();
 					echo "NO ISSUING";
 					print_json($nCur);
 					echo '<br>';
@@ -479,16 +477,18 @@ class BulletinExtractor {
 					die();
 				}
 				
-				$issuing = insertget_entity(array(
+				// insert issuing
+				$issuing_obj = array(
 					'name' => $issuingE['name'],
 					'type' => $issuingE['type'],
 					'country' => $country,
-				));
+				);
+				$issuing = insertget_entity($issuing_obj);
 				
 				if (!$issuing)
 					die('cant insert issuing');
-					
 				
+				// insert precept
 				$p = array(
 					'bulletin_id' => $bulletin_id,
 					'issuing_id' => $issuing,
@@ -497,9 +497,12 @@ class BulletinExtractor {
 				);
 				$pid = insertget_precept($p);
 				
+				set_used_name_for($issuing, $issuing_obj['name'], $pid);
+				
 				if (!$pid)
 					die('cant insert precept: '.print_r($p, true));
-				
+					
+				// insert all related
 				if ($nCur['related']){
 
 					if (!empty($nCur['_type']))
@@ -513,7 +516,7 @@ class BulletinExtractor {
 							'subtype' => $related['subtype'],
 							'country' => $country,
 						);
-						$related_id = insertget_entity($e);
+						$related_id = insertget_entity($e, $pid);
 
 						if (!$related_id)
 							die('cant insert related: '.print_r($related, true));
@@ -523,6 +526,7 @@ class BulletinExtractor {
 						$relateds[] = $e;
 					}
 						
+					// insert all targets
 					$targets = array();
 					if (!empty($nCur['target']))
 						foreach (is_array($nCur['target']) && isset($nCur['target'][0]) ? $nCur['target'] : array($nCur['target']) as $target){
@@ -533,7 +537,7 @@ class BulletinExtractor {
 								'subtype' => isset($target['subtype']) ? $target['subtype'] : null,
 								'country' => $country,
 							);
-							$ctarget = insertget_entity($e);
+							$ctarget = insertget_entity($e, $pid);
 
 							if (!$ctarget)
 								die('cant insert target entity: '.print_r($e, true).' #1');
@@ -567,6 +571,13 @@ class BulletinExtractor {
 									if ($loc)
 										$u['note'] = insert_location($loc);
 								}*/
+								break;
+						}
+						
+						switch ($u['_action']){
+							case 'decrease':
+								if (!empty($u['amount']))
+									$u['amount'] = -$u['amount'];
 								break;
 						}
 						
@@ -630,7 +641,7 @@ class BulletinExtractor {
 										'subtype' => $target['subtype'],
 										'country' => $country,
 									);
-									$ctarget = insertget_entity($e);
+									$ctarget = insertget_entity($e, $pid);
 
 									if (!$ctarget)
 										die('cant insert target entity: '.print_r($e, true).' #4');
@@ -684,56 +695,6 @@ class BulletinExtractor {
 	}	
 }
 
-function insertget_entity($e){
-	if (empty($e['name']) || empty($e['type']) || empty($e['country']))
-		return false;
-		
-	// TODO: add lock wait to not get duplicated entities
-		
-	$e['name'] = sanitize_name($e['name']);
-	
-	// session cache
-	static $cache = array();
-	$key = mb_strtoupper($e['country'].'/'.$e['name'].(isset($e['first_name']) ? ' '.$e['first_name'] : ''));
-	
-	if (isset($cache[$key]))
-		return $cache[$key];
-		
-	$e = sanitize_person($e);
-	
-	if (!empty($e['first_name']))
-		$e['first_name'] = sanitize_name($e['first_name']);
-		
-	$subtype = !empty($e['subtype']) ? prepare(' AND subtype = %s', $e['subtype']) : '';
-	$first_name = !empty($e['first_name']) ? prepare(' AND first_name = %s', $e['first_name']) : ' AND first_name IS NULL';
-	
-	$q = prepare('SELECT id FROM entities WHERE country = %s AND type = %s', array($e['country'], $e['type']));
-	$qname = prepare(' AND name = %s', $e['name']);
-	
-	//echo 'QUERY: '.$q.$subtype.$qname.$first_name.'<br>';
-	$eid = get_var($q.$subtype.$qname.$first_name);
-
-	$name = $e['name'].(!empty($e['first_name']) ? ' '.$e['first_name'] : '');
-	
-	if (!$eid){
-	
-		$eid = insert('entities', $e + array(
-			'fetched' => date('Y-m-d H:i:s'),
-			'keywords' => sanitize_keywords($name),
-			'slug' => generate_slug('entities', 'slug', $name, 200),
-		));
-		
-		if (IS_CLI)
-			print_log('inserted '.$e['type'].' "'.$name.'"', array('color' => 'grey'));
-	
-	} else if (IS_CLI)
-		print_log('found '.$e['type'].' '.$name, array('color' => 'grey'));
-	
-	// store to cache
-	$cache[$key] = $eid;
-	return $eid;
-}
-
 function get_object_path($bit, $cur, &$extractQuery){
 	//if (isset($cur['id']))
 	//	echo 'getobjpath id: '.$cur['id'].'<br>';
@@ -780,8 +741,6 @@ function get_object_path($bit, $cur, &$extractQuery){
 	//echo 'getObjPath ended with ID '.$docId.' / date '.$docDate.'<br>';
 	return $ret;
 }
-
-
 	
 function merge_extract_objects($extractQuery, &$ccur){
 	if (is_array($ccur)){

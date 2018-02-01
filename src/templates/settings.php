@@ -22,10 +22,8 @@ if (!defined('BASE_PATH'))
 	die();
 	
 global $smap;
-$smap['outputNoFilter'] = true;
 
-
-
+print_header('page');
 ?>
 <?php if (!function_exists('mb_detect_encoding') || !function_exists('iconv')){ ?>
 	<div class="block">
@@ -50,7 +48,7 @@ $smap['outputNoFilter'] = true;
 		// print folder sizes on disk
 		echo '<table border="0">';
 		
-		$loader = '<i class="smap-disksize-loader fa fa-circle-o-notch fa-spin"></i>';
+		$loader = get_loading(false);
 
 		$size = get_option('disksize_schemas');
 		echo '<tr><td class="smap-icon-td"><i class="fa fa-book"></i> </td><td>'.str_pad('Schemas folder: ', 25, '.').' </td><td><span class="smap-disksize smap-disksize-schemas '.($size ? '' : 'smap-disksize-fetchnow').'" data-smap-disksize="schemas">'.($size ? $size : 'fetching..').'</span>'.$loader.'</td></tr>';
@@ -129,4 +127,4 @@ $smap['outputNoFilter'] = true;
 
 <?php
 
-
+print_footer();

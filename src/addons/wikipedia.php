@@ -16,59 +16,68 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
- 
+
+namespace StateMapper; 
 
 if (!defined('BASE_PATH'))
 	die();
 
 
-
-add_action('entity_stats_before', 'wikipedia_entity_suggs');
-function wikipedia_entity_suggs($entity){
-	$live = get_live('wikipedia_suggs', $entity['id']);
+add_filter('entity_summary', 'entity_summary_wikipedia_suggs', 0, 3);
+function entity_summary_wikipedia_suggs($details, $entity, $context){
+	$live = get_live('wikipedia_suggs', $entity['id'], array(
+		'context' => $context
+	));
 	if (!$live) // no block if live returns false or empty string
-		return;
-	?>
-	<div class="entity-sheet-detail entity-medias-suggs live-wrap">
-		<span class="entity-sheet-label">Wikipedia suggs: </span>
-		<div class="entity-sheet-body">
-			<div class="entity-medias-suggs-inner">
-				<?php echo $live ?>
-			</div>
-		</div>
-	</div>
-	<?php
+		return $details;
+	
+	$details['wikipedia'] = array(
+		'label' => 'Wikipedia',
+		'html' => $live
+	);
+	return $details;
 }
 
-function live_wikipedia_suggs($entity_id){
+function live_wikipedia_suggs($entity_id, $opts){
 	if (!($entity = get_entity_by_id($entity_id)))
 		return false;
 		
-	$suggs = get_wikipedia_suggs($entity, $img, IS_AJAX);
+	$can_fetch = can_fetch_by_context($opts['context']);
+	$suggs = get_wikipedia_suggs($entity, $img, $can_fetch);
 	if ($suggs === false)
 		return '...';
 	
 	if ($suggs){
-		ob_start();
-		?>
-		<ul><?php
-			if ($img) echo implode('', $img);
-			?>
-			<span class="entity-medias-suggs-links"><?= implode(', ', $suggs) ?></span>
-		</ul>
-		<?php
-		return array('success' => true, 'html' => ob_get_clean());
+		$str = '<span class="inline-links">';
+		
+		$i = 0;
+		foreach ($suggs as $sugg){
+			$url = $sugg['url'];
+			
+			$str .= '<a href="'.anonymize($url).'" data-tippy-placement="right" target="_blank" title="'.esc_attr(__('Visit the Wikipedia page').': '.$url).'">';
+			if (!$i){
+				if ($img) 
+					$str .= implode('', $img).' ';
+				else 
+					$str .= '<i class="fa fa-wikipedia-w icon"></i> ';
+			}
+			$str .= strip_tags($sugg['title']).'</a>';
+			$i++;
+		}
+
+		$str .= '</span>';
+		return array('success' => true, 'html' => $str);
 	}
 	return false;
 }
 
-function get_wikipedia_suggs($entity, &$img, $allowFetch = true){
+function get_wikipedia_suggs($entity, &$img, $allow_fetch = true, $amount = 1){
 	
 	if ($cache = get_cache('entity '.$entity['id'].' wikipedia')){
 		$img = $cache['img'];
 		return $cache['suggs'];
 	}
-	if (!$allowFetch)
+	if (!$allow_fetch)
 		return false;
 	
 	$opts = array(
@@ -76,7 +85,6 @@ function get_wikipedia_suggs($entity, &$img, $allowFetch = true){
 		'countAsFetch' => false,
 		'noUserAgent' => true,
 		'cache' => '1 day',
-		'type' => 'html',
 	);
 		
 	$suggs = array();
@@ -85,44 +93,100 @@ function get_wikipedia_suggs($entity, &$img, $allowFetch = true){
 		
 		$q = get_entity_title($entity, $i > 0);
 		
-		if ($i > 0)
-			$q = preg_replace('#ayuntamiento\s*de\s*#ius', '', $q); // TODO: abstract this to schemas!!
+		//if ($i > 0)
+		//	$q = preg_replace('#ayuntamiento\s*de\s*#ius', '', $q); // TODO: abstract this to schemas!!
 			
 		if ($i > 1 && strtolower($entity['country']) == 'en')
 			break;
 			
 		$ccountry = $i > 1 ? 'en' : strtolower($entity['country']);
+		$api_url = 'https://'.$ccountry.'.wikipedia.org/w/api.php';
 		
-		$wikis = fetch('https://'.$ccountry.'.wikipedia.org/w/api.php', array('action' => 'opensearch', 'modules' => 'opensearch', 'search' => $q), true, false, $opts);
+		$search_results = fetch_json($api_url, array(
+			'action' => 'query',
+			'list' => 'search',
+			'srsearch' => $q,
+			'utf8' => 1,
+			'srinfo' => 'suggestion', //totalhits|suggestion
+			'srlimit' => 10,
+			'format' => 'json',
+		), true, false, array(
+			'type' => 'json',
+		) + $opts);
 		
-		if ($wikis && is_array($wikis))
-			foreach ($wikis as $wiki)
-				foreach (is_array($wiki) ? $wiki : array($wiki) as $w)
-					if (preg_match('#^https?://#i', $w)){
-						if (!$img){
-							$html = file_get_contents($w.(strpos($w, '?') === false ? '?' : '&').'action=render');
-
-							// TODO: grep all images in infobox instead of just the first one..
-							if ($html && preg_match_all('#\binfobox\b.*?(<img[^>]+>)#ius', $html, $matches)){ 
-								$img = array_merge($img, $matches[1]);
-							}
-						}
-						
-						$label = strip_tags(rtrim(preg_replace('#^https?://[a-z0-9]+\.wikipedia\.org/(?:wiki/)?#ius', '', urldecode($w)), '/'));
-						
-						// keep first translation
-						$id = str_replace(array('_', ' ', '-'), ' ', remove_accents(strtolower($label)));
-						if (!isset($suggs[$id]) && preg_match('#\b'.preg_replace('#[^a-z0-9]+#iu', '[^a-z0-9]*', $entity['name']).'\b#iu', $label))
-							$suggs[$id] = '<a href="'.esc_attr(anonymize(strip_tags($w))).'" target="_blank">'.$ccountry.':'.$label.'</a>';
-					}
+		$cresults = array();
+		if ($search_results && is_object($search_results) && !empty($search_results->query) && !empty($search_results->query->search))
+			foreach ($search_results->query->search as $search_result)
+				$cresults[$search_result->pageid] = $search_result;
+				
+		if ($cresults){
+			$wikis = fetch_json($api_url, array(
+				'action' => 'query',
+				'prop' => 'info',
+				'pageids' => implode('|', array_keys($cresults)),
+				'inprop' => 'url',
+				'format' => 'json',
+			), true, false, array(
+				'type' => 'json',
+			) + $opts);
+			
+			if ($wikis && is_object($wikis) && !empty($wikis->query) && !empty($wikis->query->pages))
+				foreach ($wikis->query->pages as $page)
+					$suggs[$page->pageid] = array(
+						'url' => $page->canonicalurl.'?curid='.$page->pageid,
+					) + ((array) $page) + ((array) $cresults[$page->pageid]);
+		}
 		
-		if (count($suggs) >= 3)
+		if (count($suggs) >= $amount)
 			break;
 	}
-	$suggs = array_unique(array_values($suggs));
-	array_splice($suggs, 3);
+	$suggs = array_values($suggs);
 	
-	set_cache('entity '.$entity['id'].' wikipedia', array('suggs' => $suggs, 'img' => $img), '1 month');
-	return $suggs;
+	$checked = array();
+	foreach ($suggs as $sugg){
+		// check the entity name is in the title
+		if (preg_match('#^https?://#i', $sugg['url'])
+			&& preg_match('#\b'.preg_replace('#[^a-z0-9]+#iu', '[^a-z0-9]*', $entity['name']).'\b#iu', $sugg['title'])){
+
+			// try to grab the first image
+			/*
+			 * @todo: do not take the full <img> tag, just it's URL. Then cache such images locally somehow.
+			 * 
+			if (!$checked){
+				$html = fetch($sugg['url'], array(
+					'action' => 'render'
+				), true, false, array(
+					'type' => 'html',
+				) + $opts);
+
+				// @todo: grep all images in infobox instead of just the first one..
+				if ($html && preg_match_all('#\binfobox\b.*?(<img[^>]+>)#ius', $html, $matches)){ 
+					
+					$img = array_merge($img, $matches[1]);
+				} 
+			}*/
+
+			$checked[] = $sugg;
+		}
+	}
+
+	array_splice($checked, $amount);
+	
+	set_cache('entity '.$entity['id'].' wikipedia', array('suggs' => $checked, 'img' => $img), '1 month');
+	return $checked;
 }
+
+add_filter('entity_actions', 'entity_actions_wikipedia_search', -100, 2);
+function entity_actions_wikipedia_search($entity, $context){
+	$country = empty($entity['country']) ? 'en' : strtolower($entity['country']);
+	$entity['actions']['wikipedia_search'] = array(
+		'label' => 'Search on Wikipedia',
+		'icon' => 'wikipedia-w',
+		'url' => anonymize('https://'.$country.'.wikipedia.org/w/index.php?search='.urlencode($entity['name'])),
+		'target' => '_blank',
+	);
+	return $entity;
+}
+
+
 

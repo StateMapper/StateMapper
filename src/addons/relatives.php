@@ -16,12 +16,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
- 
+
+namespace StateMapper; 
 
 if (!defined('BASE_PATH'))
 	die();
-
-
 
 add_action('entity_stats_after', 'relatives_entity_suggs');
 function relatives_entity_suggs($entity){

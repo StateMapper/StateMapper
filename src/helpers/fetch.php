@@ -16,11 +16,15 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
- 
+
+namespace StateMapper;
 
 if (!defined('BASE_PATH'))
 	die();
 
+function fetch_json($url, $data = array(), $isFinalURL = true, $filePath = false, $opts = array()){
+	return @json_decode(fetch($url, $data, $isFinalURL, $filePath, $opts));
+}
 
 function fetch($url, $data = array(), $isFinalURL = true, $filePath = false, $opts = array()){
 	$opts += array(
@@ -28,6 +32,8 @@ function fetch($url, $data = array(), $isFinalURL = true, $filePath = false, $op
 		'allowTor' => true, 
 		'noUserAgent' => false,
 		'cache' => false, // use database cache (precise period)
+		'timeout' => CURL_TIMEOUT,
+		'retries' => CURL_RETRY,
 	);
 	//$opts['cache'] = false;
 	if ($filePath)
@@ -83,38 +89,38 @@ function fetch($url, $data = array(), $isFinalURL = true, $filePath = false, $op
 				
 			$_SESSION['fetched'] = $sessionFetched = 0;
 			
-			if (!isset($smap['torIpChanges']))
-				$smap['torIpChanges'] = array();
+			if (!isset($smap['tor_ip_changes']))
+				$smap['tor_ip_changes'] = array();
 				
-			$smap['torIpChanges'][] = date('Y-m-d H:i:s');
+			$smap['tor_ip_changes'][] = date('Y-m-d H:i:s');
 		
 		} else if (empty($smap['simulateFetch']))
 			wait_for_fetching();
 	}
 		
-	if (!isset($smap['fetchedUrls']))
-		$smap['fetchTypes'] = $smap['fetchCodes'] = $smap['fetchDurations'] = $smap['fetchedUrls'] = array();
+	if (!isset($smap['fetched_urls']))
+		$smap['fetchTypes'] = $smap['fetchCodes'] = $smap['fetchDurations'] = $smap['fetched_urls'] = array();
 		
 	if (!empty($smap['simulateFetch'])){
 		$content = 'SIMULATION';
 		if ($smap['call'] == 'rewind' || IS_CLI)
 			print_log('(Should be) calling '.$url, array('color' => 'grey'));
 			
-		$smap['fetchedUrls'][] = $url;
+		$smap['fetched_urls'][] = $url;
 		$smap['fetchDurations'][] = 0;
 		$smap['fetchCodes'][] = 200;
 	
 	} else {
 		// really fetch
-		$ch = get_curl_channel($url, CURL_TIMEOUT, $opts);
+		$ch = get_curl_channel($url, $opts['timeout'], $opts);
 	
-		for ($i = 0; $i < max(CURL_RETRY, 1); $i++){
+		for ($i = 0; $i < max($opts['retries'], 1); $i++){
 			$smap['lastFetchBegin'] = microtime(true);
 			
 			//if ($smap['call'] == 'rewind')
 				//echo 'Calling '.$url.'<br>';
 				
-			$smap['fetchedUrls'][] = $url;
+			$smap['fetched_urls'][] = $url;
 			$smap['fetchTypes'][] = $filePath;
 				
 			$content = curl_exec($ch);
@@ -366,15 +372,31 @@ function http_encode($params){
 	return http_build_query($params, '', '&', PHP_QUERY_RFC3986);
 }
 
+
+function get_fetcher_cache($cacheType, $protocoleConfig, $query, $parent){
+	$filePath = APP_PATH.'/fetcher/caches/BulletinFetcher'.ucfirst($cacheType).'Cache.php';
+	if (file_exists($filePath)){
+		require_once APP_PATH.'/fetcher/BulletinFetcherCache.php';
+		require_once $filePath;
+		$class = '\\StateMapper\\BulletinFetcher'.ucfirst($cacheType).'Cache';
+		$fetcherCache = new $class();
+		$fetcherCache->set_config($protocoleConfig, $query, $parent);
+		return $fetcherCache;
+	} 
+	return null;
+}
+
 function get_format_fetcher($format, $parent = null){
 	static $cache = array();
 	if (isset($cache[$format]))
 		return $cache[$format];
 
 	// load format fetcher
-	require_once(APP_PATH.'/fetcher/BulletinFetcher.php');
+	require_once APP_PATH.'/fetcher/BulletinFetcher.php';
+	require_once APP_PATH.'/fetcher/BulletinFetcherFormat.php';
 	$fetcherClass = 'BulletinFetcher'.ucfirst($format);
 	$fetcherPath = APP_PATH.'/fetcher/formats/'.$fetcherClass.'.php';
+	$fetcherClass = '\\StateMapper\\'.$fetcherClass;
 	if (!is_file($fetcherPath))
 		return new SMapError('unknown fetchProcole format '.$format);
 
@@ -383,3 +405,6 @@ function get_format_fetcher($format, $parent = null){
 	return $cache[$format];
 }
 
+function can_fetch_by_context($context){
+	return in_array($context, array('sheet', 'sheet-top', 'sheet-sidebar', 'popup')) && IS_AJAX;
+}

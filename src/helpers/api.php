@@ -16,14 +16,15 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
- 
+
+namespace StateMapper; 
 	
 if (!defined('BASE_PATH'))
 	die();
 
 function get_api_type(){
 	global $smap;
-	if (is_home(true))
+	if (is_home())
 		return false;
 	if (in_array($smap['page'], array('api', 'settings', 'login', 'logout')))
 		return false;
@@ -32,11 +33,15 @@ function get_api_type(){
 	return 'json';
 }
 
-function get_api_url($url = null){
-	if (!($type = get_api_type()))
+function get_api_uri($url = null, $type = null){
+	return get_uri_from_url(get_api_url($url, $type));
+}
+
+function get_api_url($url = null, $type = null){
+	if (!$type && !($type = get_api_type()))
 		return null;
 		
-	$uri = preg_replace('#^('.preg_quote(BASE_URL, '#').')(.*)$#iu', '$2', $url ? $url : get_canonical_url());
+	$uri = get_uri_from_url($url ? $url : get_canonical_url());
 	switch ($type){
 		case 'document': 
 			$end = '/raw';
@@ -57,6 +62,11 @@ function is_api(){
 	return defined('IS_API') && IS_API;
 }
 
+function is_api_root(){
+	global $smap;
+	return is_page('api') && empty($smap['query']['schema']);
+}
+
 add_action('clean_tables', 'clean_api_rates');
 function clean_api_rates($all){
 		
@@ -66,3 +76,36 @@ function clean_api_rates($all){
 	else
 		query('DELETE FROM api_rates WHERE date < %s', date('Y-m-d H:i:s', strtotime('-'.API_RATE_PERIOD)));
 }
+
+add_action('footer_left', function(){
+	$modes = get_modes();
+
+	?>
+	<span class="api-footer-link left"><span class="menu menu-top">
+		<span class="menu-button" title="<?= esc_attr(_('$tateMapper has full JSON and document API\'s. <br>Build apps and widgets on top of our stack!')) ?>"><i class="fa fa-<?= $modes['api']['icon'] ?>"></i> <?= __('API') ?> <i class="fa fa-angle-down tick"></i></span>
+		<span class="menu-wrap">
+			<span class="menu-menu">
+				<ul class="menu-inner">
+					<li><a href="<?= add_lang(BASE_URL.'api') ?>"><i class="fa fa-info-circle"></i> API Reference</a></li>
+					
+					<?php if (!is_home() && ($type = get_api_type())){ 
+						
+						if ($type == 'json'){
+							?>
+							<li><a href="<?= add_url_arg('human', 1, get_api_url()) ?>"><i class="fa fa-<?= $modes['api']['icon'] ?>"></i> <?= _('Human JSON') ?></a></li>
+							<li><a href="<?= get_api_url() ?>"><i class="fa fa-<?= $modes['api']['icon'] ?>"></i> <?= _('Raw JSON') ?></a></li>
+							<?php 
+							
+						} else if ($type == 'document'){
+							?>
+							<li><a href="<?= get_api_url() ?>"><i class="fa fa-<?= $modes['document']['icon'] ?>"></i> <?= _('Raw document') ?></a></li>
+							<?php 
+						} 
+					}
+					?>
+				</ul>
+			</span>
+		</span>
+	</span></span>
+	<?php
+});

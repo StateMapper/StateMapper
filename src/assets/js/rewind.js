@@ -27,16 +27,16 @@ $(document).ready(function(){
 		setInterval(function(){
 			updateYear();
 		}, 10000);
-		
-	$('#wrap').on('click', '.map-years a', function(e){
+
+	/*$('#wrap').on('click', 'a.map-year-inner', function(e){
 		var a = $(this).addClass('smap-year-current');
 		$('.map-years a').not(a).removeClass('smap-year-current');
 		
-		year = a.data('smap-year');
+		year = a.smap().year;
 		
 		updateYear(true);
 		return false;
-	});
+	});*/
 	
 	function updateYear(manual){
 		
@@ -50,7 +50,7 @@ $(document).ready(function(){
 		if (manual)
 			$('.map-fetched .map-table').animate({opacity: 0.4});
 			
-		refreshing = smapAjax('refreshMap', {year: year, extract: $('.spider-ctrl-extract-button input').is(':checked')}, function(data){
+		refreshing = smapAjax('refresh_map', {current_year: year, extract: $('.spider-ctrl-extract-button input').is(':checked')}, function(data){
 			if (data && data.success){
 				var rep = $(data.html);
 				$('.map-fetched').replaceWith(rep);
@@ -67,7 +67,7 @@ $(document).ready(function(){
 		var t = $(this);
 		var turnOn = !t.filter('.spider-status-waiting, .spider-status-active').length;
 
-		smapAjax('spiderPower', {turnOn: turnOn, schema: t.data('schema')}, function(data, success){
+		smapAjax('spider_power', {turnOn: turnOn, schema: t.data('schema')}, function(data, success){
 			if (success && data.button){
 				t.replaceWith(data.button);
 				smapUpdate();
@@ -99,7 +99,7 @@ $(document).ready(function(){
 			configCallI++;
 			(function(i){
 				t.find('.spider-ctrl-field-val').html(nval);
-				smapAjax('spiderConfig', {configVar: id, configVal: nval}, function(data, success){
+				smapAjax('spider_config', {configVar: id, configVal: nval}, function(data, success){
 					if (success && configCallI == i){
 						t.data('smap-ctrl-val', nval);
 						updateYear(true);

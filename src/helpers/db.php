@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
  
-
+namespace StateMapper;
 	
 if (!defined('BASE_PATH'))
 	die();
@@ -27,7 +27,7 @@ function get_connection($closing = false){
 	static $conn = null;
 	if ($conn == null){
 		try {
-			$conn = new mysqli(DB_HOST, DB_USER, DB_PASS);
+			$conn = new \mysqli(DB_HOST, DB_USER, DB_PASS);
 		} catch (Exception $e){
 			$conn = false;
 			die_error('db connection failed: '.$e->getMessage());
@@ -37,7 +37,7 @@ function get_connection($closing = false){
 			$conn = false;
 			die_error('db connection failed: '.$err);
 		}
-		if (!mysqli_select_db($conn, DB_NAME)){
+		if (!\mysqli_select_db($conn, DB_NAME)){
 			$conn = false;
 			die_error('db '.DB_NAME.' not found');
 		}
@@ -48,7 +48,7 @@ function get_connection($closing = false){
 		return false;
 	
 	if ($closing){
-		mysqli_close($conn);
+		\mysqli_close($conn);
 		$conn = null;
 		return true;
 	}
@@ -101,7 +101,7 @@ function prepare($query, $injectVars){
 		
 	// TODO: protect against double injecting with %s in first injection: use pair number of quotes before %s in regexp
 	foreach ($injectVars as $v)
-		$query = preg_replace('/%s/', "'".mysqli_real_escape_string($conn, $v)."'", $query, 1);
+		$query = preg_replace('/%s/', "'".\mysqli_real_escape_string($conn, $v)."'", $query, 1);
 
 	//echo "FINAL QUERY: ".$query.PHP_EOL;		
 	return $query;
@@ -110,7 +110,7 @@ function prepare($query, $injectVars){
 function esc_like($str, $dir = 'both'){
 	if (!($conn = get_connection()) || is_error($conn))
 		return $conn;
-	return "'".(in_array($dir, array('left', 'both')) ? '%' : '').mysqli_real_escape_string($conn, $str).(in_array($dir, array('right', 'both')) ? '%' : '')."'";
+	return "'".(in_array($dir, array('left', 'both')) ? '%' : '').\mysqli_real_escape_string($conn, $str).(in_array($dir, array('right', 'both')) ? '%' : '')."'";
 }
 
 function query($query, $injectVars = array(), $returnType = null){
@@ -121,7 +121,7 @@ function query($query, $injectVars = array(), $returnType = null){
 		
 	$result = execute_query($conn, $query);
 	if (!$result){
-		$err = mysqli_error($conn);
+		$err = \mysqli_error($conn);
 		$err = preg_replace('#\s*'.preg_quote('You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ', '#').'(.*)\s*$#ius', 'syntax error near $1', $err);
 		
 		die_error('MySQL query error: <b>'.$err.'</b> about query <b>'.$query.'</b>');
@@ -129,13 +129,13 @@ function query($query, $injectVars = array(), $returnType = null){
 	}
 	
 	if ($returnType == 'num_rows')
-		return mysqli_num_rows($conn);
+		return \mysqli_num_rows($conn);
 	
 	if ($result === true)
 		return true;
 		
 	$ret = array();
-	while ($row = mysqli_fetch_assoc($result))
+	while ($row = \mysqli_fetch_assoc($result))
 		$ret[] = $row;
 	return $ret;
 }
@@ -148,34 +148,48 @@ function insert($table, $vars = array()){
 	
 	$values = array();
 	foreach ($vars as $k => $v)
-		$values[] = $v === null ? 'NULL' : "'".mysqli_real_escape_string($conn, $v)."'";
+		$values[] = $v === null ? 'NULL' : "'".\mysqli_real_escape_string($conn, $v)."'";
 
 	$query = 'INSERT INTO '.$table.' ( '.implode(', ', array_keys($vars)).' ) VALUES ( '.implode(', ', $values).' )';
 		
 	return execute_query($conn, $query, true);
 }
 
-function update($table, $data = array(), $where = array(), $notWhere = array()){
+function update_row($table, $data = array(), $where = array(), $notWhere = array(), $opts = array()){
+	return update($table, $data, $where, $notWhere, $opts + array('limit' => 1));
+}
+
+function update($table, $data = array(), $where = array(), $notWhere = array(), $opts = array()){
 	if (!($conn = get_connection()) || is_error($conn))
 		return $conn;
 	
-	$set = array();
-	foreach ($data as $k => $v)
-		$set[] = $k.' = '.($v === null ? 'NULL' : "'".mysqli_real_escape_string($conn, $v)."'");
+	if (is_array($data)){
+		$set = array();
+		foreach ($data as $k => $v)
+			$set[] = $k.' = '.($v === null ? 'NULL' : "'".\mysqli_real_escape_string($conn, $v)."'");
+		$data = implode(', ', $set);
+	}
 
 	$w = array();
 	foreach ($where as $k => $v)
-		$w[] = $k.' = '.($v === null ? 'NULL' : "'".mysqli_real_escape_string($conn, $v)."'");
+		$w[] = $k.($v === null ? ' IS NULL' : " = '".\mysqli_real_escape_string($conn, $v)."'");
 	foreach ($notWhere as $k => $v)
-		$w[] = $k.' != '.($v === null ? 'NULL' : "'".mysqli_real_escape_string($conn, $v)."'");
+		$w[] = $k.($v === null ? ' IS NOT NULL' : " != '".\mysqli_real_escape_string($conn, $v)."'");
 
-	$query = 'UPDATE '.$table.' SET '.implode(', ', $set);
+	$query = 'UPDATE '.$table.' SET '.$data;
+	
 	if ($w)
 		$query .= ' WHERE '.implode(' AND ', $w);
+	
+	if (!empty($opts['limit']))
+		$query .= ' LIMIT '.$opts['limit'];
+		
+	if (!empty($opts['debug']))
+		echo $query.PHP_EOL;
 		
 	if (!execute_query($conn, $query))
 		return false;
-	return mysqli_affected_rows($conn);
+	return \mysqli_affected_rows($conn);
 }
 
 function execute_query($conn, $query, $returnInsertedId = false){
@@ -183,14 +197,14 @@ function execute_query($conn, $query, $returnInsertedId = false){
 	if (empty($smapDebug['queries']))
 		$smapDebug['queries'] = array();
 	$begin = microtime(true);
-	$ret = mysqli_query($conn, $query);
+	$ret = \mysqli_query($conn, $query);
 	if ($returnInsertedId)
-		$ret = $ret ? mysqli_insert_id($conn) : false;
+		$ret = $ret ? \mysqli_insert_id($conn) : false;
 
 	$explain = array();
 	if (!IS_CLI && is_dev()){
-		if ($eRet = mysqli_query($conn, 'EXPLAIN '.$query))
-			while ($eRow = mysqli_fetch_assoc($eRet))
+		if ($eRet = \mysqli_query($conn, 'EXPLAIN '.$query))
+			while ($eRow = \mysqli_fetch_assoc($eRet))
 				$explain[] = $eRow;
 	}
 			
@@ -207,40 +221,10 @@ function execute_query($conn, $query, $returnInsertedId = false){
 	return $ret;
 }
 
-function lint_sql_var($var){
-	return preg_replace_callback('#[A-Z]#u', function($m){
-		return '_'.strtolower($m[0]);
-	}, $var);
-}
-
-// Convert all tables to TokuDB engine with "?setNewEngine=TokuDB" - for development purpose only
-function convert_db_engine($newEngine){
-	if (!in_array($newEngine, array('TokuDB')))
-		die('bad engine');
-		
-	$sql = '
-		SELECT TABLE_NAME, ENGINE FROM INFORMATION_SCHEMA.TABLES
-        WHERE TABLE_SCHEMA = "'.DB_NAME.'"
-    ';
-
-    foreach (query($sql) as $t){
-		$alter = strcasecmp($t['ENGINE'], $newEngine);
-		if ($alter){
-			echo 'Altering table "'.$t['TABLE_NAME'].'" engine from '.$t['ENGINE'].' to '.$newEngine.'<br>';
-			query('ALTER TABLE '.$t['TABLE_NAME'].' ENGINE="'.$newEngine.'"');
-		} else 
-			echo 'Leaving table "'.$t['TABLE_NAME'].'" with engine '.$t['ENGINE'].'<br>';
-		
-		query('ALTER SCHEMA '.DB_NAME.' DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_general_ci');
-		query('ALTER TABLE '.$t['TABLE_NAME'].' CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci');
-    }
-    die('done');
-}
-// convert_db_engine('TokuDB');
-
 function clean_tables($all = false){
 	if (IS_INSTALL)
 		return;
 		
 	do_action('clean_tables', $all);
 }
+

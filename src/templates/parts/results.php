@@ -16,29 +16,32 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
- 
+
+namespace StateMapper;
 
 if (!defined('BASE_PATH'))
 	die();
 
 global $smap;
 
-$count = count($smap['results']);
 $i = 0;
 $last = null;
-foreach ($smap['results'] as $r){
+foreach ($results['items'] as $r){
 	$last = $r;
 	?>
-	<div class="<?= ($i == $count-1 ? 'last' : '') ?> result">
+	<div class="<?= ($i == $results['count']-1 ? 'last' : '') ?> result" <?= related(array('entity_id' => $r['id'])) ?>>
 		<a href="<?= get_entity_url($r) ?>">
-			<span><i class="result-icon fa fa-<?= get_entity_icon($r) ?>"></i><span><?= get_entity_title($r) ?></span></span>
+			<span class="inline-entity"><i class="result-icon fa fa-<?= get_entity_icon($r) ?>"></i><span><?= get_entity_title($r) ?></span></span>
 
 			<?php
+			if (0){
+				$summary = get_entity_summary($r, 'list');
 
 				// TODO: factorize with template/Entity.php stats! (try to grab everything at once, or precache to entity table)
 
 				$details = array();
-
+				
+				// founded
 				$date = get_var('SELECT b.date AS date
 					FROM statuses AS s
 					LEFT JOIN precepts AS p ON s.precept_id = p.id
@@ -53,9 +56,19 @@ foreach ($smap['results'] as $r){
 
 				if ($object)
 					$details[] = '<span class="entity-line-detail"><span class="entity-line-label">'._('Object').': </span><span class="entity-line-body"><i>"'.$object.'"</i></span></span>';
+					
+				if (!empty($summary['fund']))
+					$details[] = '<span class="entity-line-detail"><i class="fa fa-'.$summary['fund']['icon'].'"></i> '.format_number_nice($summary['fund']['originalAmount'] / 100, false).'</span>';
+				
+				if (!empty($summary['location']))
+					$details[] = '<span class="entity-line-detail"><i class="fa fa-map-marker"></i> '.$summary['location']['html'].'</span>';
+				
+				if (!empty($summary['funding']))
+					$details[] = '<span class="entity-line-detail"><i class="fa fa-'.$summary['funding']['icon'].'"></i> '.format_number_nice($summary['funding']['originalAmount'] / 100, false).'</span>';
 
 				if ($details)
 					echo '<span class="entity-line-details">'.implode(' / ', $details).'</span>';
+			}
 			?>
 		</a>
 	</div>
@@ -63,12 +76,25 @@ foreach ($smap['results'] as $r){
 	$i++;
 }
 
-if ($smap['resultsLeft']){
-	?>
-	<div class="infinite-loader" <?= related(array('after_id' => $last['id'], 'loaded_count' => count($smap['results']) + (!empty($smap['query']['loaded_count']) ? $smap['query']['loaded_count'] : 0))) ?>><i class="fa fa-circle-o-notch fa-spin"></i> Loading..</div>
-	<?php
+if (!empty($results['left'])){
+	$autoload = !empty($smap['query']['loaded_count']);
+	$related = array(
+		'after_id' => $last['id'], 
+		'loaded_count' => $results['count'] + (!empty($smap['query']['loaded_count']) ? $smap['query']['loaded_count'] : 0)
+	);
 
-} else {
+	$loader = '<div class="infinite-loader infinite-autoload loading" '.related($related).'>'.get_loading().'</div>';
+	
+	if ($autoload){
+		echo $loader;
+		
+	} else {
+		?>
+		<a class="infinite-loader" href="#" data-smap-loading="<?= esc_attr($loader) ?>" <?= related($related) ?>><?= __('Load more') ?> <i class="fa fa-angle-down"></i></a>
+		<?php
+	}
+
+} else if (is_search()){
 	?>
 	<div class="results-outro"><a href="#"><i class="fa fa-search"></i> Edit search..</a></div>
 	<?php

@@ -46,11 +46,12 @@
 .menu-menu {
     position: absolute;
     background: white;
-    border: 1px solid #ccc;
+    border: 1px solid $popup-border-color;
     padding: 4px 0;
     left: 0;
     z-index: 110;
     box-sizing: border-box;
+    box-shadow: $popup-shadow;
 }
 
 .menu-right .menu-menu {
@@ -144,6 +145,9 @@
 		}
 	}
 }
+.full-cb-menu li {
+	cursor: pointer;
+}
 
 /* multi selection */
 
@@ -160,10 +164,11 @@
 	cursor: default;
 }
 
-
-
-
-
+.tick {
+	position: relative;
+	top: 1px;
+	left: 2px;
+}
 
 
 @media screen and (max-width: 450px){
@@ -187,3 +192,4 @@
 		right: 0;
 	}
 }
+

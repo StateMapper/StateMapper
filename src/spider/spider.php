@@ -16,7 +16,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
- 
+
+namespace StateMapper;
+//use \StateMapper\BulletinParser as BulletinParser;
+//use \StateMapper\BulletinExtractor as BulletinExtractor;
+
 
 global $smap;
 
@@ -37,12 +41,14 @@ if (!defined('BASE_PATH'))
  * 
  */
 
+global $smap;
+
 // spider script
 $maxAttempts = 3;
 $maxFixed = 3;
 
 $query = $smap['query'];
-$config = !KAOS_SPIDER_ID ? $smap['spiderConfig'] : get_spider_config(KAOS_SPIDER_ID);
+$config = !KAOS_SPIDER_ID ? $smap['spider'] : get_spider_config(KAOS_SPIDER_ID);
 
 /*
 echo 'spider config: '.PHP_EOL;
@@ -51,13 +57,13 @@ print_r($config);
 echo PHP_EOL.PHP_EOL;
 */
 
-$workers = $config['workersCount'];
+$workers = $config['max_workers'];
 
 
 if (empty($smap['query']['date']))
-	$smap['query']['date'] = $query['date'] = $config['dateBack'];
+	$smap['query']['date'] = $query['date'] = $config['date_back'];
 
-print_log('spider starting with '.$workers.' workers back until '.$config['dateBack'].' (CPU rate: '.$config['cpuRate'].'%)', array('color' => 'lgreen', 'spider_id' => KAOS_SPIDER_ID));
+print_log('spider starting with '.$workers.' workers back until '.$config['date_back'].' (CPU rate: '.$config['max_cpu_rate'].'%)', array('color' => 'lgreen', 'spider_id' => KAOS_SPIDER_ID));
 
 $pids = array();
 $lastCPUCheck = $last_recheck = $goal = null;
@@ -67,7 +73,7 @@ $begin = $lastConfigReload = time();
 while (true){
 	$starting = time() - $begin < 120; // 2min startup mode
 	
-	// reload spider params every 15 seconds
+	// reload the spider's config every 15 seconds
 	if (KAOS_SPIDER_ID && $lastConfigReload < strtotime('-15 seconds')){
 		$lastConfigReload = time();
 		$config = get_spider_config(KAOS_SPIDER_ID);
@@ -84,28 +90,28 @@ while (true){
 	if ($cpu){
 		$load = $cpu[0];
 
-		if (!$lastCPUCheck || ($config['cpuRate'] != 100 && ($lastCPUCheck < strtotime('-1 minute') || ($starting && $lastCPUCheck < strtotime('-20 seconds'))))){
+		if (!$lastCPUCheck || ($config['max_cpu_rate'] != 100 && ($lastCPUCheck < strtotime('-1 minute') || ($starting && $lastCPUCheck < strtotime('-20 seconds'))))){
 			
 			if (!$goal){
 				$lastCPUCheck = time();
 				
-				if ($config['workersCount'] > 25 && $load > min($config['cpuRate'] + 15, 95))
+				if ($config['max_workers'] > 25 && $load > min($config['max_cpu_rate'] + 15, 95))
 					$workers -= 5;
-				else if ($config['workersCount'] > 15 && $load > min($config['cpuRate'] + 5, 95))
+				else if ($config['max_workers'] > 15 && $load > min($config['max_cpu_rate'] + 5, 95))
 					$workers -= 3;
-				else if ($load < $config['cpuRate'] - 15 && $workers < $config['workersCount'])
+				else if ($load < $config['max_cpu_rate'] - 15 && $workers < $config['max_workers'])
 					$workers += 5;
 					
 				$goal = $workers;
 			}
 		}
-		$overload = $load > min($config['cpuRate'] + 15, 95);
+		$overload = $load > min($config['max_cpu_rate'] + 15, 95);
 	}
 	
-	$workers = max(min($workers, $config['workersCount']), 1);
+	$workers = max(min($workers, $config['max_workers']), 1);
 	
 	if (IS_CLI)
-		print_log('workers goal: '.$workers.'/'.$config['workersCount'], array('spider_id' => KAOS_SPIDER_ID));
+		print_log('workers goal: '.$workers.'/'.$config['max_workers'], array('spider_id' => KAOS_SPIDER_ID));
 		
 	clean_tables();
 	
@@ -170,7 +176,7 @@ while (true){
 			if ($stop) // important!
 				break;
 				
-			if ($config['dateBack'] && $query['date'] < $config['dateBack'])
+			if ($config['date_back'] && $query['date'] < $config['date_back'])
 				break;
 			
 			// go to previous day
@@ -179,8 +185,8 @@ while (true){
 
 		$smap['query']['date'] = $query['date'];
 		
-		// stop at dateBack
-		if ($config['dateBack'] && $query['date'] < $config['dateBack']){
+		// stop at date_back
+		if ($config['date_back'] && $query['date'] < $config['date_back']){
 			unlock($lock);
 			break;
 		}
@@ -227,7 +233,7 @@ while (true){
 				print_log('ended fetch for '.$query['schema'].'/'.$query['date'].(!empty($query['id']) ? '/'.$query['id'] : ''), array('color' => 'lgreen'));
 				
 				if ($ret === true)
-					print_log('skipping extraction, bulletin not found not expected');
+					print_log('skipping extraction, bulletin not found nor expected');
 				
 				else if ($config['extract']){ // extract if no bulletin expected
 					print_log('starting to extract');
@@ -292,7 +298,7 @@ while (true){
 		}
 	}
 	
-	if ($config['dateBack'] && $query['date'] < $config['dateBack'])
+	if ($config['date_back'] && $query['date'] < $config['date_back'])
 		break;
 }
 worker_wait($pids, null, true);

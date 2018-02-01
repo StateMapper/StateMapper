@@ -16,7 +16,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
- 
+
+namespace StateMapper;
+
 if (!defined('BASE_PATH'))
 	die();
 		
@@ -30,7 +32,7 @@ $url = get_canonical_url();
 $canonical = rtrim($url, '/') == rtrim(current_url(), '/');
 
 // print canonical indicator
-$str[] = '<span><a href="'.$url.'" style="'.($canonical ? '' : 'color: red').'" title="'.($canonical ? 'The canonical URL matches the current URL' : 'The canonical and the current URL are different').'"><i class="fa fa-'.($canonical ? 'check' : 'link').'"></i> Link</a></span>';
+$str[] = '<span class="left"><a href="'.$url.'" style="'.($canonical ? '' : 'color: red').'" title="'.($canonical ? 'The canonical URL matches the current URL' : 'The canonical and the current URL are different').'"><i class="fa fa-'.($canonical ? 'check' : 'link').'"></i> Link</a></span>';
 
 // calc query duration
 $dbduration = 0;
@@ -41,14 +43,14 @@ if (!empty($smapDebug['queries']))
 if (!empty($smap['begin'])){
 
 	// generation time
-	$str[] = '<span title="'.esc_attr('This page was generated in '.time_diff($smap['begin'], null, true)).'" class="show-queries"><i class="fa fa-clock-o"></i> '.time_diff($smap['begin'], null, true).' exec</span>';
+	$str[] = '<span title="'.esc_attr('This page was generated in '.time_diff($smap['begin'], null, true)).'" class="show-queries left"><i class="fa fa-clock-o"></i> '.time_diff($smap['begin'], null, true).' exec</span>';
 
 	// fetches
 	if (isset($smap['fetches'])){
 
 		$cstr = array();
-		if (!empty($smap['fetchOrigins']))
-			foreach ($smap['fetchOrigins'] as $f => $count)
+		if (!empty($smap['fetched_origins']))
+			foreach ($smap['fetched_origins'] as $f => $count)
 				$cstr[] = number_format($count, 0).' fetched from '.$f;
 
 		$cprec = array();
@@ -57,7 +59,7 @@ if (!empty($smap['begin'])){
 		if (!empty($smap['fetchWaitDuration']))
 			$cprec[] = time_diff(0, $smap['fetchWaitDuration']).' wait';
 
-		$str[] = '<span title="'.esc_attr(implode("\n", $cstr)).'" class="show-queries"><i class="fa fa-download"></i> '.number_format($smap['fetches'], 0).' fetches'.($cprec ? ' ('.implode(', ', $cprec).')' : '').'</span>';
+		$str[] = '<span title="'.esc_attr(implode("\n", $cstr)).'" class="show-queries left"><i class="fa fa-download"></i> '.number_format($smap['fetches'], 0).' fetches'.($cprec ? ' ('.implode(', ', $cprec).')' : '').'</span>';
 
 	}
 }
@@ -72,7 +74,7 @@ if (!empty($smapDebug['queries'])){
 		$keysHtml = ' <span class="footer-queries-icons">'.implode(' ', $keysHtml).'</span>';
 	}
 	$count = count($smapDebug['queries']);
-	$str[] = '<span class="show-queries"><span title="'.esc_attr('click to show all executed queries').'"><i class="fa fa-database"></i> '.sprintf(ngettext('%s query', '%s queries', $count), number_format($count)).' ('.time_diff(0, $dbduration, true).')</span>'.$keysHtml.'</span>';
+	$str[] = '<span class="show-queries left"><span title="'.esc_attr('click to show all executed queries').'"><i class="fa fa-database"></i> '.sprintf(ngettext('%s query', '%s queries', $count), number_format($count)).' ('.time_diff(0, $dbduration, true).')</span>'.$keysHtml.'</span>';
 }
 
 if (!empty($smapDebug['queries'])){
@@ -92,48 +94,59 @@ if (!empty($smapDebug['queries'])){
 
 	?>
 	<div class="debug-queries">
-		<?php
-			if (!empty($smap['fetchedUrls'])){
+		<div class="debug-queries-inner">
+			<div class="debug-queries-title">$smap global variable</div>
+			<table border="0">
+				<tr><td><?php 
+					$smap_clone = $smap;
+					unset($smap_clone['schemaObj']);
+					debug($smap_clone);
+				?></td></tr>
+			</table>
+			<?php
+			
+				if (!empty($smap['fetched_urls'])){
+					?>
+					<div class="debug-queries-title">All <?= count($smap['fetched_urls']) ?> fetched URLs:</div>
+					<table border="0">
+					<?php
+						$i = 0;
+						foreach ($smap['fetched_urls'] as $url){
+							?>
+							<tr><td class="debug-queries-prefix">[<?= time_diff($smap['fetchDurations'][$i], 0, true) ?>] </td><td class="query-key-td"><i class="color-<?= ($smap['fetchCodes'][$i] == 200 ? 'green' : 'red') ?> fa fa-<?= ($smap['fetchCodes'][$i] != 200 ? 'times' : ($smap['fetchTypes'][$i] ? 'download' : 'check')) ?>"></i> </td><td class="debug-queries-val"><a href="<?= $url ?>" target="_blank"><?= $url ?></a> </td><td> <span title="Status code <?= $smap['fetchCodes'][$i] ?> was returned"> <i class="fa fa-long-arrow-right"></i> <?= $smap['fetchCodes'][$i] ?></span></td></tr>
+							<?php
+							$i++;
+						}
+					?>
+					</table>
+					<?php
+				}
+				
+				if ($has){
 				?>
-				<div class="debug-queries-title">All <?= count($smap['fetchedUrls']) ?> fetched URLs:</div>
-				<table border="0">
-				<?php
-					$i = 0;
-					foreach ($smap['fetchedUrls'] as $url){
-						?>
-						<tr><td class="debug-queries-prefix">[<?= time_diff($smap['fetchDurations'][$i], 0, true) ?>] </td><td class="query-key-td"><i class="color-<?= ($smap['fetchCodes'][$i] == 200 ? 'green' : 'red') ?> fa fa-<?= ($smap['fetchCodes'][$i] != 200 ? 'times' : ($smap['fetchTypes'][$i] ? 'download' : 'check')) ?>"></i> </td><td class="debug-queries-val"><a href="<?= $url ?>" target="_blank"><?= $url ?></a> </td><td> <span title="Status code <?= $smap['fetchCodes'][$i] ?> was returned"> <i class="fa fa-long-arrow-right"></i> <?= $smap['fetchCodes'][$i] ?></span></td></tr>
-						<?php
-						$i++;
-					}
-				?>
-				</table>
+					<div class="debug-queries-title">Top 10 slow queries:</div>
+					<table border="0">
+					<?php
+						foreach ($slow as $q)
+							print_query_line($q, true);
+					?>
+					</table>
 				<?php
 			}
-			
-			if ($has){
 			?>
-				<div class="debug-queries-title">Top 10 slow queries:</div>
-				<table border="0">
-				<?php
-					foreach ($slow as $q)
-						print_query_line($q, true);
-				?>
-				</table>
+			<div class="debug-queries-title">All <?= number_format(count($smapDebug['queries']), 0) ?> queries:</div>
+			<table border="0">
 			<?php
-		}
-		?>
-		<div class="debug-queries-title">All <?= number_format(count($smapDebug['queries']), 0) ?> queries:</div>
-		<table border="0">
-		<?php
-			echo $queriesHtml;
-		?>
-		</table>
+				echo $queriesHtml;
+			?>
+			</table>
+		</div>
 	</div>
 	<?php
 }
 
 if ($str)
-	echo implode('', $str).'<span>|</span>';
+	echo implode('', $str);
 
 
 

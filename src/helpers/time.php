@@ -17,27 +17,71 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
  
+namespace StateMapper;
 	
 if (!defined('BASE_PATH'))
 	die();
 
+function time_ago($time, $timeRef = null, $microseconds = false){
+	return time_diff($time, $timeRef, $microseconds, 'ago');
+}
 
-function time_diff($time, $timeRef = null, $microseconds = false){
+function time_diff($time, $timeRef = null, $microseconds = false, $mode = null){
 	if (!is_numeric($time))
 		$time = strtotime($time);
-	$diff = abs(($timeRef !== null ? (is_numeric($timeRef) ? $timeRef : strtotime($timeRef)) : time()) - $time);
-	$min = $diff >= 60 ? ($diff - ($diff % 60)) / 60 : 0;
-	$diff -= $min * 60;
-	$s = floor($diff);
-	$ms = floor(($diff - $s) * 1000);
+		
+	$diff = abs(($timeRef !== null ? (is_numeric($timeRef) ? $timeRef : strtotime($timeRef)) : strtotime('midnight')) - $time);
 	
-	$str = $min ? $min.'m' : '';
-	if ($s || $min)
-		$str .= ($str == '' ? '' : ' ').$s.'s';
-	if ($microseconds && !$min && ($s < 3 && ($ms > 1 || $s < 1)))
-		$str .= ($str == '' ? '' : ' ').$ms.($str == '' && !$ms ? 's' : 'ms');
-	if ($str == '')
-		$str = '0s';
+	$min = $diff >= 60 ? ($diff - ($diff % 60)) / 60 : 0;
+	
+	if ($min < 60){
+		
+		$diff -= $min * 60;
+		
+		$s = floor($diff);
+		$ms = floor(($diff - $s) * 1000);
+		
+		$str = $min ? $min.'m' : '';
+		if ($s || $min)
+			$str .= ($str == '' ? '' : ' ').$s.'s';
+		if ($microseconds && !$min && ($s < 3 && ($ms > 1 || $s < 1)))
+			$str .= ($str == '' ? '' : ' ').$ms.($str == '' && !$ms ? 's' : 'ms');
+		if ($str == '')
+			$str = '0s';
+	
+	} else {
+		$h = round($diff / (60 * 60));
+		if ($h >= 24){
+			
+			$date = date('Y-m-d', $time);
+			if (date('Y-m-d') == $date)
+				return 'today';
+			if (date('Y-m-d', strtotime('-1 day')) == $date)
+				return 'yesterday';
+				
+			$d = ceil($diff / (60 * 60 * 24));
+			
+			if ($d > 365){
+				$y = round($d/365,25);
+				$str = _n('%s year', '%s years', $y);
+			
+			} else if ($d > 27){
+				$m = round($d/31);
+				$str = _n('%s month', '%s months', $m);
+			
+			} else if ($d > 6){
+				$w = round($d/7);
+				$str = _n('%s week', '%s weeks', $w);
+				
+			} else
+				$str = _n('%s day', '%s days', $d);
+			
+		} else
+			$str = $h.'h';
+	}
+	
+	if ($mode == 'ago')
+		return sprintf(__('%s ago'), $str);
 	return $str;
 }
 

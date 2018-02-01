@@ -16,7 +16,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
- 
+
+namespace StateMapper; 
 	
 if (!defined('BASE_PATH'))
 	die();
@@ -27,7 +28,7 @@ function get_location_by_id($id){
 }
 
 
-function get_location_label($loc){
+function get_location_label($loc, $context = 'status'){
 	
 	if (empty($loc['state']) || is_numeric($loc['state']))
 		$loc['state'] = get_state_name($loc['state']);
@@ -36,7 +37,7 @@ function get_location_label($loc){
 	if (empty($loc['city']) || is_numeric($loc['city']))
 		$loc['city'] = get_city_name($loc['city']);
 		
-	return '<span class="location-full" title="'.esc_attr('<u>Full address</u>: '.$loc['label'].'<br><br><u>Original</u>: '.$loc['original']).'">'.$loc['postalcode'].' '.$loc['city'].', '.$loc['state'].' <img src="'.get_flag_url($loc['country']).'" /></span>';
+	return '<span class="location-full" title="'.esc_attr('<u>Full address</u>: '.$loc['label'].'<br><br><u>Original address</u>: '.$loc['original']).'">'.$loc['postalcode'].' '.$loc['city'].', '.$loc['state'].($context != 'sheet' ? ' <img data-tippy-placement="right" title="'.esc_attr(get_country_name($loc['country'])).'" src="'.get_flag_url($loc['country']).'" />' : '').'</span>';
 }
 
 function get_state_name($id){
@@ -194,4 +195,16 @@ function get_location_filter_array($loc){
 	} 
 	
 	return array('country' => $loc['country']);
+}
+
+function get_country_name($country){
+	$schema = get_country_schema($country);
+	return $schema ? $schema->name : $country;
+}
+
+function query_locations($args, &$left = null){
+	return array();
+	// @todo: add locations results
+	foreach (array('countries', 'states', 'counties', 'cities') as $table)
+		get_var('SELECT id FROM location_'.$type.' WHERE country = %s AND slug = %s', array(strtoupper($country), $slug));
 }

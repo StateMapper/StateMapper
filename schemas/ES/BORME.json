@@ -62,6 +62,10 @@
 									url: "https://boe.es/diario_borme/xml.php?id=BORME-S-{date:formatDate(Ymd)}"
 								}
 							]
+							/*,
+							noBulletinReplies: [
+								'No se encontró el sumario original\s*.?'
+							]*/
 						}
 					}
 				}
@@ -863,13 +867,13 @@
 				},
 				socialStatus: {
 					_type: "object",
-					_action: "new",
+					_action: "update",
 					_attr: "note",
 					title: "Social object"
 				},
 				location: {
 					_type: "location",
-					_action: "new",
+					_action: "update",
 					_attr: "note",
 					title: "Location"
 				},
@@ -940,21 +944,21 @@
 				},
 				counselorNew: {
 					_type: "counselor",
-					_action: "new",
+					_action: "start",
 					_attr: "target",
 					title: "Counselor start",
 					columns: ["name", "subtype"]
 				},
 				presidentNew: {
 					_type: "president",
-					_action: "new",
+					_action: "start",
 					_attr: "target",
 					title: "President start",
 					columns: ["name", "subtype"]
 				},
 				secretarioNew: {
 					_type: "secretary",
-					_action: "new",
+					_action: "start",
 					_attr: "target",
 					title: "Secretary start",
 					columns: ["name", "subtype"]

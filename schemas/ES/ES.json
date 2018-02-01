@@ -42,7 +42,30 @@
 		
 		legalEntityName: {
 			pattern: "[\pL0-9][\pL-_0-9\.&][\s\pL-_0-9\.&]*",											// pattern of entity names (companies), without the suffix (S.L/S.A./..)
-			exception: "[0-9\.,\)\(:;]+"
+			exception: "[0-9\.,\)\(:;]+",
+			usualWords: [
+				"de",
+				"a",
+				"y",
+				"e",
+				"u",
+				"o",
+				"en",
+				"los",
+				"lo",
+				"el",
+				"al",
+				"la",
+				"las",
+				"para",
+				"por",
+				"desde",
+				"hasta",
+				"España",
+				"español",
+				"Spain",
+				"Spanish"
+			]
 		},
 		
 		legalEntityTypes: {																// patterns for legal entities (companies amongst them)
@@ -52,15 +75,26 @@
 				strictPatterns: [
 				],
 				caseInsensitivePatterns: [
-					"{legalEntityPattern}(S\.?\s?C\.?\s?o\.?\s?o\.?\s?p\.?)",
+					"{legalEntityPattern}(\bS\.?\s?C\.?\s?o\.?\s?o\.?\s?p\b\.?)",
 					"{legalEntityPattern}(Sociedad\s*Cooperativa(?:\s*Espa[ñn]ola)?)"
+				]
+			},
+			SCOM: {
+				name: "Sociedad Comanditaria Simple",
+				shortName: "S.Com.",
+				strictPatterns: [
+					"{legalEntityPattern}(\bS\s?\.?\s?C\s?\.?\s?o\s?\.?\s?m\b\s?\.?)",
+					"{legalEntityPattern}(\bs\.?\s?c\.?\s?o\.?\s?m\b\.?)"
+				],
+				caseInsensitivePatterns: [
+					"{legalEntityPattern}(Sociedad\s*Comanditaria\s*Simple(?:\s*Espa[ñn]ola)?)"
 				]
 			},
 			SLNE: {
 				name: "Sociedad Limitada Nueva Empresa",
 				shortName: "S.L.N.E.",
 				strictPatterns: [
-					"{legalEntityPattern}(S\.?\s?L\.?\s?N\.?\s?E\.?)"
+					"{legalEntityPattern}(\bS\.?\s?L\.?\s?N\.?\s?E\b\.?)"
 				],
 				caseInsensitivePatterns: [
 					"{legalEntityPattern}(Sociedad\s*Limitada\s*Nueva\s*Empresa(?:\s*Espa[ñn]ola)?)"
@@ -70,7 +104,7 @@
 				name: "Sociedad Limitada de Formación Succesiva",
 				shortName: "S.L.F.S.",
 				strictPatterns: [
-					"{legalEntityPattern}(S\.?\s?L\.?\s?F\.?\s?S\.?)"
+					"{legalEntityPattern}(\bS\.?\s?L\.?\s?F\.?\s?S\b\.?)"
 				],
 				caseInsensitivePatterns: [
 					"{legalEntityPattern}(Sociedad\s*Limitada\s*(?:de\s*)?Formaci[óo]n\s*Succ?esiva(?:\s*Espa[ñn]ola)?)"
@@ -80,7 +114,7 @@
 				name: "Sociedad Limitada Profesional",
 				shortName: "S.L.P.",
 				strictPatterns: [
-					"{legalEntityPattern}(S\.?\s?L\.?\s??P\.?)"
+					"{legalEntityPattern}(\bS\.?\s?L\.?\s??P\b\.?)"
 				],
 				caseInsensitivePatterns: [
 					"{legalEntityPattern}(Sociedad\s*(?:Limitada\s*)?Profesional(?:\s*Espa[ñn]ola)?)",
@@ -119,11 +153,12 @@
 				shortName: "S.L.",
 				namePosition: "before",											// position of the name (before means the name is before the patterns: MYCOMPANY S.L.)
 				strictPatterns: [
-					"{legalEntityPattern}(S\.?\s?(?:R\.?\s?)?L\.?)",
+					"{legalEntityPattern}(\bS\s?\.?\s?(?:R\s?\.?\s?)?L\b\s?\.?)",
+					"{legalEntityPattern}(\bs\.?(?:r\.?)?l\b\.?)",
 					"{legalEntityPattern}(B\.?\s?V\.?)" 						// SL from Netherlands
 				],
 				caseInsensitivePatterns: [
-					"{legalEntityPattern}(Sociedad\s*(?:de\s*Responsabilidad\s*)?Limitada(?:\s*Espa[ñn]ola)?)",
+					"{legalEntityPattern}(S\s*o\s*c\s*i\s*e\s*d\s*a\s*d\s*(?:d\s*e\s*R\s*e\s*s\s*p\s*o\s*n\s*s\s*a\s*b\s*i\s*l\s*i\s*d\s*a\s*d\s*)?L\s*i\s*m\s*i\s*t\s*a\s*d\s*a(?:\s*Espa[ñn]ola)?)",
 					"{legalEntityPattern}((?:Ltd|Limited)\.?(?:\s+Sucursal)?(?:\s+Espa[ñn]a)?)",
 					"{legalEntityPattern}(Sucursal\s+en\s+Espa[nñ]a)", // may add 'not preceeded by SA'
 					"{legalEntityPattern}(GmbH\.?)"								// SL from Germany
@@ -138,7 +173,7 @@
 				shortName: "S.A.U.",
 				namePosition: "before",
 				strictPatterns: [
-					"{legalEntityPattern}(S\.?\s?A\.?\s?U\.?)"
+					"{legalEntityPattern}(\bS\.?\s?A\.?\s?U\b\.?)"
 				],
 				caseInsensitivePatterns: [
 					"{legalEntityPattern}(Sociedad\s*An[óo]nima\s*Unipersonal(?:\s*Espa[ñn]ola)?)"
@@ -149,7 +184,8 @@
 				shortName: "S.A.L.",
 				namePosition: "before",
 				strictPatterns: [
-					"{legalEntityPattern}(S\.?\s?A\.?\s?L\.?)"
+					"{legalEntityPattern}(\bS\.?\s?A\.?\s?L\b\.?)",
+					"{legalEntityPattern}(\bs\.?a\b\.?l\.?)"
 				],
 				caseInsensitivePatterns: [
 					"{legalEntityPattern}(Sociedad\s*An[óo]nima\s*Laboral(?:\s*Espa[ñn]ola)?)"
@@ -163,7 +199,7 @@
 					en: "https://en.wikipedia.org/wiki/Sociedad_An%C3%B3nima_Deportiva"
 				},
 				strictPatterns: [
-					"{legalEntityPattern}(S\.?\s?A\.?\s?D\.?)"
+					"{legalEntityPattern}(\bS\.?\s?A\.?\s?D\b\.?)"
 				],
 				caseInsensitivePatterns: [
 					"{legalEntityPattern}(Sociedad\s*An[óo]nima\s*Deportiva(?:\s*Espa[ñn]ola)?)"
@@ -174,8 +210,8 @@
 				shortName: "S.A.",
 				namePosition: "before",
 				strictPatterns: [
-					"{legalEntityPattern}(S\.?\s?A\.?)",
-					"{legalEntityPattern}(s\.a\.?)"
+					"{legalEntityPattern}(\bS\s?\.?\s?A\b\s?\.?)",
+					"{legalEntityPattern}(\bs\.a\b\.?)"
 				],
 				caseInsensitivePatterns: [
 					"{legalEntityPattern}(Sociedad\s*An[óo]nima(?:\s*Espa[ñn]ola)?)",
@@ -209,8 +245,8 @@
 				shortName: "S.C.",
 				namePosition: "before",
 				strictPatterns: [
-					"{legalEntityPattern}(S\.?\s?C\.?)",
-					"{legalEntityPattern}(s\.c\.?)"
+					"{legalEntityPattern}(\bS\s?\.?(?:R\s?\.?)?\s?C\b\s?\.?)",
+					"{legalEntityPattern}(\bs\.(?:r\.)?c\b\.?)"
 				],
 				caseInsensitivePatterns: [
 					"{legalEntityPattern}(Sociedad\s*Colectiva(?:\s*Espa[ñn]ola)?)",
@@ -222,8 +258,8 @@
 				shortName: "U.T.E.",
 				namePosition: "before",
 				strictPatterns: [
-					"{legalEntityPattern}((?:en\s+)?U\.?\s?T\.?\s?E\.?)",
-					"(U\.?\s?T\.?\s?E\.?){legalEntityPattern}"
+					"{legalEntityPattern}((?:en\s+)?\bU\.?\s?T\.?\s?E\b\.?)",
+					"(\bU\.?\s?T\.?\s?E\b\.?){legalEntityPattern}"
 				],
 				caseInsensitivePatterns: [
 					"{legalEntityPattern}(\,?\s*(?:\s+en)?\s+Unión\s*Temporal\s+de\s+Empresas)"
@@ -238,8 +274,8 @@
 				shortName: "F.I.",
 				namePosition: "before",
 				strictPatterns: [
-					"{legalEntityPattern}(F\.?\s?I\.?)",
-					"(F\.?\s?I\.?){legalEntityPattern}"
+					"{legalEntityPattern}(\bF\.?\s?I\b\.?)",
+					"(\bF\.?\s?I\b\.?){legalEntityPattern}"
 				],
 				caseInsensitivePatterns: [
 					"{legalEntityPattern}(\,?\s*Fondo\s+(?:de\s+)inversi[oó]n)"

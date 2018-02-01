@@ -1,11 +1,11 @@
 {
 	capital: {
-		new: {
+		new: { 
 			meaning: "company foundation",
-			icon: "plus",
+			icon: "birthday-cake",
 			own: "Founded with a capital of [amount]",
 			issuing: "[related] was founded with a capital of [amount]",
-			stats: "[count] Companies funded with a total capital of [amount]",
+			stats: "[count] Companies founded with a total capital of [amount]",
 			required: {
 				amount: "the amount of capital"
 			}
@@ -14,6 +14,7 @@
 			meaning: "capital increase",
 			icon: "money",
 			own: "Capital increase by [amount]",
+			summary: "Current capital",
 			issuing: "[related] had a capital increase of [amount]",
 			stats: "[count] Capital increases for a total [amount]",
 			required: {
@@ -22,10 +23,14 @@
 		}
 	},
 	fund: {
-		new: {
+		increase: {
 			meaning: "company funding",
 			icon: "credit-card",
 			own: "Funded with [amount] through [issuing]",
+			summary: {
+				related: "Funded with",
+				issuing: "Funded"
+			},
 			issuing: {
 				icon: "credit-card-alt",
 				label: "[related] funded with [amount]"
@@ -44,6 +49,10 @@
 				icon: "user-o",
 				label: "Now owning [related]"
 			},
+			summary: {
+				related: "Owned by",
+				target: "Owning"
+			},
 			issuing: "[target] was made owner of [related]",
 			related: "[target] was made owner",
 			stats: "[count] Now owning",
@@ -53,10 +62,15 @@
 		}
 	},
 	administrator: {
-		start: {
+		start: { 
 			meaning: "new administrator",
 			icon: "user-plus",
 			own: "Now administrating [related]",
+			summary: {
+				icon: "user",
+				related: "Administrated by",
+				target: "Administrating"
+			},
 			issuing: "[target] was made administrator of [related]",
 			related: "[target] was made administrator",
 			stats: "[count] Now administrating",
@@ -82,6 +96,7 @@
 				icon: "user-o",
 				label: "No longer administrator of [related]"
 			},
+			summary: "Was administrated by",
 			issuing: "[target] is no longer administrator of [related]",
 			related: "[target] is no longer administrator",
 			stats: "[count] Administrators ceased",
@@ -91,10 +106,11 @@
 		}
 	},
 	president: {
-		new: {
+		start: {
 			meaning: "new president",
 			icon: "user-plus",
 			own: "Now president of [related]",
+			summary: "President",
 			issuing: "[target] was made president of [related]",
 			related: "[target] was made president",
 			stats: "[count] Now president of",
@@ -104,10 +120,11 @@
 		}
 	},
 	counselor: {
-		new: {
+		start: {
 			meaning: "new counselor",
 			icon: "user-plus",
 			own: "Now counselor of [related]",
+			summary: "Counselors",
 			issuing: "[target] was made counselor of [related]",
 			related: "[target] was made counselor",
 			stats: "[count] New counselors",
@@ -117,24 +134,26 @@
 		}
 	},
 	object: {
-		new: {
-			meaning: "new social object",
+		update: {
+			meaning: "new social purpose",
 			icon: "file-o",
 			note: "Object",
-			own: "Declared its object as [note]",
-			issuing: "[related] declared its object as [note]",
-			stats: "[count] Object declarations",
+			own: "Declared its social purpose as [note]",
+			summary: "Social purpose",
+			issuing: "[related] declared its social purpose as [note]",
+			stats: "[count] Social purpose declarations",
 			required: {
-				note: "the object"
+				note: "the social purpose"
 			}
 		}
 	},
 	location: {
-		new: {
+		update: { 
 			meaning: "new location",
 			icon: "map-marker",
 			note: "Location",
 			own: "Declared its location as [note]",
+			summary: "Location",
 			issuing: "[related] declared its location as [note]",
 			stats: "[count] Location declarations",
 			required: {
@@ -160,6 +179,7 @@
 			icon: "times",
 			name: "Company dissolutions",
 			own: "Company was dissolved",
+			summary: "Previous names",
 			issuing: "[related] was dissolved",
 			stats: "[count] Company dissolutions"
 		}
@@ -170,6 +190,10 @@
 			icon: "shopping-cart",
 			related: "Absorbed [target]",
 			own: "Absorbed by [related]",
+			summary: {
+				related: "Absorbed",
+				target: "Owned by"
+			},
 			issuing: "[related] absorbed [target]",
 			stats: "[count] Company absorptions",
 			required: {

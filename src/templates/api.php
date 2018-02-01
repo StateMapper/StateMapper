@@ -17,30 +17,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
  
+namespace StateMapper;
 
 if (!defined('BASE_PATH'))
 	die();
 
-$title = get_page_title();
+set_page_title('API Preview: '.get_page_title());
 
-print_template('parts/header');
+print_header('page');
 ?>
-<div class="main-header<?php echo ' header-avatar-'.($avatar ? 'has' : 'none'); ?>">
-	<div class="main-header-inner">
-		<?php print_template('parts/header_logo') ?>
-		<div class="header-center-wrap">
-			<div class="header-center">
-				<div class="header-center-inner">
-					<div class="header-center-title header-title">
-						API Preview: <?= $title ?>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
 <div class="api-human-content">
 	<?php echo print_json($obj); ?>
 </div>
 <?php
-print_template('parts/footer');
+print_footer();

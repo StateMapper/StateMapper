@@ -22,36 +22,132 @@
     z-index: 99;
     color: #333;
     font-weight: normal;
-    position: fixed;
-    bottom: 0;
-    right: 28px;
-    background: white;
-    margin: 6px 0 10px;
-    padding: 1px 10px 1px 1px;
+    margin: 0;
+    padding: 0px 20px 0px;
     text-align: right;
+    background: $bg-light-grey;
+    border-top: 1px solid #e4e4e4;
+    line-height: 40px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
 
 	& > span {
+		position: relative;
 		display: inline-block;
-		padding: 4px 5px;
+		vertical-align: top;
+		
+		&.sep {
+			color: #eee;
+			font-size: 26px;
+			position: absolute;
+			margin: -1px 0 0 -13px;
+		}
+		
+		& > a > i,
+		.menu-button > i,
+		.footer-contribute i,
+		&.footer-login i {
+			font-size: 18px;
+			position: relative;
+			top: 1px;
+			margin-right: 2px;
+			
+			&.fa-plug {
+				font-size: 15px;
+			}
+			
+			&.tick {
+				font-size: inherit;
+				top: 0;
+			}	
+		}
+		
+		& > a {
+			color: inherit;
+			text-decoration: none;
+
+			&.footer-contribute {
+				font-weight: bold;
+				color: $link-color;
+			}
+		}
+		
+		&.footer-debug-ind {
+			color: $font-color-orange;
+			font-weight: bold;
+		}
+		
+		&.left {
+			float: left;
+		}
 	}
 	& > span.show-queries,
 	.copyright .menu-button {
 		cursor: pointer;
 	}
-	& > span > a {
-		color: inherit;
-		text-decoration: none;
-	}
 	& > span.show-queries:hover,
 	.copyright .menu-button:hover,
-	& > span > a:hover {
+	& > span > a:hover,
+	.pointer:hover {
 		color: black;
 	}
+	
+	.menu-wrap {
+		line-height: normal;
+	}
 
-	.footer-contribute i {
-		font-size: 18px;
-		position: relative;
-		top: 1px;
-		margin-right: 2px;
+	.menu-button {
+		cursor: pointer;
+		
+		&:hover {
+			color: black;
+		}
+	}
+	
+	& > span.show-queries,
+	& > span.copyright,
+	& > span > a,
+	& > span.footer-debug-ind,
+	& .menu-button,
+	& > span.footer-login {
+		padding: 4px 10px;
+		vertical-align: top;
+		display: inline-block;
 	}
 }
+
+.footer-law-disclaimer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    cursor: pointer;
+    background: $green-bg;
+    z-index: 99999;
+    color: white;
+    padding: 6px 50px 6px 26px;
+    
+    a {
+		color: inherit;
+		text-decoration: underline;
+	}
+	
+	i {
+		position: absolute;
+		right: 18px;
+		top: 10px;
+	}
+}
+
+@media screen and (max-width: 900px){
+	.footer {
+		text-align: center;
+		padding: 10px 20px;
+		z-index: 3;
+		line-height: 20px;
+	}
+}
+
+

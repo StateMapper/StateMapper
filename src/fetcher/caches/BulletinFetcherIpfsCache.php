@@ -22,6 +22,8 @@
 // ipfs key gen --type=rsa --size=2048 Kaos155
 // ipfs add -r . (on /data)
 
+namespace StateMapper;
+
 if (!defined('BASE_PATH'))
 	die();
 

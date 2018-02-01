@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
  
-
+namespace StateMapper;
 	
 if (!defined('BASE_PATH'))
 	die();
@@ -37,9 +37,9 @@ function convert_currency($value, $currency, $destCurrency = 'USD'){
 			foreach (get_currencies() as $cCurrency => $cConfig)
 				if (in_array($ret['unit'], $cConfig['labels'])){
 					$config = $cConfig;
-					if (!isset($ret['originalUnit'])){
-						$ret['originalUnit'] = $cCurrency;
-						$ret['originalValue'] = $ret['value'];
+					if (!isset($ret['original_unit'])){
+						$ret['original_unit'] = $cCurrency;
+						$ret['original_value'] = $ret['value'];
 					}
 					break;
 				}
@@ -91,7 +91,7 @@ function get_currencies(){
 	);
 }
 
-function convert_amount($amount, $schema){
+function convert_amount($amount, $schema = null){
 /*
 	if ($amount['type'] == 'currency'){
 		print_r($amount);
@@ -106,8 +106,8 @@ function convert_amount($amount, $schema){
 	$v = $amount['amount'];
 		
 	$ret = array(
-		'originalValue' => $v * 100,
-		'originalUnit' 	=> $amount['unit'],
+		'original_value' => $v * 100,
+		'original_unit' 	=> $amount['unit'],
 		'value' 		=> $v * 100,
 		'unit' 			=> $amount['unit'],
 	);
@@ -133,10 +133,20 @@ function get_amount_pattern($currency = true){
 	return '((?:[0-9\s]{1,3})(?:[,\.\s]?[0-9\s]{3})*(?:[\.,][0-9\s]+)?)'.($currency ? '(\s*(?:'.implode('|', $labels).'))?' : '');
 }
 
-function format_number_nice($count, $decimals = true){
+function format_number_nice($count, $decimals = true, $sep = '', $remove_decimal_if_big = true){
 	if ($count < 1000)
 		return number_format($count, 0);
-	return format_bytes($count, 1, '', 1000);
-	$count = $count/1000;
-	return number_format(floor($count), 0).($decimals && $count < 100 ? '.'.floor(($count - floor($count)) * 10) : '').'k';
+	return format_sci($count, $decimals ? 1 : 0, $sep, 1000, $remove_decimal_if_big);
+	//$count = $count/1000;
+	//return number_format(floor($count), 0).($decimals && $count < 100 ? '.'.floor(($count - floor($count)) * 10) : '').'k';
+}
+
+function format_sci($size, $precision = 0, $sep = '', $base_num = 1000, $remove_decimal_if_big = true){ 
+    $base = log($size, $base_num);
+    $suffixes = array('', 'K', 'M', 'G', 'T');   
+    
+    $integer = pow($base_num, $base - floor($base));
+    if ($remove_decimal_if_big && $integer >= 100)
+		$precision = 0;
+    return number_format($integer, $precision) . $sep . $suffixes[floor($base)];
 }

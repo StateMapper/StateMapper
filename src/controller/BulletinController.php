@@ -17,9 +17,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
  
+namespace StateMapper;
+
+
 if (!defined('BASE_PATH'))
 	die();
-
 
 class BulletinController {
 
@@ -32,30 +34,28 @@ class BulletinController {
 		//if (IS_CLI && $bits && $bits[0] == 'api')
 			//array_shift($bits);
 
-		// CLI API Root (useful?)
-		if (IS_CLI && $smap['page'] == 'schemas'){
+		// CLI API root
+		/*if (IS_CLI && $smap['page'] == 'schemas'){
 			cli_print();
 			exit();
-		}
+		}*/
 
 		if (!empty($smap['filters']['loc']) && !get_country_schema($smap['filters']['loc']))
-			die_error('no such schema country');
+			return 'no such schema country';
 			
 		$query = array();
-		$query['followLevels'] = $bits && is_numeric($bits[count($bits)-1]) ? intval(array_pop($bits)) : 2;
-
+		$query['max_depth'] = MAX_FOLLOW_DEPTH;//$bits && is_numeric($bits[count($bits)-1]) ? intval(array_pop($bits)) : 2;
+		
+		// retrieve cpu-rate parameter (a percentage at the end of the call string)
 		if ($bits && preg_match('#^([0-9]+)%$#', $bits[count($bits)-1], $m)){
-			$smap['spiderConfig']['cpuRate'] = min(intval($m[1]), 95);
+			$smap['spider']['max_cpu_rate'] = min(intval($m[1]), 95);
 			array_pop($bits);
 		} else
-			$smap['spiderConfig']['cpuRate'] = 100;
-
-		if (empty($smap['call'])){
-			if ($smap['page'] == 'providers')
-				$smap['call'] = null;
-			else
-				$smap['call'] = $bits && is_mode($bits[count($bits)-1]) && (count($bits) > 1 || !is_dated_mode($bits[count($bits)-1])) ? array_pop($bits) : 'fetch';
-		}
+			$smap['spider']['max_cpu_rate'] = 100;
+		
+		// detect the call id
+		if (empty($smap['call']) && $smap['page'] != 'providers')
+			$smap['call'] = $bits && is_mode($bits[count($bits)-1]) && (count($bits) > 1 || !is_dated_mode($bits[count($bits)-1])) ? array_pop($bits) : 'fetch';
 		
 		// (redirect|download)/[format] url detection
 		if (count($bits) > 1 && is_format($bits[count($bits)-1]) && in_array($bits[count($bits)-2], array('redirect', 'download'))){ 
@@ -66,18 +66,20 @@ class BulletinController {
 			}
 			$smap['call'] = array_pop($bits);
 		}
-
+		
+		// force spider config
 		if ($smap['call'] == 'spide'){
-			$smap['spiderConfig']['workersCount'] = $query['followLevels'] ? $query['followLevels'] : SPIDER_WORKERS_COUNT;
-			$query['followLevels'] = 2;
+			$smap['spider']['workers_count'] = $query['workers_count'] ? $query['workers_count'] : SPIDER_WORKERS_COUNT;
+			$query['max_depth'] = 2;
 		}
 		
 		if ($smap['call'] == 'lint')
 			$query['lint'] = true;
-		$smap['query'] = $query;
+			
+		$smap['query'] = $query + $smap['query'];
 		
+		// providers page
 		if (empty($smap['call'])){
-			// providers page
 
 			if (IS_CLI){
 				// CLI help
@@ -102,12 +104,23 @@ class BulletinController {
 							'continent' => !empty($s->continent) ? $s->continent : null,
 						);
 					}
-				return_wrap(array('success' => true, 'query' => array('filters' => $smap['filters']), 'results' => $schemas));
+					
+				// @todo: substitute?
+				return array(
+					'result' => array(
+						'success' => true, 
+						'query' => array(
+							'filters' => $smap['filters']
+						), 
+						'results' => $schemas
+					)
+				);
 			}
+			//print_page('providers'); // testing!
 
-			$smap['outputNoFilter'] = true;
-			return_wrap(get_template('providers'));
-			exit;
+			return array(
+				'page' => 'providers',
+			);
 		}
 		
 		// grab schema
@@ -121,7 +134,7 @@ class BulletinController {
 			$query['schema'][] = strtoupper(array_shift($bits));
 		
 		if (!$query['schema'])
-			die_error('bad schema');
+			return 'bad schema';
 		$query['schema'] = strtoupper(implode('/', $query['schema']));
 		
 		// grab date
@@ -132,6 +145,8 @@ class BulletinController {
 			// check date is valid
 			if (!is_valid_date($query['date']))
 				die_error('given date does not exist: '.$query['date'].' (format is YY-MM-DD)');
+			else if ($query['date'] > date('Y-m-d'))
+				die_error('the date must be today or in the past (format is YY-MM-DD)');
 		}
 		
 		if (is_dated_mode($smap['call'])){
@@ -139,15 +154,15 @@ class BulletinController {
 				$query['id'] = strtoupper(array_shift($bits));
 				
 				if (!preg_match('#^([a-z0-9-_]+)$#i', $query['id']))
-					die_error('bad id: '.htmlentities($query['id']));
+					return 'bad id: '.htmlentities($query['id']);
 					
 				if (!($query['date'] = get_var('SELECT date FROM bulletins WHERE bulletin_schema = %s AND external_id = %s', array($query['schema'], $query['id']))))
-					die_error('unknown id: '.htmlentities($query['id']));
+					return 'unknown id: '.htmlentities($query['id']);
 
 			} else if (empty($query['date'])){
 				if (!empty($_GET['url'])){
 					if (!($query['url'] = filter_var($_GET['url'], FILTER_VALIDATE_URL)))
-						die_error('bad url');
+						return 'bad url';
 				} else
 					$query['date'] = date('Y-m-d', strtotime('-1 day'));
 			}
@@ -158,63 +173,68 @@ class BulletinController {
 		else if (empty($query['type']) && !empty($query['id']))
 			$query['type'] = 'document';
 
-		if (in_array($smap['call'], array('parse', 'rewind', 'extract', 'spide')) && $query['followLevels'] < 1)
-			$query['followLevels'] = 1;
+		if (in_array($smap['call'], array('parse', 'rewind', 'extract', 'spide')) && $query['max_depth'] < 1)
+			$query['max_depth'] = 1;
 
-		$query['allowProcessedCache'] = empty($_GET['noProcessedCache']) && !in_array($smap['call'], array('rewind', 'spide'));
-		$smap['query'] = $query;
+		$query['use_processed_cache'] = empty($_GET['no_processed_cache']) && !in_array($smap['call'], array('rewind', 'spide')) && USE_PROCESSED_FILE_CACHE;
+		
+		$smap['query'] = $query + $smap['query'];
 		
 		// check schema
 		if (!is_valid_schema_path($query['schema']))
-			die_error('invalid schema');
+			return 'invalid schema';
 		if (!($smap['schemaObj'] = get_schema($query['schema'])))
-			die_error('no such schema '.$query['schema']);
+			return 'no such schema '.$query['schema'];
 			
 		if ($smap['schemaObj']->type != 'bulletin' && !in_array($smap['call'], array('schema', 'soldiers', 'ambassadors'))){
 			$smap['call'] = null;
-			die_error();
+			return false;
 		}
 
 		switch ($smap['call']){
 
 			case 'schema':
 				if ($smap['page'] != 'bulletin')
-					die_error();
+					return false;
 					
 				if (!empty($query['id']) || !empty($query['date']))
-					die_error('id or date in arguments');
+					return 'id or date in arguments';
 
 				if (!empty($smap['schemaObj']->providerId))
 					$smap['schemaObj']->provider = get_provider_schema($smap['schemaObj']->providerId, true, false);
 
-				return_wrap($smap['raw'] ? array(
-					'success' => true,
-					'query' => $query,
-					'result' => $smap['schemaObj']
-				) : get_schema($query['schema'], true));
-				exit();
+				return array(
+					'result' => $smap['raw'] ? array(
+						'success' => true,
+						'query' => $query,
+						'result' => $smap['schemaObj']
+					) : get_schema($query['schema'], true)
+				);
 
 			case 'fetch':
 			case 'lint':
 			case 'download':
 			case 'redirect':
 				if ($smap['page'] != 'bulletin')
-					die_error();
+					return false;
 					
 				$bulletinFetcher = new BulletinFetcher();
 				$bulletin = $bulletinFetcher->fetch_bulletin($query, $smap['call'] == 'redirect');//, $smap['call'] == 'lint' ? '.parsed.json' : false);
 
 				if (is_error($bulletin))
-					die_error($bulletin);
+					return $bulletin;
 
 				// iframe inside API
 				if (!IS_CLI && in_array($smap['call'], array('fetch', 'lint')) && !$smap['raw']){
-					$smap['isIframe'] = true;
+					$smap['is_iframe'] = true;
 
-					return_wrap('<iframe class="bulletin-iframe" src="'.current_url(true).'/raw?loadCSS=1" onload="if (smapGetChromeVersion()) {smapRedrawElement(this,100)}"></iframe>'); // attempt to fix Chromium bug displaying XML in iframes
+					return array(
+						'page' => 'bulletin_iframe',
+					); // attempt to fix Chromium bug displaying XML in iframes
 
 				} else {
 					$content = $bulletinFetcher->serve_bulletin($bulletin, $smap['call'], get_schema_title($smap['schemaObj'], $query), $query);
+					debug($content); die();
 
 					if ($smap['raw'] && !IS_CLI){
 						// not a file, print the returned content
@@ -235,10 +255,12 @@ class BulletinController {
 							print_template('parts/footer', array('is_iframe' => true));
 						}
 					} else
-						return_wrap($content);
+						return array(
+							'result' => $content
+						);
 
 				}
-				exit();
+				return false;
 
 			case 'parse':
 			case 'extract':
@@ -257,50 +279,76 @@ class BulletinController {
 
 				if (is_error($ret)){
 					unlock($lock);
-					die_error($ret->msg);
+					return $ret->msg;
+				}
+				
+				if ($ret === true){
+					// no bulletin this day
+					return new SMapError('no bulletin this day');
 				}
 
 				if ($smap['call'] == 'extract'){
 					$extracter = new BulletinExtractor($ret);
 					$ret = $extracter->extract($smap['query'], is_admin() && !empty($_GET['save']));
-					$smap['apiResultPreview'] = $extracter;
+					$smap['preview_api_result'] = $extracter;
 				}
 
 				unlock($lock);
-				return_wrap(array(
-					'success' => true,
-					'query' => $query,
-					'result' => $ret
-				));
-				exit(0);
+				
+				// @todo: improve this..
+				return array(
+					'result' => array(
+						'success' => true,
+						'query' => $query,
+						'result' => $ret
+					)
+				);
 
 			case 'rewind':
 			
 				if ($smap['page'] != 'bulletin')
 					die_error();
 					
+				if ($bits && is_numeric($bits[0])){
+					$year = intval($bits[0]);
+					if ($year > 1900)
+						$smap['query']['year'] = $year;
+				}
+					
 				if (IS_CLI){
 					define('SMAP_FORCE_OUTPUT', true);
 
-					$smap['spiderConfig'] = array(
+					$smap['spider'] = array(
 						'schema' => $smap['query']['schema'],
 						'status' => 'manual',
-						'dateBack' => !empty($smap['query']['date']) ? $smap['query']['date'] : date('Y-m-d', strtotime('-2 days')),
+						'date_back' => !empty($smap['query']['date']) ? $smap['query']['date'] : date('Y-m-d', strtotime('-2 days')),
 						'extract' => !empty($smap['extract']),
-					) + get_default_spider_config(false);
+					) + get_default_spider_config();
 
 					define('KAOS_SPIDER_ID', 0);
-					require(APP_PATH.'/spider/spider.php');
-					exit(0);
+					return array(
+						'route' => APP_PATH.'/spider/spider.php'
+					);
 				} 
-				print_page('rewind');
-				exit(0);
+				return array(
+					'page' => 'rewind'
+				);
 				
 			case 'soldiers':
-				print_page('soldiers');
-				exit;
+				$schema = get_schema(!empty($smap['query']['schema']) ? $smap['query']['schema'] : $smap['filters']['loc']);
+				$soldiers = get_schema_prop($schema, 'soldiers', true);
+
+				return array(
+					'page' => 'soldiers', 
+					'vars' => array(
+						'soldiers' => $soldiers
+					), 
+					'template_vars' => array(
+						'schema' => $schema
+					)
+				);
 		}
-		die_error('unknown call');
+		return 'unknown call';
 	}
 }
 

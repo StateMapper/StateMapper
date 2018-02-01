@@ -17,69 +17,33 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
 
+namespace StateMapper;
+
 if (!defined('BASE_PATH'))
 	die();
 
-global $smap;
-$smap['outputNoFilter'] = true;
+//$location = get_location_by_id($entity['id']);
 
-// what this entity was adjudicated
-$statuses = array();
-
-$ids = get_other_entities($entity['id']);
-
-$stats = query('
-	SELECT "target" AS rel, YEAR(b.date) AS date, s.type AS _type, s.action AS _action,
-	SUM(a.originalValue) AS amount, a.originalUnit AS unit, COUNT(s.id) AS count, COUNT(s.related_id) AS related
-
-	FROM precepts AS p
-	LEFT JOIN statuses AS s ON p.id = s.precept_id
-	LEFT JOIN bulletins AS b ON p.bulletin_id = b.id
-	LEFT JOIN amounts AS a ON s.amount = a.id
-
-	WHERE s.target_id IN ( '.implode(', ', $ids).' )
-	GROUP BY YEAR(b.date), s.type, s.action
-	ORDER BY b.date DESC, s.type = "name" ASC
-');
-
-$stats = array_merge($stats, query('
-	SELECT "related" AS rel, YEAR(b.date) AS date, s.type AS _type, s.action AS _action,
-	SUM(a.originalValue) AS amount, a.originalUnit AS unit, COUNT(s.id) AS count, COUNT(s.target_id) AS target
-
-	FROM precepts AS p
-	LEFT JOIN statuses AS s ON p.id = s.precept_id
-	LEFT JOIN bulletins AS b ON p.bulletin_id = b.id
-	LEFT JOIN amounts AS a ON s.amount = a.id
-
-	WHERE s.related_id IN ( '.implode(', ', $ids).' )
-	GROUP BY YEAR(b.date), s.type, s.action
-	ORDER BY b.date DESC, s.type = "name" ASC
-
-'));
-
-$stats = array_merge($stats, query('
-	SELECT "related" AS rel, YEAR(b.date) AS date, s.type AS _type, s.action AS _action,
-	SUM(a.originalValue) AS amount, a.originalUnit AS unit, COUNT(s.id) AS count, COUNT(s.target_id) AS target
-
-	FROM precepts AS p
-	LEFT JOIN statuses AS s ON p.id = s.precept_id
-	LEFT JOIN bulletins AS b ON p.bulletin_id = b.id
-	LEFT JOIN amounts AS a ON s.amount = a.id
-
-	WHERE p.issuing_id IN ( '.implode(', ', $ids).' )
-	GROUP BY YEAR(b.date), s.type, s.action
-	ORDER BY b.date DESC, s.type = "name" ASC
-
-'));
-
-
-$location = get_location_by_id($entity['id']);
-
+/*
 $locationObj = apply_filters('location_lint', null, $location, $entity['country']);
-	
+
+// fixing.....
+if (!is_numeric($location) && $locationObj && !empty($locationObj['id']))
+	update('statuses', array(
+		'note' => $locationObj['id']
+	), array(
+		'note' => $location
+	));*/
+$locationObj = null;
+
+print_header('browser');
+
+$in_my_lists = array();
+foreach ($entity['summary']['in_my_lists'] as $cur)
+	$in_my_lists[] = intval($cur['list_id']);
 ?>
-<div>
-	<div class="entity-header entity-header-entity-<?= $entity['id'] ?>" <?= related(array('id' => $entity['id'])) ?>>
+<div class="sheet entity-sheet entity-header-entity-<?= $entity['id'] ?>" <?= related(array('entity_id' => $entity['id'], 'in_my_lists' => $in_my_lists)) ?>>
+	<div class="sheet-header">
 		<div class="entity-intro">
 			<span class="entity-country">
 			<?php
@@ -88,7 +52,11 @@ $locationObj = apply_filters('location_lint', null, $location, $entity['country'
 				$entityCountry = $country;
 				if ($locationObj)
 					$entityCountry = $locationObj['country'];
-
+				
+				echo '<a href="'.url(array(
+					'country' => $entity['country'],
+				)).'" title="See all '.get_country_schema($entity['country'])->adjective.' entities" class="clean-links">';
+					
 				if ($avatarUrl = get_flag_url($entityCountry))
 					echo '<img class="entity-avatar" src="'.$avatarUrl.'" />';
 
@@ -99,6 +67,8 @@ $locationObj = apply_filters('location_lint', null, $location, $entity['country'
 					echo $locationObj['countryName'];
 				else
 					echo $country->name;
+					
+				echo '</a>';
 
 				?></span><?php
 
@@ -117,7 +87,9 @@ $locationObj = apply_filters('location_lint', null, $location, $entity['country'
 			switch ($entity['type']){
 				case 'person':
 				case 'institution':
-					echo ' <a href="'.url(null, $conv[$entity['type']]['slug']).'" title="'.esc_attr('See all '.$conv[$entity['type']]['plural']).'">'.ucfirst($conv[$entity['type']]['singular']).'</a>';
+					echo ' <a href="'.url(array(
+						'country' => $entity['country']
+					), $conv[$entity['type']]['slug']).'" title="'.esc_attr('See all '.get_country_schema($entity['country'])->adjective.' '.$conv[$entity['type']]['plural']).'">'.ucfirst($conv[$entity['type']]['singular']).'</a>';
 					break;
 				case 'company':
 					if (!empty($entity['subtype'])){
@@ -134,53 +106,146 @@ $locationObj = apply_filters('location_lint', null, $location, $entity['country'
 						}
 						echo $label;
 					} else
-						echo '<a href="'.url(null, $conv[$entity['type']]['slug']).'">Company (Unknown type)</a>';
+						echo '<a href="'.url(array(
+							'country' => $entity['country']
+						), $conv[$entity['type']]['slug']).'">Company (Unknown type)</a>';
 					break;
 			}
 			?></span>
 		</div>
 		<div class="entity-name entity-title">
-			<div class="entity-title-inner"><a class="entity-title-icon" href="<?php
+			<?php
+				if ($actions = get_entity_actions_html($entity, 'sheet'))
+					print_actions_menu($entity, $actions, 'entity-action', 'entity-sheet-actions-wrap entity-actions-wrap', 'sheet');
+			?>
+			<div class="entity-title-inner">
+				<a class="icon" href="<?php
 			
 				echo url(array(
 					'country' => $entity['country']
 				), $conv[$entity['type']]['slug']);
 
-			?>" title="<?= esc_attr(sprintf(_('See all %s %s'), get_country_schema($entity['country'])->adjective, $conv[$entity['type']]['plural'])) ?>"><?= '<i class="fa fa-'.get_entity_icon($entity).'"></i>' ?></a> <?= (!empty($entity) ? get_entity_title($entity) : '') ?><?= get_buggy_button('entity', 'Mark this name as buggy') ?>
-			</div>
-		</div>
-		<?php
-
-			do_action('entity_header', $entity);
-
-			$details = array();
-			foreach ($entity['summary'] as $id => $e)
-				$details[] = '<div class="entity-sheet-detail entity-sheet-detail-'.$id.' '.(!empty($e['class']) ? $e['class'] : '').'"><span class="entity-sheet-label">'.$e['title'].': </span><span class="entity-sheet-body">'.$e['html'].'</span></div>';
-
-			ob_start();
-			do_action('entity_stats_before', $entity);
-			$htmlBefore = ob_get_clean();
-
-			ob_start();
-			do_action('entity_stats_after', $entity);
-			$htmlAfter = ob_get_clean();
-
-			if ($details || $htmlBefore != '' || $htmlAfter != '')
-				echo '<div class="entity-sheet-details">'.$htmlBefore.implode('', $details).$htmlAfter.'</div>';
-			?>
-		<div class="entity-stats-wrap">
-			<div class="entity-stats">
-				<?php print_entity_stats($stats, $entity, array('id' => $entity['id'])); ?>
+				?>" title="<?= esc_attr(sprintf(_('See all %s %s'), get_country_schema($entity['country'])->adjective, $conv[$entity['type']]['plural'])) ?>"><?= '<i class="fa fa-'.get_entity_icon($entity).'"></i>' ?></a><?php 
+				
+					if (!empty($entity))
+						echo ' <h1 class="seemless">'.get_entity_title($entity).'</h1>';
+				?>
 			</div>
 		</div>
 	</div>
-	<!--<div class="entity-info">
-		<div class="entity-info-block">
-			<div class="entity-info-inner">
-				<?php //print_statuses($statuses, $entity); ?>
+	<div class="sheet-body">
+		<div class="entity-summary">
+			<?php
+			$labels = get_status_labels();
+			$lines = array();
+			
+			if ($founded = @$entity['summary']['founded']){
+				$amount = $founded['amount'] ? print_amount($founded['amount'], $founded['unit']) : null;
+				
+				if ($founded['date'])
+					$html = '<b>'.date_i18n('Y, M jS', strtotime($founded['date'])).'</b> - Aged '.time_diff($founded['date']).($amount ? ' - Inicial capital: <b>'.$amount.'</b>' : '');
+				else if ($amount)
+					$html = 'Initial capital: <b>'.$amount.'</b>';
+				else
+					$html = null;
+				
+				if ($html)
+					$lines[] = array(
+						'icon' => 'birthday-cake',
+						'label' => 'Founded',
+						'html' => $html,
+					);
+			}
+			foreach ($entity['summary'] as $type => $summary){
+				if ($type == 'founded')
+					continue;
+					
+				if ($line = apply_filters('entity_summary_html_'.$type, false, $summary, $entity))
+					$lines[] = $line;
+				
+				else
+					foreach ($summary as $rel => $s){
+							
+						if (@$labels->{$type}->start->summary)
+							$label = $labels->{$type}->start->summary;
+						else if (@$labels->{$type}->new->summary)
+							$label = $labels->{$type}->new->summary;
+						else if (@$labels->{$type}->increase->summary)
+							$label = $labels->{$type}->increase->summary;
+						else if (@$labels->{$type}->update->summary)
+							$label = $labels->{$type}->update->summary;
+						else
+							continue;
+							
+						if (@$labels->{$type}->increase->icon)
+							$icon = $labels->{$type}->increase->icon;
+						else if (@$labels->{$type}->start->icon)
+							$icon = $labels->{$type}->start->icon;
+						else if (@$labels->{$type}->new->icon)
+							$icon = $labels->{$type}->new->icon;
+						else if (@$labels->{$type}->update->icon)
+							$icon = $labels->{$type}->update->icon;
+						else
+							$icon = null;
+						
+						if (is_object($label)){
+							if (!empty($label->{$rel}))
+								$label = $label->{$rel};
+							else {
+								$label = (array) $label;
+								$label = array_shift($label);
+							}
+						}
+						
+						$str = array();
+						if (!empty($s['current'])){
+							if (in_array($type, array('location', 'object')))
+								$str[] = '<i>'.$s['current']['note'].'</i>';
+							else if (!empty($s['current']['amount']))
+								$str[] = print_amount($s['current']['amount'], $s['current']['unit']);
+							else
+								foreach ($s['current'] as $e)
+									$str[] = get_entity_title_html($e, array('icon' => true));
+						}
+						if (!empty($s['past'])){
+							if (in_array($type, array('location', 'object')))
+								$str[] = '<i>'.$s['past']['note'].'</i>';
+							else if (!empty($s['past']['amount']))
+								$str[] = print_amount($s['past']['amount'], $s['past']['unit']);
+							else
+								foreach ($s['past'] as $e)
+									$str[] = get_entity_title_html($e, array('icon' => true));
+						}
+						$lines[] = array(
+							'icon' => $icon,
+							'label' => $label,
+							'html' => plural($str),
+						);
+					}
+					
+			}
+			if ($lines){
+				echo '<table class="sheet-summary-table">';
+				foreach ($lines as $c){
+					$class = '';
+					if (!empty($c['hidden']))
+						$class = 'hidden';
+						
+					echo '<tr class="'.$class.'"><td class="sheet-summary-label">'.($c['icon'] ? '<i class="fa fa-'.$c['icon'].'"></i> ' : '').$c['label'].': </td><td class="sheet-summary-value">'.$c['html'].'</td></tr>';
+				}
+				echo '</table>';
+			}
+			?>
+		</div>
+		<div class="sheet-content">
+			<div class="entity-statuses-wrap">
+				<div class="entity-statuses">
+					<?php print_entity_statuses($entity['activity'], $entity, array('id' => $entity['id'])); ?>
+				</div>
 			</div>
 		</div>
-	</div>-->
+	</div>
 </div>
 <?php
 
+print_footer();

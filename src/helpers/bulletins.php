@@ -17,6 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
  
+namespace StateMapper;
 	
 if (!defined('BASE_PATH'))
 	die();
@@ -44,6 +45,7 @@ function insert_bulletin($query){
 			'external_id' => !empty($query['id']) ? $query['id'] : null,
 			'date' => !empty($query['date']) ? $query['date'] : null,
 			'fetched' => null,
+			'bulletin_hash' => null,
 			'created' => date('Y-m-d H:i:s'),
 			'format' => $query['format'],
 			'status' => 'waiting',
@@ -53,17 +55,29 @@ function insert_bulletin($query){
 }
 
 function set_bulletin_fetched($bulletin, $query){
-	if (!empty($query['id']))	
-		return query('UPDATE bulletins SET status = "fetched", format = %s WHERE bulletin_schema = %s AND date = %s AND external_id = %s AND fetched IS NULL', array($bulletin['format'], $query['schema'], $query['date'], $query['id']));
-	else
-		return query('UPDATE bulletins SET status = "fetched", format = %s WHERE bulletin_schema = %s AND date = %s AND external_id IS NULL AND fetched IS NULL', array($bulletin['format'], $query['schema'], $query['date']));
+	update('bulletins', array(
+		'status' => 'fetched',
+		'format' => $bulletin['format'],
+		'bulletin_hash' => get_bulletin_hash($query),
+	), array(
+		'bulletin_schema' => $query['schema'],
+		'date' => $query['date'],
+		'external_id' => !empty($query['id']) ? $query['id'] : null,
+		'fetched' => null,
+	));
 }
 
 function set_bulletin_parsed($bulletin, $query){
-	if (!empty($query['id']))	
-		return query('UPDATE bulletins SET status = "parsed", parsed = %s, format = %s WHERE bulletin_schema = %s AND date = %s AND external_id = %s AND parsed IS NULL', array(date('Y-m-d H:i:s'), $bulletin['format'], $query['schema'], $query['date'], $query['id']));
-	else
-		return query('UPDATE bulletins SET status = "parsed", parsed = %s, format = %s WHERE bulletin_schema = %s AND date = %s AND external_id IS NULL AND parsed IS NULL', array(date('Y-m-d H:i:s'), $bulletin['format'], $query['schema'], $query['date']));
+	update('bulletins', array(
+		'status' => 'parsed',
+		'parsed' => date('Y-m-d H:i:s'),
+		'format' => $bulletin['format'],
+	), array(
+		'bulletin_schema' => $query['schema'],
+		'date' => $query['date'],
+		'external_id' => !empty($query['id']) ? $query['id'] : null,
+		'parsed' => null,
+	));
 }
 
 function set_bulletin_extracting($query){
@@ -72,7 +86,7 @@ function set_bulletin_extracting($query){
 	), array(
 		'bulletin_schema' => $query['schema'],
 		'date' => $query['date'],
-		'external_id' => null,
+		'external_id' => !empty($query['id']) ? $query['id'] : null,
 	));
 }
 
@@ -82,22 +96,28 @@ function set_bulletin_extracted($query){
 	), array(
 		'bulletin_schema' => $query['schema'],
 		'date' => $query['date'],
-		'external_id' => null,
+		'external_id' => !empty($query['id']) ? $query['id'] : null,
 	));
 }
 
 function set_bulletin_none($query){
-	if (!empty($query['id']))	
-		return query('UPDATE bulletins SET status = "none" WHERE bulletin_schema = %s AND date = %s AND external_id = %s AND parsed IS NULL', array($query['schema'], $query['date'], $query['id']));
-	else
-		return query('UPDATE bulletins SET status = "none" WHERE bulletin_schema = %s AND date = %s AND external_id IS NULL AND parsed IS NULL', array($query['schema'], $query['date']));
+	update('bulletins', array(
+		'status' => 'none'
+	), array(
+		'bulletin_schema' => $query['schema'],
+		'date' => $query['date'],
+		'external_id' => !empty($query['id']) ? $query['id'] : null,
+		'parsed' => null,
+	));
 }
 
 function set_bulletin_error($query, $error){
-	if (!empty($query['id']))	
-		return query('UPDATE bulletins SET status = "error", attempts = attempts + 1, last_error = %s WHERE bulletin_schema = %s AND date = %s AND external_id = %s AND parsed IS NULL', array($error, $query['schema'], $query['date'], $query['id']));
-	else
-		return query('UPDATE bulletins SET status = "error", attempts = attempts + 1, last_error = %s WHERE bulletin_schema = %s AND date = %s AND external_id IS NULL AND parsed IS NULL', array($error, $query['schema'], $query['date']));
+	update('bulletins', prepare('status = "error", attempts = attempts + 1, last_error = %s', $error), array(
+		'bulletin_schema' => $query['schema'],
+		'date' => $query['date'],
+		'external_id' => !empty($query['id']) ? $query['id'] : null,
+		'parsed' => null,
+	));
 }
 
 function get_bulletin_status($schema, $date){
@@ -117,11 +137,6 @@ function repair_bulletin($schema, $date){
 	
 	$ids = query('SELECT id, external_id, format FROM bulletins WHERE bulletin_schema = %s AND date = %s AND external_id IS NOT NULL', array($schema, $date));
 	
-	// file formats:
-	// 2017/01/01.xml
-	// 2017/01/01/id_document.xml
-	$datePath = str_replace('-', '/', $date); 
-	
 	foreach ($ids as $b){
 		
 		$fetcher = get_format_fetcher($b['format']);
@@ -132,7 +147,10 @@ function repair_bulletin($schema, $date){
 			continue;
 		}
 		
-		$filePath = DATA_PATH.'/'.$schema.'/'.$datePath.'/'.$b['external_id'].'.'.strtolower($b['format']);
+		$filePath = get_bulletin_path(array(
+			'date' => $date,
+			'schema' => $schema,
+		) + $b);
 		
 		$filePath = $fetcher->get_content_path($filePath, false);
 		
@@ -191,4 +209,37 @@ function get_format_by_query($query){
 		return get_var('SELECT format FROM bulletins WHERE bulletin_schema = %s AND date = %s AND external_id = %s', array($query['schema'], $query['date'], $query['id']));
 	else
 		return get_var('SELECT format FROM bulletins WHERE bulletin_schema = %s AND date = %s AND external_id IS NULL', array($query['schema'], $query['date']));
+}
+
+function get_bulletins_count($include_documents = false){
+	return get_var('SELECT COUNT(*) FROM bulletins WHERE status IN ( "fetched", "parsed", "extracting", "extracting" )'.($include_documents ? '' : ' AND external_id IS NULL'));
+}
+
+function get_providers_count(){
+	return count(get_col('SELECT bulletin_schema FROM bulletins WHERE status IN ( "fetched", "parsed", "extracting", "extracting" ) GROUP BY bulletin_schema'));
+}
+
+function get_bulletin_hash($query){
+	return ($path = get_bulletin_path($query)) && file_exists($path) ? hash('sha256', $path) : null;
+}
+
+function get_bulletin_path($query){
+	return ($uri = get_bulletin_uri($query)) ? DATA_PATH.'/'.$uri : null;
+}
+
+// file formats:
+// 2017/01/01.xml
+// 2017/01/01/id_document.xml
+function get_bulletin_uri($query, $relative_to_bulletin_root = false){
+	if (empty($query['date']) || empty($query['format']))
+		return false;
+		
+	$file_uri = str_replace('-', '/', $query['date']); 
+	if (!empty($query['id']))
+		$file_uri .= '/'.$query['id'];
+
+	$file_uri .= '.'.strtolower($query['format']);
+	if (!$relative_to_bulletin_root)
+		return $query['schema'].'/'.$file_uri;
+	return $file_uri;
 }

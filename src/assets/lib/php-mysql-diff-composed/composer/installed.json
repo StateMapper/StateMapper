@@ -1,0 +1,295 @@
+[
+    {
+        "name": "psr/log",
+        "version": "1.0.2",
+        "version_normalized": "1.0.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/php-fig/log.git",
+            "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/php-fig/log/zipball/4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
+            "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "time": "2016-10-10T12:19:37+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.0.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Psr\\Log\\": "Psr/Log/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "PHP-FIG",
+                "homepage": "http://www.php-fig.org/"
+            }
+        ],
+        "description": "Common interface for logging libraries",
+        "homepage": "https://github.com/php-fig/log",
+        "keywords": [
+            "log",
+            "psr",
+            "psr-3"
+        ]
+    },
+    {
+        "name": "symfony/debug",
+        "version": "v4.0.3",
+        "version_normalized": "4.0.3.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/debug.git",
+            "reference": "9ae4223a661b56a9abdce144de4886cca37f198f"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/debug/zipball/9ae4223a661b56a9abdce144de4886cca37f198f",
+            "reference": "9ae4223a661b56a9abdce144de4886cca37f198f",
+            "shasum": ""
+        },
+        "require": {
+            "php": "^7.1.3",
+            "psr/log": "~1.0"
+        },
+        "conflict": {
+            "symfony/http-kernel": "<3.4"
+        },
+        "require-dev": {
+            "symfony/http-kernel": "~3.4|~4.0"
+        },
+        "time": "2018-01-03T17:15:19+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "4.0-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Symfony\\Component\\Debug\\": ""
+            },
+            "exclude-from-classmap": [
+                "/Tests/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "https://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Debug Component",
+        "homepage": "https://symfony.com"
+    },
+    {
+        "name": "symfony/polyfill-mbstring",
+        "version": "v1.6.0",
+        "version_normalized": "1.6.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/polyfill-mbstring.git",
+            "reference": "2ec8b39c38cb16674bbf3fea2b6ce5bf117e1296"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/2ec8b39c38cb16674bbf3fea2b6ce5bf117e1296",
+            "reference": "2ec8b39c38cb16674bbf3fea2b6ce5bf117e1296",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "suggest": {
+            "ext-mbstring": "For best performance"
+        },
+        "time": "2017-10-11T12:05:26+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.6-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Symfony\\Polyfill\\Mbstring\\": ""
+            },
+            "files": [
+                "bootstrap.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Nicolas Grekas",
+                "email": "p@tchwork.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "https://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony polyfill for the Mbstring extension",
+        "homepage": "https://symfony.com",
+        "keywords": [
+            "compatibility",
+            "mbstring",
+            "polyfill",
+            "portable",
+            "shim"
+        ]
+    },
+    {
+        "name": "symfony/console",
+        "version": "v3.4.3",
+        "version_normalized": "3.4.3.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/console.git",
+            "reference": "8394c8ef121949e8f858f13bc1e34f05169e4e7d"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/console/zipball/8394c8ef121949e8f858f13bc1e34f05169e4e7d",
+            "reference": "8394c8ef121949e8f858f13bc1e34f05169e4e7d",
+            "shasum": ""
+        },
+        "require": {
+            "php": "^5.5.9|>=7.0.8",
+            "symfony/debug": "~2.8|~3.0|~4.0",
+            "symfony/polyfill-mbstring": "~1.0"
+        },
+        "conflict": {
+            "symfony/dependency-injection": "<3.4",
+            "symfony/process": "<3.3"
+        },
+        "require-dev": {
+            "psr/log": "~1.0",
+            "symfony/config": "~3.3|~4.0",
+            "symfony/dependency-injection": "~3.4|~4.0",
+            "symfony/event-dispatcher": "~2.8|~3.0|~4.0",
+            "symfony/lock": "~3.4|~4.0",
+            "symfony/process": "~3.3|~4.0"
+        },
+        "suggest": {
+            "psr/log": "For using the console logger",
+            "symfony/event-dispatcher": "",
+            "symfony/lock": "",
+            "symfony/process": ""
+        },
+        "time": "2018-01-03T07:37:34+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "3.4-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Symfony\\Component\\Console\\": ""
+            },
+            "exclude-from-classmap": [
+                "/Tests/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "https://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Console Component",
+        "homepage": "https://symfony.com"
+    },
+    {
+        "name": "camcima/php-mysql-diff",
+        "version": "1.2.1",
+        "version_normalized": "1.2.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/camcima/php-mysql-diff.git",
+            "reference": "a12f9648b9948827800dad41c62616088e4dcd10"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/camcima/php-mysql-diff/zipball/a12f9648b9948827800dad41c62616088e4dcd10",
+            "reference": "a12f9648b9948827800dad41c62616088e4dcd10",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">5.6",
+            "symfony/console": "^3.0"
+        },
+        "require-dev": {
+            "fabpot/php-cs-fixer": "^1.11",
+            "phpunit/phpunit": "^5.3"
+        },
+        "time": "2017-11-02T06:52:39+00:00",
+        "bin": [
+            "php-mysql-diff"
+        ],
+        "type": "project",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Camcima\\MySqlDiff\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Carlos Cima",
+                "role": "Developer"
+            }
+        ],
+        "homepage": "https://github.com/camcima/php-mysql-diff",
+        "keywords": [
+            "database",
+            "diff",
+            "generator",
+            "migration",
+            "mysql",
+            "script"
+        ]
+    }
+]

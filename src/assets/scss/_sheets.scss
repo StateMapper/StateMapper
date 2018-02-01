@@ -1,0 +1,159 @@
+/*
+ * StateMapper: worldwide, collaborative, public data reviewing and monitoring tool.
+ * Copyright (C) 2017-2018  StateMapper.net <statemapper@riseup.net>
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */ 
+ 
+$sheets-left-margin: 170px;
+
+.sheet {
+	padding: 20px 0 0;
+	
+	.sheet-content {
+		display: table;
+		width: 100%;
+	}
+	.sheet-content-left,
+	.sheet-content-right {
+		display: table-cell;
+	}
+	.sheet-content-left {
+		width: $sheets-left-margin;
+	}
+		
+	.sheet-content-right {
+		padding-left: 10px;
+	}
+	.entity-sheet-details-wrap {
+		margin: 0 0 20px;
+	}
+	
+	.entity-sheet-detail.mini {
+		max-width: 25%;
+		float: left;
+		clear: right;
+		padding-right: 30px;
+	}
+
+	.entity-details {
+		font-size: 14px;
+
+		.entity-detail-label {
+			font-weight: bold;
+			display: block;
+		}
+		.entity-detail-body {
+			padding: 5px 0 20px 20px;
+			display: block;
+		}
+		.mini-wrap {
+			display: inline-block;
+			width: 100%;
+			vertical-align: top;
+		}
+	}
+	
+	.entity-statuses-wrap {
+	}
+
+	span.entity-stat-date-ind {
+		font-size: 22px;
+		border-bottom: 1px solid #eee;
+		display: block;
+		padding-bottom: 10px;
+		font-weight: bold;
+		margin-top: 30px;
+		padding-left: 6px;
+	}
+	
+	.statuses-date {
+		font-size: 12px;
+		font-weight: normal;
+		margin: 0 8px;
+		font-style: italic;
+		color: #777;
+	}
+	
+	.entity-stat-right {
+	    position: relative;
+	    padding-left: 30px;
+    }
+	.entity-stat {
+		font-size: 14px;
+		border-bottom: 1px solid #f0f0f0;
+		margin: 0;
+		padding: 6px 0;
+	}
+	.entity-stat:hover,
+	.entity-stat.folding-visible-extract {
+		background: #f6f6f6;
+	}
+
+	.entity-stat-children {
+		border-left: 2px solid #eee;
+		margin: 0 0 20px 14px;
+		padding: 10px 0 1px 26px;
+	}
+
+	.sheet-summary-label {
+	    padding: 5px 8px;
+		min-width: 160px;
+		
+		i {
+			width: 23px;
+			text-align: center;
+			position: relative;
+			left: -5px;
+		}
+	}
+	.sheet-summary-value {
+		padding: 5px 10px;
+	}
+}
+
+
+.entity-sheet {
+	.sheet-header {
+		
+		.entity-country {
+			display: inline-block;
+			margin: 0 0 5px 3px;
+		}
+		.entity-avatar {
+			max-width: 22px;
+			margin: 0 5px 0 0;
+			position: relative;
+			top: 2px;
+		}
+		.entity-title {
+			margin-bottom: 25px;
+		}
+		.entity-title-inner {
+			@extend .page-title;
+		}
+	}
+
+	.entity-summary {
+		margin: 0 0 20px 0;
+		
+		.sheet-summary-value .summary-in-my-lists .full-cb-menu {
+			display: none !important;
+		}
+	}
+	
+	.sheet-body {
+		padding-left: 30px;
+	}
+}

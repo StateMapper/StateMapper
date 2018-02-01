@@ -16,6 +16,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
+
+namespace StateMapper;
  
 if (!defined('BASE_PATH'))
 	die();
@@ -27,6 +29,7 @@ if (!defined('BASE_PATH'))
 //require 'compile.php'; 	// manuals' compilation methods (generates this manual)
 //require 'export.php'; 	// export function for database structure dump
 require 'actions.php';		// actions (hooks) and filters, to add modularity
+require 'ajax.php';			// ajax handling
 require 'cli.php';			// command-line help (CLI)
 require 'system.php';		// system/disk helpers
 require 'access.php';		// access, roles, auth..
@@ -42,6 +45,8 @@ require 'encoding.php';		// encoding/charset conversion
 require 'language.php';		// internationalization
 require 'templates.php';	// templating system
 require 'entities.php';		// entities helper functions
+require 'statuses.php';		// status' helper functions
+require 'law.php';			// disclaimers
 require 'spiders.php';		// spiders helpers
 require 'locations.php';	// geolocation methods
 require 'string.php';		// string processing
@@ -57,9 +62,11 @@ require 'schemas.php';		// schemas helpers
 require 'labels.php';		// label sets
 require 'map.php';			// map/rewind methods
 require 'file.php';			// local file handling
+require 'menu.php';			// menu functions
 require 'names.php';		// people's name helpers
 require 'assets.php';		// asset management (css, js..)
 require 'license.php';		// licensing helpers
+require 'lists.php';		// entity lists management
 
 // END LOAD ALL HELPERS		<-- leave this comment as it is, the preceeding list is parsed from PHP to be injected in the DEVELOPERS manual 
 

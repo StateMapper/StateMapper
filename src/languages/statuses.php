@@ -22,7 +22,7 @@
 
 /*
  * /!\ AUTO-GENERATED TRANSLATION FILE, DO NOT MODIFY! 
- * Instead, you can edit schemas/status.json and regenerate this file entering "smap compile" in a console.
+ * Instead, you may edit schemas/status.json and regenerate this file entering "smap compile" in a console.
  */
  
 exit(); // this file only serves for translation purpose
@@ -31,7 +31,7 @@ exit(); // this file only serves for translation purpose
 _("company foundation");
 _("[related] was founded with a capital of [amount]");
 _("Founded with a capital of [amount]");
-_("[count] Companies funded with a total capital of [amount]");
+_("[count] Companies founded with a total capital of [amount]");
 _("the amount of capital");
 _("capital increase");
 _("[related] had a capital increase of [amount]");
@@ -79,11 +79,11 @@ _("[target] was made counselor of [related]");
 _("Now counselor of [related]");
 _("[count] New counselors");
 _("the counselor's name");
-_("new social object");
-_("[related] declared its object as [note]");
-_("Declared its object as [note]");
-_("[count] Object declarations");
-_("the object");
+_("new social purpose");
+_("[related] declared its social purpose as [note]");
+_("Declared its social purpose as [note]");
+_("[count] Social purpose declarations");
+_("the social purpose");
 _("Object");
 _("new location");
 _("[related] declared its location as [note]");

@@ -16,6 +16,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
+
+namespace StateMapper;
  
 if (!defined('BASE_PATH'))
 	die();
@@ -31,8 +33,8 @@ function current_url($stripArgs = false){
 	else {
 
 		global $smap;
-		if (!empty($smap['cliArgs']))
-			$url = $smap['cliArgs'][0];
+		if (!empty($smap['cli_args']))
+			$url = $smap['cli_args'][0];
 		else
 			return null;
 	}
@@ -46,7 +48,7 @@ function current_uri($stripArgs = false){
 }
 
 function add_url_arg($name, $val, $url = null, $encode = true){
-	if (!$url)
+	if ($url === null)
 		$url = current_url();
 	$url = rtrim(rtrim(preg_replace('#([&\?])('.$name.'=[^&\#]*&?)#', '$1', $url), '&'), '?');
 	$url .= (strpos($url, '?') !== false ? '&' : '?').$name.'='.($encode ? urlencode($val) : $val);
@@ -131,6 +133,8 @@ function url($query = null, $apiCall = null, $passCurrentArgs = array()){
 }
 
 function uri($query = null, $apiCall = null, $passCurrentArgs = array()){
+	if ($apiCall == 'providers')
+		return get_providers_uri($query);
 		
 	if (!$query || !is_array($query))
 		$query = array(
@@ -174,36 +178,37 @@ function uri($query = null, $apiCall = null, $passCurrentArgs = array()){
 
 	if ($apiCall){
 		
-		if ($schema && in_array($cleanCall, dated_modes())){
+		if ($schema && is_dated_mode($cleanCall)){
 			$query += array(
 				'date' => date('Y-m-d', strtotime('-1 day'))
 			);
-			$url .= '/'.$query['date'];
+			if ($query['date'])
+				$url .= '/'.$query['date'];
 			if (!empty($query['id']))
 				$url .= '/'.$query['id'];
 		}
 		
 		if ($apiCall == 'fetch/raw')
 			$url .= '/raw';
-		else if (!in_array($cleanCall, array('fetch', 'rewind')))
+		else if (!in_array($cleanCall, array('fetch', 'rewind', 'search')))
 			$url .= '/'.$apiCall;
 			
 		if (in_array($apiCall, array('redirect')) && !empty($query['format']))
 			$url .= '/'.$query['format'];
-
+		else if ($apiCall == 'rewind' && !empty($query['year']) && $query['year'] != date('Y'))
+			$url .= '/'.$query['year'];
 	} 
 	
-	$has = false;
-	if (!empty($query['precept'])){
-		$url .= '?precept='.$query['precept'];
-		$has = true;
-	}
-		
+	if (!empty($query['precept']))
+		$url = add_url_arg('precept', $query['precept'], $url);
+	
+	if ($cleanCall == 'search')
+		foreach ($query as $k => $v)
+			$url = add_url_arg($k, $v, $url);
+	
 	foreach ($passCurrentArgs as $k)
-		if (isset($_GET[$k])){
-			$url .= ($has ? '&' : '?').$k.'='.urlencode($_GET[$k]);
-			$has = true;
-		}
+		if (isset($_GET[$k]))
+			$url = add_url_arg($k, $_GET[$k], $url);
 
 	return ltrim($url, '/');
 }
@@ -247,7 +252,7 @@ function generate_slug($table, $col, $title, $length = null, $where = array()){
 	
 	$and_where = array();
 	foreach ($where as $k => $v)
-		$and_where[] = $k.' = '.($v === null ? 'NULL' : "'".mysqli_real_escape_string($conn, $v)."'");
+		$and_where[] = $v === null ? $k.' IS NULL' : prepare($k.' = %s', $v);
 	$and_where = $and_where ? ' AND '.implode(' AND ', $and_where) : '';
 	
 	do {
@@ -257,11 +262,12 @@ function generate_slug($table, $col, $title, $length = null, $where = array()){
 	return $slug;
 }
 
-function get_flag_url($country){
+function get_flag_url($country, $size = 'original'){
 	if (is_object($country))
 		$country = $country->id;
 	$country = strtoupper($country);
-	return file_exists(APP_PATH.'/assets/images/flags/'.$country.'.png') ? ASSETS_URL.'/images/flags/'.$country.'.png' : null;
+	//$size = IMAGE_SIZE_SMALL;
+	return file_exists(APP_PATH.'/assets/images/flags/'.$size.'/'.$country.'.png') ? ASSETS_URL.'/images/flags/'.$size.'/'.$country.'.png' : null;
 }
 
 
@@ -291,14 +297,21 @@ function is_call($call){
 	return false;
 }
 
-function is_home($root = false){
+function is_home(){
 	global $smap;
-	return $smap['page'] == 'browser' && (!$root || (empty($smap['call']) && empty($_GET['q']) && !has_filter()));
+	return $smap['page'] == 'browser' && empty($smap['call']) && empty($smap['filters']['q']) && empty($smap['entity']) && !has_filter();
 }
 
 function is_browser(){
 	global $smap;
-	return !empty($smap['query']['q']) || (!in_array($smap['page'], array('bulletin', 'bulletins')) && (!empty($smap['entity']) || empty($smap['filters']['loc'])) && empty($smap['query']['schema']));
+	return $smap['page'] == 'browser';/*
+		&& (!empty($smap['query']['q']) || (
+			!in_array($smap['page'], array('bulletin', 'bulletins')) 
+			&& (!empty($smap['entity']) || empty($smap['filters']['loc'])) 
+			&& empty($smap['query']['schema'])
+		));
+		*/
+	//return $smap['page'] == 'browser' && (!$root || (empty($smap['call']) && empty($_GET['q']) && !has_filter()));
 }
 
 function is_mode($str){
@@ -352,27 +365,16 @@ function get_filter(){
 	return null;
 }
 
-function get_url_patterns(){
+function is_page($page){
+	global $smap;
+	return $smap['page'] == $page;
+}
 
-	// calc a past date for the example
-	$date = '2017-01-04';
-	$query = array('schema' => 'ES/BOE', 'date' => $date);
-	$queryRaw = array('country' => 'es');
+function is_search(){
+	global $smap;
+	return (IS_CLI || is_browser()) && !empty($smap['query']['q']);
+}
 
-	return array(
-		uri($queryRaw, 'schema') => 'print a country schema',
-		uri($queryRaw, 'ambassadors') => 'print country ambassadors',
-		uri($query, 'schema') => 'print a bulletin schema',
-		uri($query, 'fetch') => 'print a bulletin by date',
-		uri($query, 'fetch').'/DOCUMENT_ID' => 'print a bulletin by date and ID',
-		'es/bulletin/boe/DOCUMENT_ID' => 'print a bulletin by ID (its date will be guessed)',
-		uri($query, 'redirect') => 'print a bulletin\'s original URL',
-		uri($query, 'parse') => 'print a parsed bulletin',
-		uri($query, 'extract') => 'print the extract of a bulletin',
-		'',
-		
-		// TODO: produce URLs dinamically
-		'es/bulletin/boe/DOCUMENT_ID/MODE' => 'call any previous MODE to a specific document',
-		'es/bulletin/boe/'.$date.'/DOCUMENT_ID/MODE' => 'call any previous MODE to a specific document and date',
-	);
+function get_uri_from_url($url){
+	return preg_replace('#^('.preg_quote(BASE_URL, '#').')(.*)$#iu', '$2', $url);
 }

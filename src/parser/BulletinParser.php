@@ -16,12 +16,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
- 
+
+namespace StateMapper; 
 
 if (!defined('BASE_PATH'))
 	die();
-	
-
 
 class BulletinParser {
 	
@@ -39,8 +38,8 @@ class BulletinParser {
 	public function __construct($parent = null){
 		if ($parent){
 			$this->lastBulletinSchema = $parent->lastBulletinSchema;
-			$this->query['followLevels'] = $parent->query['followLevels'];
-			$this->query['currentLevel'] = $parent->query['currentLevel'] + 1;
+			$this->query['max_depth'] = $parent->query['max_depth'];
+			$this->query['current_depth'] = $parent->query['current_depth'] + 1;
 		}
 	}
 	
@@ -51,13 +50,13 @@ class BulletinParser {
 	public function fetch_and_parse($query){
 		global $smap;
 		$query += array(
-			'followLevels' => 2
+			'max_depth' => 2
 		);
 		
 		$bulletinFetcher = new BulletinFetcher();
 				
 		// try from parsed cache (.parsed.json)
-		if (!empty($query['allowProcessedCache']) && USE_PROCESSED_FILE_CACHE){
+		if (!empty($query['use_processed_cache'])){
 			$bulletin = $bulletinFetcher->fetch_bulletin($query, false, '.parsed.json');
 			
 			if (is_error($bulletin))
@@ -81,6 +80,8 @@ class BulletinParser {
 		}
 		unset($bulletinFetcher);
 		
+		set_bulletin_fetched($bulletin, $query);
+		
 		// really parse
 		$parsed = $this->parse_bulletin($bulletin, $query);
 		
@@ -94,8 +95,6 @@ class BulletinParser {
 			return new SMapError('nothing to parse');
 		}
 
-		set_bulletin_fetched($bulletin, $query);
-		
 		if (!USE_PROCESSED_FILE_CACHE)
 			return $parsed;
 		
@@ -120,8 +119,8 @@ class BulletinParser {
 		$this->query = $query + $this->query + array(
 			'schema' => null,
 			'type' => 'Summary',
-			'followLevels' => 0,
-			'currentLevel' => 0
+			'max_depth' => 0,
+			'current_depth' => 0
 		);
 		
 		if (empty($this->query['type']) || empty($query['schema']))
@@ -131,6 +130,7 @@ class BulletinParser {
 		
 		$formatParserClass = 'BulletinParser'.ucfirst(strtolower($bulletin['format']));
 		$formatParserPath = __DIR__.'/formats/'.$formatParserClass.'.php';
+		$formatParserClass = '\\StateMapper\\'.$formatParserClass;
 		
 		if (!file_exists($formatParserPath))
 			return new SMapError('unknown parsing format '.$bulletin['format']);
@@ -373,7 +373,7 @@ class BulletinParser {
 			}
 		}
 		
-		if (!empty($obj['follow']) && $this->query['currentLevel'] < $this->query['followLevels']){
+		if (!empty($obj['follow']) && $this->query['current_depth'] < $this->query['max_depth']){
 			if (empty($obj['type']))
 				$obj['type'] = $this->query['type'];
 			if (empty($obj['schema']))

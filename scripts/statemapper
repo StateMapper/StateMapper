@@ -37,7 +37,9 @@ BASE_DIR=$(dirname "$0")
 
 # change the nice levels at your convenency (using the smallest now)
 BASE_CMD="ionice -c $IONICE nice -n $NICE php $BASE_DIR/../index.php"
-PHP_CMD="$BASE_CMD $*"
+
+# prepare the PHP command within quotes to be able to keep them later
+PHP_CMD="$BASE_CMD '$@'"
 
 function contains {
   local list="$1"
@@ -176,14 +178,17 @@ then
 					then
 						end 0
 					else
+						# follow restarting with a normal start
 						DAEMON_CMD="start"
 					fi
 
 				else
-					echo "StateMapper daemon already running with PID $PID"
-					end 1
+					if contains "start" "$DAEMON_CMD"
+					then
+						echo "StateMapper daemon already running with PID $PID"
+						end 1
+					fi
 				fi
-				
 			fi
 		fi
 	fi
@@ -206,13 +211,29 @@ then
 		fi
 		#PHP_CMD="$PHP_CMD "'echo "$!"'
 		sudo su - $APACHE_USER -s /bin/bash -c "$PHP_CMD"
+	
 	else
 	
-		# daemonize and print PID into .lock file
-		PHP_CMD="nohup $PHP_CMD >/dev/null 2>&1 &"' echo "$!"'
-		sudo su - $APACHE_USER -s /bin/bash -c "$PHP_CMD" > $BASE_DIR/.statemapper.lock
-		PID=$(cat $BASE_DIR/.statemapper.lock)
-		echo "StateMapper daemon started with PID $PID"
+		if [ "$DAEMON_CMD" = "start" ]
+		then
+		
+			# daemonize and print PID into .lock file
+			PHP_CMD="nohup $PHP_CMD >/dev/null 2>&1 &"' echo "$!"'
+			sudo su - $APACHE_USER -s /bin/bash -c "$PHP_CMD" > $BASE_DIR/.statemapper.lock
+			PID=$(cat $BASE_DIR/.statemapper.lock)
+			echo "StateMapper daemon started with PID $PID"
+			
+		else
+			if [ "$DAEMON_CMD" = "" ]
+			then
+				echo "Missing daemon command"
+				end 1
+			else 
+				echo "Bad daemon command"
+				end 1
+			fi
+		fi
+
 	fi
 
 else

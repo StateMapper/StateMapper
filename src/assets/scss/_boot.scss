@@ -1,0 +1,175 @@
+/*
+ * StateMapper: worldwide, collaborative, public data reviewing and monitoring tool.
+ * Copyright (C) 2017-2018  StateMapper.net <statemapper@riseup.net>
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */ 
+
+// this file is inlined before any other CSS file is loaded
+
+html, body {
+	line-height: normal;
+	padding: 0 !important;
+	margin: 0 !important;
+    height: 100%;
+}
+
+html {
+	overflow: auto;
+	min-height: 100vh;
+}
+
+#main {
+	position: relative;
+	min-height: 100vh;
+}
+
+#wrap {
+	padding: 10px 20px 50px;
+}
+
+.hidden {
+	display: none;
+}
+
+body.call-fetch,
+body.call-lint,
+body.call-schema {
+	#wrap {
+		padding: 0;
+		font-family: $font-family-code;
+	}
+}
+
+body.lazy-loading {
+	.main-header {
+		opacity: 0;
+	}
+	
+	/* hide all this before the rest of CSS is loaded */
+	.footer,
+	.search-root-big-wrap,
+	.browser-directories,
+	.browser-big-submit,
+	.front-warning,
+	.root-slogan,
+	.root-by,
+	.root-stats,
+	#my-lists {
+		display: none;
+	}
+	.root-menu {
+		display: none;
+	}
+	.menu-wrap {
+		display: none;
+	}
+}
+
+.lazy-loader-ind {
+	display: none;
+}
+
+.browser-center-msg {
+    min-height: 200px;
+    font-size: 23px;
+    color: #333;
+    line-height: 180%;
+    text-align: center;
+}
+
+#main-inner {
+    position: relative;
+    z-index: 3;
+    min-height: 100vh;
+}
+
+.main-header-inner {
+    min-height: 72px;
+    display: table;
+    width: 100%;
+}
+
+.browser-loading {
+	display: none;
+
+	body.lazy-loading & {
+		display: block;
+	}
+}
+
+.hidden {
+	display: none;
+}
+.fake-hidden {
+	position: fixed;
+	top: -999px;
+	left: -999px;
+}
+
+.browser-loading,
+.infinite-loader.loading {
+    font-size: 16px;
+    font-weight: normal;
+    font-style: italic;
+    color: #777;
+}
+
+/* nice alerts */
+.nice-alert {
+    position: fixed;
+    right: 0;
+    top: 90px;
+    padding: 15px 20px 15px 38px;
+	color: black;
+    background: #f5f5f5;
+    cursor: pointer;
+    z-index: 10;
+    border-radius: 4px 0 0 4px;
+    
+    i {
+		position: absolute;
+		left: 12px;
+		top: 14px;
+    }
+
+	&.success {
+		color: white;
+		background: $green-bg;
+	}
+	
+	&.warning {
+		color: white;
+		background: $red-bg;
+	}
+	
+	box-shadow: $popup-shadow;
+}
+
+/* preload fontawesome */
+.fa {
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.fa-spin {
+  -webkit-animation: fa-spin 2s infinite linear;
+  animation: fa-spin 2s infinite linear;
+}
+.fa-circle-o-notch:before {
+  content: "\f1ce";
+}

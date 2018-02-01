@@ -16,20 +16,14 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
- 
+
+namespace StateMapper; 
 	
 if (!defined('BASE_PATH'))
 	die();
 
-
-function format_bytes($size, $precision = 0, $sep = ' ', $base_num = 1024, $remove_decimal_if_big = true){ 
-    $base = log($size, $base_num);
-    $suffixes = array('', 'K', 'M', 'G', 'T');   
-    
-    $integer = pow($base_num, $base - floor($base));
-    if ($remove_decimal_if_big && $integer >= 100)
-		$precision = 0;
-    return number_format($integer, $precision) . $sep . $suffixes[floor($base)];
+function format_bytes($size, $precision = 0, $sep = '', $base_num = 1024, $remove_decimal_if_big = true){ 
+	return format_sci($size, $precision, $sep, $base_num, $remove_decimal_if_big);
 } 
 
 

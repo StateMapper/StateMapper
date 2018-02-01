@@ -16,7 +16,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
- 
+
+namespace StateMapper; 
 
 if (!defined('BASE_PATH'))
 	die();
@@ -31,7 +32,7 @@ class BulletinParserXml {
 	// init 
 	public function load_root_node($content){
 		try {
-			return new SimpleXMLElement($content);
+			return new \SimpleXMLElement($content);
 		} catch (Exception $e){
 			return new SMapError('XML Exception: '.$e->getMessage());//.print_r($e, true));
 		}

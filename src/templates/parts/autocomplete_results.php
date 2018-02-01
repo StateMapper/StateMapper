@@ -16,19 +16,25 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
- 
+
+namespace StateMapper; 
 
 if (!defined('BASE_PATH'))
 	die();
 
 foreach ($results as $r){
 
-	$title = get_entity_title($r, true);
-	foreach (explode(' ', $args['query']) as $w){
-		$title = preg_replace('#'.preg_quote(htmlentities($w), '#').'#ius', '<b>$0</b>', $title); // highlight search terms
+	$title = get_result_title($r, true);
+	foreach (explode(' ', minimize_spaces($args['query'])) as $w){
+		$title = preg_replace('#'.add_accents(preg_quote(remove_accents($w), '#')).'#ius', '<b>$0</b>', $title); // highlight search terms
 		$title = preg_replace('#<b>([^<]*)<b>([^<]*)</b>([^<]*)</b>#ius', '<b>$1$2$3</b>', $title); // reduce <b><b></b></b> to outer <b></b>
 	}
+	
+	$r += array(
+		'subtype' => null,
+		'country' => null,
+	);
 	?>
-	<div><a href="<?= get_entity_url($r) ?>"><i class="fa fa-<?= get_entity_icon($r) ?>"></i><span><?= $title ?><?php if ($r['subtype'] || $r['country']){ ?><span class="searchSugg-sugg-metas<?php if ($r['subtype']) echo ' search-sugg-flag-more'; ?>"><?= ($r['subtype'] ? $r['subtype'] : '') ?><?= ($r['country'] ? '<img class="sugg-flag" src="'.get_flag_url($r['country']).'" />' : '') ?></span><?php } ?></span></a></div>
+	<div class="sugg"><a href="<?= get_result_url($r) ?>"><i class="fa fa-<?= get_result_icon($r) ?>"></i><span><?= $title ?><?php if ($r['subtype'] || $r['country']){ ?><span class="searchSugg-sugg-metas<?php if ($r['subtype']) echo ' search-sugg-flag-more'; ?>"><?= ($r['subtype'] ? $r['subtype'] : '') ?><?= ($r['country'] ? '<img title="'.esc_attr(get_country_schema($r['country'])->name).'" data-tippy-placement="right" class="sugg-flag" src="'.get_flag_url($r['country'], IMAGE_SIZE_TINY).'" />' : '') ?></span><?php } ?></span></a></div>
 	<?php
 }

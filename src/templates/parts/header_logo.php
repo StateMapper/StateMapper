@@ -16,31 +16,40 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
+
+namespace StateMapper;
  
 if (!defined('BASE_PATH'))
 	die();
 
-global $smap;
-
-if (is_home(true))
+if (is_home())
 	return;
 
-$backToHome = is_browser();
+$go_to_home = is_browser() || is_api() || is_api_root() || (is_page('providers') && !has_filter());
 ?>
 <div class="header-logo">
 	<a data-tippy-placement="bottom" href="<?php
 			
-			if (!IS_INSTALL){
-				if ($backToHome)
-					echo url();
-				else 
-					echo get_providers_url(!empty($smap['query']['schema']) ? get_country_from_schema($smap['query']['schema']) : null);
-			}
+			if (IS_API)
+				echo url(null, 'api');
+			else if (IS_INSTALL)
+				echo anonymize(get_repository_url('blob/master/documentation/manuals/INSTALL.md#top'));
+			else if ($go_to_home)
+				echo url();
+			else 
+				echo get_providers_url(!empty($smap['query']['schema']) ? get_country_from_schema($smap['query']['schema']) : null);
 			
-		?>" title="<?php
+		?>" <?php
+		
+			if (IS_INSTALL)
+				echo 'target="_blank" ';
+				
+		?>title="<?php
 			
-			if (!IS_INSTALL){
-				if ($backToHome)
+			if (IS_API)
+				echo _('Go to the API Reference');
+			else if (!IS_INSTALL){
+				if ($go_to_home)
 					echo _('Go to homepage');
 				else if (!empty($smap['query']['schema']))
 					echo sprintf(_('Go back to %s providers'), get_country_schema($smap['query']['schema'])->adjective);

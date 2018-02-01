@@ -17,6 +17,9 @@
  */ 
 
 
+.map-fetched {
+	font-family: $font-family-code;
+}
 
 .map-fetched-ind {
 
@@ -80,7 +83,7 @@
 .map-year-stat-bg-fetched,
 .map-fetched-ind.map-fetched-ind-fetched,
 .map-fetched-legend-state-fetched > span {
-	background: #09d91b;
+	background: $green;
 }
 .map-year-stat-bg-error,
 .map-fetched-ind.map-fetched-ind-error,
@@ -130,7 +133,7 @@
     vertical-align: top;
     padding: 1px 0 0 20px;
     display: inline-block;
-    width: 50px;
+    width: 80px;
     position: relative;
 }
 
@@ -147,12 +150,6 @@
 }
 .map-fetched {
     text-align: left;
-}
-
-
-
-.main-body-type-map .main-body-inner {
-    display: inline-block;
 }
 
 .map-fetched-legend-state > span {
@@ -177,59 +174,62 @@
     text-align: left;
 	margin-top: 20px;
 	line-height: 200%;
-}
 
-.spider-button {
-	margin: 0;
-    padding: 10px 20px;
-    border: 1px solid #ccc;
-    background: #f5f5f5;
-    font-size: 16px;
-    font-weight: normal;
-    cursor: pointer;
-    border-radius: 2px;
-}
-.spider-button,
-.spider-button:active
-.spider-button:focus {
-	box-shadow: 3px 3px 5px -5px #aaa;
-	outline: 0 !important;
-}
-.spider-button:hover {
-	box-shadow: 3px 3px 6px -5px #bbb;
-}
-.spider-button.spider-status-waiting {
-	background: white;
-    color: #09d91b;
-    border-color: #09d91b;
-}
-.spider-button.spider-status-active {
-    background: #09d91b;
-    border-color: #09d91b;
-    color: white;
-}
-.spider-button.spider-status-stopping {
-	background: white;
-    color: orange;
-    border-color: orange;
-}
-.spider-button i {
-	margin-right: 4px;
-}
-.spider-ctrl input[type="text"],
-.spider-ctrl input[type="numeric"],
-.spider-ctrl input[type="date"] {
-    padding: 4px 6px;
-    margin: 2px 0;
-}
-.spider-ctrl input[type="date"] {
-    width: 140px;
-}
-.spider-ctrl input[type="numeric"] {
-    margin-right: 5px;
-    width: 40px;
-}
+	.spider-button {
+		margin: 0;
+		padding: 10px 20px;
+		border: 1px solid #ccc;
+		background: #f5f5f5;
+		font-size: 16px;
+		font-weight: normal;
+		cursor: pointer;
+		line-height: normal;
+		height: auto;
+		border-radius: 2px;
 
+		&,
+		&:active
+		&:focus {
+			box-shadow: 3px 3px 5px -5px #aaa;
+			outline: 0 !important;
+		}
+		&:hover {
+			box-shadow: 3px 3px 6px -5px #bbb;
+		}
+		&.spider-status-waiting {
+			background: white;
+			color: $green;
+			border-color: $green;
+		}
+		&.spider-status-active {
+			background: $green-bg;
+			border-color: $green-bg;
+			color: white;
+		}
+		&.spider-status-stopping {
+			background: white;
+			color: orange;
+			border-color: orange;
+		}
+		i {
+			margin-right: 4px;
+		}
+	}
+
+	input[type="text"],
+	input[type="numeric"],
+	input[type="date"] {
+		padding: 4px 6px;
+		margin: 2px 0;
+	}
+	input[type="date"] {
+		width: 140px;
+	}
+	input[type="numeric"] {
+		margin-right: 5px;
+		width: 40px;
+	}
+}
 
 .map-years {
 	display: table;
@@ -416,7 +416,7 @@ span.map-month-workers-ind > span > span {
 span.map-year-workers-ind > span > span,
 span.map-month-workers-ind > span > span {
     position: absolute;
-    font-family: Roboto;
+    font-family: $font-family-main;
     font-size: 11px;
     font-weight: bold;
 }

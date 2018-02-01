@@ -16,7 +16,7 @@ The processing layers can be described as follows:
 | <img src="{IncludeIcon cloud-download}" valign="middle" /> | fetch | download bulletins from bulletin providers |
 | <img src="{IncludeIcon tree}" valign="middle" /> | parse | parse bulletins and trigger subsequent fetches (follows) |
 | <img src="{IncludeIcon magic}" valign="middle" /> | extract | extract precepts and status from parsed objects |
-| <img src="{IncludeIcon usb}" valign="middle" /> | controller + api | route calls and prepare data for the templates |
+| <img src="{IncludeIcon usb}" valign="middle" /> | controller | route calls and prepare data for the templates |
 
 - The daemon throws spiders (one per type of bulletin), which in their turn throw workers (one per day and type of bulletin). 
 - Workers call the parser (parsing layer), which calls the fetcher (fetch layer) every time it needs (once for the daily summary, and often many times more for sub-documents).
@@ -112,7 +112,9 @@ Please refer to the [Schemas documentation](SCHEMAS.md#top).
 
 ## Manuals:
 
-If needed, please edit Github manuals from ```documentation/manuals/templates``` (```.tpl.md``` files) and ```documentation/manuals/parts``` (```.part.md``` files). Patterns like ```{Include[Inline] name_of_part_file}``` and ```{Include[Inline] name_of_part_file(var1[, var2, ..])}``` will be replaced by the part file ```documentation/manuals/parts/name_of_part_file.part.md```, with patterns ```{$1}```, ```{$2}```, ```{$3}``` replaced by arguments ```var1```, ```var2```, ```var3```.
+If needed, please edit Github manuals from ```documentation/manuals/templates``` (```.tpl.md``` files) and ```documentation/manuals/parts``` (```.part.md``` files). 
+
+Patterns like ```{Include[Inline] name_of_part_file}``` and ```{Include[Inline] name_of_part_file(var1[, var2, ..])}``` will be replaced by the part file ```documentation/manuals/parts/name_of_part_file.part.md```, with patterns ```{$1}```, ```{$2}```, ```{$3}``` replaced by arguments ```var1```, ```var2```, ```var3```.
 
 Before commiting your changes, compile the manuals to ```documentation/manuals``` (```.md``` files) with ```smap compile```.
 
@@ -125,12 +127,6 @@ Before commiting your changes, compile the manuals to ```documentation/manuals``
 * the ```debug($whatever, $echo = true)``` will print whatever variable in a JSON human-readable way.
 * the ```die_error($string, $opts = array())``` will generate a beautiful error on the web GUI (and a nice response on the JSON and CLI APIs too).
 * when logged in (from the copyright's menu), executed queries can be displayed clicking the "X queries" icon in the footer.
-
-**Shortcuts:**
-
-* ```smap push``` and ```smap push -m "some comment"``` will compile manuals and push all local changes (not only to manuals) to the repository.
-* ```smap pull``` will update the local files with the repository's.
-* ```smap replace STRING_A STRING_B``` will replace all STRING_A by STRING_B in all PHP files. Use with caution!
 
 **Disk space:**
 
@@ -157,6 +153,13 @@ Before commiting your changes, compile the manuals to ```documentation/manuals``
 **Graphics:**
 
 * The main logo was made using the [Megrim font](../../src/assets/font/megrim) and the [FontAwesome](http://fontawesome.io/icons/)'s "map-signs" icon. Source files can be found in the [logo documentation folder](../logo) (```.xcf```) and opened with [GIMP](https://www.gimp.org/).
+* Please optimize all images included in the web front, and keep original files. To optimize all the images in the current folder, try the following:
+   ```bash
+   find ./ -type f -iname "*.FORMAT" -exec mogrify -verbose -format FORMAT -layers Dispose -resize HEIGHT\>xWIDTH\> {} + # to resize all images in the CURRENT folder (recursive)
+   optipng *.png # to optimize all png files in the CURRENT folder
+   ```
+   .. where FORMAT is ```png``` or ```jpg```, and HEIGHT and WIDTH are the destination dimensions.1
+
 * Favicons can be generated on-the-fly from ```{IncludeIconRoot}[the-icon-code].ico``` with optional parameters ```?color=ffffff``` for icon color and ```?bg=000000``` for background color. Example: <a href="{IncludeIcon home}?bg=DEDEDE&color=D20075"><img src="{IncludeIcon home}?bg=DEDEDE&color=D20075" /></a>
 
 {Include footer()}

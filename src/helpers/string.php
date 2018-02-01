@@ -17,6 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
  
+namespace StateMapper;
 	
 if (!defined('BASE_PATH'))
 	die();
@@ -203,7 +204,7 @@ function remove_accents( $string ) {
 	);
 
 	// Used for locale-specific rules
-	$locale = LANG;
+	$locale = get_lang(true);
 
 	if ( 'de_DE' == $locale || 'de_DE_formal' == $locale || 'de_CH' == $locale || 'de_CH_informal' == $locale ) {
 		$chars[ chr(195).chr(132) ] = 'Ae';
@@ -240,6 +241,7 @@ function array_to_str($str){
 	return implode("\n\n", $text);
 }
 
+// convert a JSON object to a beautiful, commented code block (for schema pages)
 function convert_code($ostr){
 	global $smap;
 	$commentHas = $commentOpen = false;
@@ -316,6 +318,8 @@ function convert_code($ostr){
 	} else
 		$str .= '</td><td class="code-comment">';
 	$str .= '</td></tr>';
+	
+	$str .= '<tr class="last"><td></td><td class="code-comment"></td></tr>';
 
 	return '<table class="code-table">'.convert_entities($str).'</table>';
 }
@@ -455,13 +459,21 @@ function esc_attr($string, $charset = 'UTF-8', $double_encode = false ) {
 }
 
 function sanitize_keywords($str){
-	return strtolower(remove_accents(trim(preg_replace('#\s+#', ' ', $str))));
+	return strtolower(remove_accents(trim_any(preg_replace('#\s+#', ' ', $str))));
 }
 
 function sanitize_title($str, $length = null){
-	$str = preg_replace('#([-]+)#', '-', preg_replace('#([^a-z0-9])#', '-', str_replace('.', '', strtolower(remove_accents($str)))));
-	if (strlen($str) > $length)
+	
+	$str = strtolower(remove_accents($str));
+	$str = preg_replace('#[&\.]#', '', $str);
+	$str = minimize_spaces($str);
+	$str = preg_replace('#([^a-z0-9])#', '-', $str);
+	$str = preg_replace('#([-]+)#', '-', $str);
+	
+	if ($length && strlen($str) > $length)
 		$str = substr($str, $length);
+		
+	$str = preg_replace('#[-]+#', '-', $str);
 	$str = rtrim($str, '-');
 	$str = ltrim($str, '-');
 	return $str;
@@ -513,42 +525,6 @@ function plural($arr, $sep = SEPARATOR_AND){
 		$sep = _('or');
 	return implode(', ', $arr).' '.$sep.' '.$last;
 }
-	
-function print_inner($obj){
-	global $smap;
-
-	$wrapped = false;
-	if (empty($smap['call']) || !in_array($smap['call'], array('fetch', 'lint', 'schema'))){
-		$wrapped = true;
-		?>
-		<div id="wrap">
-		<?php
-	}
-
-	if (!empty($smap['isIframe']) || !empty($smap['outputNoFilter']))
-		echo is_array($obj) || is_object($obj) ? print_json($obj) : (is_string($obj) ? $obj : $obj);
-
-	else {
-		if (!empty($smap['apiResultPreview']))
-			$smap['apiResultPreview']->preview($obj['result'], $smap['query']);
-
-		if (!empty($smap['collapseAPIReturn']))
-			echo '<div><a href="#" onclick="jQuery(this).parent().find(\'.unfolding\').toggle(); return false">Unfold API return <i class="fa fa-caret-down"></i></a><div class="unfolding" style="display:none">';
-		if (is_string($obj))
-			echo convert_code($obj);
-		else
-			print_json($obj);
-
-		if (!empty($smap['collapseAPIReturn']))
-			echo '</div></div>';
-
-	}
-	if ($wrapped){
-		?>
-		</div>
-		<?php
-	}
-}
 
 function trailingslashit($str){
 	return rtrim($str, '/').'/';
@@ -591,3 +567,116 @@ function get_nth_non_empty($values, $from, $index){
 	return null;
 }
 
+function get_loading($label = null){
+	return '<i class="fa fa-circle-o-notch fa-spin"></i>'.($label ? $label : ($label === false ? '' : ' '.__('Loading').'..'));
+}
+
+function get_search_loading(){
+	return false;
+}
+
+function get_multisel_cbs(){
+	return '<i class="fa fa-square-o cb-off multisel-cb"></i><i class="fa fa-check-square-o cb-on multisel-cb"></i>';
+}
+
+function minimize_spaces($str){
+	return trim_any(preg_replace('#[\s]+#ius', ' ', $str));
+}
+
+function add_accents($str){
+	static $replace = null;
+	if ($replace === null){
+		$replace = array();
+		foreach (array(
+			"A" => "АĂǍĄÀÃÁÆÂÅǺĀא",
+			"B" => "БבÞ",
+			"C" => "ĈĆÇЦצĊČ©ץ",
+			"D" => "ДĎĐדÐ",
+			"E" => "ÈĘÉËÊЕĒĖĚĔЄƏע",
+			"F" => "ФƑ",
+			"G" => "ĞĠĢĜГגҐ",
+			"H" => "חĦХĤה",
+			"I" => "IÏÎÍÌĮĬIИĨǏיЇĪІ",
+			"J" => "ЙĴ",
+			"K" => "ĸכĶКך",
+			"L" => "ŁĿЛĻĹĽל",
+			"M" => "מМם",
+			"N" => "ÑŃНŅןŊנŉŇ",
+			"O" => "ØÓÒÔÕОŐŎŌǾǑƠ",
+			"P" => "פףП",
+			"Q" => "ק",
+			"R" => "ŔŘŖרР®",
+			"S" => "ŞŚȘŠСŜס",
+			"T" => "ТȚטŦתŤŢ",
+			"U" => "ÙÛÚŪУŨƯǓŲŬŮŰǕǛǙǗ",
+			"V" => "Вו",
+			"Y" => "ÝЫŶŸ",
+			"Z" => "ŹŽŻЗזS",
+			"a" => "аăǎąàãáæâåǻāא",
+			"b" => "бבþ",
+			"c" => "ĉćçцצċč©ץ",
+			"ch" => "ч",
+			"d" => "дďđדð",
+			"e" => "èęéëêеēėěĕєəע",
+			"f" => "фƒ",
+			"g" => "ğġģĝгגґ",
+			"h" => "חħхĥה",
+			"i" => "iïîíìįĭıиĩǐיїīі",
+			"j" => "йĵ",
+			"k" => "ĸכķкך",
+			"l" => "łŀлļĺľל",
+			"m" => "מмם",
+			"n" => "ñńнņןŋנŉň",
+			"o" => "øóòôõоőŏōǿǒơ",
+			"p" => "פףп",
+			"q" => "ק",
+			"r" => "ŕřŗרр®",
+			"s" => "şśșšсŝס",
+			"t" => "тțטŧתťţ",
+			"u" => "ùûúūуũưǔųŭůűǖǜǚǘ",
+			"v" => "вו",
+			"y" => "ýыŷÿ",
+			"z" => "źžżзזſ",
+			"tm" => "™",
+			"at" => "@",
+			"ae" => "ÄǼäæǽ",
+			"ch" => "Чч",
+			"ij" => "ĳĲ",
+			"j" => "йЙĴĵ",
+			"ja" => "яЯ",
+			"je" => "Ээ",
+			"jo" => "ёЁ",
+			"ju" => "юЮ",
+			"oe" => "œŒöÖ",
+			"sch" => "щЩ",
+			"sh" => "шШ",
+			"ss" => "ß",
+			"tm" => "™",
+			"ue" => "Ü",
+			"zh" => "Жж"
+		) as $k => $v)
+			$replace[$k] = '(?:['.$v.']|'.$k.')';
+	}
+	return strtr($str, $replace);
+}
+
+function get_usual_words($country){
+	static $usuals = array();
+	if (!isset($usuals[$country])){
+		if (!($s = get_country_schema($country)))
+			$usuals[$country] = array();
+		else if (!@$s->vocabulary->legalEntityName->usualWords)
+			$usuals[$country] = array();
+		else 
+			$usuals[$country] = $s->vocabulary->legalEntityName->usualWords;
+	}
+	return $usuals[$country];
+}
+
+function is_usual_word($word, $country){
+	$word = mb_strtolower($word);
+	foreach (get_usual_words($country) as $cword)
+		if ($word == mb_strtolower($cword))
+			return $cword;
+	return false;
+}

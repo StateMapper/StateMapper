@@ -16,6 +16,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
+
+namespace StateMapper;
  
 if (!defined('BASE_PATH'))
 	die();
@@ -33,9 +35,13 @@ function seo_head(){
 	
 	<title><?= $title ?></title>
 	<meta name="description" content="<?= esc_attr($desc) ?>">
-	<link rel="canonical" href="<?= $canonical ?>" />
 	
 	<?php
+	if (!IS_INSTALL){
+		?>
+		<link rel="canonical" href="<?= $canonical ?>" />
+		<?php
+	}
 
 	if ((defined('IS_ERROR') && IS_ERROR) 
 		|| (!empty($smap['call']) && in_array($smap['call'], array('parse', 'extract')))
@@ -61,18 +67,23 @@ function seo_head(){
 	}
 }
 
+function set_page_title($title){
+	global $smap;
+	$smap['page_title'] = $title;
+}
+
 function get_page_title($seoTitle = false){
 	global $smap;
 	$title = false;
 	
-	if (!empty($smap['pageTitle']))
-		$title = $smap['pageTitle'];
+	if (isset($smap['page_title']) && (!empty($smap['page_title']) || !$seoTitle))
+		$title = $smap['page_title'];
 	
 	else if (IS_INSTALL)
 		$title = 'Quick installation';
 		
-	else if (defined('IS_ERROR') && IS_ERROR)
-		$title = 'Error';
+	else if ($smap['page'] == 'lists')
+		$title = 'My lists';
 		
 	else if ($smap['page'] == 'api')
 		$title = 'API Reference';
@@ -140,9 +151,11 @@ function get_page_title($seoTitle = false){
 	
 	} else if (!empty($smap['filters']['loc']))
 		$title = sprintf(_('All entities in %s'), plural(get_locations_label($smap['filters']['loc']), '&'));
-		
-
-	if (!isset($title))
+	
+	else if (is_home())
+		$title = '';
+	
+	else
 		$title = 'Error';
 		
 	if ($seoTitle){
@@ -151,7 +164,7 @@ function get_page_title($seoTitle = false){
 		$title .= '$tateMapper';
 		if (is_api() && $smap['page'] != 'api')
 			$title .= ' API';
-		if (is_home(true) || $smap['page'] == 'api')
+		if (is_home() || $smap['page'] == 'api')
 			$title .= ' - '.get_slogan(true);
 	}
 

@@ -16,7 +16,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
- 
+
+namespace StateMapper;
 
 if (!defined('BASE_PATH'))
 	die();
@@ -45,8 +46,10 @@ ob_start();
 			if ($v != '')
 				$cur_title = $v;
 		} else
-			echo '  '.($cur_title ? '  ' : '').str_pad('smap '.$k, 48 + ($cur_title ? 0 : 2), ' ').'- '.$v."\n";
+			echo '  '.($cur_title ? '  ' : '').str_pad($k != '"' ? 'smap '.$k : '', 48 + ($cur_title ? 0 : 2), ' ').($k != '"' ? '- ' : '  ').$v."\n";
 	}
+
+/*
 ?>
   
 [ Schemas list: ] _________________________________________________________
@@ -54,4 +57,9 @@ ob_start();
 <?php 		
 
 cli_print_dir('  ', 47); 
+*/
+
 echo str_replace("\n", PHP_EOL, ob_get_clean()).PHP_EOL;
+
+if (IS_CLI)
+	exit(0);

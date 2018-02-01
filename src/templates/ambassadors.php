@@ -16,58 +16,44 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
- 
+
+namespace StateMapper; 
 
 if (!defined('BASE_PATH'))
 	die();
 
-global $smap;	
-$schema = get_schema($smap['filters']['loc']);
+print_header('page');
 
-$smap['outputNoFilter'] = true;
+if (empty($ambassadors)){
+	echo 'No Country Ambassadors are currently defined for this schema. Please, help this project <a href="'.anonymize(get_repository_url('blob/master/documentation/manuals/AMBASSADORS.md#top')).'" target="_blank">enrolling as an Ambassador now</a>!';
 
-
-$ambassadors = !empty($schema->ambassadors) ? $schema->ambassadors : array();
-
-// update soldiers list from remote Github schema file
-if ($remoteSchema = get_remote_schema($schema->id))
-	$ambassadors = !empty($remoteSchema->ambassadors) ? $remoteSchema->ambassadors : array();
-
-?>
-<div>
-	<?php
-		if (empty($ambassadors)){
-			echo 'No Country Ambassadors are currently defined for this schema. Please, help this project <a href="'.anonymize('https://github.com/'.SMAP_GITHUB_REPOSITORY.'/blob/master/documentation/manuals/AMBASSADORS.md#top').'" target="_blank">enrolling as an Ambassador now</a>!';
-		
-		} else {
-			?>
-			<?= number_format(count($ambassadors)) ?> Ambassadors defined for <?= $schema->name ?>:
-			<table class="table">
-				<?php
-				foreach ($ambassadors as $s){
-					?><tr><td>
-						<div><?= $s->name ?></div>
-						<?php if (!empty($s->users)){ ?>
-							<div>
-								<?php foreach ($s->users as $u){ ?>
-									<a href="https://github.com/<?= $u ?>" target="_blank"><i class="fa fa-github"></i> <?= $u ?></a>
-								<?php } ?>
-							</div>
+} else {
+	?>
+	<?= number_format(count($ambassadors)) ?> Ambassadors defined for <?= $schema->name ?>:
+	<table class="table">
+		<?php
+		foreach ($ambassadors as $s){
+			?><tr><td>
+				<div><?= $s->name ?></div>
+				<?php if (!empty($s->users)){ ?>
+					<div>
+						<?php foreach ($s->users as $u){ ?>
+							<a href="https://github.com/<?= $u ?>" target="_blank"><i class="fa fa-github"></i> <?= $u ?></a>
 						<?php } ?>
-						<?php if (!empty($s->nodes)){ ?>
-							<div>
-								<?php foreach ($s->nodes as $u){ ?>
-									<a href="https://ipfs.io/<?= $u ?>" target="_blank"><i class="fa fa-globe"></i> <?= $u ?></a>
-								<?php } ?>
-							</div>
+					</div>
+				<?php } ?>
+				<?php if (!empty($s->nodes)){ ?>
+					<div>
+						<?php foreach ($s->nodes as $u){ ?>
+							<a href="https://ipfs.io/<?= $u ?>" target="_blank"><i class="fa fa-globe"></i> <?= $u ?></a>
 						<?php } ?>
-					</td></tr><?php
-				}
-			?>
-			</table>
-			<?php
+					</div>
+				<?php } ?>
+			</td></tr><?php
 		}
 	?>
-</div>
-<?php
+	</table>
+	<?php
+}
 
+print_footer();

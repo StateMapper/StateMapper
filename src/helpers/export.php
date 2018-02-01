@@ -16,6 +16,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
+
+namespace StateMapper;
  
 if (!defined('BASE_PATH'))
 	die();
@@ -30,7 +32,7 @@ function export(){
 
 	echo 'exporting database structure to '.strip_root($dest.'.sql').'...'.PHP_EOL; 
 		
-	$cmd = 'mysqldump --no-data --no-create-db --skip-add-drop-table -u "'.DB_USER.'"'.(DB_PASS != '' ? ' -p "'.DB_PASS.'"' : '').' -h "'.DB_HOST.'" "'.DB_NAME.'" > "'.$dest.'.exporting.sql"';
+	$cmd = 'mysqldump --no-data --no-create-db --skip-comments --single-transaction --skip-add-drop-table -u "'.DB_USER.'"'.(DB_PASS != '' ? ' -p "'.DB_PASS.'"' : '').' -h "'.DB_HOST.'" "'.DB_NAME.'" | sed \'s/ AUTO_INCREMENT=[0-9]*\b//g\' > "'.$dest.'.exporting.sql"'; // export, striping out AUTO_INCREMENT
 
 	exec($cmd, $output, $returnVar);
 	if (!empty($returnVar) || $output){
@@ -40,4 +42,5 @@ function export(){
 	if (!rename($dest.'.exporting.sql', $dest.'.sql'))
 		die_error('an error occurred: '.$output[0]);
 	echo 'done'.PHP_EOL; 
+	exit(0);
 }

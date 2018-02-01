@@ -1,0 +1,27 @@
+{
+  "name": "camcima/php-mysql-diff",
+  "type": "project",
+  "homepage": "https://github.com/camcima/php-mysql-diff",
+  "keywords": ["database","diff","mysql","migration","generator","script"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Carlos Cima",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">5.6",
+    "symfony/console": "^3.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^5.3",
+    "fabpot/php-cs-fixer": "^1.11"
+  },
+  "autoload": {
+    "psr-4": {
+      "Camcima\\MySqlDiff\\": "src/"
+    }
+  },
+  "bin": ["php-mysql-diff"]
+}

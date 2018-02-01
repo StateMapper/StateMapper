@@ -16,16 +16,17 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
- 
+
+namespace StateMapper;
+use \StateMapper\BulletinController as BulletinController;
 
 if (!defined('BASE_PATH'))
 	die();
 
 class MainController {
 	
-	public function route($bits){
-		global $smap;		
-
+	public function init(){
+		
 		// clean
 		clean_tables(IS_DEBUG && !empty($_GET['clean_tables']));
 		
@@ -33,44 +34,19 @@ class MainController {
 		if (is_admin() && IS_DEBUG && !empty($_GET['repair_slugs']))
 			repair_location_slugs();
 		
-		// check if it's an ajax request
-		if (!empty($_POST['action']) && preg_match('#^[a-z0-9_]+$#i', $_POST['action'])){
-			
-			$fn = 'smap_ajax_'.preg_replace_callback('#[A-Z]#', function($m){
-				return '_'.strtolower($m[0]);
-			}, $_POST['action']);
-			
-			if (function_exists($fn)){
-				define('IS_AJAX', true);
-				
-				if (!empty($_POST['session']['query']))
-					$smap['query'] = $_POST['session']['query'];
-				if (!empty($_POST['session']['filters']))
-					$smap['filters'] = $_POST['session']['filters'];
-				if (isset($smap['query']['schema']))
-					$smap['schemaObj'] = get_schema($smap['query']['schema']);
-				
-				// exec ajax function
-				$ret = call_user_func($fn, $_POST);
-				if ($ret === true)
-					$ret = array('success' => true);
-				else if (is_string($ret))
-					$ret = array('success' => false, 'error' => $ret);
-				echo json_encode($ret);
-				exit();
-			}
-		}
-		define('IS_AJAX', false);
+	}
+	
+	public function get_route($bits){
+		global $smap;	
 		
-		if (IS_CLI && !current_url()){
-			
-			// print CLI help if no argument
-			print_template('cli');
-			exit();
-		}
+		if (!empty($smap['filters']['q']))
+			$smap['query']['q'] = $smap['filters']['q'];
+
+		// handle ajax requests
+		handle_ajax();
 		
 		// detect if it's an API call (.[format] at the end of the URL). Only json supported at this time.
-		if ($bits && (IS_CLI || $bits[0] == 'api') && preg_match('#^(.+)(\.(json))$#', $bits[count($bits)-1], $m)){
+		if ($bits && (IS_CLI || in_array($bits[0], array('api', 'api.json'))) && preg_match('#^(.+)(\.(json))$#', $bits[count($bits)-1], $m)){
 			define('IS_API', true);
 			
 			// check api rates
@@ -93,35 +69,44 @@ class MainController {
 				));
 			}
 			
-			if ($bits[0] == 'api' && !IS_CLI)
+			if (in_array($bits[0], array('api', 'api.json')) && !IS_CLI)
 				array_shift($bits);
 			$smap['raw'] = $m[3]; // store format into 'raw'
 			if ($m[1] != 'api')
 				$bits[count($bits)-1] = $m[1]; 
 		
-		} else
+		// default API settings
+		} else {
+			
 			define('IS_API', false);
+			if ($bits && $bits[count($bits)-1] == 'raw'){
+				$smap['raw'] = true;
+				array_pop($bits);
+			
+			} 
+		}
+
+		$smap['human'] = !empty($smap['filters']['human']) || (IS_CLI && empty($smap['raw']));
 		
-		// force to install if decided so
+		// force to install if defined so
 		if (IS_INSTALL){ 
 			if (IS_CLI)
 				die('Please visit '.BASE_URL.' to complete the installation process.');
 				
 			$smap['page'] = 'install';
-			if (!IS_INSTALL)
-				die_error();
-			print_page('install');
-			exit();
+			return array(
+				'page' => 'install'
+			);
 		}
 	
-		if ($bits && preg_match('#^[a-z]{2,3}$#i', $bits[0]) && is_country($bits[0]))
-			$smap['filters']['loc'] = strtolower(array_shift($bits));
+		if ($bits && preg_match('#^[a-z]{2,3}$#i', $bits[0]) && is_country($bits[0])){
+			$country = $smap['filters']['loc'] = strtolower(urldecode(array_shift($bits)));
+			if ($bits && !is_mode($bits[0]) && !is_valid_date($bits[0])){
+				if ($loc_id = get_location_id_by_slug(urldecode($bits[0]), 'states', $country))
+					$smap['filters']['loc'] .= '/'.array_shift($bits);
+			}
+		}
 		
-		// build filters
-		if (!empty($_GET))
-			$smap['filters'] += $_GET;
-		if (empty($smap['filters']['q']))
-			$smap['filters']['q'] = '';
 		$smap['filters']['loc'] = !empty($smap['filters']['loc']) ? urldecode($smap['filters']['loc']) : null;
 			
 		$smap['page'] = $bits ? array_shift($bits) : 'browser';
@@ -141,22 +126,122 @@ class MainController {
 				break;
 			}
 			
+		
+		$smap['page'] = apply_filters('page', $smap['page'], $bits);
+		do_action('redirect');
+		
+		// print CLI help if no argument
+		if (IS_CLI && !current_url() && !is_search())
+			return array(
+				'template' => 'cli',
+			);
+		
 		switch ($smap['page']){
+			
+			// CLI-only methods
 			case 'daemon':
-				if (IS_CLI){
-					require APP_PATH.'/daemon/daemon.php';
-					exit();
-				} else 
-					die_error();
+			case 'admin':
+			case 'compile':
+			case 'export':
+			
+				if (!IS_CLI)
+					return false;
+				require APP_PATH.'/helpers/'.$smap['page'].'.php';
+				return call_user_func('\\StateMapper\\'.$smap['page']);
+			
+			case 'spiders':
+				if (!IS_CLI)
+					return false;
+					
+				if (!($spiders = query('SELECT * FROM spiders')))
+					return 'no spider configured so far';
+				
+				echo PHP_EOL;
+				echo '   '.str_pad('SCHEMA', 12, ' ');
+				echo '   '.str_pad('STATUS', 20, ' ');
+				echo '   '.str_pad('DATE_BACK', 13, ' ');
+				echo '   '.str_pad('EXTRACT', 16, ' ');
+				echo '   '.str_pad('MAX_WORKERS', 15, ' ');
+				echo '   '.str_pad('MAX_CPU_RATE', 16, ' ');
+				echo PHP_EOL;
+				echo ' | '.str_pad('', 12, '-');
+				echo ' | '.str_pad('', 20, '-');
+				echo ' | '.str_pad('', 13, '-');
+				echo ' | '.str_pad('', 16, '-');
+				echo ' | '.str_pad('', 15, '-');
+				echo ' | '.str_pad('', 16, '-');
+				echo PHP_EOL;
+				 
+				foreach ($spiders as $s){
+					echo ' | '.str_pad($s['bulletin_schema'], 12, ' ');
+					echo ' | '.str_pad($s['status'].' ('.($s['pid'] && is_active_pid($s['pid']) ? 'PID '.$s['pid'] : 'inactive').')', 20, ' ');
+					echo ' | '.str_pad($s['date_back'], 13, ' ');
+					echo ' | '.str_pad($s['extract'] ? '1' : '0', 16, ' ');
+					echo ' | '.str_pad($s['max_workers'], 15, ' ');
+					echo ' | '.str_pad($s['max_cpu_rate'], 16, ' ');
+					echo PHP_EOL;
+				}
+				echo PHP_EOL;
+					
+				exit(0);
+				
+			case 'spider':
+				if (!IS_CLI)
+					return false;
+				$args = $smap['cli_args'];
+				if ($args && $args[0] == 'spider')
+					array_shift($args);
+				$schema = array_shift($args);
+				if (!$schema)
+					return 'missing schema';
+				$schema = strtoupper($schema);
+				if (!is_valid_schema_path($schema) || !($s = get_schema(strtoupper($schema))))
+					return 'missing schema '.$schema;
+				
+				if (!$args)
+					return 'missing command';
+				$cmd = strtolower(array_shift($args));
+				
+				switch ($cmd){
+					
+					case 'turn':
+						$on = array_shift($args);
+						if (!in_array($on, array('on', 'off')))
+							return 'bad command '.$on;
+							
+						if (($error = toggle_spider_status($schema, $on == 'on')) !== true)
+							return $error;
+						
+						echo 'Spider '.$schema.' turned '.$on.PHP_EOL;
+						exit(0);
+						
+					case 'config':
+						$var = array_shift($args);
+						if ($var === null)
+							return 'missing var';
+						$value = array_shift($args);
+						if ($value === null)
+							return 'missing value';
+						
+						$error = set_spider_config($schema, strtolower($var), strtolower($value));
+						if ($error !== true)
+							return $error;
+						echo 'Variable '.$var.' set to '.$value.' for spider '.$schema.PHP_EOL;
+						exit(0);
+						
+				}
+						
+				return 'bad spider command';
 			
 			case 'bulletins':
 				$smap['page'] = 'bulletin';
 				$smap['call'] = 'rewind';
+				
 				if (IS_CLI && $bits && in_array($bits[count($bits)-1], array('extract'))){
-					$smap['call'] = 'rewind';
 					array_pop($bits);
 					$smap['extract'] = true;
-				}
+				
+				} 
 				
 			case 'schema':
 				if ($smap['page'] == 'schema'){
@@ -178,242 +263,162 @@ class MainController {
 			case 'bulletin':
 			
 				// reroute to BulletinController
-				require 'BulletinController.php';
+				require_once 'BulletinController.php';
 				$c = new BulletinController();
-				$c->route($bits);
-				exit;
+				return $c->route($bits);
 				
+			// countries' (and providers'?) soldiers
 			case 'soldiers':
 				$smap['page'] = 'bulletin';
 				$smap['call'] = 'soldiers';
-				print_page('soldiers');
-				exit;
-			
+				
+				$schema = get_schema(!empty($smap['query']['schema']) ? $smap['query']['schema'] : $smap['filters']['loc']);
+				$soldiers = get_schema_prop($schema, 'soldiers', true);
+
+				return array(
+					'page' => 'soldiers', 
+					'vars' => array(
+						'soldiers' => $soldiers
+					),
+					'template_vars' => array(
+						'schema' => $schema
+					),
+				);
+
 			case 'ambassadors':
-				print_page('ambassadors');
-				exit;
+				$schema = get_schema($smap['filters']['loc']);
+				$ambassadors = get_schema_prop($schema, 'ambassadors', true);
+				
+				return array(
+					'page' => 'ambassadors', 
+					'vars' => array(
+						'ambassadors' => $ambassadors,
+					), 
+					'template_vars' => array(
+						'schema' => $schema,
+					),
+				);
 				
 			case 'browser':
-				load_search_results();
-				
-				if (!empty($smap['raw'])){
-					foreach ($smap['results'] as &$e){
-						$e['icon'] = get_entity_icon($e);
-						$e['label'] = get_entity_title($e);
-						$e['url'] = get_entity_url($e);
-					}
-					unset($e);
-					return_wrap(array('success' => true, 'results' => $smap['results']));
-				}
-				print_template('browser');
-				exit();
-
+				$res = get_results();
+				return array(
+					'page' => is_home() ? 'home' : 'browser', 
+					'vars' => array(
+						'results' => $res,
+					),
+				);
+			
+			// entity page
+			case 'entity':
 			case 'person':
 			case 'company':
 			case 'institution':
+				$etype = $smap['page'];
+				$smap['page'] = 'browser';
 			
 				// retrieve targeted entity
-				if (($entityId = array_shift($bits)) && !empty($smap['filters']['loc']) && ($entity = get_entity_by_slug($entityId, $smap['page'], $smap['filters']['loc']))){
+				if (
+					($entity_slug = array_shift($bits)) 
+					&& !empty($smap['filters']['loc']) 
+					&& ($entity = $etype == 'entity' 
+						? get_entity_by_id($entity_slug) 
+						: get_entity_by_slug($entity_slug, $etype, $smap['filters']['loc'])
+					)
+				){
+
+					
+					// @todo: put summaries into entity
+					// $entity['summary'] = get_entity_summary($entity, 'sheet');
+					$smap['entity'] = $entity;
 					
 					$entity['summary'] = get_entity_summary($entity);
+					$entity['activity'] = get_entity_activity($entity, true);
 
-					$entity['icon'] = get_entity_icon($entity);
-					$entity['label'] = get_entity_title($entity);
-					$entity['url'] = get_entity_url($entity);
-					$smap['entity'] = $entity;
-
-					if (!empty($smap['raw']))
-						return_wrap(array('success' => true, 'entity' => $entity));
-					
-					print_template('browser', array('entity' => $entity));
-					exit(0);
+					return array(
+						'page' => 'entity', 
+						'vars' => array(
+							'entity' => $entity,
+						),
+					);
 				}
 				break;
 				
-			// web-only methods
-			case 'login':
-				if (!ALLOW_LOGIN)
-					die_error();
-					
 			case 'logout':
 				if (IS_CLI)
-					die_error();
-
-				$_SESSION['smap_authed'] = $smap['page'] == 'login' ? 1 : 0; // TODO: implement a login form/system
-				redirect(add_lang(!empty($_GET['redirect']) ? $_GET['redirect'] : url()));
+					return false;
+				
+				logout_do();
+				return array(
+					'redirect' => add_lang(!empty($_REQUEST['redirect']) ? $_REQUEST['redirect'] : url()),
+				);
 				
 			case 'settings':
 				if (!is_admin() || IS_CLI)
-					die_error();
-				print_template('settings');
-				exit();
+					return false;
+				return array(
+					'page' => 'settings',
+				);
 				
 			case 'api':
 				if (IS_CLI)
-					die_error();
-				print_template('api_root');
-				exit();
-			
-			// CLI-only methods
-			case 'compile':
-			case 'export':
-				if (!IS_CLI)
-					die_error();
-				require APP_PATH.'/helpers/'.$smap['page'].'.php';
-				call_user_func($smap['page']);
-				exit(0);
+					return false;
+				return array(
+					'page' => 'api_root',
+				);
+				
+			case 'lists':
+				if (!is_logged())
+					return array(
+						'redirect' => add_url_arg('redirect', current_url(), url(null, 'login')),
+					);
+					
+				$lists = get_my_lists(true);
+				return array(
+					'page' => 'lists', 
+					'vars' => array(
+						'lists' => $lists,
+					),
+				);
+				
+			case 'test':
+				if (!is_admin() || !$bits || !preg_match('#^[a-z0-9_]+$#i', $bits[0]))
+					return false;
+					
+				if (file_exists($path = APP_PATH.'/tests/'.$bits[0].'.php')){
+					require_once APP_PATH.'/helpers/tests.php';
+					return array(
+						'route' => $path,
+					);
+				}
+				break;
 		}
 		
-		die_error('bad call');
+		if (apply_filters('page_'.urlencode($smap['page']), false, $bits))
+			exit(0);
+			
+		return 'bad call';
 	}
-}
-
-function smap_ajax_refresh_map($args){
-	$vars = array(
-		'currentYear' => $args['year'],
-		'extract' => !empty($args['extract']) && $args['extract'] !== 'false',
-	);
-	return array('success' => true, 'html' => get_template('rewind', $vars));
-}
-
-
-function smap_ajax_search($args){
-	$count = 0;
-	$results = query_entities(array(
-		'q' => $args['query'],
-		'limit' => 30,
-	), $left);
 	
-	ob_start();
-	if ($results){
-
-		$vars = array('results' => $results, 'args' => $args, 'count' => count($results) + $left);
-		$html = get_template('parts/autocomplete_results', $vars);
-		$more = get_template('parts/autocomplete_footer', $vars);
+	function exec($cmd){
 		
-	} else {
-		$html = '<div class="results-none">Nothing found</div>';
-		$more = false;
-	}
-	
-	return array('success' => true, 'results' => $html, 'resultsMore' => $more);
-}
-
-function smap_ajax_delete_extracted_data($args){
-	if (!is_admin())
+		if (!$cmd)
+			die_error();
+		else if (is_string($cmd))
+			die_error($cmd);
+		else if (is_error($cmd))
+			die_error($cmd);
+			
+		if (!empty($cmd['redirect']))
+			redirect($cmd['redirect']);
+		else if (!empty($cmd['page']))
+			print_page($cmd['page'], isset($cmd['vars']) ? $cmd['vars'] : array(), isset($cmd['template_vars']) ? $cmd['template_vars'] : array());
+		else if (!empty($cmd['template']))
+			print_template($cmd['template'], isset($cmd['vars']) ? $cmd['vars'] : array(), isset($cmd['template_vars']) ? $cmd['template_vars'] : array());
+		else if (!empty($cmd['route']))
+			require_once $cmd['route'];
+		else if (!empty($cmd['result']))
+			return_wrap($cmd['result']);
+		
 		die_error();
-		
-	$tables = array(
-		'entities', 
-		'precepts', 
-		'statuses', 
-		'status_has_service', 
-		'amounts', 
-		'locations',
-		'location_states',
-		'location_counties',
-		'location_cities',
-		
-		/* TODO: implement several hard-reset button
-		'bulletins',
-		'spiders',
-		'workers',
-		* */
-	);
-	$error = 0;
-	foreach ($tables as $table)
-		if (!query('TRUNCATE '.$table))
-			$error++;
-	
-	clean_tables(true);
-	query('UPDATE bulletins SET status = "fetched" WHERE status IN ( "extracting", "extracted" )');
-		
-	return array('success' => true, 'msg' => 'Tables '.implode(', ', $tables).' were '.($error ? 'emptied with '.$error.' errors' : 'successfuly empties'));
-}
-
-function smap_ajax_load_statuses($args){
-	
-	if (empty($args['related']) || empty($args['related']['id']) || !($target = get_entity_by_id($args['related']['id'])))
-		return 'Bad id';
-	
-	$statuses = query_statuses($args['related']);
-
-	ob_start();
-	echo '<div class="entity-stat-children">';
-	print_statuses($statuses, $target, $args['related']['id'], isset($args['related']['date']) ? array('date' => $args['related']['date']) : array());
-	echo '</div>';
-
-	return array('success' => true, 'html' => ob_get_clean());
-}
-
-function smap_ajax_status_action($args){
-	if (empty($args['related']))
-		return 'Bad id';
-	if (empty($args['status_action']))
-		return 'Bad action';
-	
-	$abits = explode(':', $args['status_action']);
-	switch (array_shift($abits)){
-		
-		case 'markAsBuggy':
-			$bug = null;
-			switch ($abits ? $abits[0] : ''){
-				
-				case 'status':
-					if (empty($args['related']['status_id']) || !($status = get_row('SELECT * FROM statuses WHERE id = %s', $args['related']['status_id'])))
-						return 'Bad status id';
-					
-					$a = $status['amount'] ? get_amount($status['amount']) : null;
-					
-					$arg3 = null;
-					if (!empty($status['target_id'])){
-						$arg3 = get_entity_by_id($status['target_id']);
-						$arg3 = $arg3 ? get_entity_title($arg3, true) : $arg3;
-					}
-					
-					$bug = array(
-						'type' => 'status',
-						'related_id' => $status['id'],
-						'arg1' => $status['type'],
-						'arg2' => $status['action'],
-						'arg3' => $arg3,
-						'arg4' => $a && (is_object($a) || is_array($a)) ? serialize($a) : $a, // TODO: get real amount
-						'arg5' => $status['note'],
-					);
-					break;
-				
-				case 'entity':	
-					if (empty($args['related']['id']) || !($entity = get_entity_by_id($args['related']['id'])))
-						return 'Bad entity id';
-						
-					$bug = array(
-						'type' => 'entity',
-						'related_id' => $entity['id'],
-						'arg1' => $entity['type'],
-						'arg2' => $entity['subtype'],
-						'arg3' => $entity['name'],
-						'arg4' => $entity['first_name'],
-					);
-					break;
-			}
-			if ($bug){
-				// TODO: implement a bug tracking table and web UX. it must be very flexible, and not related to auto_incremeneted ids (because it's gonna remain through re-parsings!)
-				
-				debug($bug); die();
-				insert('bugs', $bug);
-				return array('success' => true);
-			}
-			break;
 	}
-	return 'Bad action';
-}
-
-function smap_ajax_load_more_results($args){
-	global $smap;
-	$smap['query']['loaded_count'] = $args['loaded_count'];
-	$smap['query']['after_id'] = $args['after_id'];
-	load_search_results();
-	ob_start();
-	print_template('parts/results');
-	return array('success' => true, 'results' => ob_get_clean(), 'resultsLabel' => get_results_count_label(count($smap['results']) + $args['loaded_count'], $smap['resultsCount']));
 }

@@ -16,7 +16,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
- 
+
+namespace StateMapper; 
 
 if (!defined('BASE_PATH'))
 	die();
@@ -150,7 +151,7 @@ function parse_entities($options, $oval, $schema, $extraEnt = array(), $doubleCh
 					$groups[$group][] = trim(preg_replace('#[;:]\s*$#', '', $m['value']));
 				}
 
-				if ($smapDebug){
+				if (0 && $smapDebug){
 					echo "GROUPS: "; print_json($groups); echo '<br><br><br>';
 				}
 
@@ -426,509 +427,6 @@ function get_entity_pattern($schema, $allowEntityPrefix = false, &$companyPatter
 }
 
 
-function query_statuses($query){
-	$statuses = array();
-
-	$query += array(
-		'type' => null,
-		'action' => null,
-		'id' => null, // entity ID
-		'ids' => array(),
-		'date' => null,
-		'include_other_names' => true,
-		'target' => null,
-		'related' => null,
-		'issuing' => null,
-	);
-
-	if ((empty($query['id']) && empty($query['ids'])) || ($query['id'] && !is_numeric($query['id'])))
-		return array();
-
-	if (!empty($query['ids']))
-		foreach ($query['ids'] as $id)
-			if (!is_numeric($id))
-				return array();
-
-	if ($query['include_other_names'])
-		$query['ids'] = array_merge($query['ids'], get_other_entities($query['id']));
-	else if (!empty($query['id']))
-		$query['ids'][] = $query['id'];
-	if (empty($query['ids']))
-		return array();
-
-	$limit = 100;
-	$where = '';
-
-	$yearMode = !empty($query['date']) && is_numeric($query['date']);
-
-	if (!empty($query['date'])){
-		if ($yearMode) // year mode
-			$where .= prepare(' AND YEAR(b.date) = %s', array($query['date']));
-		else
-			$where .= prepare(' AND b.date = %s', array($query['date']));
-	}
-
-	$join = '';
-	$order = 'b.date DESC';
-
-	if (!empty($query['type'])){
-		$where .= prepare(' AND s.type = %s', array($query['type']));
-		if ($query['type'] == 'capital'){
-			$join .= 'LEFT JOIN amounts AS a ON s.amount = a.id ';
-			$order = 'a.value DESC';
-		}
-	}
-	$order .= ', e.name ASC, e.first_name ASC';
-
-	if (!empty($query['action']))
-		$where .= prepare(' AND s.action = %s', array($query['action']));
-
-	if (empty($query['related']) && empty($query['issuing'])){
-
-		$q = '
-			SELECT s.id AS status_id, b.date AS date, b.external_id, b.bulletin_schema, p.title, p.text, p.bulletin_id,
-			s.type AS _type, s.action AS _action, s.amount, s.contract_type_id, s.sector_id,
-			s.target_id, s.related_id, p.issuing_id, p.id AS precept_id, s.note,
-			e.name, e.first_name, e.type, e.subtype, e.country
-
-			FROM precepts AS p
-			LEFT JOIN statuses AS s ON p.id = s.precept_id
-			LEFT JOIN bulletins AS b ON p.bulletin_id = b.id
-			LEFT JOIN entities AS e ON p.issuing_id = e.id
-			'.$join.'
-
-			WHERE s.target_id IN ( '.implode(', ', $query['ids']).' ) '.$where.'
-			GROUP BY s.id
-			ORDER BY '.$order.'
-			LIMIT '.$limit.'
-
-		';
-
-		foreach (query($q) as $e)
-			$statuses[$e['status_id']] = $e;
-	}
-
-	// what this entity adjudicated to
-	if (empty($query['target'])){
-
-		$q = '
-
-			SELECT s.id AS status_id, b.date AS date, b.external_id, b.bulletin_schema,
-			p.title, p.text, p.bulletin_id,
-			s.type AS _type, s.action AS _action, s.amount, s.contract_type_id, s.sector_id,
-			s.target_id, s.related_id, p.issuing_id, p.id AS precept_id, s.note,
-			e.name, e.first_name, e.type, e.subtype, e.country
-
-			FROM precepts AS p
-			LEFT JOIN statuses AS s ON p.id = s.precept_id
-			LEFT JOIN entities AS e ON s.target_id = e.id
-			LEFT JOIN bulletins AS b ON p.bulletin_id = b.id
-			'.$join.'
-
-			WHERE s.related_id IN ( '.implode(', ', $query['ids']).' ) '.$where.'
-			GROUP BY s.id
-			ORDER BY '.$order.'
-			LIMIT '.$limit.'
-
-		';
-
-		foreach (query($q) as $e)
-			$statuses[$e['status_id']] = $e;
-			
-		$q = '
-
-			SELECT s.id AS status_id, b.date AS date, b.external_id, b.bulletin_schema,
-			p.title, p.text, p.bulletin_id,
-			s.type AS _type, s.action AS _action, s.amount, s.contract_type_id, s.sector_id,
-			s.target_id, s.related_id, p.issuing_id, p.id AS precept_id, s.note,
-			e.name, e.first_name, e.type, e.subtype, e.country
-
-			FROM precepts AS p
-			LEFT JOIN statuses AS s ON p.id = s.precept_id
-			LEFT JOIN entities AS e ON s.target_id = e.id
-			LEFT JOIN bulletins AS b ON p.bulletin_id = b.id
-			'.$join.'
-
-			WHERE p.issuing_id IN ( '.implode(', ', $query['ids']).' ) '.$where.'
-			GROUP BY s.id
-			ORDER BY '.$order.'
-			LIMIT '.$limit.'
-
-		';
-
-		foreach (query($q) as $e)
-			$statuses[$e['status_id']] = $e;
-	}
-	return $statuses;
-}
-
-function print_statuses($statuses, $target = null, $headerEntityId = null, $default = array(), $printAsTopLevel = false){
-	global $smap;
-	$otherIds = get_other_entities($target['id']);
-
-	foreach ($statuses as $p){
-		$p += $default;
-
-		$schema = get_schema($p['bulletin_schema']);
-
-		$sector = get_var('SELECT value FROM options WHERE id = %s', array($p['sector_id']));
-		$contract_type = get_var('SELECT value FROM options WHERE id = %s', array($p['contract_type_id']));
-
-		$services = query('SELECT o.id AS id, o.value AS label FROM status_has_service AS ss LEFT JOIN options AS o ON ss.service_id = o.id AND o.name = "service" WHERE ss.status_id = %s', array($p['status_id']));
-
-		$date = $p['date'];
-		//if (empty($date))
-			//$date = get_var('SELECT b.date FROM bulletin_uses_bulletin AS bb LEFT JOIN bulletins AS b ON bb.bulletin_in = b.id WHERE bb.bulletin_id = %s', array($p['bulletin_id']));
-
-		$cleanId = null;
-		if ($p['external_id']){
-			$cleanId = $p['external_id'];
-			$cleanId = preg_replace('#\b'.preg_quote($schema->shortName, '#').'\b#ius', '', $cleanId);
-			$cleanId = ltrim($cleanId, '-');
-			$cleanId = rtrim($cleanId, '-');
-		}
-
-		$icon = null;
-		$label = $p['_action'].' '.$p['_type'];
-
-		$labels = get_status_labels();
-
-		if (isset($labels->{$p['_type']}, $labels->{$p['_type']}->{$p['_action']})){
-			$config = $labels->{$p['_type']}->{$p['_action']};
-			if (isset($config->icon))
-				$icon = $config->icon;
-
-			if (!empty($p['target_id']) && $target['id'] == $p['target_id'])
-				$label = $config->own;
-			else if ($target['id'] == $p['related_id'])
-				$label = !empty($config->related) ? $config->related : $config->own;
-			else if ($target['id'] == $p['issuing_id'] || in_array($p['related_id'], $otherIds) || in_array($p['target_id'], $otherIds))
-				$label = $config->issuing;
-			else
-				$label = $config->own;
-
-			if (is_object($label)){
-				if (isset($label->icon))
-					$icon = $label->icon;
-				$label = $label->label;
-			}
-			//print_r($p);
-			
-			$note = '';
-			if (!empty($p['note'])){
-				$note = $p['note'];
-				if ($p['_type'] == 'location'){
-					$countrySchema = get_country_schema($schema);
-					
-					$locationObj = apply_filters('location_lint', null, $p['note'], $countrySchema);
-					$note = $locationObj ? get_location_label($locationObj) : $note;
-				}
-				if ($note != '')
-					$note = '<span class="status-note">"'.$note.'"</span>';
-			}
-
-			$label = strtr($label, array(
-				'[target]' => '<a href="'.get_entity_url($p['target_id']).'" class="status-title-tag status-target"><i class="fa fa-'.get_entity_icon($p['target_id']).'"></i> '.get_entity_title($p['target_id']).'</a>',
-				'[related]' => '<a href="'.get_entity_url($p['related_id']).'" class="status-title-tag status-target"><i class="fa fa-'.get_entity_icon($p['related_id']).'"></i> '.get_entity_title($p['related_id']).'</a>',
-				'[issuing]' => '<a href="'.get_entity_url($p['issuing_id']).'" class="status-title-tag status-issuing"><i class="fa fa-'.get_entity_icon($p['issuing_id']).'"></i> '.get_entity_title($p['issuing_id']).'</a>',
-				'[amount]' => !empty($p['amount']) ? '<span class="status-amount">'.print_amount($p['amount']).'</span>' : 'N/D',
-				'[note]' => $note,
-			));
-		}
-
-		// format and print source info and text
-
-		$title = !empty($p['title']) ? strip_tags(preg_replace('#<([a-z0-9]+)>(\*\|.+?\|\*)</\1>#i', '$2', $p['title'])) : null;
-		$text = strip_tags(preg_replace('#<([a-z0-9]+)>(\*\|.+?\|\*)</\1>#i', '$2', $p['text']));
-		$icons = $alerts = array();
-
-		// highlight amount in source text
-		$smap['mem']['amount'] = !empty($p['amount']) ? get_amount($p['amount']) : null;
-		$text = preg_replace_callback('#\b'.get_amount_pattern(true).'\b#i', function($m){
-			global $smap;
-			$hasCents = preg_match('#.*[,\.][0-9][0-9]$#', $m[0]);
-			$val = intval(preg_replace('#([\.,\s])#', '', $m[0])) * ($hasCents ? 100 : 1);
-
-			$isAmount = $smap['mem']['amount']['originalValue']
-				&& $val == $smap['mem']['amount']['originalValue'];
-
-			return !empty($m[2]) && ($isAmount || $val > 1000)
-				? '<span class="text-tag '.($isAmount ? '' : 'text-tag-nolabel ').'text-tag-type-'.($isAmount ? 'amount' : 'amount-other').'">'.($isAmount ? '<span class="text-tag-icon">Amount</span>' : '').'<span class="text-tag-label">'.strip_tags($m[0]).'</span></span>'
-				: $m[0];
-		}, $text, -1, $count);
-
-		// highlight note in source text
-		if (!empty($p['note'])){
-
-			$labels = get_status_labels();
-			$noteLabel = null;
-			if (isset($labels->{$p['_type']}, $labels->{$p['_type']}->{$p['_action']})){
-				$config = $labels->{$p['_type']}->{$p['_action']};
-				if (isset($config->note))
-					$noteLabel = $config->note;
-			}
-
-			$inner = implode('\s+', array_map(function($e){ return preg_quote($e, '#'); }, explode(' ', $p['note'])));
-			$text = preg_replace('#'.$inner.'#ius', '<span class="text-tag'.($noteLabel ? '' : 'text-tag-nolabel').'">'.($noteLabel ? '<span class="text-tag-icon">'.$noteLabel.'</span>' : '').$p['note'].'</span>', $text);
-		}
-
-		if (!$count)
-			$alerts[] = '<i class="fa fa-warning" title="Amount not detected in extract"></i>';
-
-		// highlight entities
-		$entities = array();
-		$hasTarget = false;
-
-		if (!empty($p['target_id']) && ($ctarget = get_entity_by_id($p['target_id'])))
-			$entities[] = array(
-				'_type' => 'target',
-			) + $ctarget;
-		if (!empty($p['related_id']) && ($ctarget = get_entity_by_id($p['related_id'])))
-			$entities[] = array(
-				'_type' => 'related',
-			) + $ctarget;
-		if (!empty($p['issuing_id']) && ($ctarget = get_entity_by_id($p['issuing_id'])))
-			$entities[] = array(
-				'_type' => 'issuing',
-			) + $ctarget;
-
-		if ($otherEntities = parse_entities(array('strict' => true), $text, $p['bulletin_schema'], array('_type' => 'other', 'country' => get_country_schema($p['bulletin_schema'])->id)))
-			$entities = array_merge($entities, $otherEntities);
-
-/*
-		$entities[] = array(
-			'_type' => !empty($p['related_id']) ? 'target' : 'related',
-		) + $target;*/
-
-		// print_json($entities);
-
-		$replace = array();
-		foreach ($entities as $e){
-
-			foreach (get_entity_patterns($e) as $pat)
-				$replace[$pat] = '<span class="text-tag text-tag-type-'.$e['_type'].'"><span class="text-tag-icon">'.($e['_type'] != 'other' ? ucfirst($e['_type']) : 'Entity').'</span><span class="text-tag-label">$0</span></span>';
-
-			if ($e['_type'] == 'target')
-				$hasTarget = true;
-		}
-		if ($replace){
-			$title = smap_replace($replace, $title);
-			$text = smap_replace($replace, $text);
-		}
-
-		if (!$hasTarget)
-			$alerts[] = '<i class="fa fa-warning" title="Target not detected in extract"></i>';
-
-		$js = "jQuery(this).closest('.status-body').find('.folding').toggle(); return false;";
-
-		$countEntities = count($entities);
-
-		//$icons[] = '<a href="#" class="extract-entities-count" onclick="'.$js.'"><span title="'.$countEntities.' entities found in extract"><i class="fa fa-address-book-o"></i> '.$countEntities.'</span>'.($alerts ? ' '.implode('', $alerts) : '').'</a>';
-
-		$docQuery = array(
-			'schema' => $schema->id,
-			'date' => $p['date'],
-			'id' => $p['external_id'],
-		);
-
-		$topDocQuery = $docQuery;
-		if (!empty($docQuery['id']))
-			unset($topDocQuery['id']);
-
-		if (!$printAsTopLevel){
-		?>
-		<div class="status-inline">
-			<?php } else { ?>
-				
-				<div class="entity-stat" data-smap-related="<?= esc_json(array('type' => $p['_type'], 'action' => $p['_action'])) ?>">
-				
-			<?php } ?>
-			<!-- <div class="status-header-inline">
-				<div class="status-debug debug">Status #<?= $p['status_id'] ?>: <?= $p['_type'].' / '.$p['_action'] ?></div>
-			</div> -->
-			<span class="date"><?= date_i18n('M j', strtotime($date)) ?><span><?= date_i18n(', Y', strtotime($date)) ?></span></span>
-			<div class="status-body" <?= related(array('status_id' => $p['status_id'])) ?>>
-
-				<div class="status-title">
-					<?php if ($printAsTopLevel){ ?>
-						<i class="status-icon fa fa-<?= ($icon ? $icon : 'info-circle') ?>"></i>
-					<?php } ?>
-				<?php
-					echo '<span class="status-type">'.$label.'</span> ';
-
-					?>
-				</div>
-				<?php if ($services || $contract_type || $sector){ ?>
-					<div class="status-services">
-						<?php foreach ($services as $v){ ?>
-							<div><?= $v['label'] ?> <span>(<?= $v['id'] ?>)</span></div>
-						<?php }
-						if ($contract_type || $sector){
-							if ($services)
-								echo ' (';
-							if ($contract_type)
-								echo $contract_type;
-							if ($sector)
-								echo ' of '.$sector;
-							if ($services)
-								echo ')';
-						}
-						?>
-					</div>
-				<?php } ?>
-				<div class="source">
-					<?= get_buggy_button('status', 'Mark status #'.$p['status_id'].' as buggy') ?>
-					<span class="status-date"><a title="<?= esc_attr('Published on '.date_i18n('M j, Y', strtotime($date)).'. <br>Click to show the original bulletin summary.') ?>" href="<?= url($topDocQuery, 'fetch') ?>" target="_blank"><i class="fa fa-clock-o"></i> <?= date_i18n('M j, Y', strtotime($date)) ?></a></span>
-					<span class="status-bulletin"><a title="<?= esc_attr('Published in '.$schema->name.'. <br>Click to show the original bulletin document.') ?>" href="<?= url($docQuery, 'fetch') ?>" target="_blank"><i class="fa fa-book"></i><?= $schema->shortName ?></a><a href="#" title="Click to unfold the original text" class="extract-link" onclick="<?= $js ?>"><i class="fa fa-caret-down"></i></a></span><?php echo implode('', $icons); ?>
-				</div>
-				<div class="folding">
-					<div class="extract">
-						<div class="extract-header">
-							<?php
-							if (!empty($p['issuing_id']) && ($issuing = get_entity_by_id($p['issuing_id'])))
-								$pat = 'Published by '.get_entity_title_html($issuing, false, 50).' as part of the %s';
-							else if (!empty($docQuery['id']))
-								$pat = 'Original text from %s';
-							else
-								$pat = 'Below is the %s';
-
-							if (!empty($docQuery['id'])){
-								$inner = get_format_label($docQuery, 'document').' <a href="'.url($docQuery, 'fetch').'" target="_blank">'.$p['external_id'].'</a> of <a href="'.url($topDocQuery, 'fetch').'" target="_blank">'.date_i18n('M j, Y', strtotime($docQuery['date'])).'</a>.';
-								
-							} else
-								$inner = 'bulletin\'s '.get_format_label($docQuery, 'document').' from <a href="'.url($docQuery, 'fetch').'" target="_blank">'.date_i18n('M j, Y', strtotime($docQuery['date'])).'</a>.';
-
-							if (is_admin())
-								$inner .= ' <a class="precept-reparse" href="'.url($topDocQuery+array('precept' => $p['precept_id']), 'parse').'" target="_blank"><i class="fa fa-refresh"></i> reparse</a>';
-							
-							echo sprintf($pat, $inner);
-							?>
-						</div>
-						<div class="extract-inner">
-							<?php
-
-							if ($title)
-								echo nl2br(preg_replace("/\n+/", "\n", $title)).'<br><br>';
-
-							echo nl2br(preg_replace("/\n+/", "\n", $text));
-
-							?>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<?php
-	}
-}
-
-function print_entity_stats($stats, $target, $query){
-	$labels = get_status_labels();
-	$date = null;
-	$items = array();
-	$count = 0;
-	$otherIds = get_other_entities($target['id']);
-
-	foreach ($stats as $s){
-		if (!$date || $s['date'] != $date){
-			if ($date)
-				print_entity_stats_for_date($date, $items, $count, $target, $query);
-			$items = array();
-			$count = 0;
-			$date = $s['date'];
-		}
-
-		if (!empty($s['count']))
-			$count += $s['count'];
-			
-		if (isset($labels->{$s['_type']}, $labels->{$s['_type']}->{$s['_action']}, $labels->{$s['_type']}->{$s['_action']}->stats)){
-			$config = $labels->{$s['_type']}->{$s['_action']};
-			$icon = isset($config->icon) ? $config->icon : null;
-
-			$item = '<div class="entity-stat-wrap'.($s['count'] <= 5 ? ' entity-stat-children-filled entity-stat-children-open' : '').'">';
-			
-			$statuses = array();
-			$cquery = array(
-				'type' => $s['_type'], 
-				'action' => $s['_action'],
-				'date' => $s['date'],
-			
-			) + ($s['rel'] == 'target' ? array(
-				'target' => true
-			
-			) : array(
-				'related' => true
-			
-			)) + $query;
-					
-			if ($s['count'] < 2){
-				$statuses = query_statuses($cquery);
-
-				if (empty($statuses))
-					print_inline_error('no status returned ( < 2)');
-				if (count($statuses) >= 2)
-					print_inline_error('bad status count');
-			}
-			
-			if ($s['count'] < 2 && $statuses){
-				ob_start();
-				print_statuses($statuses, $target, $query['id'], array('date' => $date), true);
-				$item .= ob_get_clean();
-				
-			} else {
-				
-				$item .= '<div class="entity-stat" data-smap-related="'.esc_json(array('type' => $s['_type'], 'action' => $s['_action'])).'">';
-			
-				$item .= '<div class="status-title"><i class="status-icon fa fa-'.$icon.'"></i> '.strtr($config->stats, array(
-					'[count]' => '<span class="status-count">'.number_format($s['count'], 0).'</span>',
-					'[amount]' => '<span class="status-amount">'.number_format($s['amount']/100, 2).' '.$s['unit'].'</span>', // could be calculated better....
-				)).' <i class="fa fa-angle-right entity-stat-children-filled-ind" title="Unfold statuses"></i><i class="fa fa-spinner fa-pulse entity-stat-children-loading-ind"></i></div>';
-				
-				$item .= '</div>'; // close the entity-stat div
-
-				if ($s['count'] <= 5){
-					$statuses = query_statuses($cquery);
-					
-					if (empty($statuses))
-						print_inline_error('no status returned ( <= 5)');
-						
-					ob_start();
-					print_statuses($statuses, $target, $query['id'], array('date' => $date));
-					$item .= '<div class="entity-stat-children-holder"><div class="entity-stat-children">'.ob_get_clean().'</div></div>';
-				} else
-					$item .= '<div class="entity-stat-children-holder"></div>';
-			}
-
-			$item .= '</div>'; // close entity-stat-wrap div
-			
-			$items[] = $s + array('html' => $item);
-		} else
-			echo 'missing label for '.print_json($s, false).'<br>';
-	}
-	if ($date)
-		print_entity_stats_for_date($date, $items, $count, $target, $query);
-}
-
-function print_entity_stats_for_date($date, $items, $count, $target, $query){
-	usort($items, function($s1, $s2){
-		$labels = get_status_labels();
-		if ($s1['_type'] == $s2['_type']){
-			$keys = array_keys((array) $labels->{$s2['_type']});
-			$k1 = array_search($s1['_action'], $keys);
-			$k2 = array_search($s2['_action'], $keys);
-		} else {
-			$keys = array_keys((array) $labels);
-			$k1 = array_search($s1['_type'], $keys);
-			$k2 = array_search($s2['_type'], $keys);
-		}
-		return $k1 > $k2;
-	});
-	echo '<div class="entity-stat-date" '.related(array('date' => $date)).'><span class="entity-stat-date-ind">'.$date.'</span><div class="entity-stat-right">';
-	foreach ($items as $s)
-		echo $s['html'];
-	echo '</div></div>';
-}
-
 function related($args){
 	return 'data-smap-related="'.esc_json($args).'"';
 }
@@ -958,17 +456,17 @@ function print_amount($amount, $unit = null, $unit_in = 'EUR'){
 
 	$a = convert_currency($a['value'], $a['unit'], $unit_in);
 
-	return number_format((isset($a['value']) ? $a['value'] : $a['originalValue'])/100, 2).' '.(isset($a['unit']) ? $a['unit'] : $a['originalUnit']);
+	return number_format((isset($a['value']) ? $a['value'] : $a['original_value'])/100, 2).' '.(isset($a['unit']) ? $a['unit'] : $a['original_unit']);
 }
 
 function print_entity_stat($c, $entity, &$details, $relation = 'related'){
 	if ($v = get_col('SELECT '.(!empty($c['type']) ? $c['type'] : 'target_id').' FROM statuses WHERE '.(!empty($c['type']) && $c['type'] == 'related_id' ? 'target_id' : 'related_id').' = %s AND type = "'.$c['_type'].'" AND action IN ( '.(!empty($c['_action']) ? '"'.$c['_action'].'"' : '"new", "start", "update"').' ) ORDER BY id DESC', $entity['id'])){
 		$isAmount = !empty($c['type']) && $c['type'] == 'amount';
 		$details[$c['_type'].'_'.(!empty($c['_action']) ? $c['_action'] : 'new')] = array(
-			'title' => $c['label'],
+			'label' => $c['label'],
 			'value' => $isAmount ? get_amount($v) : get_entities_by_id($v),
 			'html' => $isAmount ? print_amount(array_pop($v)) : print_entities($v),
-		);
+		) + $c;
 	}
 }
 
@@ -1007,7 +505,7 @@ function get_entity_by_slug($slug, $type = null, $country = null){
 		$and .= prepare('type = %s AND ', $type);
 
 	if ($country)
-		$and .= prepare('country = %s AND ', strtolower($country));
+		$and .= prepare('country = %s AND ', strtoupper($country));
 
 	$e = get_row('SELECT * FROM entities WHERE '.$and.'slug = %s LIMIT 1', $slug);
 	return $e;
@@ -1016,18 +514,38 @@ function get_entity_by_slug($slug, $type = null, $country = null){
 function get_entity_title($e, $short = false, $forTitle = false){
 	if (is_numeric($e))
 		$e = get_entity_by_id($e);
-	return ($e['type'] == 'person' ? mb_strtoupper($e['name']).(!empty($e['first_name']) ? ', '.$e['first_name'] : '') : $e['name']).(!$short && !empty($e['subtype']) ? ($forTitle ? ', '.$e['subtype'] : '<span class="entity-subtype">'.$e['subtype'].'</span>') : '');
+	return ($e['type'] == 'person' ? mb_strtoupper($e['name']).(!empty($e['first_name']) ? ', '.$e['first_name'] : '') : $e['name']).(!$short && !empty($e['subtype']) ? ($forTitle ? ', '.$e['subtype'] : '<span class="entity-subtype"><span class="hidden">, </span>'.$e['subtype'].'</span>') : '');
 }
 
-function get_entity_title_html($e, $icon = false, $maxLength = false){
+function get_entity_title_html($e, $opts = array()){ // /$icon = false, $maxLength = false){
+	$opts += array(
+		'icon' => false,
+		'limit' => false,
+		'append_country' => false,
+		'class' => '',
+		'icon_class' => '',
+	);
 	$title = get_entity_title($e);
-	if ($maxLength && mb_strlen($title) > $maxLength){
-		while (mb_substr($title, $maxLength - 5, 1) != ' ')
-			$maxLength--;
-		$title = mb_substr($title, 0, $maxLength - 5).'...';
+	if ($opts['limit'] && mb_strlen($title) > $opts['limit']){
+		while (mb_substr($title, $opts['limit'] - 5, 1) != ' ')
+			$opts['limit']--;
+		$title = mb_substr($title, 0, $opts['limit'] - 5).'...';
 	}
-	$title .= ' ('.get_country_schema($e['country'])->name.')';
-	return '<a href="'.get_entity_url($e).'">'.($icon ? '<i class="fa fa-'.get_entity_icon($e).'"></i> ' : '').$title.'</a>';
+	if ($opts['append_country'])
+		$title .= ' ('.get_country_schema($e['country'])->name.')';
+		
+	if (is_dev() && !empty($_GET['stick'])){
+		$stick = ' data-tippy-interactive="1" data-tippy-trigger="click" onclick="return false"';
+		$url = '#';
+	
+	} else {
+		$stick = '';
+		$url = get_entity_url($e);
+	}
+	
+	return '<a href="'.$url.'"'.$stick.' class="inline-entity '.$opts['class'].'" '.related(array(
+		'entity_id' => is_array($e) ? $e['id'] : $e,
+	)).'>'.($opts['icon'] ? '<i class="fa fa-'.get_entity_icon($e).' '.$opts['icon_class'].'"></i> ' : '').$title.'</a>';
 }
 
 function get_entity_icon($r){
@@ -1180,8 +698,6 @@ function split_by_groups($options, $applyVal, $smapDebug = false, $recursion = f
 			'value' => $applyVal
 		);
 	}
-	// --------------------------------------------------- HERE -----------!!
-	// http://localhost/boe/application/api/es/boe/2017-2018-01-05/parse
 	if ($smapDebug)
 		print_json($wrapGroups);
 	return $wrapGroups;
@@ -1210,144 +726,184 @@ function lint_group_label($tr, $val){
 }
 
 
-function get_entity_summary($entity){
-	$details = array();
+/*
+add_filter('entity_summary', 'entity_summary_stats', 200, 3);
+function entity_summary_stats($details, $entity, $context){
+	$labels = get_status_labels();
 
 	// TODO: add total fundings
 	// TODO: grep "Resultante suscrito" -> update capital
 
-	// became
+	if ($context == 'sheet-top'){
 
-	$entities = query('SELECT e.country, e.name, e.first_name, e.type, e.subtype, e.slug
-		FROM statuses AS s
-		LEFT JOIN entities AS e ON s.target_id = e.id
-		WHERE s.related_id = %s AND s.type = "name" AND s.action IN ( "update" )
-		ORDER BY s.id DESC
-	', $entity['id']);
+		// became
+		
+		$entities = query('SELECT e.country, e.name, e.first_name, e.type, e.subtype, e.slug
+			FROM statuses AS s
+			LEFT JOIN entities AS e ON s.target_id = e.id
+			WHERE s.related_id = %s AND s.type = "name" AND s.action = "update"
+			ORDER BY s.id DESC
+		', $entity['id']);
 
-	if ($entities)
-		$details['new_names'] = array(
-			'title' => 'Became',
-			'html' => print_entities($entities),
-		);
+		if ($entities)
+			$details['new_names'] = array(
+				'label' => 'Became',
+				'html' => print_entities($entities),
+			);
 
-	// previous names
+		// previous names
+		
+		$entities = get_previous_entities($entity['id']);
 
-	$entities = get_previous_entities($entity['id']);
+		if ($entities)
+			$details['old_names'] = array(
+				'label' => 'Old names',
+				'html' => print_entities($entities),
+			);
+	}
+	
+	if (in_array($context, array('list', 'sheet-sidebar'))){
 
-	if ($entities)
-		$details['old_names'] = array(
-			'title' => 'Old names',
-			'html' => print_entities($entities),
-		);
+		// date founded
 
-	// date founded
+		$date = get_var('SELECT b.date AS date
+			FROM statuses AS s
+			LEFT JOIN precepts AS p ON s.precept_id = p.id
+			LEFT JOIN bulletins AS b ON p.bulletin_id = b.id
+			WHERE related_id = %s AND type = "capital" AND action IN ( "new" )
+		', $entity['id']);
 
-	$date = get_var('SELECT b.date AS date
-		FROM statuses AS s
-		LEFT JOIN precepts AS p ON s.precept_id = p.id
-		LEFT JOIN bulletins AS b ON p.bulletin_id = b.id
-		WHERE related_id = %s AND type = "capital" AND action IN ( "new" )
-	', $entity['id']);
+		if ($date)
+			$details['founded'] = array(
+				'label' => 'Founded',
+				'value' => $date,
+				'html' => '<span title="'.esc_attr(date_i18n('M jS, Y', strtotime($date))).'">'.date_i18n('Y', strtotime($date)).' ('.time_diff($date).')</span>',
+			);
+			
+		// location
 
-	if ($date)
-		$details['founded'] = array(
-			'title' => 'Founded',
-			'value' => $date,
-			'html' => date_i18n('M j, Y', strtotime($date)),
-		);
+		$location = get_var('SELECT note FROM statuses WHERE related_id = %s AND type = "location" AND action = "new" ORDER BY id DESC LIMIT 1', $entity['id']);
 
-	// object
+		$locationObj = $location ? apply_filters('location_lint', null, $location, $entity['country']) : null;
 
-	$object = get_var('SELECT note FROM statuses WHERE related_id = %s AND type = "object" AND action = "new" ORDER BY id DESC LIMIT 1', $entity['id']);
-	if ($object)
-		$details['object'] = array(
-			'title' => 'Object',
-			'html' => $object,
-		);
+		if ($location)
+			$details['location'] = array(
+				'label' => 'Location',
+				'value' => $locationObj ? $locationObj : null,
+				'html' => '<i>'.($locationObj ? get_location_label($locationObj, 'sheet') : $location).'</i>',
+			);
 
-	// location
-	$location = get_var('SELECT note FROM statuses WHERE related_id = %s AND type = "location" AND action = "new" ORDER BY id DESC LIMIT 1', $entity['id']);
-	$locationObj = $location ? herecom_convert_location($location, $entity['country']) : null;
+	}
+	
+	if ($context == 'sheet-top'){
 
-	if ($location)
-		$details['location'] = array(
-			'title' => 'Location',
-			'value' => $locationObj ? $locationObj : null,
-			'html' => '<i>'.($locationObj ? get_location_label($locationObj) : $location).'</i>',
-		);
+		// estimated capital
 
-	// creation capital
+		$in = get_row('SELECT SUM(a.value) AS amount, a.unit FROM statuses AS s LEFT JOIN amounts AS a ON s.amount = a.id WHERE s.related_id = %s AND s.type = "capital" AND s.action IN ( "new", "increase" )', $entity['id']);
+		
+		$out = get_row('SELECT SUM(a.value) AS amount, a.unit FROM statuses AS s LEFT JOIN amounts AS a ON s.amount = a.id WHERE s.related_id = %s AND s.type = "capital" AND s.action IN ( "decrease" )', $entity['id']);
 
-	print_entity_stat(array(
-		'_type' => 'capital',
-		'_action' => 'new',
-		'type' => 'amount',
-		'label' => 'Initial capital',
-	), $entity, $details);
+		$diff = ($in ? $in['amount'] : 0) - ($out ? $out['amount'] : 0);
+		
+		if ($diff > 0)
+			$details['estimated_capital'] = array(
+				'label' => 'Estimated capital',
+				'html' => print_amount($diff, $in ? $in['unit'] : $out['unit']),
+				'class' => 'mini',
+			);
 
+		// creation capital
 
-	// minimum capital
+		print_entity_stat(array(
+			'_type' => 'capital',
+			'_action' => 'new',
+			'type' => 'amount',
+			'label' => 'Initial capital',
+			'class' => 'mini',
+		), $entity, $details);
 
-	$in = get_row('SELECT SUM(a.value) AS amount, a.unit FROM statuses AS s LEFT JOIN amounts AS a ON s.amount = a.id WHERE related_id = %s AND type = "capital" AND action IN ( "new", "increase" )', $entity['id']);
-	$out = get_row('SELECT SUM(a.value) AS amount, a.unit FROM statuses AS s LEFT JOIN amounts AS a ON s.amount = a.id WHERE related_id = %s AND type = "capital" AND action IN ( "decrease" )', $entity['id']);
-	$diff = ($in ? $in['amount'] : 0) - ($out ? $out['amount'] : 0);
+		// sum funded
 
-	if ($diff > 0)
-		$details['capital_min'] = array(
-			'title' => 'Minimum capital',
-			'html' => print_amount($diff, $in ? $in['unit'] : $out['unit']),
-		);
+		$in = get_row('SELECT SUM(a.value) AS amount, SUM(a.original_value) AS originalAmount, a.unit, a.original_unit FROM statuses AS s LEFT JOIN amounts AS a ON s.amount = a.id WHERE s.related_id = %s AND s.type = "fund" AND s.action IN ( "new" )', $entity['id']);
+		if ($in && !empty($in['amount']))
+			$details['fund'] = array(
+				'label' => 'Total funded',
+				'icon' => $labels->fund->new->icon,
+				'html' => print_amount($in['originalAmount'], $in['original_unit']),
+				'class' => 'mini',
+			) + $in;
+			
+		// sum funding
 
-	print_entity_stat(array(
-		'type' => 'related_id',
-		'_type' => 'owner',
-		'label' => 'Owns',
-	), $entity, $details);
+		$in = get_row('SELECT SUM(a.value) AS amount, SUM(a.original_value) AS originalAmount, a.unit, a.original_unit FROM statuses AS s LEFT JOIN amounts AS a ON s.amount = a.id LEFT JOIN precepts AS p ON s.precept_id = p.id WHERE p.issuing_id = %s AND s.type = "fund" AND s.action IN ( "new" )', $entity['id']);
+		if ($in && !empty($in['amount']))
+			$details['funding'] = array(
+				'label' => 'Total funding',
+				'icon' => $labels->fund->new->issuing->icon,
+				'html' => print_amount($in['originalAmount'], $in['original_unit']),
+				'class' => 'mini',
+			) + $in;
+			
+		// object
 
-	print_entity_stat(array(
-		'type' => 'related_id',
-		'_type' => 'owner',
-		'_action' => 'end',
-		'label' => 'Owned',
-	), $entity, $details);
+		$object = get_var('SELECT note FROM statuses WHERE related_id = %s AND type = "object" AND action = "new" ORDER BY id DESC LIMIT 1', $entity['id']);
+		if ($object)
+			$details['object'] = array(
+				'label' => 'Corporate purpose',
+				'html' => $object,
+			);
 
-	print_entity_stat(array(
-		'_type' => 'owner',
-		'label' => 'Owners',
-	), $entity, $details);
+		print_entity_stat(array(
+			'type' => 'related_id',
+			'_type' => 'owner',
+			'label' => 'Currently owning',
+		), $entity, $details);
 
-	print_entity_stat(array(
-		'type' => 'related_id',
-		'_type' => 'administrator',
-		'label' => 'Administrates',
-	), $entity, $details);
+		print_entity_stat(array(
+			'type' => 'related_id',
+			'_type' => 'owner',
+			'_action' => 'end',
+			'label' => 'Has owned',
+		), $entity, $details);
 
-	print_entity_stat(array(
-		'type' => 'related_id',
-		'_type' => 'administrator',
-		'_action' => 'end',
-		'label' => 'Has administrated',
-	), $entity, $details);
+		print_entity_stat(array(
+			'_type' => 'owner',
+			'label' => 'Owned by',
+		), $entity, $details);
 
-	print_entity_stat(array(
-		'_type' => 'administrator',
-		'label' => 'Administrated by',
-	), $entity, $details);
+		print_entity_stat(array(
+			'type' => 'related_id',
+			'_type' => 'administrator',
+			'label' => 'Administrates',
+		), $entity, $details);
 
-	print_entity_stat(array(
-		'_type' => 'administrator',
-		'_action' => 'end',
-		'label' => 'Was administrated by',
-	), $entity, $details);
+		print_entity_stat(array(
+			'type' => 'related_id',
+			'_type' => 'administrator',
+			'_action' => 'end',
+			'label' => 'Has administrated',
+		), $entity, $details);
 
-	print_entity_stat(array(
-		'_type' => 'auditor',
-		'label' => 'Auditors',
-	), $entity, $details);
+		print_entity_stat(array(
+			'_type' => 'administrator',
+			'label' => 'Administrated by',
+		), $entity, $details);
 
+		print_entity_stat(array(
+			'_type' => 'administrator',
+			'_action' => 'end',
+			'label' => 'Was administrated by',
+		), $entity, $details);
+
+		print_entity_stat(array(
+			'_type' => 'auditor',
+			'label' => 'Auditors',
+		), $entity, $details);
+	}
+	
 	return $details;
 }
+*/
 
 
 function get_company_label($filter = false, $key = 'plural'){
@@ -1392,7 +948,56 @@ function get_subtype_prop($country, $subtype, $prop){
 		return $s->vocabulary->legalEntityTypes->{$subtype}->{$prop};
 	return 'N/D';
 }
-		
+
+function query_any($args, &$left){
+	$results = array();
+	$args += array(
+		'include' => 'any',
+	);
+	if (!is_array($args['include']))
+		$args['include'] = array($args['include']);
+	$is_any = in_array('any', $args['include']);
+	$query = explode(' ', remove_accents($args['q']));
+	
+	// query bulletins
+	if ($is_any || in_array('bulletin', $args['include'])){
+		foreach (get_schemas() as $file){
+			$schema = get_schema($file);
+			if ($schema && $schema->type == 'bulletin'){
+				$schema_name = remove_accents($schema->name.' '.$schema->shortName);
+				
+				$has = true;
+				foreach ($query as $q)
+					if (!preg_match('#'.preg_quote($q, '#').'#iu', $schema_name)){
+						$has = false;
+						break;
+					}
+				
+				if (!$has)
+					continue;
+					
+				$results[] = array(
+					'schema' => $schema->id,
+					'id' => 'bulletin:'.$schema->id,
+					'name' => $schema->name.' ('.$schema->shortName.')',
+					'type' => 'bulletin',
+					'country' => !empty($schema->providerId) && ($p = get_provider_schema($schema->providerId)) ? ($p->country ? $p->country : $p->continent) : null,
+				);
+			}
+		}
+	}
+	
+	// query locations
+	if ($is_any || in_array('location', $args['include']))
+		$results = array_merge($results, query_locations($args, $left));
+	
+	
+	// query entities
+	if ($is_any || in_array('entity', $args['include']))
+		$results = array_merge($results, query_entities($args, $left));
+	
+	return $results;
+}
 
 function query_entities($args, &$left = null){
 	$args += array(
@@ -1406,8 +1011,12 @@ function query_entities($args, &$left = null){
 		'misc' => null, // [buggy]
 		'limit' => 0,
 		'count' => false,
+		'use_views' => true,
 	);
 	$join = $where = $groupby = array();
+	
+	$table = $args['use_views'] ? 'entities_by_name' : 'entities';
+	$table_count = 'entities';
 
 	if (!empty($args['q']) && trim($args['q']) != ''){
 		$query = sanitize_keywords($args['q']);
@@ -1419,35 +1028,10 @@ function query_entities($args, &$left = null){
 	if ($args['etype'])
 		$where[] = prepare('e.type = %s', $args['etype']);
 	if ($args['esubtype'])
-		$where[] = prepare('e.subtype = %s', $args['esubtype']);
+		$where[] = prepare('e.subtype = %s', strtoupper($args['esubtype']));
 
 	if ($args['country'])
-		$where[] = prepare('e.country = %s', $args['country']);
-
-	if ($args['locations']){
-		// join with statuses on location type and filter where
-		
-		$cwhere = array();
-		foreach ($args['locations'] as $l){
-		
-			if (!empty($l['country']))
-				$where[] = prepare('e.country = %s', $l['country']);
-			
-			else {
-				
-				foreach ($l as $k => $v)
-					$cwhere[] = prepare('l.'.$k.' = %s', $v);
-			}
-		}
-
-		$join[] = 'LEFT JOIN statuses AS s ON e.id = s.related_id AND s.type = "location"';
-		$join[] = 'LEFT JOIN locations AS l ON s.note = l.id';
-
-		$groupby[] = 'e.id';
-		
-		if ($cwhere)
-			$where[] = '( ( '.implode(' ) OR ( ', $cwhere).' ) )';
-	}
+		$where[] = prepare('e.country = %s', strtoupper($args['country']));
 
 	if ($args['etypes']){
 		$subwhere = array();
@@ -1456,22 +1040,46 @@ function query_entities($args, &$left = null){
 			if (count($etype) < 3)
 				$subwhere[] = prepare('e.type = %s', $etype[0]);
 			else
-				$subwhere[] = prepare('e.country = %s AND e.type = %s AND e.subtype = %s', array(strtolower($etype[1]), $etype[0], strtoupper($etype[2])));
+				$subwhere[] = prepare('e.country = %s AND e.type = %s AND e.subtype = %s', array(strtoupper($etype[1]), $etype[0], strtoupper($etype[2])));
 		}
 		$where[] = '( '.implode(' OR ', $subwhere).' )';
+	}
+
+	if ($args['locations']){
+		// join with statuses on location type and filter where
+		
+		$cwhere = array();
+		foreach ($args['locations'] as $l){
+		
+			if (!empty($l['country']))
+				$where[] = prepare('e.country = %s', strtoupper($l['country']));
+			
+			else {
+				
+				foreach ($l as $k => $v)
+					$cwhere[] = prepare('l.'.$k.' = %s', $v);
+			}
+		}
+		if ($cwhere){
+			$join[] = 'LEFT JOIN statuses AS s ON e.id = s.related_id AND s.type = "location"';
+			$join[] = 'LEFT JOIN locations AS l ON s.note = l.id';
+			$where[] = '( '.implode(' ) OR ( ', $cwhere).' )';
+		}
+		$groupby[] = 'e.id';
 	}
 
 	if (!empty($args['misc']) && $args['misc'] == 'buggy')
 		$where[] = '(( e.type = "person" AND LENGTH(e.name) > 40 OR LENGTH(e.first_name) > 30) OR LENGTH(e.name) > 80 )';
 		
 	// build queries
-	$count_q = $q = 'FROM entities AS e '.($join ? implode(' ', $join).' ' : '');
+	$q = 'FROM '.$table.' AS e '.($join ? implode(' ', $join).' ' : '');
+	$count_q = 'FROM '.$table_count.' AS e '.($join ? implode(' ', $join).' ' : '');
 		
 	// allow infinite scroll
 	$limit = $args['limit'];
 	if ($args['after_id']){
 		$limit = 2 * $limit;
-		if ($after_value = get_var('SELECT name FROM entities WHERE id = %s', $args['after_id']))
+		if ($after_value = get_var('SELECT name FROM '.$table.' WHERE id = %s', $args['after_id']))
 			$where[] = prepare('name >= %s', $after_value);
 	}
 	$count_where = $where;
@@ -1488,11 +1096,12 @@ function query_entities($args, &$left = null){
 	if (!empty($args['count']))
 		return get_var('SELECT COUNT(e.id) '.$q);
 	
-	$q = 'SELECT e.id, e.country, e.type, e.subtype, e.name, e.first_name, e.slug '.$q.' ORDER BY e.name ASC, e.first_name ASC'.($limit ? ' LIMIT '.($limit+1) : '');
+	$order = $args['use_views'] ? '' : 'ORDER BY e.name ASC, e.first_name ASC ';
 	
-	//echo $q.'<br>';
+	$q = 'SELECT e.id, e.country, e.type, e.subtype, e.name, e.first_name, e.slug '.$q.' '.$order.($limit ? ' LIMIT '.($limit+1) : '');
+	
+//	echo $q.'<br>';
 	$res = query($q);
-	//debug($res);
 	
 	$strip_count = 0;
 	if ($args['after_id']){
@@ -1529,9 +1138,9 @@ function get_entity_count($type, $subtype = null){
 }
 
 
-function load_search_results(){
+function get_results(){
 	global $smap;
-	$ret = array('results' => array(), 'resultsCount' => 0);
+	$ret = array('items' => array(), 'count' => 0, 'total' => 0,'left' => 0);
 				
 	// generate search results/listing
 	if (!empty($smap['filters']['q']) || has_filter()){
@@ -1558,20 +1167,188 @@ function load_search_results(){
 			'q' => !empty($smap['filters']['q']) ? $smap['filters']['q'] : null,
 			'etypes' => $etype,
 			'locations' => $loc,
-			'limit' => min(200, !empty($smap['filters']['limit']) ? intval($smap['filters']['limit']) : DEFAULT_RESULTS_COUNT),
+			'limit' => min(MAX_RESULTS_COUNT, !empty($smap['filters']['limit']) ? intval($smap['filters']['limit']) : DEFAULT_RESULTS_COUNT),
 			'after_id' => !empty($smap['query']['after_id']) ? $smap['query']['after_id'] : null,
 			'misc' => !empty($smap['filters']['misc']) ? $smap['filters']['misc'] : null,
 			'loaded_count' => !empty($smap['query']['loaded_count']) ? $smap['query']['loaded_count'] : null,
 		);
-		$ret['results'] = query_entities($ret['query'], $ret['resultsLeft']);
-		$ret['resultsCount'] = $smap['query']['loaded_count'] + count($ret['results']) + $ret['resultsLeft'];
+		$ret['items'] = query_entities($ret['query'], $ret['left']);
+		$ret['count'] = count($ret['items']);
+		$ret['total'] = $smap['query']['loaded_count'] + $ret['count'] + $ret['left'];
+		
+		// fill entities
+		foreach ($ret['items'] as &$entity){
+			$entity['icon'] = get_entity_icon($entity);
+			$entity['label'] = get_entity_title($entity, false, true);
+			$entity['url'] = get_entity_url($entity);
+		}
+		unset($entity);
 	}
-	$smap += $ret;
+	
+	$smap += array('results' => $ret);
+	return $ret;
 }
 
 function get_results_count_label($count, $total){
-	if ($count != $total)
-		return sprintf(_('%s results out of %s'), number_format($count, 0), $total);
-	else
-		return sprintf(_('%s results'), $total);
+	//if ($count != $total)
+		//return sprintf(_('%s results out of %s'), number_format($count, 0), $total);
+	//else
+		return sprintf(_('%s results'), number_format($total, 0));
+}
+
+
+add_action('body_after', 'entity_popup_body_open');
+function entity_popup_body_open(){
+	?>
+	<div id="entity-popup" class="inline-popup entity-popup"><div class="inline-popup-inner"></div></div>
+	<?php
+}
+
+function get_entity_actions_html(&$entity, $context){
+	$entity['actions'] = array();
+	$entity = apply_filters('entity_actions', $entity, $context);
+	return $entity['actions'];
+}
+
+add_filter('inline_popup', 'entities_inline_popup', 0, 2);
+function entities_inline_popup($ret, $args){
+	if (!empty($args['entity_id']) && ($entity = get_entity_by_id($args['entity_id']))){
+		$entity['summary'] = get_entity_summary($entity, 'popup');
+		return array('success' => true, 'html' => get_template('parts/entity_popup', array('entity' => $entity)));
+	}
+	return $ret;
+}
+
+add_filter('entity_actions', 'entity_actions_entity_cross_search', 100, 2);
+function entity_actions_entity_cross_search($entity, $context){
+	if (!is_logged())
+		return $entity;
+		
+	$entity['actions']['entity_cross_search'] = array(
+		'label' => 'Show statuses in common with..',
+		'icon' => 'random',
+	);
+	return $entity;
+}
+
+function insertget_entity($e, $precept_id = null){
+	if (empty($e['name']) || empty($e['type']) || empty($e['country']))
+		return false;
+		
+	// TODO: add lock wait to not get duplicated entities
+	
+	$initial_name = $e['name'].(!empty($e['first_name']) ? ' '.$e['first_name'] : '');
+		
+	$e['name'] = beautify_name($e['name'], $e['country']);
+	
+	// session cache
+	static $cache = array();
+	$key = mb_strtolower($e['country'].'/'.$e['name'].(isset($e['first_name']) ? ' '.$e['first_name'] : ''));
+	
+	if (isset($cache[$key]))
+		return $cache[$key];
+		
+	$e = sanitize_person($e);
+	if ($e['country'])
+		$e['country'] = strtoupper($e['country']);
+	
+	if (!empty($e['first_name']))
+		$e['first_name'] = beautify_name($e['first_name'], $e['country']);
+		
+	$subtype = !empty($e['subtype']) ? prepare(' AND subtype = %s', $e['subtype']) : '';
+	$first_name = !empty($e['first_name']) ? prepare(' AND first_name = %s', $e['first_name']) : ' AND first_name IS NULL';
+	
+	$q = prepare('SELECT id FROM entities WHERE country = %s AND type = %s', array($e['country'], $e['type']));
+	
+	$e['normalized'] = normalize_name($e['name'], $e['country']);
+	$qname = prepare(' AND normalized = %s', $e['normalized']);
+	
+	// really query 
+	$eid = get_var($q.$subtype.$qname.$first_name);
+
+	$name = $e['name'].(!empty($e['first_name']) ? ' '.$e['first_name'] : '');
+	
+	if (!$eid){
+		$keywords = $name;
+		if (!empty($e['subtype'])){
+			
+			// add the subtype's name and shortName to the keywords
+			
+			$keywords .= ' '.get_subtype_prop($e['country'], $e['type'].'/'.$e['country'].'/'.$e['subtype'], 'name');
+			$keywords .= ' '.preg_replace('#[\.]#', '', get_subtype_prop($e['country'], $e['type'].'/'.$e['country'].'/'.$e['subtype'], 'shortName'));
+		}
+	
+		$eid = insert('entities', $e + array(
+			'fetched' => date('Y-m-d H:i:s'),
+			'keywords' => sanitize_keywords($keywords),
+			'slug' => generate_slug('entities', 'slug', $name, 200),
+		));
+		
+		if (IS_CLI)
+			print_log('inserted '.$e['type'].' "'.$name.'"', array('color' => 'grey'));
+	
+	} else if (IS_CLI)
+		print_log('found '.$e['type'].' '.$name, array('color' => 'grey'));
+	
+	if ($precept_id)
+		set_used_name_for($eid, $initial_name, $precept_id);
+		
+	// store to cache
+	$cache[$key] = $eid;
+	return $eid;
+}
+
+function set_used_name_for($entity_id, $initial_name, $precept_id){
+	insert('entity_uses_name', array(
+		'entity_id' => $entity_id,
+		'used_name' => $initial_name,
+		'precept_id' => $precept_id,
+	));
+}
+
+function print_entity_summary($entity, $summary){
+	
+	$details = array();
+	$mini = false;
+	foreach ($summary as $id => $e){
+		if (!empty($e['class']) && preg_match('#.*\bmini\b.*#', $e['class'])){
+			if (!$mini){
+				$mini = true;
+				$details[] = '<div class="mini-wrap">';
+			}
+		} else if ($mini){
+			$details[] = '</div>';
+			$mini = false;
+		}
+			
+		$details[] = '<div class="entity-sheet-detail entity-sheet-detail-'.$id.' live-wrap '.(!empty($e['class']) ? $e['class'] : '').'"><span class="entity-detail-label entity-stat-left">'.$e['label'].':</span><span class="entity-detail-body">'.$e['html'].'</span></div>';
+	}
+	if ($mini)
+		$details[] = '</div>';
+	echo '<div class="entity-sheet-details-wrap entity-details-wrap"><div class="entity-details entity-sheet-details">'.implode('', $details).'</div></div>';
+}
+
+function get_result_url($e){
+	if ($e['type'] == 'bulletin')
+		return url(array(
+			'schema' => $e['schema'],
+		), 'schema');
+	
+	return get_entity_url($e);
+}
+
+function get_result_icon($e){
+	$modes = get_modes();
+	if ($e['type'] == 'bulletin')
+		return $modes['schema']['icon'];
+	
+	return get_entity_icon($e);
+}
+
+function get_result_title($e, $short = false, $forTitle = false){
+	$modes = get_modes();
+	if ($e['type'] == 'bulletin')
+		return $e['name'];
+	
+	return get_entity_title($e, $short, $forTitle);
 }

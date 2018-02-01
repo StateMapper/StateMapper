@@ -17,22 +17,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
  
-
+namespace StateMapper;
+require 'error-class.php';
 	
 if (!defined('BASE_PATH'))
 	die();
 	
-	
-class SMapError {
-
-	public $msg = null;
-	public $opts = array();
-
-	public function __construct($msg, $opts = array()){
-		$this->msg = $msg;
-		$this->opts = $opts;
-	}
-}
 
 function die_error($str_or_error = null, $error = null){
 	global $smap;
@@ -42,10 +32,10 @@ function die_error($str_or_error = null, $error = null){
 	$msg = (is_string($str_or_error) ? $str_or_error : $str_or_error->msg).($error ? $error->msg : '');
 	
 	define('IS_ERROR', true);	
-	if (!empty($smap) && !IS_CLI){
-		if (!is_admin())
+	if (!empty($smap) && (!IS_CLI || empty($smap['human']))){
+		if (!is_dev())
 			$msg = 'An error occurred'; // hide errors to no-admins
-			
+		
 		$obj = array(
 			'success' => false,
 			'query' => isset($smap['query']) ? $smap['query'] : null,
@@ -66,7 +56,7 @@ function die_error($str_or_error = null, $error = null){
 }
 
 function is_error($obj){
-	return is_object($obj) && get_class($obj) == 'SMapError';
+	return is_object($obj) && get_class($obj) == 'StateMapper\\SMapError';
 }
 
 function print_inline_error($error){
@@ -91,8 +81,81 @@ function get_buggy_button($type, $title){
 		
 	ob_start();
 	?>
-	<span class="status-alert status-alert-buggy"><a href="#" class="status-action" data-status-action="markAsBuggy:<?= $type ?>" title="<?= esc_attr($title) ?>"><i class="fa fa-flag"></i></a></span>
+	<span class="status-alert status-alert-buggy"><a href="#" class="autoaction" title="<?= esc_attr($title) ?>"<?= related(array(
+		'action' => 'mark_as_buggy',
+		'type' => $type,
+	)) ?>><i class="fa fa-flag"></i></a></span>
 	<?php
 	return ob_get_clean();
 }
 
+add_filter('autoaction_mark_as_buggy', 'autoaction_mark_as_buggy');
+function autoaction_mark_as_buggy($ret, $args){
+	$bug = null;
+	switch ($args['type']){
+		
+		case 'status':
+			if (empty($args['status_id']) || !($status = get_row('SELECT * FROM statuses WHERE id = %s', $args['status_id'])))
+				return 'Bad status id';
+			
+			$a = $status['amount'] ? get_amount($status['amount']) : null;
+			
+			$arg3 = null;
+			if (!empty($status['target_id'])){
+				$arg3 = get_entity_by_id($status['target_id']);
+				$arg3 = $arg3 ? get_entity_title($arg3, true) : $arg3;
+			}
+			
+			$bug = array(
+				'type' => 'status',
+				'related_id' => $status['id'],
+				'arg1' => $status['type'],
+				'arg2' => $status['action'],
+				'arg3' => $arg3,
+				'arg4' => $a && (is_object($a) || is_array($a)) ? serialize($a) : $a, // TODO: get real amount
+				'arg5' => $status['note'],
+			);
+			break;
+		
+		case 'entity_name':	
+			if (empty($args['entity_id']) || !($entity = get_entity_by_id($args['entity_id'])))
+				return 'Bad entity id';
+				
+			$bug = array(
+				'type' => 'entity_name',
+				'related_id' => $entity['id'],
+				'arg1' => $entity['type'],
+				'arg2' => $entity['subtype'],
+				'arg3' => $entity['name'],
+				'arg4' => $entity['first_name'],
+			);
+			break;
+	}
+	if ($bug){
+		// TODO: implement a bug tracking table and web UX. it must be very flexible, and not related to auto_incremeneted ids (because it's gonna remain through re-parsings!)
+		
+		debug($bug); die();
+		insert('bugs', $bug);
+		return array('success' => true);
+	}
+	return false;
+}
+
+
+add_filter('entity_actions', 'entity_actions_report_buggy', 30, 2);
+function entity_actions_report_buggy($entity, $context){
+	if (!is_logged())
+		return $entity;
+		
+	$modes = get_modes();
+	$entity['actions']['report_buggy'] = array(
+		'label' => 'Report the entity as buggy',
+		'icon' => 'flag',
+		'advanced' => true,
+	);
+	return $entity;
+}
+
+function has_error(){
+	return defined('IS_ERROR') && IS_ERROR;
+}

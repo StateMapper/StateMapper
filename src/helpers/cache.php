@@ -17,13 +17,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
  
+namespace StateMapper;
 	
 if (!defined('BASE_PATH'))
 	die();
 
-
-
 function get_cache($key){
+	global $smap;
+	if (is_dev() && !empty($smap['filters']['no_cache']))
+		return null;
+		
 	$cache = get_var('SELECT cache_value FROM caches WHERE cache_key = %s AND expire > %s ORDER BY id DESC', array($key, date('Y-m-d H:i:s')));
 	return $cache ? unserialize($cache) : null;
 }

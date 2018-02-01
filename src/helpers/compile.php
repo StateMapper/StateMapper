@@ -17,6 +17,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
 
+namespace StateMapper;
+
 if (!defined('BASE_PATH'))
 	die();
 
@@ -69,7 +71,7 @@ function compile(){
 
 /*
  * /!\\ AUTO-GENERATED TRANSLATION FILE, DO NOT MODIFY! 
- * Instead, you can edit schemas/status.json and regenerate this file entering "smap compile" in a console.
+ * Instead, you may edit schemas/status.json and regenerate this file entering "smap compile" in a console.
  */
  
 exit(); // this file only serves for translation purpose
@@ -172,6 +174,7 @@ exit(); // this file only serves for translation purpose
 			$content = str_replace('{IncludeEncodedVar LicenseShort}', esc_attr(get_license(true)), $content);
 			$content = str_replace('{IncludeVar CopyrightRange}', get_copyright_range(), $content);
 			
+			// convert {IncludeIcon ANY_FONTAWESOME_ICON}
 			$content = str_replace('{IncludeIconRoot}', 'https://statemapper.net/src/addons/fontawesome_favicons/', $content);
 			$content = preg_replace_callback('#{IncludeIcon (.*?)}#us', function($m){
 				return 'https://statemapper.net/src/addons/fontawesome_favicons/'.$m[1].'.ico';
@@ -195,4 +198,5 @@ exit(); // this file only serves for translation purpose
 		}
 
 	echo PHP_EOL.'generated '.number_format($count, 0).' manuals'.PHP_EOL;
+	exit(0);
 }

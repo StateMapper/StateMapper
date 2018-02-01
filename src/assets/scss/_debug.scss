@@ -18,19 +18,31 @@
 
 
 .debug-queries {
+	line-height: normal;
 	display: none;
 	background: rgba(0,0,0,0.75);
 	color: white;
 	padding: 5px 5px 44px;
 	text-align: left;
 	position: fixed;
-	bottom: 40px;
+	bottom: 50px;
 	right: 0;
 	left: 0;
 	z-index: 96;
-	font-family: monospace;
-	overflow: auto;
-	max-height: 60%;
+	font-family: $font-family-code;
+	height: 60%;
+
+	.debug-queries-inner {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		
+		.simplebar-scrollbar {
+			background: white;
+		}
+	}
 	
 	a {
 		color: inherit;
@@ -68,8 +80,9 @@
 
 .footer-queries-icons {
     background: #333;
-    padding: 3px;
+    padding: 7px;
     border-radius: 3px;
+    margin-left: 5px;
     
     & > span {
 		margin: 0 2px;
@@ -83,10 +96,10 @@
     vertical-align: top;
 }
 .query-key-status-optimized {
-	color: $green_on_dark;
+	color: $red-on-dark;
 }
 .query-key-status-not-optimized {
-	color: $red_on_dark;
+	color: $red-on-dark;
 }
 .query-key-status-optimizable {
 	color: #ffb835;

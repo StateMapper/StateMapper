@@ -21,7 +21,8 @@
 if (!defined('BASE_PATH'))
 	die();
 
-add_filter('location_lint', 'herecom_location_lint');
+if (0) // @todo: implement as a spider
+	add_filter('location_lint', 'herecom_location_lint');
 function herecom_location_lint($locationObj, $location, $country){
 	if ($location){
 		$locationObj = herecom_convert_location($location, $country, true);

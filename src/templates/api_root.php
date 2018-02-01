@@ -16,7 +16,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
- 
+
+namespace StateMapper; 
 
 if (!defined('BASE_PATH'))
 	die();
@@ -27,76 +28,114 @@ $url = get_api_url(get_filter_url(array(
 ), false, false));
 
 $title = get_page_title();
+$modes = get_modes();
 
-print_template('parts/header');
+print_header('browser');
+//print_header('page');
 ?>
-<div id="main-inner">
-	<div class="main-header<?php echo ' header-avatar-'.($avatar ? 'has' : 'none'); ?>">
-		<div class="main-header-inner">
-			<?php print_template('parts/header_logo') ?>
-			<div class="header-center-wrap">
-				<div class="header-center">
-					<div class="header-center-inner">
-						<div class="header-center-title header-title">
-							<?= $title ?>
-						</div>
+<div class="api-human-content api-root">
+	<h1>API Reference</h1>
+	
+	<?php ob_start(); ?>
+	$tateMapper provides JSON endpoints for nearly everything. 
+	On most pages, you will find the corresponding JSON endpoint in the footer's <span class="footer-menu-simulation"><i class="fa fa-plug"></i> API</span> menu.
+	
+	The public API is currently rate-limited to <?= API_RATE_LIMIT ?> requests <?= (API_RATE_PERIOD == '1 hour' ? 'per hour' : 'every '.API_RATE_PERIOD) ?>, and provides the following endpoints:
+	
+	<?php echo nl2br(ob_get_clean()); ?>
+	
+	<div class="api-help-calls">
+		<?php 
+			// calc a past date for the example
+			$date = '2017-01-04';
+			$query = array('schema' => 'ES/BOE', 'date' => $date);
+			$queryRaw = array('country' => 'es');
+			
+			foreach (array(
+
+				array('providers', null, 'all schemas'),
+				array('providers', 'es', 'country providers'),
+				
+				array('schema', $queryRaw, 'country schema'),
+				array('soldiers', $queryRaw, 'country soldiers'),
+				array('ambassadors', $queryRaw, 'country ambassadors'),
+				
+				array('schema', $query, 'bulletin schema'),
+				array('fetch/raw', $query, 'bulletin file'),
+				array('lint/raw', $query, 'linted bulletin file'),
+				array('redirect', $query, 'bulletin\'s original URL'),
+				array('parse', $query, 'parsed bulletin'),
+				array('extract', $query, 'extracted bulletin'),
+				array('rewind', $query, 'all bulletins\' map'),
+				array('soldiers', $query, 'bulletin soldiers'),
+				
+				array('search', array('q' => 'ab'), 'search'),
+				
+			) as $c){
+				$uri = uri($c[1], $c[0]);
+				$label = $c[2];
+				
+				$clean_mode = preg_match('#^([^/]+)/.*$#', $c[0], $m) ? $m[1] : $c[0];
+				if (isset($modes[$clean_mode], $modes[$clean_mode]['api_icon']))
+					$icon = $modes[$clean_mode]['api_icon'];
+				else if (isset($modes[$clean_mode], $modes[$clean_mode]['icon']))
+					$icon = $modes[$clean_mode]['icon'];
+				else
+					$icon = 'map-signs';
+				
+				$is_document = preg_match('#^(.*)/raw\b([\?\#].*)?$#iu', $uri, $m);
+				
+				$api_uri = get_api_uri(BASE_URL.($is_document ? $m[1].(!empty($m[2]) ? $m[2] : '') : $uri), $is_document ? 'document' : 'json');
+				
+				$original_uri = $is_document ? strstr($uri, '/raw', true) : $uri;
+				?>
+				<div class="api-help-call">
+					<a href="<?= add_lang(BASE_URL.$original_uri) ?>" class="api-help-call-title"><i class="fa fa-<?= $icon ?>"></i> <span><?= $label ?></span></a>
+					<div class="api-help-call-urls">
+						<a href="<?= add_lang(BASE_URL.($is_document ? $api_uri : add_url_arg('human', 1, $api_uri))) ?>"><?= $api_uri ?></a>
+						
+						<span class="api-help-call-links">
+
+							<a title="<?= esc_attr(_('Browser page')) ?>" href="<?= add_lang(BASE_URL.$original_uri) ?>"><i class="fa fa-<?= $modes['browse']['icon'] ?>"></i></a>
+							
+							<?php
+							
+							if ($is_document){
+								?>
+								<a title="<?= esc_attr(_('Raw document')) ?>" href="<?= add_lang(BASE_URL.$uri) ?>"><i class="fa fa-<?= $modes['document']['icon'] ?>"></i></a>
+								<?php
+							
+							} else {
+								?>
+								<a title="<?= esc_attr(_('Human JSON')) ?>" href="<?= add_lang(add_url_arg('human', 1, BASE_URL.$api_uri)) ?>"><i class="fa fa-male"></i></a>
+								<a title="<?= esc_attr(_('Raw JSON')) ?>" href="<?= add_lang(BASE_URL.$api_uri) ?>"><i class="fa fa-<?= $modes['api']['icon'] ?>"></i></a>
+								<?php
+							}
+							?>
+						</span>
 					</div>
 				</div>
-			</div>
-		</div>
-	</div>
-	<div class="api-human-content">
-		<div class="api-root">
-			<?php ob_start(); ?>
-			Most $tateMapper's URLs hide a JSON API endpoint that can be built this way:
-			- replace "<?= BASE_URL ?>" with "<?= BASE_URL ?>api/"
-			- add ".json" at the end of the URL (just before the first "?", if any)
+				<?php
+		
+				/* // TODO: build a preview system with tabs: Human JSON | Raw JSON + browser URL below?
+				 * 
+					$json = @json_decode(file_get_contents(add_lang(BASE_URL.$api_uri)));
+					echo '<div style="overflow: auto; max-height: 200px; margin: 20px 0 40px 100px; padding: 10px 20px; background: #fafafa;">';
+					print_json($json);
+					echo '</div>';
+				*/	
+			}
 			
-			This way, <a href="<?= $url ?>"><?= $url ?></a> is one valid API URL.
 			
-			Please, also note that in the footer's copyright menu, there is always direct URLs to the APIs related to the current page.
-			
-			The public $tateMapper's API is currently rate-limited to <?= API_RATE_LIMIT ?> requests every <?= API_RATE_PERIOD ?>.
-			
-			Please try yourself some URLs:
-			
-			<?php echo nl2br(ob_get_clean()); ?>
-			
-			<?php 
-				// calc a past date for the example
-				$date = '2017-01-04';
-				$query = array('schema' => 'ES/BOE', 'date' => $date);
-				$queryRaw = array('country' => 'es');
-				
-				foreach (get_url_patterns() + array(
-
-					uri($query, 'rewind') => 'all bulletins\' map',
-					
-					999 => '', // force a space
-					
-					uri($query, 'fetch/raw') => 'retrieve the original bulletin file',
-					uri($query, 'lint/raw') => 'retrieve the linted bulletin file',
-					
-				) as $uri => $label){
-					if (is_numeric($uri))
-						echo '<br>';
-					else {
-						$api_uri = 'api/'.$uri.'.json';
-						echo '<a target="_blank" href="'.add_lang(BASE_URL.$api_uri.'?human=1').'">'.$api_uri.'</a>: '.$label.' (<a target="_blank" href="'.add_lang(BASE_URL.$api_uri.'?human=1').'">Human JSON</a> | <a target="_blank" href="'.add_lang(BASE_URL.$api_uri).'">Raw JSON</a> | <a target="_blank" href="'.add_lang(BASE_URL.$uri).'">Browser URL</a>)<br>';
-				
-						/* // TODO: build a preview system with tabs: Human JSON | Raw JSON + browser URL below?
-						 * 
-							$json = @json_decode(file_get_contents(add_lang(BASE_URL.$api_uri)));
-							echo '<div style="overflow: auto; max-height: 200px; margin: 20px 0 40px 100px; padding: 10px 20px; background: #fafafa;">';
-							print_json($json);
-							echo '</div>';
-						*/	
-					}
-				}
-			?>
-		</div>
+		?>
+		<br><br>
+		All API queries support the optional "lang" parameter: <?= plural(array_map(function($e){
+			return convert_lang_for_url($e);
+		}, get_langs(true)), SEPARATOR_OR) ?>.<br><br>
+		
+		Please also see the <a href="<?= anonymize(get_repository_url('blob/master/documentation/manuals/INSTALL.md#cli-commands')) ?>" target="_blank">CLI API</a>.
 	</div>
 </div>
 <?php
-print_template('parts/footer');
+print_footer();
 

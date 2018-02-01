@@ -506,7 +506,7 @@
 			
 			previewParts: {																	// parts to preview
 				_type: "fund",
-				_action: "new",
+				_action: "increase",
 				
 				id: {
 					title: "Bulletin ID",

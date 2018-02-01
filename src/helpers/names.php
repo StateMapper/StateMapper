@@ -16,7 +16,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
- 
+
+namespace StateMapper; 
 	
 if (!defined('BASE_PATH'))
 	die();
@@ -167,21 +168,57 @@ function sanitize_person($a){
 	return $a;
 }
 
-function sanitize_name($name){
-	$name = preg_replace('#\s+#u', ' ', $name);
-	if (mb_strtoupper($name) == $name || mb_strtolower($name) == $name){
-		
-		// words of 3+ chars in first-letter cap
-		// TODO: use a list of meaningless words from country schema: "of", "from", "for"..
-		
-		$name = preg_replace_callback('#[a-z]{3,}#u', function($m){
-			return mb_convert_case(mb_strtolower($m[0]), MB_CASE_TITLE, 'UTF-8');
-		}, mb_strtolower($name));
-		
-		// first letter uppercase
-		$name = preg_replace_callback('#^[a-z]#u', function($m){
-			return mb_convert_case($m[0], MB_CASE_UPPER, 'UTF-8');
-		}, $name);
-	}
+function normalize_name($name, $country){
+	$name = preg_replace('#\.#u', '', $name);
+	
+	$name = preg_replace_callback('#\b([\S]+)\b#iu', function($cword) use ($country){
+		return is_usual_word($cword[0], $country) ? '' : $cword[0];
+	}, $name);
+	
+	$name = preg_replace('#[^\pL0-9\s]#u', ' ', mb_strtolower(remove_accents($name)));
+	$name = minimize_spaces($name);
+	
+	$words = explode(' ', $name);
+	sort($words);
+	$name = implode(' ', array_unique($words));
+	return $name;
+}
+
+function beautify_name($name, $country){
+	
+
+	// remove weird characters
+	$name = preg_replace('#[^\pL0-9\.\s&-]#u', ' ', $name); 
+	
+	// minimize double letters and spaces
+	$name = preg_replace('#([^\pL0-9&])+#u', '$1', $name); 
+	$name = minimize_spaces($name);
+	
+	// ucfirst all words
+	$name = preg_replace_callback('#(\b[\pL0-9]+\b)#u', function($m){
+		return mb_convert_case($m[0], MB_CASE_TITLE, 'UTF-8');
+	}, $name);
+	
+	// lowercase usual words
+	$name = preg_replace_callback('#\b([\pL0-9&]){1,5}\b#u', function($m) use ($country) {
+		return ($word = is_usual_word($m[0], $country)) ? $word : $m[0];
+	}, $name);
+	
+	// uppercase all acronyms
+	$name = preg_replace_callback('#(\b[\pL0-9&]\b\.?\s?)#u', function($m) use ($country) {
+		$ret = preg_replace('#^(.*?)(\.[\pL0-9]+)(\s*)$#iu', '$1$2.$3', $m[0]); // fix last dot
+		return mb_strtoupper($ret);
+	}, $name);
+	
+	// uppercase seeming acronyms
+	$name = preg_replace_callback('#\b([\pL0-9&]\s){1,5}\b#u', function($m) use ($country) {
+		return mb_strtoupper($m[0]);
+	}, $name);
+	
+	// very first letter always uppercase
+	$name = preg_replace_callback('#^[\pL0-9]#u', function($m){
+		return mb_convert_case($m[0], MB_CASE_UPPER, 'UTF-8');
+	}, $name);
+
 	return $name;
 }

@@ -1,6 +1,10 @@
 [
 	{
-		id: 
+		name: "Denominaciones social - Información General",
+		url: "http://www.rmc.es/DenominacionesSociales.aspx",
+		provider: "Registro Mercantil Central"
+	},
+	{
 		name: "Normativa básica sobre denominaciones a tener en cuenta al solicitar una denominación social",
 		url: "https://www.oepm.es/export/sites/oepm/comun/documentos_relacionados/PDF/NormDenomSociales.pdf",
 		provider: "Oficina Española de Patente y Marcas"

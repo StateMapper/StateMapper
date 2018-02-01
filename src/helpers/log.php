@@ -25,7 +25,7 @@ if (!defined('BASE_PATH'))
 function print_log($str, $opts = array()){
 	global $smap;
 
-	if (empty($smap['debug']) && (!IS_CLI || !in_array($smap['call'], array('spide'))) && (!defined('SMAP_FORCE_OUTPUT') || !SMAP_FORCE_OUTPUT))
+	if (empty($smap['debug']) && (!IS_CLI || !in_array($smap['call'], array('spide'))) && !@SMAP_FORCE_OUTPUT)
 		return;
 		
 	// see https://unix.stackexchange.com/questions/148/colorizing-your-terminal-and-shell-environment for colors
@@ -42,11 +42,35 @@ function print_log($str, $opts = array()){
 	if (defined('WORKER_ID'))
 		$opts['worker_id'] = WORKER_ID;
 
-	echo (IS_CLI ? $color.(isset($opts['worker_id']) ? '[W'.str_pad($opts['worker_id']+1, 2, '0', STR_PAD_LEFT).']' : '') : '')
-		.(IS_CLI && !empty($smap['query']) ? (!isset($opts['spider_id']) && isset($smap['query']['date']) ? '['.$smap['query']['date'].']' : '['.$smap['query']['schema'].']').(isset($smap['query']['id']) ? '/'.$smap['query']['id'] : '') : '')
-		.(IS_CLI ? ' ' : '')
-		.$str
-		.(IS_CLI ? "\e[0m".PHP_EOL : '<br>');
+	$o = '';
+	if (IS_CLI){
+		$o = $color;
+		if (isset($opts['worker_id']))
+			$o .= '[W'.str_pad($opts['worker_id']+1, 2, '0', STR_PAD_LEFT).']';
+	}
+	
+	if (IS_CLI && !empty($smap['query'])){
+		
+		if (!isset($opts['spider_id']) && isset($smap['query']['date']))
+			$o .= '['.$smap['query']['date'].']';
+		else if (!empty($smap['query']['schema']))
+			$o .= '['.$smap['query']['schema'].']';
+	}
+		
+	if (isset($smap['query']['id']))
+		$o .= '/'.$smap['query']['id'];
+		
+	if (IS_CLI)
+		$o .= ' ';
+	
+	$o .= $str;
+	
+	if (IS_CLI)
+		$o .= "\e[0m".PHP_EOL;
+	else
+		$o .= '<br>';
+		
+	echo $o;
 }
 
 

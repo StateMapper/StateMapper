@@ -16,7 +16,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
- 
+
+namespace StateMapper; 
 
 if (!defined('BASE_PATH'))
 	die();
@@ -109,6 +110,7 @@ class BulletinFetcherLocalCache extends BulletinFetcherCache {
 		}
 		
 		$success = $formatFetcher->fetch_is_done($this->fileUri, $processedFilePrefix);
+		
 		if (is_error($success)){
 			
 			// clean if error

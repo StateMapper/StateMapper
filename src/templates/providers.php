@@ -16,11 +16,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
- 
+
+namespace StateMapper; 
 
 if (!defined('BASE_PATH'))
 	die();
 
+print_header();
 ?>
 	<table class="table table-bulletins">
 		<?php 
@@ -71,9 +73,9 @@ if (!defined('BASE_PATH'))
 						<div class="schema-picture">
 							<?php 
 							if (in_array($schema->type, array('continent', 'country'))){ 
-								if (file_exists(ASSETS_PATH.'/images/flags/'.$schema->id.'.png')){
+								if ($url = get_flag_url($schema->id, IMAGE_SIZE_SMALL)){
 									?>
-									<img src="<?= ASSETS_URL.'/images/flags/'.$schema->id.'.png' ?>" />
+									<img src="<?= $url ?>" />
 									<?php
 								}
 								
@@ -207,5 +209,4 @@ if (!defined('BASE_PATH'))
 	
 	<div>Missing a bulletin? Adding bulletin providers is easy and well documented, so you if you're a JSON/Regexp nurd, don't hesitate to participate as a Schema Soldier!</div>
 <?php 
-
-
+print_footer();

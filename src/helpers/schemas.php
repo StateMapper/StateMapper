@@ -16,15 +16,15 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
- 
+
+namespace StateMapper; 
 
 if (!defined('BASE_PATH'))
 	die();
 
 
-
 function is_valid_schema_path($type){
-	return !!preg_match('#^([A-Z0-9_]+)(/[A-Z0-9_]+)*$#', $type);
+	return preg_match('#^([A-Z0-9_]+)(/[A-Z0-9_]+)*$#', $type);
 }
 
 function get_provider_schema($type, $fill = false, $keepVocabulary = false){
@@ -115,9 +115,11 @@ function schema_has_feature($schema, $feature){
 	static $cache = array();
 	if (!isset($cache[$schema])){
 		$s = get_schema($schema);
-		$features = array();
+		$features = array('providers', 'browse', 'schema');
 		if (!empty($s->fetchProtocoles)){
 			$features[] = 'fetch';
+			$features[] = 'lint';
+			$features[] = 'rewind';
 			if (!empty($s->parsingProtocoles)){
 				$features[] = 'parse';
 				if (!empty($s->extractProtocoles))
@@ -127,6 +129,14 @@ function schema_has_feature($schema, $feature){
 		$cache[$schema] = $features;
 	}
 	return in_array($feature, $cache[$schema]);
+}
+
+function get_schema_countries(){
+	$files = array();
+	foreach (ls_dir(BASE_PATH.'/schemas') as $file)
+		if (preg_match('#^[A-Z]{2,3}$#i', $file))
+			$files[] = $file;
+	return $files;
 }
 
 function get_schemas($filter = null){
@@ -237,3 +247,13 @@ function get_country_from_schema($schema){
 	return preg_match('#^([a-z]{2,3})(/.*)?$#iu', $schema, $m) ? $m[1] : null;
 }
 	
+function get_schema_prop($schema, $prop, $allow_remote_update = false){
+	
+	$val = !empty($schema->{$prop}) ? $schema->{$prop} : array();
+
+	// update property from the remote repository's schema file
+	if ($allow_remote_update && ($remoteSchema = get_remote_schema($schema->id)))
+		$val = !empty($remoteSchema->{$prop}) ? $remoteSchema->{$prop} : array();
+		
+	return $val;
+}

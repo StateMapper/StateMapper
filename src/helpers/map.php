@@ -16,7 +16,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
- 
+
+namespace StateMapper;
 	
 if (!defined('BASE_PATH'))
 	die();
@@ -124,8 +125,11 @@ function get_map_square($date, &$bulletinStatus, &$monthHas, &$monthTotal, $dbst
 	$title = date_i18n(_('l jS \o\f F Y'), strtotime($date)).'<br>';
 	$title .= '<b>'.strtoupper(str_replace('_', ' ', $bulletinStatus)).'</b>';
 	
-	if (!empty($cdbstats['precepts']))
-		$title .= '<br><br>Precepts count: '.number_format($cdbstats['precepts']);
+	if (!empty($cdbstats['count'])){
+		$title .= '<br><br>Documents count: '.number_format($cdbstats['count']);
+		if (!empty($cdbstats['precepts']))
+			$title .= '<br>Precepts count: '.number_format($cdbstats['precepts']);
+	}
 	
 	// show errors in tooltip
 	if ($bulletin && $bulletin['last_error'])
@@ -138,3 +142,14 @@ function get_map_square($date, &$bulletinStatus, &$monthHas, &$monthTotal, $dbst
 	
 	// TODO: could/should convert status to a human sentence (NOT_PUBLISHED => Not expected)
 }
+
+function smap_ajax_refresh_map($args){
+	global $smap;
+		
+	$vars = array(
+		'current_year' => is_numeric(@$smap['query']['year']) ? $smap['query']['year'] : intval(date('Y')),
+		'extract' => !empty($args['extract']) && $args['extract'] !== 'false',
+	);
+	return array('success' => true, 'html' => get_template('parts/rewind_map', $vars));
+}
+

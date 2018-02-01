@@ -18,6 +18,8 @@
 
 
 $(document).ready(function(){
+	
+	// resize home's bg
 	if ($('body').hasClass('root')){
 		resize_home_bg();
 		$(window).resize(function(){

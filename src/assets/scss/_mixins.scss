@@ -17,3 +17,327 @@
  */ 
 
 
+
+
+/* Cross-browser Box shadows */
+@mixin box-shadow($value...) {
+	-webkit-box-shadow: $value;
+	-moz-box-shadow: $value;
+	box-shadow: $value;
+}
+// Usage: @include box-shadow(1px 2px 10px black);
+
+/* Cross-browser text shadows */
+@mixin text-shadow($value...) {
+	text-shadow: $value;
+}
+// Usage: @include text-shadow(1px 2px 10px black);
+
+
+
+/* Cross-browser background clip */
+@mixin background-clip($value...) {
+	-webkit-background-clip: $value;
+	-moz-background-clip: $value;
+	background-clip: $value;
+}
+// Usage: @include background-clip(text);
+
+/* CSS3 Transitions */
+@mixin transition($args...) {
+  -webkit-transition: $args;
+  -moz-transition: $args;
+  -ms-transition: $args;
+  -o-transition: $args;
+  transition: $args;
+}
+// Usage: @include transition(color .3s ease);
+
+/* transition delaying */
+@mixin transition-delay($args...) {
+	-webkit-transition-delay: $args; /* Safari */
+	transition-delay: $args;
+}
+// Usage: @include transition-delay(2s);
+
+/* Cross-browser opacity */
+@mixin opacity($opacity) {
+  opacity: $opacity;
+  $opacity-ie: $opacity * 100;
+  filter: alpha(opacity=$opacity-ie); //IE8
+}
+// Usage: @include opacity(0.8);
+
+/* Strong Cross-browser clearfix/clear */
+%clearfix {
+  *zoom: 1;
+  &:before, &:after {
+    content: " ";
+    display: table;
+  }
+  &:after {
+    clear: both;
+  }
+}
+/* Usage:
+.container-with-floated-children {
+	@extend %clearfix;
+}
+*/
+
+
+// Source: http://zerosixthree.se/8-sass-mixins-you-must-have-in-your-toolbox/
+
+// px to rem
+@function calculateRem($size) {
+  $remSize: $size / 16px;
+  @return $remSize * 1rem;
+}
+
+// rem font-size with fallback
+@mixin font-size($size) {
+  font-size: $size;
+  font-size: calculateRem($size);
+}
+// Usage: @include font-size(14px)
+
+// rem line-height with fallback
+@mixin line-height($size: 12 ){
+    line-height: $size; //fallback for old browsers
+    line-height: calculateRem($size);
+}
+// Usage: @include line-height (16);
+
+
+// pretty css screen-size splitting (in boot.php)
+// Usage: @include smap_screen(S){ width: 100%; }
+
+
+/* HTML5 Placeholder TO REMOVE? */
+@mixin ph-color($color) {
+	&::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+		color:    $color;
+	}
+	&:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+		color:    $color;
+		opacity:  1;
+	}
+	&::-moz-placeholder { /* Mozilla Firefox 19+ */
+		color:    $color;
+		opacity:  1;
+	}
+	&:-ms-input-placeholder { /* Internet Explorer 10-11 */
+		color:    $color;
+	}
+}
+
+// Easy position
+/*
+@mixin position($position, $args) {
+	@each $o in top right bottom left {
+		$i: index($args, $o);
+
+		@if $i and $i + 1< = length($args) and type-of(nth($args, $i + 1)) == number {
+			#{$o}: nth($args, $i + 1);
+		}
+	}
+	position: $position;
+}
+
+@mixin absolute($args) {
+        @include position("absolute", $args);
+}
+
+@mixin fixed($args) {
+        @include position("fixed", $args);
+}
+
+@mixin relative($args) {
+        @include position("relative", $args);
+}
+* */
+// Usage: @include absolute(top 0 left 1em);
+
+// Easy width
+@mixin size($width, $height: $width) {
+      width: $width;
+      height: $height;
+}
+
+// Easy box-sizing
+@mixin box-sizing($box-model) {
+  -webkit-box-sizing: $box-model; // Safari <= 5
+     -moz-box-sizing: $box-model; // Firefox <= 19
+          box-sizing: $box-model;
+}
+
+// Usage: @include box-sizing(border-box);
+
+// Center-block (center as block)
+@mixin center-block {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+// Truncate text with beautiful ellipsis (...)
+@mixin text-truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+// Usage: @include text-truncate;
+
+/*
+@function color($color) {
+  @return $$color;
+}
+*/
+
+// Border radius shorthand
+@mixin border-radius($radius) {
+  border-radius: $radius;
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  -ms-border-radius: $radius;
+  -o-border-radius: $radius;
+}
+// Usage: @include border-radius(3px);
+
+
+// placeholder shorthand
+@mixin placeholder {
+	&::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+	   line-height: inherit;
+	   @content
+	}
+	&:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+	   line-height: inherit;
+	   opacity:  1;
+	   @content
+	}
+	&::-moz-placeholder { /* Mozilla Firefox 19+ */
+	   line-height: inherit;
+	   opacity:  1;
+	   @content
+	}
+	&:-ms-input-placeholder { /* Internet Explorer 10-11 */
+	   line-height: inherit;
+	   @content
+	}
+	&:placeholder-shown { /* Standard (https://drafts.csswg.org/selectors-4/#placeholder) */
+	   line-height: inherit;
+	   @content
+	}
+}
+
+// Usage: @include placeholder { color: blue; }
+
+
+@mixin background-vgradient($color1, $color2){
+	background: -moz-linear-gradient(top,$color1 0%,$color2 100%);
+	background: -webkit-gradient(linear,left top,left bottom,color-stop(0%,$color1),color-stop(100%,$color2));
+	background: -webkit-linear-gradient(top,$color1 0%,$color2 100%);
+	background: -o-linear-gradient(top,$color1 0%,$color2 100%);
+	background: -ms-linear-gradient(top,$color1 0%,$color2 100%);
+	background: linear-gradient(top,$color1 0%,$color2 100%);
+	filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='$color1', endColorstr='$color2',GradientType=0);
+}
+
+// Usage: @include background-vgradient( blue, red );
+
+@mixin transform($tr){
+	-ms-transform: $tr; /* IE 9 */
+    -webkit-transform: $tr; /* Chrome, Safari, Opera */
+    transform: $tr;
+}
+
+@mixin filter($type, $arg){
+    filter: #{$type+'('+$arg+')'};
+    -webkit-filter: #{$type+'('+$arg+')'};
+	-moz-filter: #{$type+'('+$arg+')'};
+	-o-filter: #{$type+'('+$arg+')'};
+	-ms-filter: #{$type+'('+$arg+')'};
+}
+
+
+/* PLACEHOLDERS */
+
+/* inline-block */
+%ib {
+	display: inline-block;
+	vertical-align: top;
+}
+
+/* disable textselection */
+%noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* IE/Edge */
+  user-select: none;           /* non-prefixed version, currently not supported by any browser */
+}
+
+
+@mixin any-element-state(){
+	&:hover,
+	&:focus,
+	&:active,
+	&:visited {
+		@content
+	}
+}
+
+@mixin cancel-state-outline {
+	&:hover,
+	&:focus,
+	&:active {
+		@content
+	}
+	@include any-element-state(){
+		outline: 0 !important;
+		@include box-shadow(none !important);
+	}
+}
+
+@mixin underline-on-hover {
+	text-decoration: none;
+	&:hover,
+	&:active {
+		text-decoration: underline;
+		@content;
+	}
+}
+
+@mixin animation($animate...) {
+    $max: length($animate);
+    $animations: '';
+
+    @for $i from 1 through $max {
+        $animations: #{$animations + nth($animate, $i)};
+
+        @if $i < $max {
+            $animations: #{$animations + ", "};
+        }
+    }
+    -webkit-animation: $animations;
+    -moz-animation:    $animations;
+    -o-animation:      $animations;
+    animation:         $animations;
+}
+
+@mixin keyframes($animationName) {
+    @-webkit-keyframes #{$animationName} {
+        @content;
+    }
+    @-moz-keyframes #{$animationName} {
+        @content;
+    }
+    @-o-keyframes #{$animationName} {
+        @content;
+    }
+    @keyframes #{$animationName} {
+        @content;
+    }
+}

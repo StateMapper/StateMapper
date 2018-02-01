@@ -1,0 +1,83 @@
+/*
+ * StateMapper: worldwide, collaborative, public data reviewing and monitoring tool.
+ * Copyright (C) 2017-2018  StateMapper.net <statemapper@riseup.net>
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */ 
+
+
+.header-filters,
+.header-filters-advanced {
+    display: none;
+    padding: 0;
+    font-family: $font-family-main;
+    
+    & > ul {
+		display: block;
+		margin: 0 0 0 124px;
+		padding: 0 0 0 4px;
+		
+		& > li {
+			display: inline-block;
+			padding: 0;
+			margin: 0;
+			vertical-align: top;
+			font-size: 14px;
+			color: #777;
+			cursor: pointer;
+			position: relative;
+		
+			& > .menu-button {
+				display: inline-block;
+				padding: 15px 8px;
+			}
+			
+			.top-filter-menu {
+				position: absolute;
+			}
+			
+			i {
+				@extend .tick;
+			}
+		}
+	}
+	
+}
+
+.header-filter-ind,
+a.header-filter-ind {
+    display: inline-block;
+    text-decoration: none;
+    padding: 10px;
+    margin: 0 20px 0 6px;
+    color: #777;
+    cursor: pointer;
+    
+    i {
+		@extend .tick;
+		color: #aaa;
+		top: 0;
+		
+		&:hover {
+			color: #333;
+		}
+	}
+}
+
+.header-filters > ul > li.menu top-filter-active > .menu-button,
+.header-filters > ul > li > .menu-button:hover,
+.header-filter-ind:hover,
+.filters-open .header-filter-ind {
+	color: #000;
+}

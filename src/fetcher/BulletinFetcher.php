@@ -16,19 +16,20 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
- 
+
+namespace StateMapper; 
 
 if (!defined('BASE_PATH'))
 	die();
-
+	
 class BulletinFetcher {
 	
 	public $args = array();
 
 	public function fetch_bulletin($query, $redirect = false, $fetchProcessedPrefix = false){
 		global $smap;
-		if (empty($smap['fetchOrigins'])) 
-			$smap['fetchOrigins'] = array();
+		if (empty($smap['fetched_origins'])) 
+			$smap['fetched_origins'] = array();
 			
 		$query += array(
 			'schema' => null,
@@ -81,7 +82,7 @@ class BulletinFetcher {
 						if (!empty($query['noFetch']))
 							return true;
 						
-						$smap['fetchOrigins'][$fetcherCache->get_label().($fetchProcessedPrefix ? ' (parsed .'.$protocoleConfig->format.')' : ' (.'.$protocoleConfig->format.')')] = (isset($smap['fetchOrigins'][$cacheType]) ? $smap['fetchOrigins'][$cacheType] : 0) + 1;
+						$smap['fetched_origins'][$fetcherCache->get_label().($fetchProcessedPrefix ? ' (parsed .'.$protocoleConfig->format.')' : ' (.'.$protocoleConfig->format.')')] = (isset($smap['fetched_origins'][$cacheType]) ? $smap['fetched_origins'][$cacheType] : 0) + 1;
 						
 						$inserted = insert_bulletin(array('format' => $protocoleConfig->format) + $query); 
 						if (is_error($inserted))
@@ -123,7 +124,7 @@ class BulletinFetcher {
 			return $fetched;
 		}
 			
-		$smap['fetchOrigins']['origin'] = (isset($smap['fetchOrigins']['origin']) ? $smap['fetchOrigins']['origin'] : 0) + 1;
+		$smap['fetched_origins']['origin'] = (isset($smap['fetched_origins']['origin']) ? $smap['fetched_origins']['origin'] : 0) + 1;
 		
 		if (!empty($smap['sumulateFetch']))
 			return true;
@@ -240,8 +241,6 @@ class BulletinFetcher {
 					if (is_error($content))
 						return $content;
 						
-					
-					
 					break;
 					
 				default:
@@ -337,72 +336,11 @@ class BulletinFetcher {
 	}
 	
 	public function serve_bulletin($bulletin, $printMode = 'download', $title = null, $query = array()){
-		if (is_error($formatFetcher = get_format_fetcher($bulletin['format'], $this)))
+		$formatFetcher = get_format_fetcher($bulletin['format'], $this);
+		if (is_error($formatFetcher))
 			die_error('no such bulletin');
 		return $formatFetcher->serve_bulletin($bulletin, $printMode, $title, $query);
 	}
 	
 }
-
-class BulletinFetcherFormat {
-	
-	public function detect_encoding($content){
-		return null;
-	}
-	
-}
-
-class BulletinFetcherCache {
-	
-	public $protocoleConfig = null;
-	public $query = null;
-	public $fileUri = null;
-	private $parent = null;
-	
-	public function set_config($protocoleConfig, $query, $parent){
-		$this->protocoleConfig = $protocoleConfig;
-		$this->query = $query;
-		$this->parent = $parent;
-		
-		// init filePath
-		$this->fileUri = $this->get_content_uri();
-	}
-	
-	public function get_content_uri(){
-		$query = $this->parent->guess_query_parameters($this->query);
-		
-		$fileUri = '/'.$query['schema'];
-		if (!empty($query['date'])){
-		
-			// file formats:
-			// 2017/01/01.xml
-			// 2017/01/01/id_document.xml
-		
-			$fileUri .= '/'.str_replace('-', '/', $query['date']); 
-			if (!empty($query['id']))
-				$fileUri .= '/'.$query['id'];
-			
-		} else
-			return new SMapError('not enough query parameters');
-			
-		$fileUri .= '.'.(is_object($this->protocoleConfig) ? $this->protocoleConfig->format : $this->protocoleConfig);
-		
-		//echo 'ContentPath: '.$filePath.'<br>';
-		return $fileUri;
-	}
-}
-
-
-function get_fetcher_cache($cacheType, $protocoleConfig, $query, $parent){
-	$filePath = __DIR__.'/caches/BulletinFetcher'.ucfirst($cacheType).'Cache.php';
-	if (file_exists($filePath)){
-		require_once $filePath;
-		$class = 'BulletinFetcher'.ucfirst($cacheType).'Cache';
-		$fetcherCache = new $class();
-		$fetcherCache->set_config($protocoleConfig, $query, $parent);
-		return $fetcherCache;
-	} 
-	return null;
-}
-
 

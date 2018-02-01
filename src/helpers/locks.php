@@ -16,11 +16,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
- 
+
+namespace StateMapper; 
 	
 if (!defined('BASE_PATH'))
 	die();
-
 
 function wait_for_lock($key, $timeout = 5){ // timeout in seconds
 	$begin = time();

@@ -16,15 +16,16 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
- 
+
+namespace StateMapper; 
 	
 if (!defined('BASE_PATH'))
 	die();
 
 
 // live placeholders
-add_action('live', 'live_action');
-function live_action($live_id){
+add_action('live', 'live_action', 0, 2);
+function live_action($live_id, $opts){
 	if (function_exists('live_'.$live_id)){
 		$args = array_slice(func_get_args(), 1);
 		if ($placeholder = call_user_func_array('live_'.$live_id, $args)){
@@ -36,11 +37,11 @@ function live_action($live_id){
 	}
 }
 
-function get_live($live_id){
+function get_live($live_id, $opts = array()){
 	$args = func_get_args();
 	array_unshift($args, 'live');
 	ob_start();
-	call_user_func_array('do_action', $args);
+	call_user_func_array('\\StateMapper\\do_action', $args);
 	return ob_get_clean();
 }
 
@@ -48,7 +49,7 @@ function smap_ajax_live($args){
 	$ret = array();
 	foreach ($args['lives'] as $live){
 		array_unshift($live['args'], $live['live_id']);
-		$ret[] = call_user_func_array('get_live', $live['args']);
+		$ret[] = call_user_func_array('\\StateMapper\\get_live', $live['args']);
 	}
 	return array('success' => true, 'result' => $ret);
 }

@@ -16,7 +16,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */ 
- 
+
+namespace StateMapper; 
 	
 if (!defined('BASE_PATH'))
 	die();
@@ -25,33 +26,49 @@ function smap_ajax_spider_config($args){
 	
 	if (!is_admin())
 		die_error();
-		
-	$opts = array_keys(get_default_spider_config(false));
 	
 	if (!@$args['session']['query']['schema'])
 		return 'missing schema';
+		
+	if (empty($args['configVar']))
+		return 'bad config var';
+	if (empty($args['configVal']))
+		return 'bad config value';
 	
-	if (empty($args['configVar']) || !isset($args['configVal']) || !is_string($args['configVal']) || !in_array($args['configVar'], $opts))
+	$var = $args['configVar'];
+	$value = $args['configVal'];
+	$schema = $args['session']['query']['schema'];
+	
+	if ($error = set_spider_config($schema, $var, $value))
+		return $error;
+	
+	return array('success' => true, 'val' => $value);
+}
+
+function set_spider_config($schema, $var, $value){
+	$opts = array_keys(get_default_spider_config());
+	
+	if (!is_string($value) || !in_array($var, $opts))
 		return 'bad config var';
 		
-	if ($args['configVar'] == 'dateBack'){
-		if (is_numeric($args['configVal']))
-			$args['configVal'] = $args['configVal'].'-01-01';
-		if (date('Y-m-d', strtotime($args['configVal'])) !== $args['configVal'])
+	if ($var == 'date_back'){
+		if (is_numeric($value))
+			$value = $value.'-01-01';
+		if (!is_valid_date($value))
 			return 'bad date or year, correct format is YYYY or YYYY-MM-DD';
 	
-	} else if (!is_numeric($args['configVal']))
+	} else if (!is_numeric($value))
 		return 'bad format';
 		
 	$update = array(
-		'bulletin_schema' => $args['session']['query']['schema'],
+		'bulletin_schema' => $schema,
 	);
 	
-	$update[lint_sql_var($args['configVar'])] = $args['configVal'];
+	$update[$var] = $value;
 	if (upsert_spider($update) === false)
 		return 'upsert failed';
 		
-	return array('success' => true, 'val' => $args['configVal']);
+	return true;
 }
 
 function smap_ajax_spider_extract($args){
@@ -77,30 +94,38 @@ function smap_ajax_spider_power($args){
 		
 	$on = !empty($args['turnOn']) && $args['turnOn'] !== 'false';
 	
-	if ($lock = wait_for_lock('spider-'.$args['schema'])){
-		$status = get_spider_status($args['schema']);
+	if ($error = toggle_spider_status($args['schema'], $on))
+		return $error;
+	
+	return array('success' => true, 'button' => get_spider_button($args['schema']));
+}
+	
+function toggle_spider_status($schema, $on){
+	if ($lock = wait_for_lock('spider-'.$schema)){
+		$status = get_spider_status($schema);
 		
 		if ($on)
 			$nstatus = in_array($status, array('waiting', 'active')) ? null : 'waiting';
 		else {
 			
-			$count = get_var('SELECT COUNT(w.pid) FROM spiders AS s LEFT JOIN workers AS w ON s.id = w.spider_id WHERE s.bulletin_schema = %s AND w.status = "active"', $args['schema']);
+			$count = get_var('SELECT COUNT(w.pid) FROM spiders AS s LEFT JOIN workers AS w ON s.id = w.spider_id WHERE s.bulletin_schema = %s AND w.status = "active"', $schema);
 			
 			$nstatus = in_array($status, array('stopping', 'stopped')) ? null : ($count ? 'stopping' : 'stopped');
 		}
 		
 		if ($nstatus && upsert_spider(array(
-			'bulletin_schema' => $args['schema'],
+			'bulletin_schema' => $schema,
 			'status' => $nstatus,
 		), true) === false){
 			unlock($lock);
 			return 'spider upsert failed';
 		}
 		unlock($lock);
-		return array('success' => true, 'button' => get_spider_button($args['schema']));
+		return true;
 	}
 	return 'can\'t get spider lock';
 }
+	
 
 function upsert_spider($args, $noLock = false){
 	$status = get_spider_status($args['bulletin_schema'], false);
@@ -112,7 +137,7 @@ function upsert_spider($args, $noLock = false){
 		}
 		$args += array(
 			'status' => 'stopped',
-		) + get_default_spider_config(true);
+		) + get_default_spider_config();
 		
 		$ret = insert('spiders', $args);
 		
@@ -128,32 +153,25 @@ function upsert_spider($args, $noLock = false){
 	return $ret;
 }
 
-function get_default_spider_config($sqlFormat = true){
-	$ret = array(
+function get_default_spider_config(){
+	return array(
 		'status' => 'waiting',
-		'dateBack' => date('Y-m-d', strtotime('-1 day')),
-		'workersCount' => SPIDER_WORKERS_COUNT,
-		'cpuRate' => SPIDER_MAX_CPU,
+		'date_back' => date('Y-m-d', strtotime('-1 day')),
+		'max_workers' => SPIDER_WORKERS_COUNT,
+		'max_cpu_rate' => SPIDER_MAX_CPU,
 		'extract' => false,
 	);
-	if ($sqlFormat){
-		$rret = array();
-		foreach ($ret as $k => $v)
-			$rret[lint_sql_var($k)] = $v;
-		return $rret;
-	}
-	return $ret;
 }
 
 
 function get_spider_config($schema){
-	$dbconfig = get_row('SELECT status, date_back, workers_count, cpu_rate, extract FROM spiders WHERE '.(is_numeric($schema) ? 'id = %s' : 'bulletin_schema = %s'), $schema);
-	$default = get_default_spider_config(false);
+	$dbconfig = get_row('SELECT bulletin_schema, status, date_back, max_workers, max_cpu_rate, extract FROM spiders WHERE '.(is_numeric($schema) ? 'id = %s' : 'bulletin_schema = %s'), $schema);
+	$default = get_default_spider_config();
 	$config = array();
-	foreach (array_keys($default) as $k){
-		$dbk = lint_sql_var($k);
-		$config[$k] = isset($dbconfig[$dbk]) ? $dbconfig[$dbk] : $default[$k];
-	}
+	foreach ($default as $k => $v)
+		$config[$k] = isset($dbconfig[$k]) ? $dbconfig[$k] : $v;
+	$config['schema'] = $dbconfig['bulletin_schema'];
+	unset($config['bulletin_schema']);
 	return $config;
 }
 
@@ -235,11 +253,11 @@ function get_workers_stats(&$count = 0, $schema = null, &$countPerYear = array()
 	
 	$editable = is_admin() ? 'spider-ctrl-field-editable' : '';
 	
-	$html = '<div><span class="spider-ctrl-field '.$editable.'" data-smap-prompt="'.esc_attr('How many workers do you want to use as a maximum?').'" data-smap-ctrl-var="workersCount" data-smap-ctrl-val="'.$config['workersCount'].'"><i class="fa fa-bug spider-ctrl-icon"></i> Workers: '.$count.' / <span class="spider-ctrl-field-val">'.$config['workersCount'].'</span> '.($count ? '(older '.time_diff(time() + $maxTime).') ' : '').'<i class="fa fa-pencil"></i></span></div>';
+	$html = '<div><span class="spider-ctrl-field '.$editable.'" data-smap-prompt="'.esc_attr('How many workers do you want to use as a maximum?').'" data-smap-ctrl-var="max_workers" data-smap-ctrl-val="'.$config['max_workers'].'"><i class="fa fa-bug spider-ctrl-icon"></i> Workers: '.$count.' / <span class="spider-ctrl-field-val">'.$config['max_workers'].'</span> '.($count ? '(older '.time_diff(time() + $maxTime).') ' : '').'<i class="fa fa-pencil"></i></span></div>';
 	
-	$html .= '<div><span class="spider-ctrl-field '.$editable.'" data-smap-prompt="'.esc_attr('How much CPU proportion do you want to use as a maximum?').' (%)" data-smap-ctrl-var="cpuRate" data-smap-ctrl-val="'.$config['cpuRate'].'"><i class="fa fa-microchip spider-ctrl-icon"></i> CPU '.$core_nums.'x: '.number_format($cpu[0]).'% (max <span class="spider-ctrl-field-val">'.$config['cpuRate'].'</span>%) <i class="fa fa-pencil"></i></span></div>';
+	$html .= '<div><span class="spider-ctrl-field '.$editable.'" data-smap-prompt="'.esc_attr('How much CPU proportion do you want to use as a maximum?').' (%)" data-smap-ctrl-var="max_cpu_rate" data-smap-ctrl-val="'.$config['max_cpu_rate'].'"><i class="fa fa-microchip spider-ctrl-icon"></i> CPU '.$core_nums.'x: '.number_format($cpu[0]).'% (max <span class="spider-ctrl-field-val">'.$config['max_cpu_rate'].'</span>%) <i class="fa fa-pencil"></i></span></div>';
 	
-	$html .= '<div><span class="spider-ctrl-field '.$editable.'" data-smap-prompt="'.esc_attr('Back until which date do you want to fetch bulletin from?').' (YYYY or YYYY-MM-DD, '.esc_attr('inclusive').')" data-smap-ctrl-var="dateBack" data-smap-ctrl-val="'.$config['dateBack'].'"><i class="fa fa-step-backward spider-ctrl-icon"></i> Back until: <span class="spider-ctrl-field-val">'.$config['dateBack'].'</span> '.($count ? '(fetching '.ucfirst(date_i18n('M j, Y', strtotime($maxDate))).' <i class="fa fa-long-arrow-right"></i> '.ucfirst(date_i18n('M j, Y', strtotime($minDate))).') ' : '').'<i class="fa fa-pencil"></i></span></div>';
+	$html .= '<div><span class="spider-ctrl-field '.$editable.'" data-smap-prompt="'.esc_attr('Back until which date do you want to fetch bulletin from?').' (YYYY or YYYY-MM-DD, '.esc_attr('inclusive').')" data-smap-ctrl-var="date_back" data-smap-ctrl-val="'.$config['date_back'].'"><i class="fa fa-step-backward spider-ctrl-icon"></i> Back until: <span class="spider-ctrl-field-val">'.$config['date_back'].'</span> '.($count ? '(fetching '.ucfirst(date_i18n('M j, Y', strtotime($minDate))).' <i class="fa fa-long-arrow-right"></i> '.ucfirst(date_i18n('M j, Y', strtotime($maxDate))).') ' : '').'<i class="fa fa-pencil"></i></span></div>';
 	
 	$docs = get_var('SELECT COUNT(*) FROM bulletins WHERE bulletin_schema = %s AND external_id IS NULL', $schema);
 	
@@ -252,7 +270,7 @@ function get_workers_stats(&$count = 0, $schema = null, &$countPerYear = array()
 	
 	$stats = query('
 		SELECT s.type AS _type, s.action AS _action, 
-		SUM(a.originalValue) AS amount, a.originalUnit AS unit, COUNT(s.id) AS count
+		SUM(a.original_value) AS amount, a.original_unit AS unit, COUNT(s.id) AS count
 		
 		FROM precepts AS p 
 		LEFT JOIN statuses AS s ON p.id = s.precept_id 
