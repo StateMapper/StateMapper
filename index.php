@@ -66,6 +66,7 @@ else
 	define('REAL_BASE_URL', BASE_URL);
 
 define('APP_URL', REAL_BASE_URL.'src');
+define('PROD_APP_URL', 'https://statemapper.net/src');
 define('ASSETS_URL', REAL_BASE_URL.'src/assets');
 define('SCHEMAS_PATH', BASE_PATH.'/schemas');
 
