@@ -45,7 +45,7 @@ The extraction layer is where data is finally saved to the database in the form 
 | location_counties | the world's counties/provinces/regions |
 | location_cities | the world's cities |
 
-Please read the [Extraction section of the Schemas documentation]({RepoRoot}/schemas/README.md#extraction-format) for more details about the extraction format.
+Please read the [Extraction section of the Schemas documentation]({RepoRoot}/tree/master/schemas#extraction-format) for more details about the extraction format.
 
 Here is an overview of the database tables:
 
@@ -58,13 +58,13 @@ The source file of this diagram can be found at ```documentation/diagrams/databa
 
 | Folder | Description |
 | ------- | ------ |
-| [bulletins/](../../bulletins) | where bulletins are stored after download |
-| [database/](../../src/database) | database files (including .sql) |
-| [documentation/](../../documentation) | documentation files (graphic material, diagrams, manuals..) |
-| [schemas/](../../schemas) | bulletin definitions (schemas) per country/continent |
-| [scripts/](../../scripts) | bash scripts (```smap``` command) |
-| [src/](../../src) | core files of the app |
-| [src/controller/](../../src/controller) | controller layer |
+| [bulletins/]({RepoRoot}/tree/master/src/bulletins) | where bulletins are stored after download |
+| [database/]({RepoRoot}/tree/master/databases) | database files (including .sql) |
+| [documentation/]({RepoRoot}/tree/master/documentation) | documentation files (graphic material, diagrams, manuals..) |
+| [schemas/]({RepoRoot}/tree/master/schemas) | bulletin definitions (schemas) per country/continent |
+| [scripts/]({RepoRoot}/tree/master/scripts) | bash scripts (```smap``` command) |
+| [src/]({RepoRoot}/tree/master/src) | core files of the app |
+| [src/controller/]({RepoRoot}/tree/master/src/controller) | controller layer |
 | [src/fetcher/](../../src/fetcher) | fetch layer |
 | [src/parser/](../../src/parser) | parse layer |
 | [src/extractor/](../../src/extractor) | extract layer |
