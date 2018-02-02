@@ -14,7 +14,7 @@ The processing layers can be described as follows:
 | | Layer name | Responsability |
 | -------- | ---- | --- |
 | <img src="{IncludeIcon cloud-download}" valign="middle" /> | fetch | download bulletins from bulletin providers |
-| <img src="{IncludeIcon tree}" valign="middle" /> | parse | parse bulletins and trigger subsequent fetches (follows) |
+| <img src="{IncludeIcon pagelines}" valign="middle" /> | parse | parse bulletins and trigger subsequent fetches (follows) |
 | <img src="{IncludeIcon magic}" valign="middle" /> | extract | extract precepts and status from parsed objects |
 | <img src="{IncludeIcon bug}" valign="middle" /> | spider | trigger workers to fetch, parse and extract bulletins |
 | <img src="{IncludeIcon terminal}" valign="middle" /> | daemon | start and stop bulletin spiders |

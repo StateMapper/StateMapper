@@ -21,7 +21,7 @@ The processing layers can be described as follows:
 | | Layer name | Responsability |
 | -------- | ---- | --- |
 | <img src="https://statemapper.net/src/addons/fontawesome_favicons/cloud-download.ico" valign="middle" /> | fetch | download bulletins from bulletin providers |
-| <img src="https://statemapper.net/src/addons/fontawesome_favicons/tree.ico" valign="middle" /> | parse | parse bulletins and trigger subsequent fetches (follows) |
+| <img src="https://statemapper.net/src/addons/fontawesome_favicons/pagelines.ico" valign="middle" /> | parse | parse bulletins and trigger subsequent fetches (follows) |
 | <img src="https://statemapper.net/src/addons/fontawesome_favicons/magic.ico" valign="middle" /> | extract | extract precepts and status from parsed objects |
 | <img src="https://statemapper.net/src/addons/fontawesome_favicons/bug.ico" valign="middle" /> | spider | trigger workers to fetch, parse and extract bulletins |
 | <img src="https://statemapper.net/src/addons/fontawesome_favicons/terminal.ico" valign="middle" /> | daemon | start and stop bulletin spiders |
