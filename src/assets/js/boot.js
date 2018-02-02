@@ -18,6 +18,10 @@
 
 
 $(document).ready(function(){
+	$(document).on('smap_nice_alert_show', function(){
+		smap_check_nice_alerts();
+	});
+	smap_check_nice_alerts();
 	
 	smapLazyloadCSS(resize); // resize after all CSS are loaded
 
@@ -116,3 +120,10 @@ $.smapNiceAlert = function(opts){
 		});
 	}
 };
+
+
+function smap_check_nice_alerts(){
+	var a = null;
+	while (a = SMAP.nice_alerts.shift())
+		$.smapNiceAlert(a);
+}

@@ -210,6 +210,7 @@ function head_print_assets(){
 		'loading' => get_loading(),
 		'lazy_css' => $smap['lazy_css'],
 		'lazy_stop' => is_dev() && !empty($_GET['lazy_stop']),
+		'nice_alerts' => array(),
 	);
 	?>
 	<script type="text/javascript">

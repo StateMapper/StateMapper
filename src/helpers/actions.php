@@ -125,9 +125,9 @@ function print_nice_alert($alert, $force_print = false){
 		// @todo: fix this (loading before $ in the homepage -due to lazyness-)
 		?>
 		<script>
-			$(document).ready(function(){
-				$.smapNiceAlert(<?= json_encode($alert) ?>);
-			});
+			SMAP.nice_alerts.push(<?= json_encode($alert) ?>);
+			var event = new CustomEvent('smap_nice_alert_show', {});
+			document.dispatchEvent(event);
 		</script>
 		<?php
 	} else
