@@ -45,7 +45,7 @@ The extraction layer is where data is finally saved to the database in the form 
 | location_counties | the world's counties/provinces/regions |
 | location_cities | the world's cities |
 
-Please read the [Extraction section of the Schemas documentation](SCHEMAS.md#extraction-format) for more details about the extraction format.
+Please read the [Extraction section of the Schemas documentation]({RepoRoot}/schemas/README.md#extraction-format) for more details about the extraction format.
 
 Here is an overview of the database tables:
 
