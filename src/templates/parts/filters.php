@@ -126,19 +126,19 @@ $cbs = get_multisel_cbs();
 								<?php 
 
 								if ($type == 'company'){
-									$subtypes = query('SELECT country, subtype FROM entities WHERE type = "company" AND subtype IS NOT NULL GROUP BY country, subtype ORDER BY country ASC, subtype ASC');
+									$subtypes = query('SELECT country, subtype, COUNT(*) AS count FROM entities WHERE type = "company" AND subtype IS NOT NULL GROUP BY country, subtype '.(!empty($smap['filters']['loc']) ? prepare('WHERE country = %s', strtoupper($smap['filters']['loc'])) : '').'ORDER BY country ASC, subtype ASC');
 									
 									$ccountry = null;
 									foreach ($subtypes as $t){
 										$s = get_country_schema($t['country']);
 										$name = $t['subtype'];
 										
-										$count = query_entities(array(
+										$count = $t['count'];/*query_entities(array(
 											'etype' => $type,
 											'esubtype' => $t['subtype'],
 											'country' => !empty($smap['filters']['loc']) ? $smap['filters']['loc'] : null,
 											'count' => true
-										));
+										));*/
 										
 										if (!$ccountry || $ccountry != $t['country']){
 											$ccountry = $t['country'];

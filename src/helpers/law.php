@@ -26,7 +26,7 @@ add_action('footer', function(){
 	if (is_logged() || !empty($_SESSION['agreed_lawd']) || IS_INSTALL)
 		return;
 	?>
-	<div class="footer-law-disclaimer" title="Click to agree and hide this notice" data-tippy-placement="top"><div>Hey! We use two session <a href="<?= anonymize('https://en.wikipedia.org/wiki/HTTP_cookie') ?>" target="_blank">cookies</a> to give you consistent user experience and to know who visit us. We won't give or sell information about your visit on our site to no-one, ever. The information displayed in this website is automatically generated from public data and might contains errors. Please close this window if you disagree with any of these conditions. <i class="fa fa-check"></i></div></div>
+	<div class="footer-law-disclaimer" title="Click to agree and hide this notice" data-tippy-placement="top"><div>Hey! We use session <a href="<?= anonymize('https://en.wikipedia.org/wiki/HTTP_cookie') ?>" target="_blank">cookies</a> to give you consistent user experience and to improve it over time. We won't give or sell information about your visit on our site to no-one, ever. The information displayed in this website is automatically generated from public data and might contains errors. Please close this window if you disagree with any of these conditions. <i class="fa fa-check"></i></div></div>
 	<?php
 });
 
