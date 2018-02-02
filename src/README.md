@@ -170,9 +170,10 @@ If needed, please edit Github manuals from ```documentation/manuals/templates```
 
 Patterns like ```{Include[Inline] name_of_part_file}``` and ```{Include[Inline] name_of_part_file(var1[, var2, ..])}``` will be replaced by the part file ```documentation/manuals/templates/parts/name_of_part_file.part.md```, with patterns ```{$1}```, ```{$2}```, ```{$3}``` replaced by arguments ```var1```, ```var2```, ```var3```.
 
-Patterns like ```{CopyTo path/DEST.md}``` at the begining of a manual file will make it compile to additional paths ```BASE_PATH/path/DEST.md```.
+All manuals except the main README.md are compiled to ```documentation/manuals```.
+```{CopyTo path/DEST.md}``` at the begining of a manual file will make it compile to additional paths.
 
-Before commiting your changes, compile the manuals to ```documentation/manuals``` (```.md``` files) with ```smap compile```.
+Before commiting your changes, compile the manuals with ```smap compile``` (included in ```smap push...```).
 
 ## Tips & tricks:
 
