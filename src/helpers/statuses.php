@@ -421,7 +421,7 @@ function print_statuses($statuses, $target = null, $headerEntityId = null, $defa
 			if (!empty($p['note'])){
 				$note = $p['note'];
 				if ($p['_type'] == 'location'){
-					$countrySchema = get_schema($schema);
+					$countrySchema = get_country_schema($schema);
 					
 					$locationObj = apply_filters('location_lint', null, $p['note'], $countrySchema);
 					$note = $locationObj ? get_location_label($locationObj, 'status') : $note;
@@ -504,7 +504,7 @@ function print_statuses($statuses, $target = null, $headerEntityId = null, $defa
 				'_type' => 'issuing',
 			) + $ctarget;
 
-		if ($otherEntities = parse_entities(array('strict' => true), $text, $p['bulletin_schema'], array('_type' => 'other', 'country' => get_schema($p['bulletin_schema'])->id)))
+		if ($otherEntities = parse_entities(array('strict' => true), $text, $p['bulletin_schema'], array('_type' => 'other', 'country' => get_country_schema($p['bulletin_schema'])->id)))
 			$entities = array_merge($entities, $otherEntities);
 
 /*

@@ -35,6 +35,6 @@ foreach ($results as $r){
 		'country' => null,
 	);
 	?>
-	<div class="sugg"><a href="<?= get_result_url($r) ?>"><i class="fa fa-<?= get_result_icon($r) ?>"></i><span><?= $title ?><?php if ($r['subtype'] || $r['country']){ ?><span class="searchSugg-sugg-metas<?php if ($r['subtype']) echo ' search-sugg-flag-more'; ?>"><?= ($r['subtype'] ? $r['subtype'] : '') ?><?= ($r['country'] ? '<img title="'.esc_attr(get_schema($r['country'])->name).'" data-tippy-placement="right" class="sugg-flag" src="'.get_flag_url($r['country'], IMAGE_SIZE_TINY).'" />' : '') ?></span><?php } ?></span></a></div>
+	<div class="sugg"><a href="<?= get_result_url($r) ?>"><i class="fa fa-<?= get_result_icon($r) ?>"></i><span><?= $title ?><?php if ($r['subtype'] || $r['country']){ ?><span class="searchSugg-sugg-metas<?php if ($r['subtype']) echo ' search-sugg-flag-more'; ?>"><?= ($r['subtype'] ? $r['subtype'] : '') ?><?= ($r['country'] ? '<img title="'.esc_attr(get_country_schema($r['country'])->name).'" data-tippy-placement="right" class="sugg-flag" src="'.get_flag_url($r['country'], IMAGE_SIZE_TINY).'" />' : '') ?></span><?php } ?></span></a></div>
 	<?php
 }

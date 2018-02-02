@@ -30,7 +30,7 @@ print_header();
 		$country = null;
 		
 		$is_filtered = !empty($smap['filters']['loc']) ? 1 : 0;
-		if ($is_filtered && ($s = get_schema($smap['filters']['loc'])) && $s->type == 'country')
+		if ($is_filtered && ($s = get_country_schema($smap['filters']['loc'])) && $s->type == 'country')
 			$is_filtered++;
 		
 		foreach ($smap['schemas'] as $path){ 
@@ -90,7 +90,7 @@ print_header();
 							else if (!empty($schema->siteUrl))
 								echo '<a title="'.esc_attr('Go to the provider\'s website: '.$schema->siteUrl).'" href="'.anonymize($schema->siteUrl).'" target="blank">'.$name.'</a>';
 							else if (in_array($schema->type, array('continent', 'country')) && (empty($smap['filters']['loc']) || $schema->id != $smap['filters']['loc']))
-								echo '<a title="'.esc_attr('Show only '.get_schema($schema->id)->adjective.' providers').'" href="'.get_providers_url($schema->id).'">'.$name.'</a>';
+								echo '<a title="'.esc_attr('Show only '.get_country_schema($schema)->adjective.' providers').'" href="'.get_providers_url($schema->id).'">'.$name.'</a>';
 							else
 								echo $name;
 							?>
@@ -135,7 +135,7 @@ print_header();
 							?>
 							
 						<?php } else if (in_array($schema->type, array('continent', 'country')) && strcasecmp($smap['filters']['loc'], $schema->id)){ ?>
-								<a href="<?= get_providers_url($schema->id) ?>" title="Show only <?= get_schema($schema->id)->adjective ?> providers"><i class="fa fa-filter"></i><span>Filter</span></a>
+								<a href="<?= get_providers_url($schema->id) ?>" title="Show only <?= get_country_schema($schema)->adjective ?> providers"><i class="fa fa-filter"></i><span>Filter</span></a>
 						<?php } ?>
 					</div>
 				</td>

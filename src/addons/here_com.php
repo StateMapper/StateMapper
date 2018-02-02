@@ -39,7 +39,7 @@ function herecom_convert_location($locationStr, $country, $tryId = false){
 		return null;
 		
 	if (!is_object($country))
-		$country = get_schema($country);
+		$country = get_country_schema($country);
 	
 	$force = false;
 	if (!is_admin() || empty($_GET['geoloc'])){

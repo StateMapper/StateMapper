@@ -594,7 +594,7 @@ class BulletinParser {
 				// check "orte neto: 6.39" at http://localhost/boe/application/api/es/boe/2017-2018-01-05/parse
 
 				$debug = false;//stripos($value['value'], '854.057,00 euros') !== false;
-				$countrySchema = get_schema($this->query['schema']);
+				$countrySchema = get_country_schema($this->query['schema']);
 				
 				if (!empty($tr->stripBeforeMatch))
 					foreach ($tr->stripBeforeMatch as $m)
@@ -904,7 +904,7 @@ class BulletinParser {
 				$value['value'] = preg_replace('#([\n]+)#', '', $value['value']);
 				//echo "PARSE: ".$value['value'].'<br>';
 				
-				$countrySchema = get_schema($this->query['schema']);
+				$countrySchema = get_country_schema($this->query['schema']);
 				if (empty($tr->dateFormat))
 					$tr->dateFormat = 'auto';
 					
@@ -933,7 +933,7 @@ class BulletinParser {
 				if ($tr->type == 'parseDateDebug')
 					return $value;
 				
-				$countrySchema = get_schema($this->query['schema']);
+				$countrySchema = get_country_schema($this->query['schema']);
 				
 				/* for testing only */
 				/*
@@ -1092,7 +1092,7 @@ class BulletinParser {
 				break;
 				
 			case 'convertLegalEntityType':
-				$countrySchema = get_schema($this->query['schema']);
+				$countrySchema = get_country_schema($this->query['schema']);
 				
 				if (!empty($countrySchema->vocabulary) && !empty($countrySchema->vocabulary->legalEntity) && !empty($countrySchema->vocabulary->legalEntityTypes)){
 					$val = preg_replace('#([\[\]\(\)])#', '', $value['value']);
@@ -1121,7 +1121,7 @@ class BulletinParser {
 				break;
 
 			case 'grepNationalIds':
-				$countrySchema = get_schema($this->query['schema']);
+				$countrySchema = get_country_schema($this->query['schema']);
 				
 				if (!empty($countrySchema->vocabulary) && !empty($countrySchema->vocabulary->legalIdNumbers)){
 					$patterns = array();

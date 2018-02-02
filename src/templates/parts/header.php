@@ -149,7 +149,7 @@ if (!empty($smap['entity'])){
 								
 						else if ($smap['page'] == 'providers')
 							echo 'Below are shown all the currently available '.(!empty($smap['filters']['loc'])
-								? get_schema($smap['filters']['loc'])->adjective.' bulletins'
+								? get_country_schema($smap['filters']['loc'])->adjective.' bulletins'
 								: 'bulletins').'.';
 
 						else if (isset($smap['call'])){

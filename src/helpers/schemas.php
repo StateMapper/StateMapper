@@ -27,6 +27,16 @@ function is_valid_schema_path($type){
 	return preg_match('#^([A-Z0-9_]+)(/[A-Z0-9_]+)*$#', $type);
 }
 
+function get_country_schema($schema){
+	if (is_object($schema)){
+		if (in_array($schema->type, array('country', 'continent')))
+			return $schema;
+		$schema = $schema->id;
+	}
+	$country = strstr($schema, '/', true);
+	return get_schema($country === false ? $schema : $country);
+}
+
 function get_provider_schema($type, $fill = false, $keepVocabulary = false){
 	$schema = is_object($type) ? $type : get_schema($type);
 	if ($fill){
@@ -105,7 +115,7 @@ function get_country_from_schema($schema){
 }
 
 function is_country($str){
-	return !!get_schema($str);
+	return !!get_country_schema($str);
 }
 
 function get_schema_title($schema, $query = array(), $short = false){

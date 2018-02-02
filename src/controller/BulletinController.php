@@ -40,7 +40,7 @@ class BulletinController {
 			exit();
 		}*/
 
-		if (!empty($smap['filters']['loc']) && !get_schema($smap['filters']['loc']))
+		if (!empty($smap['filters']['loc']) && !get_country_schema($smap['filters']['loc']))
 			return 'no such schema country';
 			
 		$query = array();

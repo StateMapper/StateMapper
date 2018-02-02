@@ -92,7 +92,7 @@ function get_page_title($seoTitle = false){
 		$title = get_entity_title($smap['entity'], false, true);
 		
 	else if ($smap['page'] == 'ambassadors')
-		$title = $seoTitle ? 'Country Ambassadors for '.get_schema($smap['filters']['loc'])->name : get_schema($smap['filters']['loc'])->name;
+		$title = $seoTitle ? 'Country Ambassadors for '.get_country_schema($smap['filters']['loc'])->name : get_country_schema($smap['filters']['loc'])->name;
 	
 	else if ($smap['page'] == 'bulletin'){
 		
@@ -121,7 +121,7 @@ function get_page_title($seoTitle = false){
 	} else if ($smap['page'] == 'providers'){
 		
 		if (!empty($smap['filters']['loc']))
-			$title = $seoTitle ? get_schema($smap['filters']['loc'])->adjective.' public data providers' : get_schema($smap['filters']['loc'])->name;
+			$title = $seoTitle ? get_country_schema($smap['filters']['loc'])->adjective.' public data providers' : get_country_schema($smap['filters']['loc'])->name;
 		else
 			$title = 'Public data providers';
 	

@@ -52,7 +52,7 @@ $go_to_home = is_browser() || is_api() || is_api_root() || (is_page('providers')
 				if ($go_to_home)
 					echo _('Go to homepage');
 				else if (!empty($smap['query']['schema']))
-					echo sprintf(_('Go back to %s providers'), get_schema($smap['query']['schema'])->adjective);
+					echo sprintf(_('Go back to %s providers'), get_country_schema($smap['query']['schema'])->adjective);
 				else
 					echo _('Go back to the providers list');
 			}
