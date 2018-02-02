@@ -32,7 +32,31 @@ function admin(){
 	$cmd = !empty($smap['cli_args']) && count($smap['cli_args']) > 1 ? $smap['cli_args'][1] : null;
 		
 	switch ($cmd){
-		case 'clear':
+		case 'db_export':
+			if (!is_writable(BASE_PATH.'/database'))
+				die_error(BASE_PATH.'/database must be made writable');
+				
+			$dest = BASE_PATH.'/database/structure';
+			@unlink($dest.'.exporting.sql');
+
+			echo 'exporting database structure to '.strip_root($dest.'.sql').'...'.PHP_EOL; 
+				
+			// export, striping out DEFINER and AUTO_INCREMENT
+			$cmd = 'mysqldump --no-data --no-create-db --skip-comments --single-transaction --skip-add-drop-table -u "'.DB_USER.'"'.(DB_PASS != '' ? ' -p "'.DB_PASS.'"' : '').' -h "'.DB_HOST.'" "'.DB_NAME.'" '
+				.'| sed -e \'s/DEFINER[ ]*=[ ]*[^*]*\*/\*/\' '
+				.'| sed \'s/ AUTO_INCREMENT=[0-9]*\b//g\' > "'.$dest.'.exporting.sql"'; 
+
+			exec($cmd, $output, $returnVar);
+			if (!empty($returnVar) || $output){
+				@unlink($dest.'.exporting.sql');
+				die_error('an error occurred: '.$output[0]);
+			}
+			if (!rename($dest.'.exporting.sql', $dest.'.sql'))
+				die_error('an error occurred: '.$output[0]);
+			echo 'done'.PHP_EOL; 
+			exit(0);
+			
+		case 'db_clear':
 			$input = readline('Are you SURE you want to CLEAR ALL extracted data? [y/N] ');
 			
 			if ($input === 'y'){
@@ -43,9 +67,9 @@ function admin(){
 			exit(0);
 
 		case 'reset':
+			// @todo: implement factory reset
 			break;
 			
-			// @todo: implement factory reset
 			$input = readline('You are about to reset the whole installation to a fresh one. Are you SURE you want to RESET the whole installation? [y/N] ');
 			
 			if ($input === 'y'){

@@ -336,7 +336,7 @@ CREATE TABLE `workers` (
 /*!50001 SET character_set_results     = utf8mb4 */;
 /*!50001 SET collation_connection      = utf8mb4_unicode_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50013 */
 /*!50001 VIEW `entities_by_name` AS select `entities`.`id` AS `id`,`entities`.`type` AS `type`,`entities`.`subtype` AS `subtype`,`entities`.`name` AS `name`,`entities`.`slug` AS `slug`,`entities`.`first_name` AS `first_name`,`entities`.`fetched` AS `fetched`,`entities`.`country` AS `country`,`entities`.`national_id` AS `national_id`,`entities`.`keywords` AS `keywords` from `entities` order by `entities`.`name`,`entities`.`first_name` limit 500 */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;

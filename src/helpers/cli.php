@@ -228,7 +228,7 @@ function get_cli_commands(){
 		'push [-m "COMMENT"]' => 'push all local changes to the remote repository (optionally with comment COMMENT)',
 		'replace STRING_A STRING_B' => 'replace STRING_A with STRING_B in all PHP files. Use with caution!',
 		'admin clear' => 'empty several tables to throw a fresh spider (do NOT use in production!)',
-		'export' => 'export the current database\'s schema to database/structure.sql (use with caution!)',
+		'admin db_export' => 'export the current database\'s schema to database/structure.sql (use with caution!)',
 		'compile' => 'compile manuals and translations. Called by "smap push" before pushing changes.'
 	);
 }

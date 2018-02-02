@@ -142,7 +142,6 @@ class MainController {
 			case 'daemon':
 			case 'admin':
 			case 'compile':
-			case 'export':
 			
 				if (!IS_CLI)
 					return false;
