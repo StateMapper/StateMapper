@@ -173,7 +173,12 @@ function repair_bulletin($schema, $date){
 		return false;
 	}
 	
-	$filePath = DATA_PATH.'/'.$schema.'/'.$datePath.'.'.strtolower($bulletin['format']);
+	$filePath = get_bulletin_path(array(
+		'date' => $date,
+		'schema' => $schema,
+		'format' => $bulletin['format'],
+	));
+	
 	$filePath = $fetcher->get_content_path($filePath, false); // TODO: should plan extensions too!!!
 	
 	if (file_exists($filePath)){
