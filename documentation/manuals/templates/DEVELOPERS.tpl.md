@@ -2,7 +2,7 @@
 
 {Include header(DEVELOPERS GUIDE)}
 
-{IncludeInline beforeIndex}[Workflow](#workflow) · [Extraction](#extraction) · [Folder structure](#folder-structure) · [URI structure](#uri-structure) · [Helper functions](#helper-functions) · [Schemas](#schemas) · [Manuals](#manuals) · [Tips & tricks](#tips--tricks)
+{IncludeInline beforeIndex}[Workflow](#workflow) · [Extraction](#extraction) · [Folder structure](#folder-structure) · [URI structure](#uri-structure) · [Schemas](#schemas) · [Manuals](#manuals) · [Tips & tricks](#tips--tricks)
 
 {Include privacyAlert}
 
@@ -98,12 +98,6 @@ The source file of this diagram can be found at ```documentation/diagrams/databa
 | | |
 | [/api/CALL.json](https://statemapper.net/api/providers.json) | JSON API endpoints start with ```api/``` and end up in ```.json``` |
 
-
-## Helper functions:
-
-Helpers function are files holding all sorts of useful functions for many tasks. All the following helpers are located in ```src/helpers/THE_HELPER.php```, and most are loaded from ```src/helpers/boot.php``` (where these descriptions are, too):
-
-{HelpersTable}
 
 ## Schemas:
 
