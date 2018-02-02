@@ -113,7 +113,9 @@ Please refer to the [Schemas documentation](SCHEMAS.md#top).
 
 If needed, please edit Github manuals from ```documentation/manuals/templates``` (```.tpl.md``` files) and ```documentation/manuals/parts``` (```.part.md``` files). 
 
-Patterns like ```{Include[Inline] name_of_part_file}``` and ```{Include[Inline] name_of_part_file(var1[, var2, ..])}``` will be replaced by the part file ```documentation/manuals/parts/name_of_part_file.part.md```, with patterns ```{$1}```, ```{$2}```, ```{$3}``` replaced by arguments ```var1```, ```var2```, ```var3```.
+Patterns like ```{Include[Inline] name_of_part_file}``` and ```{Include[Inline] name_of_part_file(var1[, var2, ..])}``` will be replaced by the part file ```documentation/manuals/templates/parts/name_of_part_file.part.md```, with patterns ```{$1}```, ```{$2}```, ```{$3}``` replaced by arguments ```var1```, ```var2```, ```var3```.
+
+Patterns like ```{CopyTo path/DEST.md}``` at the begining of a manual file will make it compile to additional paths ```BASE_PATH/path/DEST.md```.
 
 Before commiting your changes, compile the manuals to ```documentation/manuals``` (```.md``` files) with ```smap compile```.
 
@@ -123,9 +125,9 @@ Before commiting your changes, compile the manuals to ```documentation/manuals``
 
 **Debug & errors:**
 
-* the ```debug($whatever, $echo = true)``` will print whatever variable in a JSON human-readable way.
-* the ```die_error($string, $opts = array())``` will generate a beautiful error on the web GUI (and a nice response on the JSON and CLI APIs too).
-* when logged in (from the copyright's menu), executed queries can be displayed clicking the "X queries" icon in the footer.
+* ```debug($whatever, $echo = true)``` will print whatever variable in a JSON human-readable way.
+* ```die_error($string, $opts = array())``` will generate a beautiful error in most contexts (web, ajax, JSON API or CLI).
+* when logged in, executed MySQL queries can be displayed from the debug bar in the footer.
 
 **Disk space:**
 
