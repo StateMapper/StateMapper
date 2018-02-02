@@ -128,6 +128,9 @@ exit(); // this file only serves for translation purpose
 		if (preg_match('#^(.*)\.tpl\.md$#iu', $file, $fileParts)){
 			$filename = $fileParts[1];
 			$content = file_get_contents(BASE_PATH.'/documentation/manuals/templates/'.$file);
+			
+			$content = str_replace('{RepoRoot}', get_repository_url('blob/master'), $content);
+			
 			$copy_to = array();
 			
 			// compile all manuals to documentation/manuals/

@@ -1,5 +1,5 @@
 <div align="center" id="top">
-	<a href="https://github.com/StateMapper/StateMapper#top" title="Go to the project's homepage"><img src="https://github.com/StateMapper/StateMapper/blob/master/documentation/logo/logo-manuals.png" /></a><br>
+	<a href="https://github.com/StateMapper/StateMapper#top" title="Go to the project's homepage"><img src="{RepoRoot}/documentation/logo/logo-manuals.png" /></a><br>
 	<h3 align="center">SCHEMAS DOCUMENTATION</h3>
 </div>
 
