@@ -65,23 +65,23 @@ The source file of this diagram can be found at ```documentation/diagrams/databa
 
 | Folder | Description |
 | ------- | ------ |
-| [bulletins/](https://github.com/StateMapper/StateMapper/tree/master/src/bulletins) | where bulletins are stored after download |
-| [database/](https://github.com/StateMapper/StateMapper/tree/master/databases) | database files (including .sql) |
+| [bulletins/](https://github.com/StateMapper/StateMapper/tree/master/bulletins) | where bulletins are stored after download |
+| [database/](https://github.com/StateMapper/StateMapper/tree/master/database) | database files (including .sql) |
 | [documentation/](https://github.com/StateMapper/StateMapper/tree/master/documentation) | documentation files (graphic material, diagrams, manuals..) |
 | [schemas/](https://github.com/StateMapper/StateMapper/tree/master/schemas) | bulletin definitions (schemas) per country/continent |
 | [scripts/](https://github.com/StateMapper/StateMapper/tree/master/scripts) | bash scripts (```smap``` command) |
 | [src/](https://github.com/StateMapper/StateMapper/tree/master/src) | core files of the app |
 | [src/controller/](https://github.com/StateMapper/StateMapper/tree/master/src/controller) | controller layer |
-| [src/fetcher/](../../src/fetcher) | fetch layer |
-| [src/parser/](../../src/parser) | parse layer |
-| [src/extractor/](../../src/extractor) | extract layer |
-| [src/daemon/](../../src/daemon) | daemon script |
-| [src/spider/](../../src/spider) | spider (and workers) layer |
-| [src/templates/](../../src/templates) | page and partial template files |
-| [src/helpers/](../../src/helpers) | helper functions |
-| [src/addons/](../../src/addons) | addons likes Wikipedia suggs, Geoencoding, Website autodetection..  |
-| [src/languages/](../../src/languages) | translation files |
-| [src/assets/](../../src/assets) | web assets of the app (images, fonts, .css, .js, ..) |
+| [src/fetcher/](https://github.com/StateMapper/StateMapper/tree/master/src/fetcher) | fetch layer |
+| [src/parser/](https://github.com/StateMapper/StateMapper/tree/master/src/parser) | parse layer |
+| [src/extractor/](https://github.com/StateMapper/StateMapper/tree/master/src/extractor) | extract layer |
+| [src/daemon/](https://github.com/StateMapper/StateMapper/tree/master/src/daemon) | daemon script |
+| [src/spider/](https://github.com/StateMapper/StateMapper/tree/master/src/spider) | spider (and workers) layer |
+| [src/templates/](https://github.com/StateMapper/StateMapper/tree/master/src/templates) | page and partial template files |
+| [src/helpers/](https://github.com/StateMapper/StateMapper/tree/master/src/helpers) | helper functions |
+| [src/addons/](https://github.com/StateMapper/StateMapper/tree/master/src/addons) | addons likes Wikipedia suggs, Geoencoding, Website autodetection..  |
+| [src/languages/](https://github.com/StateMapper/StateMapper/tree/master/src/languages) | translation files |
+| [src/assets/](https://github.com/StateMapper/StateMapper/tree/master/src/assets) | web assets of the app (images, fonts, .css, .js, ..) |
 
 
 ## URI structure:
@@ -208,7 +208,7 @@ Before commiting your changes, compile the manuals with ```smap compile``` (incl
 
 **Graphics:**
 
-* The main logo was made using the [Megrim font](../../src/assets/font/megrim) and the [FontAwesome](http://fontawesome.io/icons/)'s "map-signs" icon. Source files can be found in the [logo documentation folder](../logo) (```.xcf```) and opened with [GIMP](https://www.gimp.org/).
+* The main logo was made using the [Megrim font](https://github.com/StateMapper/StateMapper/tree/master/src/assets/font/megrim) and the [FontAwesome](http://fontawesome.io/icons/)'s "map-signs" icon. Source files can be found in the [logo documentation folder](../logo) (```.xcf```) and opened with [GIMP](https://www.gimp.org/).
 * Please optimize all images included in the web front, and keep original files. To optimize all the images in the current folder, try the following:
    ```bash
    find ./ -type f -iname "*.FORMAT" -exec mogrify -verbose -format FORMAT -layers Dispose -resize HEIGHT\>xWIDTH\> {} + # to resize all images in the CURRENT folder (recursive)
