@@ -56,7 +56,7 @@ Please read the [Extraction section of the Schemas documentation](SCHEMAS.md#ext
 
 Here is an overview of the database tables:
 
-![Database diagram](../diagrams/database_diagram.png)
+![Database diagram](https://github.com/StateMapper/StateMapper/blob/master/documentation/diagrams/database_diagram.png)
 
 The source file of this diagram can be found at ```documentation/diagrams/database_diagram.mwb``` and edited with [MySQL Workbench](https://www.mysql.com/products/workbench/design/).
 
