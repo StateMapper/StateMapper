@@ -107,7 +107,7 @@ Helpers function are files holding all sorts of useful functions for many tasks.
 
 ## Schemas:
 
-Please refer to the [Schemas documentation](SCHEMAS.md#top).
+Please refer to the [Schemas documentation]({RepoRoot}/tree/master/schemas#top).
 
 ## Manuals:
 
