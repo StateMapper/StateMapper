@@ -170,6 +170,8 @@ exit(); // this file only serves for translation purpose
 						
 					$part = file_get_contents($path);
 					
+					$part = str_replace('{RepoRoot}', get_repository_url('blob/master'), $part);
+					
 					// inject call variables in the template part
 					if (preg_match_all('#\{\s*\$([0-9]+)\s*\}#ius', $part, $vars, PREG_SET_ORDER))
 						foreach ($vars as $var){
