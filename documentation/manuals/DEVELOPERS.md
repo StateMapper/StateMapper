@@ -113,8 +113,6 @@ Helpers function are files holding all sorts of useful functions for many tasks.
 | Helper | Description |
 | ---- | ---- |
 | boot | helpers' initialization (includes all the following) |
-| compile | manuals' compilation methods (generates this manual) |
-| export | export function for database structure dump |
 | actions | actions (hooks) and filters, to add modularity |
 | ajax | ajax handling |
 | cli | command-line help (CLI) |
@@ -141,7 +139,6 @@ Helpers function are files holding all sorts of useful functions for many tasks.
 | fetch | remote URL fetching |
 | urls | URL/permalinks helpers |
 | seo | search engine optimization (SEO) |
-| images | images optimization (still under development, not called yet) |
 | time | time/duration/date functions |
 | db | database and query handler |
 | bulletins | bulletin helpers |
@@ -154,9 +151,11 @@ Helpers function are files holding all sorts of useful functions for many tasks.
 | assets | asset management (css, js..) |
 | license | licensing helpers |
 | lists | entity lists management |
+| compile | manuals' compilation methods (generates this manual) |
 | daemon | daemon control functions (only via CLI) |
 | admin | admin utility functions (only via CLI) |
 | tests | testing functions (only via CLI) |
+| images | images optimization (still under development, not called yet) |
 | error-class |  |
 
 

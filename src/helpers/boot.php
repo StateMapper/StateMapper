@@ -26,8 +26,6 @@ if (!defined('BASE_PATH'))
 // LOAD ALL HELPERS   		<-- leave this comment as it is, the following list is parsed from PHP to be injected in the DEVELOPERS manual 
 
 //require 'boot.php'; 		// helpers' initialization (includes all the following)
-//require 'compile.php'; 	// manuals' compilation methods (generates this manual)
-//require 'export.php'; 	// export function for database structure dump
 require 'actions.php';		// actions (hooks) and filters, to add modularity
 require 'ajax.php';			// ajax handling
 require 'cli.php';			// command-line help (CLI)
@@ -54,7 +52,6 @@ require 'currency.php';		// currencies handling
 require 'fetch.php';		// remote URL fetching
 require 'urls.php';			// URL/permalinks helpers
 require 'seo.php';			// search engine optimization (SEO)
-//require 'images.php';		// images optimization (still under development, not called yet)
 require 'time.php';			// time/duration/date functions
 require 'db.php';			// database and query handler
 require 'bulletins.php';	// bulletin helpers
@@ -67,9 +64,11 @@ require 'names.php';		// people's name helpers
 require 'assets.php';		// asset management (css, js..)
 require 'license.php';		// licensing helpers
 require 'lists.php';		// entity lists management
+// require 'compile.php'; 	// manuals' compilation methods (generates this manual)
 // require 'daemon.php'; 	// daemon control functions (only via CLI)
 // require 'admin.php'; 	// admin utility functions (only via CLI)
 // require 'tests.php'; 	// testing functions (only via CLI)
+// require 'images.php';	// images optimization (still under development, not called yet)
 
 // END LOAD ALL HELPERS		<-- leave this comment as it is, the preceeding list is parsed from PHP to be injected in the DEVELOPERS manual 
 
