@@ -129,7 +129,7 @@ exit(); // this file only serves for translation purpose
 			$filename = $fileParts[1];
 			$content = file_get_contents(BASE_PATH.'/documentation/manuals/templates/'.$file);
 			
-			$content = str_replace('{RepoRoot}', get_repository_url('blob/master'), $content);
+			$content = str_replace('{RepoRoot}', get_repository_url(), $content);
 			
 			$copy_to = array();
 			
@@ -170,7 +170,7 @@ exit(); // this file only serves for translation purpose
 						
 					$part = file_get_contents($path);
 					
-					$part = str_replace('{RepoRoot}', get_repository_url('blob/master'), $part);
+					$part = str_replace('{RepoRoot}', get_repository_url(), $part);
 					
 					// inject call variables in the template part
 					if (preg_match_all('#\{\s*\$([0-9]+)\s*\}#ius', $part, $vars, PREG_SET_ORDER))

@@ -25,7 +25,7 @@ The processing layers can be described as follows:
 - Then the workers, if configured to, can call the extractor (extract layer) on the parsed object to convert it to *entities* (*institutions*, *companies* and *people*), *precepts* (small texts) and *statuses* (tiny pieces of information). 
 - The controller and api layers are only here to route HTTP and CLI calls to the frontend GUI, and to each processing layer separately.
 
-![Classes diagram]({RepoRoot}/documentation/diagrams/classes_diagram.png)
+![Classes diagram]({RepoRoot}/blob/master/documentation/diagrams/classes_diagram.png)
 
 The source file of this diagram can be found at ```documentation/diagrams/classes_diagram.dia``` and edited with [Dia](http://dia-installer.de/download/linux.html): ```sudo apt-get install dia```
 
@@ -49,7 +49,7 @@ Please read the [Extraction section of the Schemas documentation]({RepoRoot}/tre
 
 Here is an overview of the database tables:
 
-![Database diagram]({RepoRoot}/documentation/diagrams/database_diagram.png)
+![Database diagram]({RepoRoot}/blob/master/documentation/diagrams/database_diagram.png)
 
 The source file of this diagram can be found at ```documentation/diagrams/database_diagram.mwb``` and edited with [MySQL Workbench](https://www.mysql.com/products/workbench/design/).
 
