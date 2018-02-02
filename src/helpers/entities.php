@@ -1011,7 +1011,7 @@ function query_entities($args, &$left = null){
 		'misc' => null, // [buggy]
 		'limit' => 0,
 		'count' => false,
-		'use_views' => true,
+		'use_views' => DATABASE_USE_VIEWS,
 	);
 	$join = $where = $groupby = array();
 	

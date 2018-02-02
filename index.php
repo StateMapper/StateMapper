@@ -72,6 +72,9 @@ define('SCHEMAS_PATH', BASE_PATH.'/schemas');
 
 ini_set('max_execution_time', MAX_EXECUTION_TIME);
 
+// use views? (experimental)
+define('DATABASE_USE_VIEWS', false);
+
 // constants to lighten the database
 define('FIRST_NAME', 1);
 define('LAST_NAME', 2);
