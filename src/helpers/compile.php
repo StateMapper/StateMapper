@@ -101,7 +101,7 @@ exit(); // this file only serves for translation purpose
 		}
 
 	$statusTable = '
-	| | Type | Action | Meaning | Required attributes |
+	| ---- | Type | Action | Meaning | Required attributes |
 	| ---- | ---- | ----- | ----- | ---- |
 	'.implode("\n", $statusTable).'
 	';
