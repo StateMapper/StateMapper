@@ -685,7 +685,7 @@ function print_entity_statuses($statuses, $target, $query){
 				$item .= '</div>'; // close the entity-stat div
 
 				if ($s['count'] <= 5){
-					$statuses = query_statuses($cquery);
+					$statuses = $s['statuses'];//query_statuses($cquery);
 					
 					if (empty($statuses))
 						print_inline_error('no status returned ( <= 5)');
