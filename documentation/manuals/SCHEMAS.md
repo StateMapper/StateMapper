@@ -90,9 +90,9 @@ Status are sorted by ```type``` and ```action``` through the ```schemas/status.j
 
 
 
-	| | Type | Action | Meaning | Required attributes |
-	| ---- | ---- | ----- | ----- | ---- |
-	| <img src="https://statemapper.net/src/addons/fontawesome_favicons/birthday-cake.ico" valign="middle" /> | ```capital``` | ```new``` | company foundation | amount: the amount of capital | 
+| | Type | Action | Meaning | Required attributes |
+| ---- | ---- | ----- | ----- | ---- |
+| <img src="https://statemapper.net/src/addons/fontawesome_favicons/birthday-cake.ico" valign="middle" /> | ```capital``` | ```new``` | company foundation | amount: the amount of capital | 
 | <img src="https://statemapper.net/src/addons/fontawesome_favicons/money.ico" valign="middle" /> | ```capital``` | ```increase``` | capital increase | amount: the amount of increase | 
 | <img src="https://statemapper.net/src/addons/fontawesome_favicons/credit-card.ico" valign="middle" /> | ```fund``` | ```increase``` | company funding | amount: the funding amount | 
 | <img src="https://statemapper.net/src/addons/fontawesome_favicons/user-circle-o.ico" valign="middle" /> | ```owner``` | ```update``` | new owner | target: the owner's name | 
@@ -106,7 +106,8 @@ Status are sorted by ```type``` and ```action``` through the ```schemas/status.j
 | <img src="https://statemapper.net/src/addons/fontawesome_favicons/exchange.ico" valign="middle" /> | ```name``` | ```update``` | name change | target: the new entity name | 
 | <img src="https://statemapper.net/src/addons/fontawesome_favicons/times.ico" valign="middle" /> | ```name``` | ```end``` | company dissolution |  | 
 | <img src="https://statemapper.net/src/addons/fontawesome_favicons/shopping-cart.ico" valign="middle" /> | ```absorb``` | ```new``` | company absorption | target: the absorbed company | 
-	
+
+
 
 
 -----

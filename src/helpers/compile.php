@@ -102,10 +102,11 @@ exit(); // this file only serves for translation purpose
 
 	$statusTable = '
 
-	| | Type | Action | Meaning | Required attributes |
-	| ---- | ---- | ----- | ----- | ---- |
-	'.implode("\n", $statusTable).'
-	';
+| | Type | Action | Meaning | Required attributes |
+| ---- | ---- | ----- | ----- | ---- |
+'.implode("\n", $statusTable).'
+
+';
 
 	$files = ls_dir(BASE_PATH.'/documentation/manuals/templates');
 	usort($files, function($a, $b){
