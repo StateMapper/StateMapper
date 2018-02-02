@@ -13,11 +13,11 @@ The processing layers can be described as follows:
 
 | | Layer name | Responsability |
 | -------- | ---- | --- |
-| <img src="{IncludeIcon terminal}" valign="middle" /> | daemon | start and stop bulletin spiders |
-| <img src="{IncludeIcon bug}" valign="middle" /> | spider | trigger workers to fetch, parse and extract bulletins |
 | <img src="{IncludeIcon cloud-download}" valign="middle" /> | fetch | download bulletins from bulletin providers |
 | <img src="{IncludeIcon tree}" valign="middle" /> | parse | parse bulletins and trigger subsequent fetches (follows) |
 | <img src="{IncludeIcon magic}" valign="middle" /> | extract | extract precepts and status from parsed objects |
+| <img src="{IncludeIcon bug}" valign="middle" /> | spider | trigger workers to fetch, parse and extract bulletins |
+| <img src="{IncludeIcon terminal}" valign="middle" /> | daemon | start and stop bulletin spiders |
 | <img src="{IncludeIcon usb}" valign="middle" /> | controller | route calls and prepare data for the templates |
 
 - The daemon throws spiders (one per type of bulletin), which in their turn throw workers (one per day and type of bulletin). 
