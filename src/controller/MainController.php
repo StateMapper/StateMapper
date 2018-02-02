@@ -108,7 +108,7 @@ class MainController {
 		}
 		
 		$smap['filters']['loc'] = !empty($smap['filters']['loc']) ? urldecode($smap['filters']['loc']) : null;
-			
+		
 		$smap['page'] = $bits ? array_shift($bits) : 'browser';
 		
 		// detect pages such as /(institution|company|person)
@@ -135,7 +135,7 @@ class MainController {
 			return array(
 				'template' => 'cli',
 			);
-		
+
 		switch ($smap['page']){
 			
 			// CLI-only methods

@@ -1,3 +1,5 @@
+{CopyTo src/languages/README.md}
+
 {Include header(TRANSLATION GUIDE)}
 
 {IncludeInline beforeIndex}[Requirements](#requirements) · [Configuration](#configuration) · [Translation instructions](#translation-instructions)

@@ -148,7 +148,7 @@ function get_locations_label($loc, $short = false){
 	foreach ($loc as $l){
 		$l = explode('/', $l);
 		
-		if ($c = get_country_schema(strtoupper(array_shift($l)))){
+		if ($c = get_schema(strtoupper(array_shift($l)))){
 			if (!$l)
 				$str[] = $c->name; // country
 				
@@ -198,7 +198,7 @@ function get_location_filter_array($loc){
 }
 
 function get_country_name($country){
-	$schema = get_country_schema($country);
+	$schema = get_schema($country);
 	return $schema ? $schema->name : $country;
 }
 

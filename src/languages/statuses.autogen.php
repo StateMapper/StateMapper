@@ -22,7 +22,7 @@
 
 /*
  * /!\ AUTO-GENERATED TRANSLATION FILE, DO NOT MODIFY! 
- * Instead, you may edit schemas/status.json and regenerate this file entering "smap compile" in a console.
+ * Instead, you may edit schemas/statuses.json and regenerate this file entering "smap compile" in a console.
  */
  
 exit(); // this file only serves for translation purpose

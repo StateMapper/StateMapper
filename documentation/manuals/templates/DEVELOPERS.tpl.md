@@ -1,3 +1,5 @@
+{CopyTo src/README.md}
+
 {Include header(DEVELOPERS GUIDE)}
 
 {IncludeInline beforeIndex}[Workflow](#workflow) · [Extraction](#extraction) · [Folder structure](#folder-structure) · [URI structure](#uri-structure) · [Helper functions](#helper-functions) · [Schemas](#schemas) · [Manuals](#manuals) · [Tips & tricks](#tips--tricks)

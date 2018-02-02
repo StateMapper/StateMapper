@@ -185,7 +185,7 @@ function get_entity_website($e, $allow_fetch = false){
 	if (!$allow_fetch)
 		return null;
 	
-	$schema = get_country_schema($e['country']);
+	$schema = get_schema($e['country']);
 
 	$url = false;
 	$matches = array();

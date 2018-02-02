@@ -121,6 +121,8 @@ function print_actions_menu($entity, $actions, $action_class, $wrap_class = '', 
 
 function print_nice_alert($alert, $force_print = false){
 	if (defined('SMAP_JS_PRINTED') || $force_print){
+		
+		// @todo: fix this (loading before $ in the homepage -due to lazyness-)
 		?>
 		<script>
 			$(document).ready(function(){

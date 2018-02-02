@@ -663,7 +663,7 @@ function add_accents($str){
 function get_usual_words($country){
 	static $usuals = array();
 	if (!isset($usuals[$country])){
-		if (!($s = get_country_schema($country)))
+		if (!($s = get_schema($country)))
 			$usuals[$country] = array();
 		else if (!@$s->vocabulary->legalEntityName->usualWords)
 			$usuals[$country] = array();

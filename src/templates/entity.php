@@ -47,7 +47,7 @@ foreach ($entity['summary']['in_my_lists'] as $cur)
 		<div class="entity-intro">
 			<span class="entity-country">
 			<?php
-				$country = get_country_schema($entity['country']);
+				$country = get_schema($entity['country']);
 
 				$entityCountry = $country;
 				if ($locationObj)
@@ -55,14 +55,14 @@ foreach ($entity['summary']['in_my_lists'] as $cur)
 				
 				echo '<a href="'.url(array(
 					'country' => $entity['country'],
-				)).'" title="See all '.get_country_schema($entity['country'])->adjective.' entities" class="clean-links">';
+				)).'" title="See all '.get_schema($entity['country'])->adjective.' entities" class="clean-links">';
 					
 				if ($avatarUrl = get_flag_url($entityCountry))
 					echo '<img class="entity-avatar" src="'.$avatarUrl.'" />';
 
 				// country name
-				if (get_country_schema($entityCountry))
-					echo get_country_schema($entityCountry)->name;
+				if (get_schema($entityCountry))
+					echo get_schema($entityCountry)->name;
 				else if ($locationObj && !empty($locationObj['countryName']))
 					echo $locationObj['countryName'];
 				else
@@ -89,11 +89,11 @@ foreach ($entity['summary']['in_my_lists'] as $cur)
 				case 'institution':
 					echo ' <a href="'.url(array(
 						'country' => $entity['country']
-					), $conv[$entity['type']]['slug']).'" title="'.esc_attr('See all '.get_country_schema($entity['country'])->adjective.' '.$conv[$entity['type']]['plural']).'">'.ucfirst($conv[$entity['type']]['singular']).'</a>';
+					), $conv[$entity['type']]['slug']).'" title="'.esc_attr('See all '.get_schema($entity['country'])->adjective.' '.$conv[$entity['type']]['plural']).'">'.ucfirst($conv[$entity['type']]['singular']).'</a>';
 					break;
 				case 'company':
 					if (!empty($entity['subtype'])){
-						$c = get_country_schema($entity['country']);
+						$c = get_schema($entity['country']);
 						$label = $c->vocabulary->legalEntityTypes->{$entity['subtype']}->name;
 						if (!empty($c->vocabulary->legalEntityTypes->{$entity['subtype']}->urls)){
 							if (isset($c->vocabulary->legalEntityTypes->{$entity['subtype']}->urls->{get_lang()}))
@@ -125,7 +125,7 @@ foreach ($entity['summary']['in_my_lists'] as $cur)
 					'country' => $entity['country']
 				), $conv[$entity['type']]['slug']);
 
-				?>" title="<?= esc_attr(sprintf(_('See all %s %s'), get_country_schema($entity['country'])->adjective, $conv[$entity['type']]['plural'])) ?>"><?= '<i class="fa fa-'.get_entity_icon($entity).'"></i>' ?></a><?php 
+				?>" title="<?= esc_attr(sprintf(_('See all %s %s'), get_schema($entity['country'])->adjective, $conv[$entity['type']]['plural'])) ?>"><?= '<i class="fa fa-'.get_entity_icon($entity).'"></i>' ?></a><?php 
 				
 					if (!empty($entity))
 						echo ' <h1 class="seemless">'.get_entity_title($entity).'</h1>';

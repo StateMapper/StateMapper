@@ -130,7 +130,7 @@ $cbs = get_multisel_cbs();
 									
 									$ccountry = null;
 									foreach ($subtypes as $t){
-										$s = get_country_schema($t['country']);
+										$s = get_schema($t['country']);
 										$name = $t['subtype'];
 										
 										$count = $t['count'];/*query_entities(array(

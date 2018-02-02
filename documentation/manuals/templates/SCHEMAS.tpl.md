@@ -1,3 +1,5 @@
+{CopyTo schemas/README.md}
+
 {Include header(SCHEMAS DOCUMENTATION)}
 
 {IncludeInline beforeIndex}[File structure](#file-structure) · [Sections](#sections) · [Reserved attributes](#reserved-attributes) · [Transformations](#transformations) · [Extraction format](#extraction-format)
@@ -77,7 +79,7 @@ While implementing the parsingProtocoles, the following attributes have special 
 | ```note``` | whatever meaningful ID or natural label |
 | ```target``` | an entity name the status is targetting |
 
-Status are sorted by ```type``` and ```action``` through the ```schemas/status.json``` file, as follows:
+Status are sorted by ```type``` and ```action``` through the ```schemas/statuses.json``` file, as follows:
 
 {StatusTable}
 

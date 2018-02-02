@@ -247,7 +247,7 @@ class BulletinExtractor {
 								switch ($tr->type){
 									
 									case 'formatCurrency':
-										$currency = get_country_schema($schemaObj->id)->officialCurrencies[0];
+										$currency = get_schema($schemaObj->id)->officialCurrencies[0];
 										if (is_array($nCur[$part])){
 											$nCur[$part] = isset($nCur[$part]['amount']) ? $nCur[$part]['amount'] : array_shift($nCur[$part]);
 											if (isset($nCur[$part]['unit']))
@@ -350,7 +350,7 @@ class BulletinExtractor {
 
 	function save_extract($obj, $query){
 		$schemaObj = get_schema($query['schema']);
-		$countrySchema = get_country_schema($schemaObj);
+		$countrySchema = get_schema($schemaObj);
 		
 		if (!IS_CLI && !empty($_GET['filter']))
 			return;
@@ -450,7 +450,7 @@ class BulletinExtractor {
 				}
 				*/
 				
-				if (!($country = get_country_schema($schemaObj->id)->id))
+				if (!($country = get_schema($schemaObj->id)->id))
 					die('bad country in extractor');
 					
 				$issuingE = !empty($nCur['issuing']) ? $nCur['issuing'] : array(array(

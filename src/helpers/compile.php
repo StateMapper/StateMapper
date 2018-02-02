@@ -64,26 +64,26 @@ function compile(){
 				}
 		}
 						
-	$dest_file = APP_PATH.'/languages/statuses.php';
+	$dest_file = APP_PATH.'/languages/statuses.autogen.php';
 	@unlink($dest_file);
 	if (file_put_contents($dest_file, '<?php'."\n".get_disclaimer('php').'
 
 
 /*
  * /!\\ AUTO-GENERATED TRANSLATION FILE, DO NOT MODIFY! 
- * Instead, you may edit schemas/status.json and regenerate this file entering "smap compile" in a console.
+ * Instead, you may edit schemas/statuses.json and regenerate this file entering "smap compile" in a console.
  */
  
 exit(); // this file only serves for translation purpose
  
 
 '.implode("\n", $labels)."\n\n"))
-		echo 'generated status translation file src/languages/statuses.php from schemas/status.json'.PHP_EOL;
+		echo 'generated status translation file src/languages/statuses.autogen.php from schemas/statuses.json'.PHP_EOL;
 
 	// now, generate manuals
 	echo 'generating manuals..'.PHP_EOL.PHP_EOL;
 
-	// statuses table
+	// generate statuses table
 	$count = 0;
 	$statusTable = array();
 
@@ -123,14 +123,31 @@ exit(); // this file only serves for translation purpose
 		$helpersTable[] = '| '.$h_id.' | '.$h_desc.' |'."\n";
 	$helpersTable = '| Helper | Description |'."\n".'| ---- | ---- |'."\n".implode('', $helpersTable);
 		
-		
-		
-	// generate each manual file, one by one
+	// generate each .tpl.md manual template file, one by one
 	foreach ($files as $file)
 		if (preg_match('#^(.*)\.tpl\.md$#iu', $file, $fileParts)){
 			$filename = $fileParts[1];
 			$content = file_get_contents(BASE_PATH.'/documentation/manuals/templates/'.$file);
+			$copy_to = array();
 			
+			// compile all manuals to documentation/manuals/
+			if ($filename == 'README')
+				$copy_to[] = 'README.md';
+			else
+				$copy_to[] = 'documentation/manuals/'.$filename.'.md';
+				
+			// first lines can be {CopyTo DEST} (to copy the compile manual to another location in the git)
+			if (preg_match_all('#^(?:\s*\{CopyTo\s+([^\}]+)\s*\})*\s*\{CopyTo\s+([^\}]+)\s*\}#', $content, $copy_pathes, PREG_SET_ORDER)){
+				$content = trim_any(preg_replace('#^'.preg_quote($copy_pathes[0][0], '#').'#', '', $content));
+				foreach (array_slice($copy_pathes[0], 1) as $cpath)
+					if (!empty($cpath)){
+						if (!is_dir(BASE_PATH.'/'.dirname($cpath))){
+							echo 'Bad {CopyTo ..} path "'.$cpath.'" in manual '.$file.PHP_EOL;
+							exit(1);
+						}
+						$copy_to[] = $cpath;
+					}
+			}  
 			// replace variables and inject templates
 			if (preg_match_all('#\{\s*(Include(?:Inline)?)\s+([a-z0-9_-]+)(?:\((.*?)\))?\s*\}#ius', $content, $matches, PREG_SET_ORDER)){
 				foreach ($matches as $m){
@@ -145,7 +162,7 @@ exit(); // this file only serves for translation purpose
 					
 					// retrieve template part
 					$subfile = $m[2].'.part.md';
-					if (!file_exists($path = BASE_PATH.'/documentation/manuals/parts/'.$subfile))
+					if (!file_exists($path = BASE_PATH.'/documentation/manuals/templates/parts/'.$subfile))
 						die_error('missing '.$subfile.' in documentation/manuals/templates/'.$file);
 						
 					$part = file_get_contents($path);
@@ -185,16 +202,20 @@ exit(); // this file only serves for translation purpose
 			
 			// really write the manual to disk
 			if ($content != ''){
-				if ($filename == 'README')
-					$dest_path = 'README.md';
-				else
-					$dest_path = 'documentation/manuals/'.$filename.'.md';
+				foreach ($copy_to as $dest_path){
+					echo '- '.$dest_path;
+					if (!is_writable(dirname(BASE_PATH.'/'.$dest_path))){
+						echo ' -> could NOT be written. Stopping.'.PHP_EOL;
+						exit(1);
+					}
 					
-				@unlink(BASE_PATH.'/'.$dest_path);
-				if (!file_put_contents(BASE_PATH.'/'.$dest_path, $content))
-					die_error('can write '.$dest_path);
-					
-				echo '- '.$dest_path.PHP_EOL;
+					@unlink(BASE_PATH.'/'.$dest_path);
+					if (!file_put_contents(BASE_PATH.'/'.$dest_path, $content)){
+						echo ' -> could NOT be written. Stopping.'.PHP_EOL;
+						exit(1);
+					}
+					echo PHP_EOL;
+				}
 				$count++;
 			}
 		}

@@ -40,7 +40,7 @@ class BulletinController {
 			exit();
 		}*/
 
-		if (!empty($smap['filters']['loc']) && !get_country_schema($smap['filters']['loc']))
+		if (!empty($smap['filters']['loc']) && !get_schema($smap['filters']['loc']))
 			return 'no such schema country';
 			
 		$query = array();
@@ -78,15 +78,15 @@ class BulletinController {
 			
 		$smap['query'] = $query + $smap['query'];
 		
-		// providers page
 		if (empty($smap['call'])){
 
+			// CLI help
 			if (IS_CLI){
-				// CLI help
 				cli_print();
 				exit;
 			}
 
+			// providers page
 			$smap['schemas'] = get_schemas($smap['filters']['loc']);
 
 			if (!empty($smap['raw'])){
@@ -102,6 +102,7 @@ class BulletinController {
 							'region' => !empty($s->region) ? $s->region : null,
 							'country' => !empty($s->country) ? $s->country : null,
 							'continent' => !empty($s->continent) ? $s->continent : null,
+							'avatar' => get_schema_avatar_url($s),
 						);
 					}
 					
@@ -136,7 +137,6 @@ class BulletinController {
 		if (!$query['schema'])
 			return 'bad schema';
 		$query['schema'] = strtoupper(implode('/', $query['schema']));
-		
 		// grab date
 		
 		if (is_dated_mode($smap['call']) && $bits && is_date($bits[0])){

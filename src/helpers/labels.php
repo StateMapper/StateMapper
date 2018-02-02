@@ -228,11 +228,11 @@ function get_status_labels(){
 	if ($cache !== null)
 		return $cache;
 
-	if (!($schema = file_get_contents(SCHEMAS_PATH.'/status.json')))
+	if (!($schema = file_get_contents(SCHEMAS_PATH.'/statuses.json')))
 		die_error('could not read status.json');
 
 	if (!($ccache = parse_schema($schema, $linted)))
-		die_error('bad status.json');
+		die_error('bad statuses.json schema');
 	
 	$cache = $ccache;	
 	return $cache;

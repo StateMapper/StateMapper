@@ -45,11 +45,15 @@ function get_schema($type, $raw = false){
 	if (isset($cache[$type]) && !$raw)
 		return $cache[$type];
 
-	if (strpos($type, '/') === false) // correct country "ES" => "ES/ES"
-		$type = $type.'/'.$type;
-
 	if (!is_valid_schema_path($type))
 		return false;
+
+	// correct ES => ES/ES and ES/BOE => ES/BOE/BOE
+	$type = get_schema_path($type);
+	/*
+	if (strpos($type, '/') === false) // correct country "ES" => "ES/ES"
+		$type = $type.'/'.$type;
+	*/
 
 	$schemaUrl = SCHEMAS_PATH.'/'.$type.'.json';
 	if (!file_exists($schemaUrl) || !is_file($schemaUrl))
@@ -70,6 +74,12 @@ function get_schema($type, $raw = false){
 	return $obj;
 }
 
+function get_schema_path($schema){
+	if (preg_match('#^(.*/)?([^/]+)$#i', $schema, $m))
+		return $m[1].$m[2].'/'.$m[2];
+	return $schema;
+}
+
 function parse_schema($schema, &$linted = null){
 	$linted = strip_comments($schema, 'json');
 	$linted = preg_replace('/^(\s*)(\w+)(\s*:\s*(".*?"|.))/sm', '$1"$2"$3', $linted); // correct keys between quotes
@@ -82,22 +92,20 @@ function get_remote_schema($schema){
 	if (!GITHUB_SYNC)
 		return null;
 		
-	$remoteSchema = file_get_contents('https://raw.githubusercontent.com/'.SMAP_GITHUB_REPOSITORY.'/master/schemas/'.$schema.(strpos($schema, '/') === false ? '/'.$schema : '').'.json');
+	$remoteSchema = file_get_contents('https://raw.githubusercontent.com/'.SMAP_GITHUB_REPOSITORY.'/master/schemas/'.get_schema_path($schema).'.json');
 	if (!empty($remoteSchema) && ($remoteSchema = parse_schema($remoteSchema)))
 		return $remoteSchema;
 	return null;
 }
 
-function get_country_schema($schema){
+function get_country_from_schema($schema){
 	if (is_object($schema))
 		$schema = $schema->id;
-	$schemaParts = explode('/', strtoupper($schema));
-	$code = array_shift($schemaParts);
-	return get_schema($code.'/'.$code);
+	return preg_match('#^([a-z]{2,3})(/.*)?$#iu', $schema, $m) ? $m[1] : null;
 }
 
 function is_country($str){
-	return !!get_country_schema($str);
+	return !!get_schema($str);
 }
 
 function get_schema_title($schema, $query = array(), $short = false){
@@ -133,7 +141,7 @@ function schema_has_feature($schema, $feature){
 
 function get_schema_countries(){
 	$files = array();
-	foreach (ls_dir(BASE_PATH.'/schemas') as $file)
+	foreach (ls_dir(SCHEMAS_PATH) as $file)
 		if (preg_match('#^[A-Z]{2,3}$#i', $file))
 			$files[] = $file;
 	return $files;
@@ -155,8 +163,8 @@ function get_schemas($filter = null){
 
 	queue_schemas($sorted, $files, $dims);
 
+	// add continent countries
 	if ($filter && $s->type == 'continent'){
-		// add continent countries
 		$countries = array();
 		foreach (ls_dir_schemas(SCHEMAS_PATH) as $f){
 			if (($c = get_schema($f)) && $c->type == 'country' && $c->continent == $s->id)
@@ -210,10 +218,10 @@ function ls_dir_schemas($dir, $level = 0){
 
 	foreach (ls_dir($dir) as $file){
 		$isDir = is_dir($dir.'/'.$file);
-		if (!$isDir && !preg_match('#^(.*)(\.json)$#', $file))
+		if (!$isDir && !preg_match('#^(.*)(\.json)$#', $file)) // skip if not a .json
 			continue;
 
-		$fileBase = preg_replace('#^(.*)(\.json)$#', '$1', $file);
+		$fileBase = preg_replace('#^(.*)(\.json)$#', '$1', $file); // strip .json
 		$schema = strtoupper(str_replace(SCHEMAS_PATH.'/', '', $dir.'/'.$fileBase));
 
 		if (!preg_match('#^([a-z]+)/\1$#i', $schema)) // do not add XX/XX (country schemas)
@@ -240,13 +248,6 @@ function ls_dir_schemas($dir, $level = 0){
 	return $fret;
 }
 
-
-function get_country_from_schema($schema){
-	if (is_object($schema))
-		$schema = $schema->id;
-	return preg_match('#^([a-z]{2,3})(/.*)?$#iu', $schema, $m) ? $m[1] : null;
-}
-	
 function get_schema_prop($schema, $prop, $allow_remote_update = false){
 	
 	$val = !empty($schema->{$prop}) ? $schema->{$prop} : array();
@@ -256,4 +257,15 @@ function get_schema_prop($schema, $prop, $allow_remote_update = false){
 		$val = !empty($remoteSchema->{$prop}) ? $remoteSchema->{$prop} : array();
 		
 	return $val;
+}
+
+function get_schema_avatar_url($schema){
+	
+	if (in_array($schema->type, array('continent', 'country'))) // all countries and continents have a flag
+		return get_flag_url($schema->id, IMAGE_SIZE_SMALL);
+		
+	$path = get_schema_path($schema->id);
+	if (SCHEMAS_PATH.'/'.$path.'.png')
+		return SCHEMAS_URL.'/'.$path.'.png';
+	return null;
 }

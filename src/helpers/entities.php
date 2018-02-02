@@ -27,7 +27,7 @@ function parse_entities($options, $oval, $schema, $extraEnt = array(), $doubleCh
 	$options = (array) $options;
 	$starting = !empty($options['starting']);
 
-	$countrySchema = get_country_schema($schema);
+	$countrySchema = get_schema($schema);
 	$extra = !empty($options['entityExtra']) ? (array) $options['entityExtra'] : array();
 
 	//$prefix = !empty($options->allowEntityPrefix) ? $options->allowEntityPrefix : false;
@@ -376,7 +376,7 @@ function insertget_precept($p){
 function get_entity_pattern($schema, $allowEntityPrefix = false, &$companyPattern = null, $strict = true, &$exceptPatterns = ''){
 	// TODO: add cache!
 
-	$countrySchema = strpos($schema, '/') ? get_country_schema($schema) : $schema;
+	$countrySchema = strpos($schema, '/') ? get_schema($schema) : $schema;
 	if (!empty($countrySchema->vocabulary) && !empty($countrySchema->vocabulary->legalEntityTypes)){
 		$patterns = array();
 		$companyPattern = $countrySchema->vocabulary->legalEntityName->pattern;
@@ -532,7 +532,7 @@ function get_entity_title_html($e, $opts = array()){ // /$icon = false, $maxLeng
 		$title = mb_substr($title, 0, $opts['limit'] - 5).'...';
 	}
 	if ($opts['append_country'])
-		$title .= ' ('.get_country_schema($e['country'])->name.')';
+		$title .= ' ('.get_schema($e['country'])->name.')';
 		
 	if (is_dev() && !empty($_GET['stick'])){
 		$stick = ' data-tippy-interactive="1" data-tippy-trigger="click" onclick="return false"';
@@ -623,7 +623,7 @@ function get_entity_patterns($e){
 
 	} else {
 		$name = implode('\s+', $name);
-		$c = get_country_schema($e['country']);
+		$c = get_schema($e['country']);
 
 		$pats = array();
 		if (isset($e['subtype'], $c->vocabulary->legalEntityTypes->{$e['subtype']})){
@@ -929,7 +929,7 @@ function get_company_label($filter = false, $key = 'plural'){
 				break;
 			case 'company':
 				$label = $types[$etype[0]][$key];
-				if (count($etype) > 2 && ($s = get_country_schema(strtoupper($etype[1].'/'.$etype[2])))){
+				if (count($etype) > 2 && ($s = get_schema(strtoupper($etype[1].'/'.$etype[2])))){
 					$label = get_subtype_prop($s->id, $cetype, $filter ? 'shortName' : 'name');
 					if ($filter)
 						$label .= ' ('.$s->name.')';
@@ -949,7 +949,7 @@ function get_subtype_prop($country, $subtype, $prop){
 	$country = explode('/', $subtype);
 	$subtype = strtoupper($country[2]);
 	$country = $country[1];
-	if (($s = get_country_schema($country))
+	if (($s = get_schema($country))
 		&& isset($s->vocabulary, $s->vocabulary->legalEntityTypes, $s->vocabulary->legalEntityTypes->{$subtype}, $s->vocabulary->legalEntityTypes->{$subtype}->{$prop}))
 		return $s->vocabulary->legalEntityTypes->{$subtype}->{$prop};
 	return 'N/D';

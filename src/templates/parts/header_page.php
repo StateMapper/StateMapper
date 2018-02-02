@@ -34,7 +34,7 @@ $query = isset($smap['query']) ? $smap['query'] : null;
 if ($smap && !empty($smap['schemaObj']))
 	$schemaObj = $smap['schemaObj'];
 else if (!empty($smap['filters']['loc']))
-	$schemaObj = get_country_schema($smap['filters']['loc']);
+	$schemaObj = get_schema($smap['filters']['loc']);
 else
 	$schemaObj = null;
 
