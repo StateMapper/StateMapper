@@ -43,7 +43,8 @@ if (!empty($smapDebug['queries']))
 if (!empty($smap['begin'])){
 
 	// generation time
-	$str[] = '<span title="'.esc_attr('This page was generated in '.time_diff($smap['begin'], null, true)).'" class="show-queries left"><i class="fa fa-clock-o"></i> '.time_diff($smap['begin'], null, true).' exec</span>';
+	$diff = time_diff($smap['begin'], time(), true);
+	$str[] = '<span title="'.esc_attr('This page was generated in '.$diff).'" class="show-queries left"><i class="fa fa-clock-o"></i> '.$diff.' exec</span>';
 
 	// fetches
 	if (isset($smap['fetches'])){
