@@ -178,6 +178,8 @@ function get_cli_commands(){
 		
 		'"es?q=rise&limit=3"' => 'search up to 3 Spanish entities matching "rise"',
 		'es -q=rise -limit=3' => 'exact same query in CLI style',
+		'es/institution/ayuntamiento-de-madrid' => 'entity sheet, by URL',
+		'entity/77' => 'entity sheet, by ID',
 		'',
 		
 		'Rewind commands',

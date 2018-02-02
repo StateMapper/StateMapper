@@ -318,7 +318,7 @@ class MainController {
 				// retrieve targeted entity
 				if (
 					($entity_slug = array_shift($bits)) 
-					&& !empty($smap['filters']['loc']) 
+					&& ($etype == 'entity' || !empty($smap['filters']['loc']))
 					&& ($entity = $etype == 'entity' 
 						? get_entity_by_id($entity_slug) 
 						: get_entity_by_slug($entity_slug, $etype, $smap['filters']['loc'])

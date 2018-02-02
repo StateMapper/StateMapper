@@ -563,13 +563,17 @@ function get_entity_icon($r){
 	}
 }
 
-function get_entity_uri($r){
-	return get_uri_from_url(get_entity_url($r));
+function get_entity_uri($r, $keep_entity_id = false){
+	return get_uri_from_url(get_entity_url($r, $keep_entity_id));
 }
 
-function get_entity_url($r){
+function get_entity_url($r, $keep_entity_id = false){
 	if (is_numeric($r))
 		$r = get_entity_by_id($r);
+	
+	if ($keep_entity_id)
+		return add_lang(BASE_URL.'entity/'.$r['id']);
+	
 	return add_lang(BASE_URL.strtolower($r['country']).'/'.$r['type'].'/'.$r['slug']);
 }
 

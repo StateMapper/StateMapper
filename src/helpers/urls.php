@@ -139,7 +139,7 @@ function uri($query = null, $apiCall = null, $passCurrentArgs = array()){
 	
 	else if ($apiCall == 'entity'){
 		if (!empty($query['entity_id']))
-			return get_entity_uri($query['entity_id']);
+			return get_entity_uri($query['entity_id'], !empty($query['keep_entity_id']));
 		else
 			return get_entity_uri(get_entity_by_slug($query['slug'], $query['type'], $query['country']));
 	}

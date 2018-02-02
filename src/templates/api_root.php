@@ -51,6 +51,8 @@ print_header('browser');
 			$query = array('schema' => 'ES/BOE', 'date' => $date);
 			$queryRaw = array('country' => 'es');
 			
+			$entity = get_entity_by_slug('ayuntamiento-de-madrid', 'institution', 'es');
+			
 			foreach (array(
 
 				array('providers', null, 'all schemas'),
@@ -71,7 +73,8 @@ print_header('browser');
 				
 				array('search', array('q' => 'ab'), 'search'),
 				
-				array('entity', array('slug' => 'ayuntamiento-de-madrid', 'type' => 'institution', 'country' => 'es'), 'entity'),
+				array('entity', array('slug' => 'ayuntamiento-de-madrid', 'type' => 'institution', 'country' => 'es'), 'entity sheet, by URL'),
+				array('entity', array('entity_id' => $entity['id'], 'keep_entity_id' => true), 'entity sheet, by ID'),
 				
 			) as $c){
 				$uri = uri($c[1], $c[0]);
