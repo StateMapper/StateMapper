@@ -90,7 +90,7 @@ function print_scss_tags(){
 		
 		$is_inline = !$is_writable || (!IS_INSTALL && !empty($scss_config['inline']));
 		
-		$scssName = 'smap-'.implode('+', array_keys($path)).'-'.($is_inline ? 'inline' : $formatter).'-'.$date.'-'.ASSETS_INC.'.css';
+		$scssName = 'smap-'.hash('sha256', implode('+', array_keys($path))).'-'.($is_inline ? 'inline' : $formatter).'-'.$date.'-'.ASSETS_INC.'.css';
 		$dest = get_tmp_folder().'/'.$scssName;
 		$css = false;
 
@@ -288,7 +288,7 @@ function print_js_tags(){
 		$date = $date ? max(filemtime($path), $date) : filemtime($path);
 	}
 	
-	$jsName = 'smap-'.implode('+', array_keys($js_ids)).'-'.$date.'-'.ASSETS_INC.'.js';
+	$jsName = 'smap-'.hash('sha256', implode('+', array_keys($js_ids))).'-'.$date.'-'.ASSETS_INC.'.js';
 	$dest = get_tmp_folder().'/'.$jsName;
 
 	// generate css if dest missing or dest's modification time is earlier than max of scss's modification times.
