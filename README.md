@@ -47,7 +47,7 @@ If you like this project, whatever skills you have, there surely is a way you ca
 | Commission | Responsability | Profile | Instructions |
 | ----- | ------ | ---- | ---- |
 | [Counter-bribery **Strategists**](https://github.com/StateMapper/StateMapper/projects/1) | to elaborate the best strategy and endorse public communications | political scientists, journalists, magistrates, social activists | |
-| [Core **Wizards**](https://github.com/StateMapper/StateMapper/projects/2) | to develop and maintain the core code | PHP/MySQL/JS/Regexp experts | [Developers guide &rarr;](documentation/manuals/DEVELOPERS.md#top) |
+| [Core **Wizards**](https://github.com/StateMapper/StateMapper/projects/2) | to develop and maintain the core code | PHP/MySQL/JS/Regexp experts | [Developers guide &rarr;](https://github.com/StateMapper/StateMapper/tree/master/src#top) |
 | [<img src="https://statemapper.net/src/addons/fontawesome_favicons/fire.ico?color=0366d6" valign="middle" /> Schema **Soldiers**](https://github.com/StateMapper/StateMapper/projects/3) | to implement and maintain bulletin schemas | JSON/Regexp experts | [Soldiers guide &rarr;](documentation/manuals/SOLDIERS.md#top) |
 | [<img src="https://statemapper.net/src/addons/fontawesome_favicons/globe.ico?color=0366d6" valign="middle" /> Country **Ambassadors**](https://github.com/StateMapper/StateMapper/projects/4) | to host bulletins backup nodes, check bulletins' integrity and translate the UI | collectives of social rights | [Ambassadors' guide &rarr;](documentation/manuals/AMBASSADORS.md#top) |
 

@@ -1,13 +1,13 @@
 <div align="center" id="top" valign="top">
-	<a href="https://github.com/StateMapper/StateMapper#top"><img src="documentation/logo/logo-manuals.png" /></a>
+	<a href="{RepoRoot}#top"><img src="documentation/logo/logo-manuals.png" /></a>
 	<h3 align="center">{IncludeVar Slogan}</h3>
 </div>
 <p align="center" id="badges">
 	<a href="#top"><img src="https://img.shields.io/badge/manuals-draft-red.svg?style=flat-square" /></a>
 	<a href="http://php.net/"><img src="https://img.shields.io/badge/language-PHP%2FMySQL-yellow.svg?style=flat-square" /></a>
 	<a href="https://www.debian.org/derivatives/"><img src="https://img.shields.io/badge/platform-Linux-lightgrey.svg?style=flat-square" /></a>
-	<a href="https://github.com/StateMapper/StateMapper/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-{IncludeEncodedVar LicenseShort}-green.svg?style=flat-square" /></a>
-	<a href="https://github.com/StateMapper/StateMapper#contact--support"><img src="https://img.shields.io/badge/chat-XMPP-ff69b4.svg" /></a>
+	<a href="{RepoRoot}/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-{IncludeEncodedVar LicenseShort}-green.svg?style=flat-square" /></a>
+	<a href="{RepoRoot}#contact--support"><img src="https://img.shields.io/badge/chat-XMPP-ff69b4.svg" /></a>
 	<a href="https://statemapper.net"><img src="https://img.shields.io/badge/version-{IncludeEncodedVar Version}-f9b876.svg" /></a>
 </p>
 
@@ -31,7 +31,7 @@ Humanists, Activists, [Strategists, Wizards, Soldiers and Ambassadors](#contribu
 StateMapper was born with the aim of being a reviewing and monitoring tool for all public data, an open and collaborative tool destined to **link citizens and anti-corruption professionals**, so that together we be **real counter-powers**. StateMapper is a drop of water in a desert, and with everyone's contribution someday it will become an ocean.
 
 <p align="right">
-	<a href="https://github.com/StateMapper/StateMapper/blob/master/documentation/manuals/MANIFEST-ES.md#top">Spanish version &rarr;</a>
+	<a href="{RepoRoot}/blob/master/documentation/manuals/MANIFEST-ES.md#top">Spanish version &rarr;</a>
 </p>
 
 
@@ -42,14 +42,14 @@ Please refer to the [Installation guide](documentation/manuals/INSTALL.md#top).
 
 ## Contribute:
 
-If you like this project, whatever skills you have, there surely is a way you can participate! The project's current workforce splits into the following [**four commissions**](https://github.com/StateMapper/StateMapper/projects):
+If you like this project, whatever skills you have, there surely is a way you can participate! The project's current workforce splits into the following [**four commissions**]({RepoRoot}/projects):
 
 | Commission | Responsability | Profile | Instructions |
 | ----- | ------ | ---- | ---- |
-| [Counter-bribery **Strategists**](https://github.com/StateMapper/StateMapper/projects/1) | to elaborate the best strategy and endorse public communications | political scientists, journalists, magistrates, social activists | |
-| [Core **Wizards**](https://github.com/StateMapper/StateMapper/projects/2) | to develop and maintain the core code | PHP/MySQL/JS/Regexp experts | [Developers guide &rarr;](documentation/manuals/DEVELOPERS.md#top) |
-| [<img src="{IncludeIcon fire}?color=0366d6" valign="middle" /> Schema **Soldiers**](https://github.com/StateMapper/StateMapper/projects/3) | to implement and maintain bulletin schemas | JSON/Regexp experts | [Soldiers guide &rarr;](documentation/manuals/SOLDIERS.md#top) |
-| [<img src="{IncludeIcon globe}?color=0366d6" valign="middle" /> Country **Ambassadors**](https://github.com/StateMapper/StateMapper/projects/4) | to host bulletins backup nodes, check bulletins' integrity and translate the UI | collectives of social rights | [Ambassadors' guide &rarr;](documentation/manuals/AMBASSADORS.md#top) |
+| [Counter-bribery **Strategists**]({RepoRoot}/projects/1) | to elaborate the best strategy and endorse public communications | political scientists, journalists, magistrates, social activists | |
+| [Core **Wizards**]({RepoRoot}/projects/2) | to develop and maintain the core code | PHP/MySQL/JS/Regexp experts | [Developers guide &rarr;]({RepoRoot}/tree/master/src#top) |
+| [<img src="{IncludeIcon fire}?color=0366d6" valign="middle" /> Schema **Soldiers**]({RepoRoot}/projects/3) | to implement and maintain bulletin schemas | JSON/Regexp experts | [Soldiers guide &rarr;](documentation/manuals/SOLDIERS.md#top) |
+| [<img src="{IncludeIcon globe}?color=0366d6" valign="middle" /> Country **Ambassadors**]({RepoRoot}/projects/4) | to host bulletins backup nodes, check bulletins' integrity and translate the UI | collectives of social rights | [Ambassadors' guide &rarr;](documentation/manuals/AMBASSADORS.md#top) |
 
 If you wish to get involved into one of them, please do not hesitate in [contacting us](#contact--support)! A list of active Soldiers and Ambassadors is available on the [bulletin providers' page](https://statemapper.net/providers).
 
@@ -88,9 +88,9 @@ THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.
 
 Please feel free to contact us through the following channels:
 
-- **Code contributions:** Please send all [pull requests](https://github.com/StateMapper/StateMapper/pulls) through Github.
+- **Code contributions:** Please send all [pull requests]({RepoRoot}/pulls) through Github.
 
-- **Bugs & suggestions:** If it's about a critical issue, please write us privately at [statemapper@riseup.net](mailto:statemapper@riseup.net). Otherwise, [report an issue](https://github.com/StateMapper/StateMapper/issues) on our Github repository.
+- **Bugs & suggestions:** If it's about a critical issue, please write us privately at [statemapper@riseup.net](mailto:statemapper@riseup.net). Otherwise, [report an issue]({RepoRoot}/issues) on our Github repository.
 
 - **Press & enrollment:** Write us at [statemapper@riseup.net](mailto:statemapper@riseup.net) or chat with us through our [Jabber/XMPP](https://jabber.at/p/clients/) public chat room at [statemapper@conference.riseup.net](statemapper@conference.riseup.net). Recommended softwares: <a href="https://gajim.org/" target="_blank">Gajim</a> for Linux & Windows, <a href="https://adium.im/" target="_blank">Adium</a> for MacO$, <a href="https://play.google.com/store/apps/details?id=eu.siacs.conversations&hl=en" target="_blank">Conversations</a> for Android (<a href="https://f-droid.org/packages/eu.siacs.conversations/" target="_blank">free on F-Droid</a>), <a href="https://itunes.apple.com/us/app/chatsecure/id464200063" target="_blank">ChatSecure</a> for iO$ (iPhone).
 
