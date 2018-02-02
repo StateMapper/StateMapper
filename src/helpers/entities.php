@@ -563,7 +563,9 @@ function get_entity_icon($r){
 	}
 }
 
-
+function get_entity_uri($r){
+	return get_uri_from_url(get_entity_url($r));
+}
 
 function get_entity_url($r){
 	if (is_numeric($r))

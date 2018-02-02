@@ -193,6 +193,9 @@ function get_modes(){
 		'search' => array(
 			'icon' => 'search',
 		),
+		'entity' => array(
+			'icon' => 'industry',
+		)
 	);
 	return $modes;
 }

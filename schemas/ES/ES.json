@@ -45,6 +45,7 @@
 			exception: "[0-9\.,\)\(:;]+",
 			usualWords: [
 				"de",
+				"del",
 				"a",
 				"y",
 				"e",

@@ -71,6 +71,8 @@ print_header('browser');
 				
 				array('search', array('q' => 'ab'), 'search'),
 				
+				array('entity', array('slug' => 'ayuntamiento-de-madrid', 'type' => 'institution', 'country' => 'es'), 'entity'),
+				
 			) as $c){
 				$uri = uri($c[1], $c[0]);
 				$label = $c[2];

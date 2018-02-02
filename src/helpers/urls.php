@@ -133,8 +133,16 @@ function url($query = null, $apiCall = null, $passCurrentArgs = array()){
 }
 
 function uri($query = null, $apiCall = null, $passCurrentArgs = array()){
+	
 	if ($apiCall == 'providers')
 		return get_providers_uri($query);
+	
+	else if ($apiCall == 'entity'){
+		if (!empty($query['entity_id']))
+			return get_entity_uri($query['entity_id']);
+		else
+			return get_entity_uri(get_entity_by_slug($query['slug'], $query['type'], $query['country']));
+	}
 		
 	if (!$query || !is_array($query))
 		$query = array(
