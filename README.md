@@ -12,7 +12,7 @@
 </p>
 
 <p align="center" id="badges">
-<i>Redesign of <a href="https://github.com/Ingobernable/kaos155/" target="_blank">Kaos155</a>, by the same <a href="https://hacklab.ingobernable.net/" target="_blank">Ingoberlab</a> team.</i>
+<i>Redesign of <a href="https://github.com/Ingobernable/kaos155/" target="_blank">Kaos155</a>.</i>
 </p>
 
 -----
@@ -22,7 +22,7 @@
 
 ## Manifest:
 
-The imminent generalized collapse has numerous causes, among them political corruption and its ability to hide from journalistic and judicial investigations; consuming all the common budget through the years and decades.
+The imminent generalized collapse has numerous causes, among them political corruption and its ability to hide from journalistic and judicial investigations; consuming all the common budget through years and decades.
 
 Our social relations, the world's economy and the entire planet are tragically affected by these disturbances, to such an extent that the people are now pure political commodities.
 
@@ -59,7 +59,7 @@ You may also help this project by:
 
 - **Sharing this project:** tell your most important contacts how this project can help us out with the world's dramatic public bribery situation. Please use the [#StateMapper](https://twitter.com/search?q=%23StateMapper) hashtag to link your publications to a same stream ;)
 
-- **Donating to this project**: come to visit us at [La Ingobernable](https://ingobernable.net) (Madrid, Spain), and ask for the Kaos155 [hacker team](https://hacklab.ingobernable.net) :)
+- **Donating to this project**: please contact us at statemapper@riseup.net
 
 
 ## Roadmap:
@@ -98,5 +98,5 @@ Alternatively, you can [subscribe to our newsletter](https://lists.riseup.net/ww
 
 -----
 
-*Copyright &copy; 2017-2018 [StateMapper.net](https://statemapper.net) · Licensed under [GNU AGPLv3](LICENSE) · [&uarr; top](#top)* <a href="https://statemapper.net" target="_blank"><img src="http://hits.dwyl.com/StateMapper/StateMapper.svg?style=flat-square" align="right" /></a><a href="https://ingobernable.net" target="_blank"><img src="documentation/badges/love.png" align="right" /></a>
+*Copyright &copy; 2017-2018 [StateMapper.net](https://statemapper.net) · Licensed under [GNU AGPLv3](LICENSE) · [&uarr; top](#top)* <a href="https://statemapper.net" target="_blank"><img src="http://hits.dwyl.com/StateMapper/StateMapper.svg?style=flat-square" align="right" /></a><img src="documentation/badges/love.png" align="right" />
 
