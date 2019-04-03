@@ -98,5 +98,5 @@ Alternatively, you can [subscribe to our newsletter](https://lists.riseup.net/ww
 
 -----
 
-*Copyright &copy; 2017-2018 [StateMapper.net](https://statemapper.net) · Licensed under [GNU AGPLv3](LICENSE) · [&uarr; top](#top)* <a href="https://statemapper.net" target="_blank"><img src="http://hits.dwyl.com/StateMapper/StateMapper.svg?style=flat-square" align="right" /></a><img src="documentation/badges/love.png" align="right" />
+*Copyright &copy; 2017-2019 [StateMapper.net](https://statemapper.net) · Licensed under [GNU AGPLv3](LICENSE) · [&uarr; top](#top)* <a href="https://statemapper.net" target="_blank"><img src="http://hits.dwyl.com/StateMapper/StateMapper.svg?style=flat-square" align="right" /></a><img src="documentation/badges/love.png" align="right" />
 
