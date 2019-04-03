@@ -64,9 +64,9 @@ You may also help this project by:
 
 ## Roadmap:
 
-- **Q1 2018:** stable live version with near 100% parsed information from ES/BOE and ES/BORME.
-- **Q2 2018:** allow persistent user customization, add a cooperation/social layer.
-- **Q3 2018:** implement machine learning and suspition patterns, cover most western countries with Soldiers and Ambassadors.
+- **Q4 2019:** stable live version with near 100% parsed information from ES/BOE and ES/BORME.
+- **Q1 2020:** allow persistent user customization, add a cooperation/social layer.
+- **Q2 2020:** implement machine learning and suspition patterns, cover most western countries with Soldiers and Ambassadors.
 
 ## License:
 
